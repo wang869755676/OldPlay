@@ -1,0 +1,10 @@
+<resources>
+
+    <dimen name="titlebar_height">56dp</dimen>
+    <dimen name="titlebar_ic_width">48dp</dimen>
+    <dimen name="titlebar_ic_padding">12dp</dimen>
+    <dimen name="load_more_footer_height_classic">60dp</dimen>
+
+    <dimen name="refresh_header_height_twitter">80dp</dimen>
+    <dimen name="load_more_footer_height_twitter">60dp</dimen>
+</resources>

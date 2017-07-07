@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/live_root"
+            android:layout_width="match_parent"
+            android:layout_height="200dp">
+            <!--观看直播-->
+            <com.pili.pldroid.player.widget.PLVideoView
+                android:id="@+id/au_videoview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center" />
+
+            <ImageView
+                android:id="@+id/join_con"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:src="@mipmap/ic_launcher" />
+
+            <ImageView
+                android:id="@+id/landan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|bottom"
+                android:src="@mipmap/ic_launcher" />
+
+            <FrameLayout
+                android:id="@+id/live"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <!--主播的画面-->
+                <com.qiniu.pili.droid.streaming.widget.AspectFrameLayout
+                    android:id="@+id/live_afl"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <android.opengl.GLSurfaceView
+                        android:id="@+id/live_sfv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center" />
+
+                </com.qiniu.pili.droid.streaming.widget.AspectFrameLayout>
+
+                <!--连麦的窗口 如果需要多个窗口添加-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:id="@+id/live_fl_window"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:onClick="onClickRemoteWindowA"
+                        android:visibility="invisible">
+
+                        <android.opengl.GLSurfaceView
+                            android:id="@+id/live_gfv_winow"
+                            android:layout_width="100dp"
+                            android:layout_height="120dp"
+                            android:visibility="invisible" />
+
+                    </FrameLayout>
+
+                </LinearLayout>
+            </FrameLayout>
+
+        </FrameLayout>
+
+        <RadioGroup
+            android:id="@+id/rg_segment"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_course"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:text="课程"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/black"></View>
+
+            <RadioButton
+                android:id="@+id/rb_intruduce"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="介绍"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/black"></View>
+
+            <!-- android:drawableTop="@drawable/tab3"
+                        android:textColor="@drawable/tab3_color"-->
+            <RadioButton
+                android:id="@+id/rb_shop"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="商城"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/black"></View>
+
+            <!-- android:drawableTop="@drawable/tab3"
+                        android:textColor="@drawable/tab3_color"-->
+            <RadioButton
+                android:id="@+id/rb_comment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="评论"
+                android:textSize="14sp" />
+        </RadioGroup>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></android.support.v4.view.ViewPager>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/concern_action"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="关注"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/collection_action"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="收藏"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/share_action"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="分享"
+            android:textSize="14sp" />
+    </LinearLayout>
+</FrameLayout>

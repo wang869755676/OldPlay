@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:arc="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <FrameLayout
+        android:id="@+id/main_contianer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"></FrameLayout>
+
+
+    <RadioGroup
+        android:id="@+id/rg_main"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_tab1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="6dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="课程"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/rb_tab2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="6dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="商城"
+            android:textSize="12sp" />
+
+
+        <!-- android:drawableTop="@drawable/tab3"
+                    android:textColor="@drawable/tab3_color"-->
+        <RadioButton
+            android:id="@+id/rb_tab3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="6dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="论坛"
+            android:textSize="12sp" />
+        <!-- android:drawableTop="@drawable/tab3"
+                  android:textColor="@drawable/tab3_color"-->
+        <RadioButton
+            android:id="@+id/rb_tab4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="6dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="我的"
+            android:textSize="12sp" />
+
+    </RadioGroup>
+</LinearLayout>

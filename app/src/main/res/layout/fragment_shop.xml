@@ -6,9 +6,15 @@
     android:orientation="vertical"
     tools:context="com.td.oldplay.ui.course.fragment.ShopFragment">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/bg_gray"></View>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <LinearLayout
@@ -17,28 +23,31 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_marginLeft="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
                 android:src="@mipmap/icon_searc_home" />
 
             <EditText
-                android:textColorHint="@color/home_gray"
-                android:textSize="14sp"
-                android:hint="搜索你想要的产品"
-                android:background="@null"
-                android:layout_marginLeft="5dp"
                 android:id="@+id/shop_seach"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1" />
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:hint="搜索你想要的产品"
+                android:textColorHint="@color/home_gray"
+                android:textSize="14sp" />
 
-            <Button
-                android:id="@+id/shop_send_seach"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="搜索" />
+
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/bg_gray"></View>
     </LinearLayout>
 
 
@@ -57,14 +66,17 @@
             android:layout_weight="1"
             android:padding="10dp">
 
-            <RadioButton
+            <CheckBox
                 android:id="@+id/rb_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@android:color/white"
                 android:button="@null"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/selector_shop_tri"
                 android:text="价格 "
+                android:textColor="@color/tv_red"
                 android:textSize="14sp" />
 
         </FrameLayout>
@@ -72,8 +84,8 @@
         <View
             android:layout_width="0.01dp"
             android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:background="@color/gray" />
 
         <FrameLayout
@@ -83,16 +95,19 @@
             android:layout_weight="1"
             android:padding="10dp">
 
-            <RadioButton
+            <CheckBox
                 android:id="@+id/rb_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@android:color/white"
                 android:button="@null"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/selector_shop_tri"
                 android:gravity="center"
                 android:text="积分"
-                android:textSize="13sp" />
+                android:textColor="@color/tv_red"
+                android:textSize="14sp" />
 
         </FrameLayout>
 
@@ -110,7 +125,7 @@
             android:layout_weight="1"
             android:padding="10dp">
 
-            <RadioButton
+            <CheckBox
                 android:id="@+id/rb_sell"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -118,7 +133,10 @@
                 android:layout_gravity="center"
                 android:background="@android:color/white"
                 android:button="@null"
+                android:drawablePadding="5dp"
+                android:drawableRight="@drawable/selector_shop_tri"
                 android:text="销量 "
+                android:textColor="@color/tv_red"
                 android:textSize="13sp" />
         </FrameLayout>
     </LinearLayout>
@@ -126,7 +144,8 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeToLoadLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp">
 
 
         <android.support.v7.widget.RecyclerView

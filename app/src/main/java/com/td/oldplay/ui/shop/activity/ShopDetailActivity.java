@@ -2,13 +2,12 @@ package com.td.oldplay.ui.shop.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.td.oldplay.R;
@@ -29,29 +28,47 @@ import butterknife.ButterKnife;
 
 public class ShopDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
 
-    @BindView(R.id.shop_detail_banner)
-    MZBannerView shopDetailBanner;
-    @BindView(R.id.rb_detail)
-    RadioButton rbDetail;
-    @BindView(R.id.rb_comment)
-    RadioButton rbComment;
-    @BindView(R.id.rg_segment)
-    RadioGroup rgSegment;
-    @BindView(R.id.viewPager)
-    ViewPager viewPager;
-    @BindView(R.id.view)
-    View view;
+
     @BindView(R.id.title)
     CustomTitlebarLayout title;
+    @BindView(R.id.shop_detail_banner)
+    MZBannerView shopDetailBanner;
+    @BindView(R.id.shop_name)
+    TextView shopName;
+    @BindView(R.id.shop_price)
+    TextView shopPrice;
+    @BindView(R.id.item_shop_sell)
+    TextView itemShopSell;
+    @BindView(R.id.item_shop_score)
+    TextView itemShopScore;
+    @BindView(R.id.tab_layout)
+    TabLayout tabLayout;
+    @BindView(R.id.viewPager)
+    ViewPager viewPager;
     @BindView(R.id.shop_detail_teacher)
     TextView shopDetailTeacher;
     @BindView(R.id.shop_detail_cart)
-    ImageView shopDetailCart;
+    TextView shopDetailCart;
+    @BindView(R.id.shop_de_car_num)
+    TextView shopDeCarNum;
+    @BindView(R.id.fl_car)
+    FrameLayout flCar;
     @BindView(R.id.shop_detail_add_cart)
     TextView shopDetailAddCart;
     @BindView(R.id.shop_detail_buy)
     TextView shopDetailBuy;
-    private List<Fragment> datas=new ArrayList<>();
+    // 团购相关的
+    @BindView(R.id.shop_old_price)
+    TextView shopOldPrice;
+    @BindView(R.id.shop_de_tuangoudes)
+    TextView shopDeTuangoudes;
+    @BindView(R.id.shop_de_tuangouscore)
+    TextView shopDeTuangouscore;
+    @BindView(R.id.ll)
+    LinearLayout ll;
+    private List<Fragment> datas = new ArrayList<>();
+
+    private String titles[] = {"商品详情", "商品评价"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,55 +81,29 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
     private void initView() {
         title.setTitle("商品详情");
         title.setOnLeftListener(this);
+        title.setRightImageResource(R.mipmap.icon_shop_share);
+        title.setOnRightListener(this);
         shopDetailTeacher.setOnClickListener(this);
         shopDetailCart.setOnClickListener(this);
         shopDetailAddCart.setOnClickListener(this);
         shopDetailBuy.setOnClickListener(this);
+        tabLayout.setupWithViewPager(viewPager);
         datas.add(new ShopDetailFragment());
-        datas.add(new CommentFragment());
-        viewPager.setAdapter(new BasePagerAdapter(getSupportFragmentManager(), datas));
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        datas.add(new ShopCommentFragment());
+        viewPager.setAdapter(new BasePagerAdapter(getSupportFragmentManager(), datas) {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                switch (position) {
-                    case 0:
-                        rbDetail.setChecked(true);
-                        break;
-                    case 1:
-                        rbComment.setChecked(true);
-                        break;
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
+            public CharSequence getPageTitle(int position) {
+                return titles[position];
             }
         });
-        rgSegment.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                switch (checkedId) {
-                    case R.id.rb_detail:
-                        viewPager.setCurrentItem(0);
-                        break;
-                    case R.id.rb_comment:
-                        viewPager.setCurrentItem(1);
-                        break;
-                }
-            }
-        });
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.shop_detail_add_cart:
+                startActivity(new Intent(mContext,ShopCarActivity.class));
                 break;
             case R.id.shop_detail_buy:
                 break;
@@ -123,6 +114,8 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
                 break;
             case R.id.left_text:
                 finish();
+                break;
+            case R.id.right_text:
                 break;
         }
 

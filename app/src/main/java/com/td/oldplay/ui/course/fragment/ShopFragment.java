@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
@@ -37,23 +39,22 @@ import butterknife.Unbinder;
  */
 public class ShopFragment extends BaseFragment implements
         SwipeRefreshLayout.OnRefreshListener, LoadMoreWrapper.OnLoadMoreListener,
-        View.OnClickListener {
+        View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
 
     @BindView(R.id.shop_seach)
     EditText shopSeach;
-    @BindView(R.id.shop_send_seach)
-    Button shopSendSeach;
+
     @BindView(R.id.rb_price)
-    RadioButton rbPrice;
+    CheckBox rbPrice;
     @BindView(R.id.rl_price)
     FrameLayout rlPrice;
     @BindView(R.id.rb_score)
-    RadioButton rbScore;
+    CheckBox rbScore;
     @BindView(R.id.rl_score)
     FrameLayout rlScore;
     @BindView(R.id.rb_sell)
-    RadioButton rbSell;
+    CheckBox rbSell;
     @BindView(R.id.rl_sell)
     FrameLayout rlSell;
 
@@ -69,7 +70,9 @@ public class ShopFragment extends BaseFragment implements
     private LoadMoreWrapper adapter;
     private int page;
     private ShopAdapter shopAdapter;
-
+    private boolean priceup;
+    private boolean sellup;
+    private boolean scoreup;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -93,13 +96,15 @@ public class ShopFragment extends BaseFragment implements
 
 
     @Override
-    public void onClick(View v) {
-
-    }
-
-    @Override
     protected void init(View view) {
         swipeToLoadLayout.setOnRefreshListener(this);
+        rbPrice.setOnCheckedChangeListener(this);
+        rbScore.setOnCheckedChangeListener(this);
+        rbSell.setOnCheckedChangeListener(this);
+        rbPrice.setOnClickListener(this);
+        rbScore.setOnClickListener(this);
+        rbSell.setOnClickListener(this);
+
         datas = new ArrayList<>();
         datas = new ArrayList<>();
         datas.add(new ShopBean());
@@ -112,7 +117,7 @@ public class ShopFragment extends BaseFragment implements
         shopAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                     startActivity(new Intent(mActivity, ShopDetailActivity.class));
+                startActivity(new Intent(mActivity, ShopDetailActivity.class));
             }
 
             @Override
@@ -126,5 +131,29 @@ public class ShopFragment extends BaseFragment implements
     @Override
     public void onLoadMoreRequested() {
         page++;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+            case R.id.rb_price:
+            case R.id.rb_score:
+            case R.id.rb_sell:
+                break;
+        }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
+            case R.id.rb_price:
+                priceup = true;
+                break;
+            case R.id.rb_score:
+                break;
+            case R.id.rb_sell:
+                break;
+        }
     }
 }

@@ -4,15 +4,17 @@ import android.opengl.GLSurfaceView;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pili.pldroid.player.AVOptions;
@@ -46,6 +48,7 @@ import com.td.oldplay.utils.ScreenUtils;
 import com.td.oldplay.utils.ShareSDKUtils;
 import com.td.oldplay.utils.StreamUtils;
 import com.td.oldplay.utils.ToastUtil;
+import com.td.oldplay.widget.CustomTitlebarLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,7 +59,6 @@ import butterknife.ButterKnife;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.tencent.qq.QQ;
-import cn.sharesdk.tencent.qzone.QZone;
 
 public class TeacherDetailActivity extends LiveBaseActivity implements
         PLMediaPlayer.OnCompletionListener,
@@ -64,11 +66,18 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         PLMediaPlayer.OnErrorListener, View.OnClickListener {
 
     private static final String TAG = "TeacherDetailActivity";
+    @BindView(R.id.title)
+    CustomTitlebarLayout title;
     @BindView(R.id.au_videoview)
     PLVideoView auVideoview;
-
-    @BindView(R.id.live)
-    FrameLayout live;
+    @BindView(R.id.reword)
+    ImageView reword;
+    @BindView(R.id.join_con)
+    ImageView joinCon;
+    @BindView(R.id.landan)
+    ImageView landan;
+    @BindView(R.id.pause)
+    ImageView pause;
     @BindView(R.id.live_sfv)
     GLSurfaceView liveSfv;
     @BindView(R.id.live_afl)
@@ -77,32 +86,33 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     GLSurfaceView liveGfvWinow;
     @BindView(R.id.live_fl_window)
     FrameLayout liveFlWindow;
-
-
+    @BindView(R.id.live)
+    FrameLayout live;
+    @BindView(R.id.live_root)
+    FrameLayout liveRoot;
+    @BindView(R.id.tab_layout)
+    TabLayout tabLayout;
     @BindView(R.id.viewPager)
     ViewPager viewPager;
     @BindView(R.id.concern_action)
     TextView concernAction;
-    @BindView(R.id.collection_action)
-    TextView collectionAction;
+    @BindView(R.id.rl_concern_action)
+    RelativeLayout rlConcernAction;
     @BindView(R.id.share_action)
     TextView shareAction;
-    @BindView(R.id.join_con)
-    ImageView joinCon;
-    @BindView(R.id.rg_segment)
-    RadioGroup rgSegment;
-    @BindView(R.id.rb_course)
-    RadioButton rbCourse;
-    @BindView(R.id.rb_intruduce)
-    RadioButton rbIntruduce;
-    @BindView(R.id.rb_shop)
-    RadioButton rbShop;
-    @BindView(R.id.rb_comment)
-    RadioButton rbComment;
-    @BindView(R.id.landan)
-    ImageView landan;
-    @BindView(R.id.live_root)
-    FrameLayout liveRoot;
+    @BindView(R.id.rl_collection_action)
+    RelativeLayout rlCollectionAction;
+    @BindView(R.id.collection_action)
+    TextView collectionAction;
+    @BindView(R.id.ll_action)
+    LinearLayout llAction;
+    @BindView(R.id.comment_ed)
+    EditText commentEd;
+    @BindView(R.id.comment_send)
+    TextView commentSend;
+    @BindView(R.id.ll_comment)
+    LinearLayout llComment;
+
 
     private RTCMediaStreamingManager mRTCStreamingManager;
     // private RTCConferenceOptions options;
@@ -122,6 +132,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     private LinearLayout.LayoutParams params;
     private boolean island;
 
+    private String[] titles;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,6 +143,10 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         concernAction.setOnClickListener(this);
         collectionAction.setOnClickListener(this);
         shareAction.setOnClickListener(this);
+        reword.setOnClickListener(this);
+        pause.setOnClickListener(this);
+        title.setTitle("讲师直播");
+        title.setOnLeftListener(this);
         params = (LinearLayout.LayoutParams) liveRoot.getLayoutParams();
         initViewPager();
         initCamer();
@@ -144,12 +160,19 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
      * 初始化Viewpager
      */
     private void initViewPager() {
+        titles = getResources().getStringArray(R.array.title);
+        tabLayout.setupWithViewPager(viewPager);
         fragments = new ArrayList<>();
         fragments.add(new CourseFragment());
         fragments.add(new IntruceFragment());
         fragments.add(new ShopFragment());
         fragments.add(new CommentFragment());
-        viewPager.setAdapter(new BasePagerAdapter(getSupportFragmentManager(), fragments));
+        viewPager.setAdapter(new BasePagerAdapter(getSupportFragmentManager(), fragments) {
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return titles[position];
+            }
+        });
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -158,21 +181,13 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
             @Override
             public void onPageSelected(int position) {
-                switch (position) {
-                    case 0:
-                        rbCourse.setChecked(true);
-                        break;
-                    case 1:
-                        rbIntruduce.setChecked(true);
-                        break;
-                    case 2:
-                        rbShop.setChecked(true);
-                        break;
-                    case 3:
-                        rbComment.setChecked(true);
-                        break;
+                if (position == 3) {
+                    llComment.setVisibility(View.VISIBLE);
+                    llAction.setVisibility(View.GONE);
+                } else {
+                    llComment.setVisibility(View.GONE);
+                    llAction.setVisibility(View.VISIBLE);
                 }
-
             }
 
             @Override
@@ -180,26 +195,6 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
             }
         });
-        rgSegment.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                switch (checkedId) {
-                    case R.id.rb_comment:
-                        viewPager.setCurrentItem(3);
-                        break;
-                    case R.id.rb_course:
-                        viewPager.setCurrentItem(0);
-                        break;
-                    case R.id.rb_intruduce:
-                        viewPager.setCurrentItem(1);
-                        break;
-                    case R.id.rb_shop:
-                        viewPager.setCurrentItem(2);
-                        break;
-                }
-            }
-        });
-
 
     }
 
@@ -326,6 +321,13 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
                     }
                 });
+                break;
+            case R.id.reword:
+                break;
+            case R.id.pause:
+                break;
+            case R.id.left_text:
+                finish();
                 break;
         }
     }

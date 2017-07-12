@@ -106,11 +106,12 @@
         <activity android:name=".ui.mine.activity.MyForumActivity" />
         <activity
             android:name=".ui.mine.activity.MyAddressActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity android:name=".ui.mine.activity.MyOrdersActivity" />
         <activity android:name=".ui.mine.activity.MyCoureseActivity" />
-        <activity android:name=".ui.mine.activity.MyConcernActivity"></activity>
-        <activity android:name=".ui.course.activity.CourseListActivity"></activity>
+        <activity android:name=".ui.mine.activity.MyConcernActivity" />
+        <activity android:name=".ui.course.activity.CourseListActivity" />
+        <activity android:name=".ui.shop.activity.ShopCarActivity"></activity>
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package com.td.oldplay.base.adapter.recyclerview;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -91,6 +92,7 @@ public class MultiItemTypeAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
     @Override
     public int getItemCount() {
         int itemCount = mDatas.size();
+        Log.e("===",itemCount+"count");
         return itemCount;
     }
 

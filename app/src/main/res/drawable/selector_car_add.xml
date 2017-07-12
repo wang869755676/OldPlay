@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@mipmap/icon_car_add" android:state_enabled="true"></item>
+
+    <item android:drawable="@mipmap/icon_car_add_n" android:state_enabled="false"></item>
+</selector>

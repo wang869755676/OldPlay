@@ -1,13 +1,79 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_gray"
+    android:orientation="vertical"
     tools:context="com.td.oldplay.ui.course.fragment.IntruceFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="84dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="10dp">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/introduce_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="课程介绍"
+            android:textColor="@color/coure_tv"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/introduce_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text="课程介绍"
+            android:textColor="@color/home_gray"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:padding="10dp">
+
+        <com.td.oldplay.widget.CircleImageView
+            android:id="@+id/intr_te_iv"
+            android:layout_width="78dp"
+            android:layout_height="78dp"
+            android:layout_centerVertical="true" />
+
+
+        <TextView
+            android:id="@+id/intr_te_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/intr_te_iv"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/intr_te_iv"
+            android:text="nane"
+            android:textColor="@color/coure_tv"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/item_school"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/intr_te_name"
+            android:layout_below="@+id/intr_te_name"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="15dp"
+            android:maxLines="3"
+            android:text="ddddddd"
+            android:textColor="@color/home_gray"
+            android:textSize="14sp" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>

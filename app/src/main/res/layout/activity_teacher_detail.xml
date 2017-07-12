@@ -115,98 +115,75 @@
 
             </FrameLayout>
 
-            <RadioGroup
-                android:id="@+id/rg_segment"
+            <android.support.design.widget.TabLayout
+                android:background="@color/white"
+                android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="49dp"
-                android:layout_alignParentBottom="true"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/rb_course"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:button="@null"
-                    android:checked="true"
-                    android:gravity="center"
-                    android:text="课程"
-                    android:textSize="14sp" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/black"></View>
-
-                <RadioButton
-                    android:id="@+id/rb_intruduce"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="介绍"
-                    android:textSize="12sp" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/black"></View>
-
-                <!-- android:drawableTop="@drawable/tab3"
-                            android:textColor="@drawable/tab3_color"-->
-                <RadioButton
-                    android:id="@+id/rb_shop"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="商城"
-                    android:textSize="14sp" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/black"></View>
-
-                <!-- android:drawableTop="@drawable/tab3"
-                            android:textColor="@drawable/tab3_color"-->
-                <RadioButton
-                    android:id="@+id/rb_comment"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="评论"
-                    android:textSize="14sp" />
-            </RadioGroup>
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@color/tv_red"
+                app:tabSelectedTextColor="@color/tv_red"
+                app:tabTextColor="@color/home_gray"></android.support.design.widget.TabLayout>
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="55dp"
                 android:background="@color/bg_gray"></android.support.v4.view.ViewPager>
         </LinearLayout>
     </LinearLayout>
 
 
     <LinearLayout
+        android:id="@+id/ll_action"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="50dp"
         android:layout_gravity="bottom"
         android:background="@color/white"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/concern_action"
+        <RelativeLayout
+            android:id="@+id/rl_concern_action"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="关注"
-            android:textSize="14sp" />
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/concern_action"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:drawableLeft="@mipmap/icon_concern"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="关注"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#d0d0d0"></View>
+
+        <RelativeLayout
+            android:id="@+id/rl_collection_action"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/share_action"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:drawableLeft="@mipmap/icon_share"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="分享"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
 
         <TextView
             android:id="@+id/collection_action"
@@ -218,13 +195,63 @@
             android:textSize="14sp"
             android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/share_action"
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_comment"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/icon_comment" />
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="1"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/comment_ed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="说点什么"
+                android:textColorHint="@color/home_gray"
+                android:textSize="14sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="13dp"
+                android:background="@color/home_gray">
+
+            </View>
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/comment_send"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
             android:gravity="center"
-            android:text="分享"
+            android:text="发送"
+            android:textColor="@color/tv_red"
             android:textSize="14sp" />
     </LinearLayout>
 </FrameLayout>

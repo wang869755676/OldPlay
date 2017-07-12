@@ -19,6 +19,7 @@ import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.course.adapter.CourserAdapter;
+import com.td.oldplay.ui.course.adapter.CourserListAdapter;
 import com.td.oldplay.ui.course.adapter.TeacherAdapter;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
@@ -40,7 +41,7 @@ public class CourseListActivity extends BaseFragmentActivity
     SwipeRefreshLayout swipeToLoadLayout;
 
     private LoadMoreWrapper adapter;
-    private CourserAdapter coureseAdapter;
+    private CourserListAdapter coureseAdapter;
     private int page = 1;
     private List<CourseBean> datas = new ArrayList<>();
     private int type; // 0  课程类别  1
@@ -56,13 +57,13 @@ public class CourseListActivity extends BaseFragmentActivity
     }
 
     private void init() {
-        title.setTitle("讲师列表");
+        title.setTitle("X类列表");
         title.setOnLeftListener(this);
         swipeToLoadLayout.setOnRefreshListener(this);
         swipeTarget.setLayoutManager(new LinearLayoutManager(mContext));
         datas.add(new CourseBean());
 
-        coureseAdapter = new CourserAdapter(mContext, R.layout.item_courese, datas);
+        coureseAdapter = new CourserListAdapter(mContext, R.layout.item_my_teacher_list, datas);
         adapter = new LoadMoreWrapper(coureseAdapter);
         swipeTarget.setAdapter(adapter);
         adapter.setOnLoadMoreListener(this);

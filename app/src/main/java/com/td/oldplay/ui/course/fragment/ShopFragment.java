@@ -1,6 +1,7 @@
 package com.td.oldplay.ui.course.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,16 +15,15 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 
-import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
-import com.aspsine.swipetoloadlayout.OnRefreshListener;
-import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragment;
+import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.CourseBean;
 import com.td.oldplay.bean.ShopBean;
 import com.td.oldplay.ui.course.adapter.CourserAdapter;
 import com.td.oldplay.ui.course.adapter.ShopAdapter;
+import com.td.oldplay.ui.shop.activity.ShopDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,8 +67,8 @@ public class ShopFragment extends BaseFragment implements
 
     private List<ShopBean> datas;
     private LoadMoreWrapper adapter;
-    private
-    int page;
+    private int page;
+    private ShopAdapter shopAdapter;
 
 
     @Override
@@ -105,11 +105,21 @@ public class ShopFragment extends BaseFragment implements
         datas.add(new ShopBean());
         datas.add(new ShopBean());
         swipeTarget.setLayoutManager(new LinearLayoutManager(mActivity));
-        adapter = new LoadMoreWrapper(new ShopAdapter(mActivity, R.layout.item_shop, datas));
-        adapter.setLoadMoreView(R.layout.default_loading);
+        shopAdapter = new ShopAdapter(mActivity, R.layout.item_shop, datas);
+        adapter = new LoadMoreWrapper(shopAdapter);
         adapter.setOnLoadMoreListener(this);
         swipeTarget.setAdapter(adapter);
+        shopAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                     startActivity(new Intent(mActivity, ShopDetailActivity.class));
+            }
 
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
 
     }
 

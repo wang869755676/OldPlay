@@ -1,7 +1,7 @@
 <resources>
 
     <style name="AppTheme.AppCompat" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorAccent">@color/theme_color</item>
+       <!-- <item name="colorAccent">@color/theme_color</item>-->
     </style>
     <!--仿照对话框主题-->
     <style name="AlertDialogStyle" parent="@android:style/Theme.Dialog">

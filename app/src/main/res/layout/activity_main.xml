@@ -17,11 +17,13 @@
     <RadioGroup
         android:id="@+id/rg_main"
         android:layout_width="match_parent"
-        android:layout_height="49dp"
+        android:layout_height="55dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
         <RadioButton
+            android:textColor="@drawable/tab1_tv"
+            android:drawableTop="@drawable/tab1"
             android:id="@+id/rb_tab1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -33,6 +35,8 @@
             android:textSize="12sp" />
 
         <RadioButton
+            android:textColor="@drawable/tab1_tv"
+            android:drawableTop="@drawable/tab2"
             android:id="@+id/rb_tab2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -47,6 +51,8 @@
         <!-- android:drawableTop="@drawable/tab3"
                     android:textColor="@drawable/tab3_color"-->
         <RadioButton
+            android:textColor="@drawable/tab1_tv"
+            android:drawableTop="@drawable/tab3"
             android:id="@+id/rb_tab3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -59,6 +65,8 @@
         <!-- android:drawableTop="@drawable/tab3"
                   android:textColor="@drawable/tab3_color"-->
         <RadioButton
+            android:textColor="@drawable/tab1_tv"
+            android:drawableTop="@drawable/tab4"
             android:id="@+id/rb_tab4"
             android:layout_width="0dp"
             android:layout_height="match_parent"

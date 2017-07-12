@@ -133,6 +133,8 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
                 startActivity(new Intent(mActivity, ShopListActivity.class));
                 break;
             case R.id.home_shop_study:
+                intent=new Intent(mActivity, ShopListActivity.class);
+                startActivity(new Intent(mActivity, ShopListActivity.class));
                 break;
         }
     }

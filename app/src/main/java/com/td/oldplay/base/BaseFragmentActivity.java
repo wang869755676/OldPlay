@@ -22,12 +22,12 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         mContext =this;
         AContext=getApplicationContext();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+      /*  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
             window.setFlags(
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
+        }*/
     }
 
     public void showLoading() {

@@ -8,6 +8,8 @@
     <!-- 左侧按钮 -->
 
     <TextView
+        android:drawableRight="@mipmap/icon_back"
+        android:layout_marginLeft="10dp"
         android:id="@+id/left_text"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -16,7 +18,6 @@
         android:ellipsize="end"
         android:gravity="center"
         android:singleLine="true"
-        android:text="返回"
         android:textSize="16sp"
 
         />
@@ -32,12 +33,13 @@
         android:ellipsize="end"
         android:maxWidth="148dp"
         android:singleLine="true"
-        android:textColor="@color/white"
+        android:textColor="@color/coure_tv"
         android:textSize="18sp" />
 
     <!-- 右侧按钮 -->
 
     <TextView
+        android:layout_marginRight="10dp"
         android:id="@+id/right_text"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

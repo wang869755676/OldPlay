@@ -10,9 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
-import com.aspsine.swipetoloadlayout.OnRefreshListener;
-import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragment;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
@@ -74,7 +71,7 @@ public class CourseFragment extends BaseFragment implements SwipeRefreshLayout.O
         datas.add(new CourseBean());
         swipeTarget.setLayoutManager(new LinearLayoutManager(mActivity));
         adapter = new LoadMoreWrapper(new CourserAdapter(mActivity, R.layout.item_courese, datas));
-        adapter.setLoadMoreView(R.layout.default_loading);
+        //adapter.setLoadMoreView(R.layout.default_loading);
         adapter.setOnLoadMoreListener(this);
         swipeTarget.setAdapter(adapter);
 

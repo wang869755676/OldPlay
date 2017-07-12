@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:apps="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="95dp">
+
+        <ImageView
+            android:id="@+id/circularImage"
+            android:layout_width="72.5dp"
+            android:layout_height="72.5dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:scaleType="fitXY" />
+
+
+        <TextView
+            android:id="@+id/item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/circularImage"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/circularImage"
+            android:text="nane" />
+
+        <TextView
+            android:id="@+id/item_introduce"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/circularImage"
+            android:layout_alignLeft="@+id/item_name"
+            android:layout_marginBottom="5dp"
+            android:text="0 年教龄"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/item_school"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/item_introduce"
+            android:layout_alignLeft="@id/item_name"
+            android:layout_centerVertical="true"
+            android:text="ddddddd"
+            android:textSize="14dp" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>

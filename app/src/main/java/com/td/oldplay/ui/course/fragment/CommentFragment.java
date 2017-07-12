@@ -15,8 +15,10 @@ import com.td.oldplay.base.BaseFragment;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.CommentBean;
 import com.td.oldplay.ui.course.adapter.CommentAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -34,6 +36,7 @@ public class CommentFragment extends BaseFragment implements SwipeRefreshLayout.
     SwipeRefreshLayout swipeToLoadLayout;
     private List<CommentBean> datas;
     private LoadMoreWrapper adapter;
+    private CommentAdapter commentAdapter;
 
     int page;
 
@@ -64,9 +67,9 @@ public class CommentFragment extends BaseFragment implements SwipeRefreshLayout.
         datas.add(new CommentBean());
         datas.add(new CommentBean());
         datas.add(new CommentBean());
-
-        adapter = new LoadMoreWrapper(new CommentAdapter(mActivity, R.layout.item_comment, datas));
-       // adapter.setLoadMoreView(R.layout.default_loading); //当有数据的时候 再设置布局
+        commentAdapter = new CommentAdapter(mActivity, R.layout.item_comment, datas);
+        adapter = new LoadMoreWrapper(commentAdapter);
+        // adapter.setLoadMoreView(R.layout.default_loading); //当有数据的时候 再设置布局
         swipeTarget.setAdapter(adapter);
         adapter.setOnLoadMoreListener(this);
 

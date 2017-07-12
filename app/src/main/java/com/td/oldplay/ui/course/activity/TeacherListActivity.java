@@ -68,7 +68,7 @@ public class TeacherListActivity extends BaseFragmentActivity
         datas.add(new TeacherBean());
         datas.add(new TeacherBean());
 
-        teacherAdapter = new TeacherAdapter(mContext, R.layout.item_teacher_list, datas);
+        teacherAdapter = new TeacherAdapter(mContext, R.layout.item_teacher_list, datas,0);
         adapter = new LoadMoreWrapper(teacherAdapter);
         swipeTarget.setAdapter(adapter);
         adapter.setOnLoadMoreListener(this);

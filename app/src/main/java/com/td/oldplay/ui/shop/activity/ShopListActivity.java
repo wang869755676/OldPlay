@@ -38,7 +38,7 @@ public class ShopListActivity extends BaseFragmentActivity implements View.OnCli
         title.setOnLeftListener(this);
 
         fragment=new ShopFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.shop_list_container,fragment);
+        getSupportFragmentManager().beginTransaction().add(R.id.shop_list_container,fragment).commit();
     }
 
     @Override

@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
     android:orientation="vertical"
     android:paddingBottom="10dp">
 
@@ -12,8 +11,8 @@
 
         <com.td.oldplay.widget.CircleImageView
             android:id="@+id/item_commen_iv"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:src="@mipmap/ic_launcher" />
@@ -25,7 +24,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="75dp"
             android:layout_marginTop="15dp"
-            android:text="姓名" />
+            android:text="姓名"
+            android:textColor="@color/home_gray"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/item_comment_time"
@@ -34,7 +35,9 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:layout_marginTop="15dp"
-            android:text="2015 09 05" />
+            android:text="2015 09 05"
+            android:textColor="@color/coure_tv"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/pinjia_content"
@@ -43,10 +46,15 @@
             android:layout_below="@id/item_name"
             android:layout_marginLeft="75dp"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="5dp"
-            android:ellipsize="end"
-            android:lines="2"
-            android:text="酒店安排酒店安排酒店安排酒店安排酒店安排酒店安排酒店安排酒店安排酒店安排酒店安排" />
+            android:layout_marginTop="10dp"
+            android:maxLines="10"
+            android:text="酒店安排酒店安排酒店安 cxvxcvxcvxcvxcvxcvxcvxcvxcvxcvxcv排酒店安排酒店安排酒店安排酒店安排酒店安排酒店安排酒店安排"
+            android:textColor="@color/home_gray"
+            android:textSize="14sp" />
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/home_gray"></View>
 </LinearLayout>

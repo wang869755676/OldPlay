@@ -5,11 +5,19 @@
     <color name="colorAccent">#FF4081</color>
 
 
-    <color name="theme_color">#FF4081</color>
+    <color name="theme_color">#FFFFFF</color>
     <color name="title_color">#FF4081</color>
 
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <!-- 线条的颜色-->
     <color name="gray">#EBEBEB</color>
+    <color name="tv_black">#2E2E2E</color>
+    <color name="tv_gray">#656565</color>
+    <color name="tv_red">#DC1009</color>
+
+    <color name="bg_gray">#F0F0F0</color>
+    <color name="coure_tv">#333333</color>
+    <color name="home_gray">#666666</color>
+
 </resources>

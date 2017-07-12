@@ -51,7 +51,8 @@
             android:theme="@style/AppThemeFullscreen" />
         <activity
             android:name=".ui.course.activity.TeacherDetailActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <!-- ShareSDK的activity -->
         <activity
@@ -95,7 +96,21 @@
         -->
         <activity android:name=".ui.course.activity.TeacherListActivity" />
         <activity android:name=".ui.shop.activity.ShopDetailActivity" />
-        <activity android:name=".ui.shop.activity.ShopListActivity"></activity>
+        <activity android:name=".ui.shop.activity.ShopListActivity" />
+        <activity android:name=".ui.shop.activity.ShopSelectedActivity" />
+        <activity android:name=".ui.forum.activity.ForumListActivity" />
+        <activity android:name=".ui.forum.activity.FourmDetailActivity" />
+        <activity android:name=".ui.mine.activity.FeedBackActivity" />
+        <activity android:name=".ui.mine.activity.MyPasswordActivity" />
+        <activity android:name=".ui.mine.activity.ModifyPasswordActivity" />
+        <activity android:name=".ui.mine.activity.MyForumActivity" />
+        <activity
+            android:name=".ui.mine.activity.MyAddressActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
+        <activity android:name=".ui.mine.activity.MyOrdersActivity" />
+        <activity android:name=".ui.mine.activity.MyCoureseActivity" />
+        <activity android:name=".ui.mine.activity.MyConcernActivity"></activity>
+        <activity android:name=".ui.course.activity.CourseListActivity"></activity>
     </application>
 
 </manifest>

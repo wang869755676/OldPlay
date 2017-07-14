@@ -5,8 +5,6 @@
     android:orientation="vertical"
     tools:context="com.td.oldplay.ui.forum.HomeForumFragment">
 
-    <View style="@style/stateBarStyle"></View>
-
     <com.td.oldplay.widget.CustomTitlebarLayout
         android:id="@+id/title"
         android:layout_width="match_parent"

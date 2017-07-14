@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="245dp"
+    android:layout_height="165dp"
+    android:background="@drawable/corwhite"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="165dp"
+        android:background="@drawable/corwhite"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="型号:"
+                android:textColor="@color/coure_tv"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/dialog_type"
+                android:layout_width="82dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/cor_gray_5"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="大号"
+                android:textColor="@color/coure_tv"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="颜色:"
+                android:textColor="@color/coure_tv"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/dialog_color"
+                android:layout_width="82dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/cor_gray_5"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="红色"
+                android:textColor="@color/coure_tv"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="数量:"
+                android:textColor="@color/coure_tv"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:id="@+id/item_car_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/dialog_car_dec"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/selector_car_dec"
+                    android:enabled="false"></TextView>
+
+                <TextView
+                    android:id="@+id/dialog_car_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:gravity="center"
+                    android:minWidth="30dp"
+                    android:text="1"
+                    android:textColor="@color/tv_red" />
+
+                <TextView
+                    android:id="@+id/dialog_car_add"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/selector_car_add" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/bg_gray"></View>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/dialog_money"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="￥ 20"
+                android:textColor="@color/home_gray"
+                android:textSize="18sp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/bg_gray"></View>
+
+            <TextView
+                android:id="@+id/dialog_ok"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="￥ 20"
+                android:textColor="@color/tv_red"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

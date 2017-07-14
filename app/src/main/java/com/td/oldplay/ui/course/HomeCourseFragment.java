@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +63,12 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
     Unbinder unbinder;
     @BindView(R.id.title)
     CustomTitlebarLayout title;
+    @BindView(R.id.more_type_btn)
+    TextView moreTypeBtn;
+    @BindView(R.id.view1)
+    View view1;
+    @BindView(R.id.view2)
+    View view2;
 
     private List<String> banners;
     private List<CourseBean> datas;
@@ -109,9 +114,24 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         homrCoureseBanner.getViewPager().setPageTransformer(true, new CustPagerTransformer(mActivity));
         homrCoureseBanner.getViewPager().setPageMargin(50);
 
-        homeCoureRecommend.setLayoutManager(new GridLayoutManager(mActivity, 2));
-        homeCoureHot.setLayoutManager(new GridLayoutManager(mActivity, 2));
-        homeCouresType.setLayoutManager(new GridLayoutManager(mActivity, 4));
+        homeCoureRecommend.setLayoutManager(new GridLayoutManager(mActivity, 2) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
+        homeCoureHot.setLayoutManager(new GridLayoutManager(mActivity, 2) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
+        homeCouresType.setLayoutManager(new GridLayoutManager(mActivity, 4) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
 
         datas = new ArrayList<>();
         datas.add(new CourseBean());
@@ -129,7 +149,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         typeAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                  startActivity(new Intent(mActivity,CourseListActivity.class));
+                startActivity(new Intent(mActivity, CourseListActivity.class));
             }
 
             @Override
@@ -140,7 +160,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         hotAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                startActivity(new Intent(mActivity,TeacherListActivity.class));
+                startActivity(new Intent(mActivity, TeacherListActivity.class));
             }
 
             @Override
@@ -151,7 +171,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         recommendAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                startActivity(new Intent(mActivity,TeacherListActivity.class));
+                startActivity(new Intent(mActivity, TeacherListActivity.class));
             }
 
             @Override
@@ -162,6 +182,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
 
         homeMoreHot.setOnClickListener(this);
         homeMoreRecoment.setOnClickListener(this);
+        moreTypeBtn.setOnClickListener(this);
     }
 
     @Override
@@ -191,6 +212,11 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
                 startActivity(intent);
                 break;
             case R.id.home_more_recoment:
+                intent = new Intent(mActivity, CourseListActivity.class);
+                // intent.putExtra()
+                startActivity(intent);
+                break;
+            case R.id.more_type_btn:
                 intent = new Intent(mActivity, CourseListActivity.class);
                 // intent.putExtra()
                 startActivity(intent);
@@ -229,6 +255,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         protected void convert(ViewHolder holder, CourseBean homeCourseBean, int position) {
             GlideUtils.setImage(mContext, "http://pic.58pic.com/58pic/13/85/85/73T58PIC9aj_1024.jpg", (ImageView) holder.getView(R.id.item_home_iv));
         }
+
     }
 
 }

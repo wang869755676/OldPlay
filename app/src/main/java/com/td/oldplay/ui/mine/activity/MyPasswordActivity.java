@@ -29,7 +29,7 @@ public class MyPasswordActivity extends BaseFragmentActivity implements View.OnC
         setContentView(R.layout.activity_my_password);
         ButterKnife.bind(this);
         title.setTitle("密码修改");
-        title.setOnClickListener(this);
+        title.setOnLeftListener(this);
         tvModifyLogin.setOnClickListener(this);
         tvModifyZhifu.setOnClickListener(this);
     }

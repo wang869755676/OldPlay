@@ -5,12 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <View
-        android:id="@+id/view"
-        style="@style/stateBarStyle"></View>
-
     <RelativeLayout
-
         android:layout_width="match_parent"
         android:layout_height="@dimen/titlebar_height"
         android:background="@color/theme_color">
@@ -21,8 +16,9 @@
             android:id="@+id/title_back"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:paddingLeft="15dp"
             android:scaleType="centerInside"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/icon_back" />
 
 
         <!-- 中间标题 -->
@@ -35,7 +31,8 @@
             android:ellipsize="end"
             android:maxWidth="148dp"
             android:singleLine="true"
-            android:textColor="@color/white"
+            android:text="帖子详情"
+            android:textColor="@color/coure_tv"
             android:textSize="18sp" />
 
 
@@ -44,15 +41,34 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
             android:scaleType="centerInside"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/icon_shop_share" />
 
-        <ImageView
-            android:id="@+id/right_image2"
+        <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/right_image"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_album" />
+            android:paddingRight="10dp">
+
+            <ImageView
+                android:id="@+id/right_image2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:src="@mipmap/icon_forum_like" />
+
+            <TextView
+                android:id="@+id/likeNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="5dp"
+                android:text="5"
+                android:textColor="#bc1515"
+                android:textSize="14sp" />
+        </FrameLayout>
+
+
     </RelativeLayout>
 </LinearLayout>

@@ -13,10 +13,14 @@ import android.widget.TextView;
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.base.adapter.BasePagerAdapter;
+import com.td.oldplay.bean.ShopBean;
+import com.td.oldplay.contants.MContants;
 import com.td.oldplay.ui.course.activity.TeacherDetailActivity;
 import com.td.oldplay.ui.course.fragment.CommentFragment;
 import com.td.oldplay.ui.shop.fragment.ShopCommentFragment;
 import com.td.oldplay.ui.shop.fragment.ShopDetailFragment;
+import com.td.oldplay.ui.window.SharePopupWindow;
+import com.td.oldplay.ui.window.ShopCarDialog;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 import com.td.oldplay.widget.banner.MZBannerView;
 
@@ -70,6 +74,13 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
 
     private String titles[] = {"商品详情", "商品评价"};
 
+    private ShopCarDialog shopCarDialog;
+    private ShopBean bean;
+
+    private int type; // 0加入购物车  1 立即购买
+
+    private SharePopupWindow popupWindow;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +90,8 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void initView() {
+        bean = new ShopBean();
+
         title.setTitle("商品详情");
         title.setOnLeftListener(this);
         title.setRightImageResource(R.mipmap.icon_shop_share);
@@ -103,19 +116,44 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.shop_detail_add_cart:
-                startActivity(new Intent(mContext,ShopCarActivity.class));
+                type = 0;
+                if (shopCarDialog == null) {
+                    shopCarDialog = new ShopCarDialog(mContext, this, bean);
+                }
+                shopCarDialog.show();
                 break;
             case R.id.shop_detail_buy:
+                type = 1;
+                if (shopCarDialog == null) {
+                    shopCarDialog = new ShopCarDialog(mContext, this, bean);
+                }
+                shopCarDialog.show();
                 break;
             case R.id.shop_detail_teacher:
                 startActivity(new Intent(mContext, TeacherDetailActivity.class));
                 break;
             case R.id.shop_detail_cart:
+                startActivity(new Intent(mContext, ShopCarActivity.class));
                 break;
             case R.id.left_text:
                 finish();
                 break;
             case R.id.right_text:
+                if (popupWindow == null) {
+                    popupWindow =
+                            new SharePopupWindow(mContext, MContants.SHARE_TITLE, MContants.SHARE_CONTENT, MContants.SHARE_URL, MContants.IMAG_URL);
+                }
+                popupWindow.showPopup(v);
+                break;
+            case R.id.dialog_ok:
+                if (shopCarDialog != null) {
+                    shopCarDialog.dismiss();
+                }
+                if (type == 0) {
+
+                } else if (type == 1) {
+                    startActivity(new Intent(mContext, OrderConfirmActivity.class));
+                }
                 break;
         }
 

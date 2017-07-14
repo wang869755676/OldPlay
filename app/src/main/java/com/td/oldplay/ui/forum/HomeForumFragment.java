@@ -39,6 +39,7 @@ public class HomeForumFragment extends BaseFragment implements View.OnClickListe
     private HomeForumAdapter homeForumAdapter;
     private List<ForumBean> datas = new ArrayList<>();
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

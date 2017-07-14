@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragment;
+import com.td.oldplay.ui.mine.activity.AboutActivity;
 import com.td.oldplay.ui.mine.activity.FeedBackActivity;
 import com.td.oldplay.ui.mine.activity.MyAddressActivity;
 import com.td.oldplay.ui.mine.activity.MyConcernActivity;
@@ -22,6 +23,8 @@ import com.td.oldplay.ui.mine.activity.MyCoureseActivity;
 import com.td.oldplay.ui.mine.activity.MyForumActivity;
 import com.td.oldplay.ui.mine.activity.MyOrdersActivity;
 import com.td.oldplay.ui.mine.activity.MyPasswordActivity;
+import com.td.oldplay.ui.mine.activity.MyWalletActivity;
+import com.td.oldplay.ui.mine.activity.PersonDetailActivity;
 import com.td.oldplay.widget.CircleImageView;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 
@@ -42,8 +45,7 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
     CircleImageView mineUserHeadImage;
     @BindView(R.id.mine_nickname)
     TextView mineNickname;
-    @BindView(R.id.go_personal)
-    ImageView goPersonal;
+
 
     @BindView(R.id.mime_info)
     RelativeLayout mimeInfo;
@@ -76,6 +78,62 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
     @BindView(R.id.swipe_to_load_layout_mine)
     SwipeRefreshLayout swipeToLoadLayoutMine;
     Unbinder unbinder;
+    @BindView(R.id.mine_concern_image)
+    ImageView mineConcernImage;
+    @BindView(R.id.mine_concern_text)
+    TextView mineConcernText;
+    @BindView(R.id.go_concern)
+    ImageView goConcern;
+    @BindView(R.id.mine_notice_image)
+    ImageView mineNoticeImage;
+    @BindView(R.id.mine_notice_text)
+    TextView mineNoticeText;
+    @BindView(R.id.go_notice)
+    ImageView goNotice;
+    @BindView(R.id.mine_fans_image)
+    ImageView mineFansImage;
+    @BindView(R.id.mine_fans_text)
+    TextView mineFansText;
+    @BindView(R.id.go_fans)
+    ImageView goFans;
+    @BindView(R.id.mine_collection_image)
+    ImageView mineCollectionImage;
+    @BindView(R.id.mine_collection_text)
+    TextView mineCollectionText;
+    @BindView(R.id.go_collection)
+    ImageView goCollection;
+    @BindView(R.id.mine_already_image)
+    ImageView mineAlreadyImage;
+    @BindView(R.id.mine_already_text)
+    TextView mineAlreadyText;
+    @BindView(R.id.go_already)
+    ImageView goAlready;
+    @BindView(R.id.mine_concern_tag_image)
+    ImageView mineConcernTagImage;
+    @BindView(R.id.mine_concern_tag_text)
+    TextView mineConcernTagText;
+    @BindView(R.id.go_concern_tag)
+    ImageView goConcernTag;
+    @BindView(R.id.mine_already_photo_image)
+    ImageView mineAlreadyPhotoImage;
+    @BindView(R.id.mine_already_photo_text)
+    TextView mineAlreadyPhotoText;
+    @BindView(R.id.go_already_photo)
+    ImageView goAlreadyPhoto;
+    @BindView(R.id.mine_setting_image)
+    ImageView mineSettingImage;
+    @BindView(R.id.mine_setting_text)
+    TextView mineSettingText;
+    @BindView(R.id.mine_about_image)
+    ImageView mineAboutImage;
+    @BindView(R.id.mine_about_text)
+    TextView mineAboutText;
+    @BindView(R.id.go_setting)
+    ImageView goSetting;
+    @BindView(R.id.mine_about)
+    RelativeLayout mineAbout;
+    @BindView(R.id.swipe_target)
+    NestedScrollView swipeTarget;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,6 +157,8 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
         mineUpdatePassword.setOnClickListener(this);
         mineOrders.setOnClickListener(this);
         mineForum.setOnClickListener(this);
+        mineAbout.setOnClickListener(this);
+        mineUserHeadImage.setOnClickListener(this);
     }
 
     @Override
@@ -129,6 +189,8 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
                 startActivity(intent);
                 break;
             case R.id.mine_money:
+                intent = new Intent(mActivity, MyWalletActivity.class);
+                startActivity(intent);
                 break;
             case R.id.mine_update_password:
                 intent = new Intent(mActivity, MyPasswordActivity.class);
@@ -144,7 +206,14 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
                 intent = new Intent(mActivity, MyForumActivity.class);
                 startActivity(intent);
                 break;
-
+            case R.id.mine_about:
+                intent = new Intent(mActivity, AboutActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.mine_user_head_image:
+                intent = new Intent(mActivity, PersonDetailActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 }

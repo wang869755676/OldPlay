@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.td.oldplay.R;
@@ -31,7 +32,7 @@ public class ForumListActivity extends BaseFragmentActivity implements View.OnCl
     @BindView(R.id.swipeLayout)
     SwipeRefreshLayout swipeLayout;
     @BindView(R.id.forum_publish)
-    TextView forumPublish;
+    ImageView forumPublish;
 
     private List<ForumBean> datas = new ArrayList<>();
     private ForumListAdapter listAdapter;

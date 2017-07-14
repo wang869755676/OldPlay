@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/item_order_good_iv"
+            android:layout_width="57dp"
+            android:layout_height="57dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/item_order_goods_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/item_order_good_iv"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="15dip"
+            android:layout_toRightOf="@+id/item_order_good_iv"
+            android:maxLines="2"
+            android:text="炒鸡越野摩托车"
+            android:textColor="@color/tv_black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/item_order_good_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/item_order_good_iv"
+            android:layout_alignLeft="@+id/item_order_goods_name"
+            android:layout_centerHorizontal="true"
+            android:layout_toRightOf="@+id/item_order_good_iv"
+            android:text="颜色"
+            android:textColor="@color/tv_gray"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/item_order_good_typr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/item_order_good_color"
+            android:layout_alignLeft="@+id/item_order_goods_name"
+            android:layout_marginBottom="5dp"
+            android:layout_toRightOf="@+id/item_order_good_iv"
+            android:text="数量：1"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/item_order_good_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/item_order_goods_name"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/item_order_goods_name"
+            android:gravity="right"
+            android:text="70"
+            android:textColor="@color/tv_red"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/item_order_goods_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/item_order_good_price"
+            android:gravity="center"
+            android:text="x 3"
+            android:textColor="@color/tv_red"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:id="@+id/item_shop_acitivty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item_order_good_iv"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="满减活动"
+                android:textColor="@color/coure_tv"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="70"
+                android:textColor="@color/tv_red"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

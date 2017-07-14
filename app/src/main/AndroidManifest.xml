@@ -94,6 +94,19 @@
               android:name="Mob-AppSecret"
               android:value="您的AppSecret" />
         -->
+        <!-- 支付宝支付-->
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+        <activity
+            android:name="com.alipay.sdk.app.H5AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
         <activity android:name=".ui.course.activity.TeacherListActivity" />
         <activity android:name=".ui.shop.activity.ShopDetailActivity" />
         <activity android:name=".ui.shop.activity.ShopListActivity" />
@@ -111,7 +124,12 @@
         <activity android:name=".ui.mine.activity.MyCoureseActivity" />
         <activity android:name=".ui.mine.activity.MyConcernActivity" />
         <activity android:name=".ui.course.activity.CourseListActivity" />
-        <activity android:name=".ui.shop.activity.ShopCarActivity"></activity>
+        <activity android:name=".ui.shop.activity.ShopCarActivity" />
+        <activity android:name=".ui.shop.activity.OrderConfirmActivity" />
+        <activity android:name=".ui.mine.activity.AboutActivity" />
+        <activity android:name=".ui.mine.activity.MyWalletActivity" />
+        <activity android:name=".ui.mine.activity.PersonDetailActivity" />
+        <activity android:name=".ui.mine.activity.ConsumptionActivity"></activity>
     </application>
 
 </manifest>

@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,12 +19,12 @@ import com.td.oldplay.base.BaseFragment;
 import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
-import com.td.oldplay.bean.CourseBean;
-
 import com.td.oldplay.bean.ShopBean;
 import com.td.oldplay.ui.course.adapter.ShopAdapter;
 import com.td.oldplay.ui.shop.activity.ShopListActivity;
 import com.td.oldplay.utils.GlideUtils;
+import com.td.oldplay.widget.CustPagerTransformer;
+import com.td.oldplay.widget.CustomTitlebarLayout;
 import com.td.oldplay.widget.banner.MZBannerView;
 import com.td.oldplay.widget.banner.holder.MZHolderCreator;
 import com.td.oldplay.widget.banner.holder.MZViewHolder;
@@ -40,26 +39,40 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeShopFragment extends BaseFragment implements View.OnClickListener{
+public class HomeShopFragment extends BaseFragment implements View.OnClickListener {
 
 
+    Unbinder unbinder;
     @BindView(R.id.homr_courese_banner)
     MZBannerView homrCoureseBanner;
     @BindView(R.id.home_shop_green)
     TextView homeShopGreen;
     @BindView(R.id.home_shop_study)
     TextView homeShopStudy;
-    @BindView(R.id.more_recomment_essence)
-    Button moreRecommentEssence;
+    @BindView(R.id.view1)
+    View view1;
+    @BindView(R.id.more_recomment_btn)
+    TextView moreRecommentBtn;
     @BindView(R.id.home_more_essence)
     RelativeLayout homeMoreEssence;
     @BindView(R.id.home_shop_essence)
     RecyclerView homeShopEssence;
-    Unbinder unbinder;
+    @BindView(R.id.view2)
+    View view2;
+    @BindView(R.id.more_hot_btn)
+    TextView moreHotBtn;
+    @BindView(R.id.home_more_hot)
+    RelativeLayout homeMoreHot;
+    @BindView(R.id.home_coure_hot)
+    RecyclerView homeCoureHot;
+    @BindView(R.id.title)
+    CustomTitlebarLayout title;
 
     private List<String> banners;
-    private List<ShopBean> datas;
-    private ShopAdapter shopAdapter;
+    private List<ShopBean> recommenddatas;
+    private List<ShopBean> Lastdatas;
+    private Adapter recommendShopAdapter;
+    private Adapter LastShopAdapter;
 
 
     @Override
@@ -85,6 +98,11 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     protected void init(View view) {
+        title.setTitle("商城");
+        title.setRightImageResource(R.mipmap.icon_searc_home);
+        title.setLeftImageResource(R.mipmap.icon_updown);
+        title.setOnRightListener(this);
+        title.setOnLeftListener(this);
         homeShopGreen.setOnClickListener(this);
         homeShopStudy.setOnClickListener(this);
         banners = new ArrayList<>();
@@ -100,16 +118,44 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
                 return new BannerViewHolder();
             }
         });
+        homrCoureseBanner.getViewPager().setPageTransformer(true, new CustPagerTransformer(mActivity));
+        homrCoureseBanner.getViewPager().setPageMargin(50);
 
+        homeShopEssence.setLayoutManager(new GridLayoutManager(mActivity, 2) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
+        recommenddatas = new ArrayList<>();
+        recommenddatas.add(new ShopBean());
+        recommenddatas.add(new ShopBean());
+        recommendShopAdapter = new Adapter(mActivity, R.layout.item_home_course, recommenddatas);
+        homeShopEssence.setAdapter(recommendShopAdapter);
+        recommendShopAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                startActivity(new Intent(mActivity, ShopListActivity.class));
+            }
 
-        homeShopEssence.setLayoutManager(new GridLayoutManager(mActivity, 3));
-        datas = new ArrayList<>();
-        datas.add(new ShopBean());
-        datas.add(new ShopBean());
-        // shopAdapter=new ShopAdapter(mActivity,R.layout.item_home_course,datas);
-        Adapter adapter = new Adapter(mActivity, R.layout.item_home_course, datas);
-        homeShopEssence.setAdapter(adapter);
-        adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
+        homeCoureHot.setLayoutManager(new GridLayoutManager(mActivity, 2) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
+        Lastdatas = new ArrayList<>();
+        Lastdatas.add(new ShopBean());
+        Lastdatas.add(new ShopBean());
+        Lastdatas.add(new ShopBean());
+        LastShopAdapter = new Adapter(mActivity, R.layout.item_home_course, Lastdatas);
+        homeCoureHot.setAdapter(LastShopAdapter);
+        LastShopAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 startActivity(new Intent(mActivity, ShopListActivity.class));
@@ -126,14 +172,14 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        Intent intent=null;
-        switch (v.getId()){
+        Intent intent = null;
+        switch (v.getId()) {
             case R.id.home_shop_green:
-                intent=new Intent(mActivity, ShopListActivity.class);
+                intent = new Intent(mActivity, ShopListActivity.class);
                 startActivity(new Intent(mActivity, ShopListActivity.class));
                 break;
             case R.id.home_shop_study:
-                intent=new Intent(mActivity, ShopListActivity.class);
+                intent = new Intent(mActivity, ShopListActivity.class);
                 startActivity(new Intent(mActivity, ShopListActivity.class));
                 break;
         }

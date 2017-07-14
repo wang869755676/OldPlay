@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/bg_gray">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/bg_gray">
@@ -14,12 +13,12 @@
         <com.td.oldplay.widget.CustomTitlebarLayout
             android:id="@+id/title"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/titlebar_height"
-            android:layout_below="@+id/view"></com.td.oldplay.widget.CustomTitlebarLayout>
+            android:layout_height="@dimen/titlebar_height"></com.td.oldplay.widget.CustomTitlebarLayout>
 
-        <ScrollView
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/title"
             android:fillViewport="true"
             android:orientation="vertical">
 
@@ -167,7 +166,7 @@
             </LinearLayout>
 
 
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
 
         <LinearLayout
             android:id="@+id/ll"

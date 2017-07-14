@@ -31,8 +31,7 @@ public class MyForumActivity extends BaseFragmentActivity implements View.OnClic
     RecyclerView swipeTarget;
     @BindView(R.id.swipeLayout)
     SwipeRefreshLayout swipeLayout;
-    @BindView(R.id.forum_publish)
-    TextView forumPublish;
+
 
     private List<ForumBean> datas = new ArrayList<>();
     private ForumListAdapter listAdapter;
@@ -42,16 +41,15 @@ public class MyForumActivity extends BaseFragmentActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_forum_list);
+        setContentView(R.layout.activity_list);
         ButterKnife.bind(this);
         initView();
     }
 
     private void initView() {
-        title.setTitle("XX板块");
+        title.setTitle("我的帖子");
         title.setOnLeftListener(this);
         swipeLayout.setOnRefreshListener(this);
-        forumPublish.setOnClickListener(this);
         datas.add(new ForumBean());
         datas.add(new ForumBean());
         swipeTarget.setLayoutManager(new LinearLayoutManager(mContext));
@@ -78,8 +76,7 @@ public class MyForumActivity extends BaseFragmentActivity implements View.OnClic
             case R.id.left_text:
                 finish();
                 break;
-            case R.id.forum_publish:
-                break;
+
         }
 
     }

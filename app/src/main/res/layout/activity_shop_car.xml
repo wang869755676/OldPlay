@@ -39,6 +39,9 @@
             android:layout_weight="1">
 
             <CheckBox
+                android:button="@null"
+                android:drawablePadding="10dp"
+                android:drawableLeft="@drawable/selector_car_all"
                 android:id="@+id/car_cb_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

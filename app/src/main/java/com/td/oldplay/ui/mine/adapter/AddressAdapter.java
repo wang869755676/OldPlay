@@ -34,9 +34,6 @@ public class AddressAdapter extends CommonAdapter<AddressBean> {
 
     @Override
     protected void convert(ViewHolder holder, final AddressBean addressBean, final int position) {
-        itemAddress = holder.getView(R.id.edit_addr_detail_input);
-        itemPhone = holder.getView(R.id.edit_addr_phone_input);
-        itemName = holder.getView(R.id.edit_addr_name_input);
 
         holder.setOnClickListener(R.id.addr_default, new View.OnClickListener() {
             @Override
@@ -49,20 +46,10 @@ public class AddressAdapter extends CommonAdapter<AddressBean> {
         holder.setOnClickListener(R.id.addr_edit, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (((TextView) v).getText().equals("编辑")) {
-                    itemPhone.setEnabled(true);
-                    itemName.setEnabled(true);
-                    itemAddress.setEnabled(true);
-                    ((TextView) v).setText("完成");
-                }else if(((TextView) v).getText().equals("完成")){
-                    itemPhone.setEnabled(false);
-                    itemName.setEnabled(false);
-                    itemAddress.setEnabled(false);
-                    ((TextView) v).setText("编辑");
-                    if (actionListener != null) {
-                        actionListener.onAction("update", position,addressBean);
-                    }
+                if (actionListener != null) {
+                    actionListener.onAction("update", position,addressBean);
                 }
+
             }
         });
         holder.setOnClickListener(R.id.addr_delete, new View.OnClickListener() {

@@ -43,6 +43,7 @@ import com.td.oldplay.ui.course.fragment.CourseFragment;
 import com.td.oldplay.ui.course.fragment.IntruceFragment;
 import com.td.oldplay.ui.course.fragment.ShopFragment;
 import com.td.oldplay.ui.live.LiveBaseActivity;
+import com.td.oldplay.ui.window.SharePopupWindow;
 import com.td.oldplay.utils.LiveUtils;
 import com.td.oldplay.utils.ScreenUtils;
 import com.td.oldplay.utils.ShareSDKUtils;
@@ -133,6 +134,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     private boolean island;
 
     private String[] titles;
+
+    private SharePopupWindow popupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -305,22 +308,10 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             case R.id.concern_action:
                 break;
             case R.id.share_action:
-                ShareSDKUtils.share(QQ.NAME, "老年人", "老年人啦啦", "http://www.mob.com", "http://f1.webshare.mob.com/dimgs/1c950a7b02087bf41bc56f07f7d3572c11dfcf36.jpg", new PlatformActionListener() {
-                    @Override
-                    public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-
-                    }
-
-                    @Override
-                    public void onError(Platform platform, int i, Throwable throwable) {
-                        Log.e("===", throwable.getMessage() + "-----------------");
-                    }
-
-                    @Override
-                    public void onCancel(Platform platform, int i) {
-
-                    }
-                });
+                if (popupWindow == null) {
+                    popupWindow = new SharePopupWindow(mContext, "老年人", "老年人", "", "");
+                }
+                popupWindow.showPopup(v);
                 break;
             case R.id.reword:
                 break;

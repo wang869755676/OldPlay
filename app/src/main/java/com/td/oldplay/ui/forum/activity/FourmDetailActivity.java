@@ -1,12 +1,10 @@
 package com.td.oldplay.ui.forum.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,28 +25,7 @@ import butterknife.ButterKnife;
 public class FourmDetailActivity extends BaseFragmentActivity implements
         View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, LoadMoreWrapper.OnLoadMoreListener {
 
-    @BindView(R.id.forum_detail_sence)
-    TextView forumDetailSence;
-    @BindView(R.id.forum_detail_title)
-    TextView forumDetailTitle;
-    @BindView(R.id.forum_detail_edit)
-    TextView forumDetailEdit;
-    @BindView(R.id.forum_detail_comment)
-    TextView forumDetailComment;
-    @BindView(R.id.forum_detail_name)
-    TextView forumDetailName;
-    @BindView(R.id.tv_coment_total)
-    TextView tvComentTotal;
-    @BindView(R.id.swipe_target)
-    RecyclerView swipeTarget;
-    @BindView(R.id.swipeLayout)
-    SwipeRefreshLayout swipeLayout;
-    @BindView(R.id.ed_comment)
-    EditText edComment;
-    @BindView(R.id.bt_publish)
-    Button btPublish;
-    @BindView(R.id.ll)
-    LinearLayout ll;
+
     @BindView(R.id.title_back)
     ImageView titleBack;
     @BindView(R.id.title_text)
@@ -57,8 +34,34 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
     ImageView rightImage;
     @BindView(R.id.right_image2)
     ImageView rightImage2;
+    @BindView(R.id.likeNum)
+    TextView likeNum;
 
-    private List<CommentBean> datas=new ArrayList<>();
+    @BindView(R.id.forum_detail_sence)
+    TextView forumDetailSence;
+    @BindView(R.id.forum_detail_title)
+    TextView forumDetailTitle;
+    @BindView(R.id.forum_detail_comment)
+    TextView forumDetailComment;
+    @BindView(R.id.forum_detail_edit)
+    TextView forumDetailEdit;
+    @BindView(R.id.ll_des)
+    LinearLayout llDes;
+    @BindView(R.id.forum_detail_name)
+    TextView forumDetailName;
+    @BindView(R.id.tv_coment_total)
+    TextView tvComentTotal;
+    @BindView(R.id.swipe_target)
+    RecyclerView swipeTarget;
+    @BindView(R.id.swipeLayout)
+    SwipeRefreshLayout swipeLayout;
+    @BindView(R.id.comment_ed)
+    EditText commentEd;
+    @BindView(R.id.comment_send)
+    TextView commentSend;
+    @BindView(R.id.ll_comment)
+    LinearLayout llComment;
+    private List<CommentBean> datas = new ArrayList<>();
     private CommentAdapter commentAdapter;
     private LoadMoreWrapper Adapter;
 
@@ -71,17 +74,21 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
     }
 
     private void initView() {
+        datas.add(new CommentBean());
+        datas.add(new CommentBean());
+        datas.add(new CommentBean());
+        datas.add(new CommentBean());
         titleText.setText("详情");
         titleBack.setOnClickListener(this);
         rightImage.setOnClickListener(this);
         rightImage2.setOnClickListener(this);
-        btPublish.setOnClickListener(this);
+        commentSend.setOnClickListener(this);
         forumDetailEdit.setOnClickListener(this);
         forumDetailEdit.setVisibility(View.GONE);
         swipeLayout.setOnRefreshListener(this);
         swipeTarget.setLayoutManager(new LinearLayoutManager(mContext));
-        commentAdapter=new CommentAdapter(mContext,R.layout.item_comment,datas);
-        Adapter=new LoadMoreWrapper(commentAdapter);
+        commentAdapter = new CommentAdapter(mContext, R.layout.item_comment, datas);
+        Adapter = new LoadMoreWrapper(commentAdapter);
         swipeTarget.setAdapter(Adapter);
 
     }
@@ -93,7 +100,7 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.title_back:
                 finish();
                 break;
@@ -101,9 +108,9 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
                 break;
             case R.id.right_image2: // 喜欢
                 break;
-            case R.id.bt_publish: // 发表评论
-                break;
             case R.id.forum_detail_edit: // 编辑信息
+                break;
+            case R.id.comment_send: // 发表评论
                 break;
         }
 

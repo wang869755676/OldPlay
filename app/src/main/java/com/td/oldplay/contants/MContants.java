@@ -2,10 +2,11 @@ package com.td.oldplay.contants;
 
 import android.os.Environment;
 
+import com.td.oldplay.R;
+
 import java.io.File;
 
 public class MContants {
-
 
     public static final String SHAREPREFERENCE_NAME = "sp_应用名称";
     // 每一页的数量
@@ -13,6 +14,13 @@ public class MContants {
 
     public static final int SUCCESS_CODE = 0;
 
+    public static final String SHARE_URL = NetWorkApi.SERVER_IP + "common/share/share_index";
+
+    public static final String SHARE_TITLE = "老年人";
+
+    public static final String SHARE_CONTENT=  "老年人";
+
+    public static final String IMAG_URL= R.mipmap.ic_launcher+"";
     /**
      * 友盟分享
      */
@@ -24,7 +32,7 @@ public class MContants {
     /**
      * 友盟分享 --官网
      */
-    public static final String SHARE_URL = NetWorkApi.SERVER_IP + "common/share/share_index";
+
     /**
      * QQ的App_id
      */

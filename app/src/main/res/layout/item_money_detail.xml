@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:padding="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dip" >
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="2016-01-12"
+            android:textColor="@color/home_gray"
+            android:textSize="18sp" />
+        <TextView
+            android:gravity="center"
+            android:layout_weight="1"
+            android:id="@+id/money_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dip"
+            android:text="送财币"
+            android:textColor="@color/coure_tv"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_marginRight="10dp"
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+2000"
+            android:textColor="@color/tv_red"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+</RelativeLayout>

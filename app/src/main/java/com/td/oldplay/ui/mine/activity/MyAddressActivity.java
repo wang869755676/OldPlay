@@ -1,6 +1,7 @@
 package com.td.oldplay.ui.mine.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -26,8 +27,8 @@ import butterknife.ButterKnife;
 public class MyAddressActivity extends BaseFragmentActivity
         implements SwipeRefreshLayout.OnRefreshListener,
         LoadMoreWrapper.OnLoadMoreListener,
-        View.OnClickListener ,
-        AddressAdapter.OnItemActionListener{
+        View.OnClickListener,
+        AddressAdapter.OnItemActionListener {
 
     @BindView(R.id.title)
     CustomTitlebarLayout title;
@@ -77,6 +78,7 @@ public class MyAddressActivity extends BaseFragmentActivity
                 finish();
                 break;
             case R.id.right_text: // 添加资质
+                startActivity(new Intent(mContext, AddAddressActivity.class));
                 break;
         }
     }
@@ -88,12 +90,15 @@ public class MyAddressActivity extends BaseFragmentActivity
 
     @Override
     public void onAction(String action, int postion, AddressBean item) {
-         if(action.equals("default")){
+        if (action.equals("default")) {
 
-         }else if (action.equals("update")){
+        } else if (action.equals("update")) {
+            Intent intent = new Intent(mContext, AddAddressActivity.class);
+            intent.putExtra("mode", item);
+            startActivity(intent);
+        } else if (action.equals("delete")) {
 
-         }else if(action.equals("delete")){
 
-         }
+        }
     }
 }

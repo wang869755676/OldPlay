@@ -1,9 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_gray"
+    android:orientation="vertical"
     tools:context="com.td.oldplay.ui.shop.activity.ScoreActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <com.td.oldplay.widget.CustomTitlebarLayout
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/titlebar_height"></com.td.oldplay.widget.CustomTitlebarLayout>
+
+    <EditText
+        android:id="@+id/score_ed"
+        android:layout_width="match_parent"
+        android:layout_height="159dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:gravity="start"
+        android:padding="10dp"
+        android:text="宝贝满足你的期待吗？说说你的使用心得，分享给想买的他们吧"
+        android:textColor="@color/home_gray"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/score_send"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/cor_red"
+        android:text="发布"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+</LinearLayout>

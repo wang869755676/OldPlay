@@ -23,6 +23,8 @@ import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.course.activity.TeacherDetailActivity;
 import com.td.oldplay.ui.course.adapter.TeacherAdapter;
 import com.td.oldplay.ui.mine.adapter.OrderAdapter;
+import com.td.oldplay.ui.shop.activity.LogisticsActivity;
+import com.td.oldplay.ui.shop.activity.ScoreActivity;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 
@@ -150,10 +152,15 @@ public class MyOrdersActivity extends BaseFragmentActivity
 
     @Override
     public void onAction(int action, int postion, OrderBean item) {
+        Intent intent=null;
         switch (action) {
             case 1:
+                intent=new Intent(mContext, ScoreActivity.class);
+                startActivity(intent);
                 break;
             case 2:
+                intent=new Intent(mContext, LogisticsActivity.class);
+                startActivity(intent);
                 break;
             case 3:
                 break;

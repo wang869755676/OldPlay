@@ -60,8 +60,9 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
 
     private String phone;
     private String pws;
+    private int type = 1;
 
-    private HashMap<String, Object> params;
+    private HashMap<String, Object> params = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +78,10 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 switch (checkedId) {
                     case R.id.login_typ_common:
-                        params.put("uType", 0);
+                        type = 0;
                         break;
                     case R.id.login_typ_zhubo:
-                        params.put("uType", 1);
+                        type = 1;
                         break;
                 }
             }
@@ -128,7 +129,7 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
         HttpManager.getInstance().loginUser(params, new HttpSubscriber<UserBean>(new OnResultCallBack<UserBean>() {
             @Override
             public void onSuccess(UserBean userBean) {
-                if(userBean!=null){
+                if (userBean != null) {
                     MyApplication.getInstance().mPreferenceUtil.setUser(userBean);
                     MyApplication.getInstance().mPreferenceUtil.setUserId(userBean.userId);
                 }
@@ -146,13 +147,13 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
     private boolean checkInput() {
 
         phone = loginPhone.getText().toString();
-        if (TextUtils.isEmpty(phone)) {
+       /* if (TextUtils.isEmpty(phone)) {
             ToastUtil.show("请输入手机号");
             return false;
         } else if (!AppUtils.checkPhone(phone)) {
             ToastUtil.show("请输入正确的手机号");
             return false;
-        }
+        }*/
         params.put("phone", phone);
 
 
@@ -162,9 +163,9 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
             return false;
         }
 
-        params.put("passworad", pws);
+        params.put("password", pws);
 
-
+        params.put("uType", type);
         return true;
     }
 }

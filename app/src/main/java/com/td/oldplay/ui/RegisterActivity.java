@@ -85,6 +85,7 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.left_text:
+                finish();
                 break;
             case R.id.register_submint:
                 if (checkInput()) {
@@ -93,10 +94,11 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
                 break;
             case R.id.tv_getCode:
                 tvGetCode.setEnabled(false);
-                if(!TextUtils.isEmpty(registerPhone.getText().toString()) && AppUtils.checkPhone(registerPhone.getText().toString())){
-                    HttpManager.getInstance().getCode(phone, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+                if (!TextUtils.isEmpty(registerPhone.getText().toString()) && AppUtils.checkPhone(registerPhone.getText().toString())) {
+                    HttpManager.getInstance().getCode(registerPhone.getText().toString(), new HttpSubscriber<String>(new OnResultCallBack<String>() {
                         @Override
                         public void onSuccess(String s) {
+
                             timer.start();
                             ToastUtil.show("验证码已发送");
                         }
@@ -106,10 +108,9 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
                             ToastUtil.show(errorMsg);
                         }
                     }));
-                }else{
+                } else {
                     ToastUtil.show("手机格式不正确");
                 }
-
 
 
                 break;

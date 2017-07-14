@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/item_logi_ic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="35dp"
+            android:layout_marginRight="35dp"
+            android:layout_marginTop="35dp"
+            android:src="@mipmap/icon_log_one" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/item_logi_ic"
+            android:layout_marginLeft="44dp"
+            android:background="@color/bg_gray"></View>
+
+        <TextView
+            android:id="@+id/item_log_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/item_logi_ic"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="4dp"
+            android:text="2014 sr"
+            android:textColor="@color/home_gray"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/item_log_des"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/item_log_time"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/item_log_time"
+            android:layout_toRightOf="@id/item_logi_ic"
+            android:text="商家发货"
+            android:textColor="@color/home_gray"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

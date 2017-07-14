@@ -3,6 +3,9 @@
     <style name="AppTheme.AppCompat" parent="Theme.AppCompat.Light.NoActionBar">
        <!-- <item name="colorAccent">@color/theme_color</item>-->
     </style>
+    <style name="Theme.AppStartLoadTranslucent" parent="AppTheme.AppCompat">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
     <!--仿照对话框主题-->
     <style name="AlertDialogStyle" parent="@android:style/Theme.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>

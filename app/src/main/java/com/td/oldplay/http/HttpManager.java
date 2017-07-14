@@ -5,13 +5,16 @@ import android.util.Log;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.td.oldplay.bean.TeacherBean;
+import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.contants.MContants;
 import com.td.oldplay.http.api.ApiResponse;
 import com.td.oldplay.http.api.ApiService;
 import com.td.oldplay.http.api.NetWorkAPI;
 import com.td.oldplay.http.exception.ApiException;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -83,6 +86,7 @@ public class HttpManager {
                 .map(new Function<ApiResponse<T>, T>() {
                     @Override
                     public T apply(@NonNull ApiResponse<T> response) throws Exception {
+                        Log.e("===", response.toString() + "  ");
                         int code = Integer.parseInt(response.getErrcode());
                         if (code != MContants.SUCCESS_CODE) {
                             throw new ApiException(code, response.getErrdesc());
@@ -100,5 +104,16 @@ public class HttpManager {
         toSubscribe(mApiService.getTecherLists(data), observer);
     }
 
+    public void registerUser(HashMap<String, Object> params, Observer<String> observer) {
+        toSubscribe(mApiService.registerUser(params), observer);
+    }
+
+    public void loginUser(HashMap<String, Object> params, Observer<UserBean> observer) {
+        toSubscribe(mApiService.loginUser(params), observer);
+    }
+
+    public void getCode(String phone, Observer<String> observer) {
+        toSubscribe(mApiService.getCode(phone), observer);
+    }
 
 }

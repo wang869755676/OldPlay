@@ -20,6 +20,7 @@ import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
 import com.td.oldplay.bean.ShopBean;
+import com.td.oldplay.ui.SearchActivity;
 import com.td.oldplay.ui.course.adapter.ShopAdapter;
 import com.td.oldplay.ui.shop.activity.ShopListActivity;
 import com.td.oldplay.utils.GlideUtils;
@@ -181,6 +182,12 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
             case R.id.home_shop_study:
                 intent = new Intent(mActivity, ShopListActivity.class);
                 startActivity(new Intent(mActivity, ShopListActivity.class));
+                break;
+            case R.id.right_text:
+                intent = new Intent(mActivity, SearchActivity.class);
+                intent.putExtra("type",0);
+                // intent.putExtra()
+                startActivity(intent);
                 break;
         }
     }

@@ -30,4 +30,13 @@ public class ApiResponse<T> {
     public void setData(T data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "ApiResponse{" +
+                "errcode='" + errcode + '\'' +
+                ", errdesc='" + errdesc + '\'' +
+                ", data=" + data +
+                '}';
+    }
 }

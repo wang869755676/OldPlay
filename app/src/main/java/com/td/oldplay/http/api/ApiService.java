@@ -3,11 +3,14 @@ package com.td.oldplay.http.api;
 
 import com.td.oldplay.bean.TeacherBean;
 import com.td.oldplay.bean.TestBean;
+import com.td.oldplay.bean.UserBean;
 
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -24,5 +27,15 @@ public interface ApiService {
     @GET(NetWorkAPI.GET_MORE_THEACHER_LIST+"/{data}")
     Observable<ApiResponse<List<TeacherBean>>> getTecherLists(@Path("data") String data);
 
+    @FormUrlEncoded
+    @POST(NetWorkAPI.REGISTER_API)
+    Observable<ApiResponse<String>> registerUser(@FieldMap() HashMap<String,Object>maps);
 
+    @FormUrlEncoded
+    @POST(NetWorkAPI.LOGIN_API)
+    Observable<ApiResponse<UserBean>> loginUser(@FieldMap() HashMap<String,Object>maps);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.GETCODE_API)
+    Observable<ApiResponse<String>> getCode(@Field("phone") String phone);
 }

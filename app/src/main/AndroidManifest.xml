@@ -33,13 +33,21 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.AppCompat">
-        <activity android:name=".ui.SplashActivity" />
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.SplashActivity"
+            android:theme="@style/Theme.AppStartLoadTranslucent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
+
         </activity>
         <activity
             android:name=".ui.live.LiveActivity"
@@ -53,7 +61,118 @@
             android:name=".ui.course.activity.TeacherDetailActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.course.activity.TeacherListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.shop.activity.ShopDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.shop.activity.ShopListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.shop.activity.ShopSelectedActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.forum.activity.ForumListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.forum.activity.FourmDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.mine.activity.FeedBackActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.mine.activity.MyPasswordActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.mine.activity.ModifyPasswordActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.mine.activity.MyForumActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.mine.activity.MyAddressActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.mine.activity.MyOrdersActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.mine.activity.MyCoureseActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.mine.activity.MyConcernActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.course.activity.CourseListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.shop.activity.ShopCarActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.shop.activity.OrderConfirmActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.mine.activity.AboutActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.mine.activity.MyWalletActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.mine.activity.PersonDetailActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.mine.activity.ConsumptionActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.LoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.RegisterActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.SearchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.mine.activity.AddAddressActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
+        <activity
+            android:name=".ui.ForgetPwsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.shop.activity.ScoreActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.shop.activity.LogisticsActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
         <!-- ShareSDK的activity -->
         <activity
             android:name="com.mob.tools.MobUIShell"
@@ -94,42 +213,20 @@
               android:name="Mob-AppSecret"
               android:value="您的AppSecret" />
         -->
-        <!-- 支付宝支付-->
+        <!-- 支付宝支付 -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name="com.alipay.sdk.app.H5AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
-        <activity android:name=".ui.course.activity.TeacherListActivity" />
-        <activity android:name=".ui.shop.activity.ShopDetailActivity" />
-        <activity android:name=".ui.shop.activity.ShopListActivity" />
-        <activity android:name=".ui.shop.activity.ShopSelectedActivity" />
-        <activity android:name=".ui.forum.activity.ForumListActivity" />
-        <activity android:name=".ui.forum.activity.FourmDetailActivity" />
-        <activity android:name=".ui.mine.activity.FeedBackActivity" />
-        <activity android:name=".ui.mine.activity.MyPasswordActivity" />
-        <activity android:name=".ui.mine.activity.ModifyPasswordActivity" />
-        <activity android:name=".ui.mine.activity.MyForumActivity" />
-        <activity
-            android:name=".ui.mine.activity.MyAddressActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity android:name=".ui.mine.activity.MyOrdersActivity" />
-        <activity android:name=".ui.mine.activity.MyCoureseActivity" />
-        <activity android:name=".ui.mine.activity.MyConcernActivity" />
-        <activity android:name=".ui.course.activity.CourseListActivity" />
-        <activity android:name=".ui.shop.activity.ShopCarActivity" />
-        <activity android:name=".ui.shop.activity.OrderConfirmActivity" />
-        <activity android:name=".ui.mine.activity.AboutActivity" />
-        <activity android:name=".ui.mine.activity.MyWalletActivity" />
-        <activity android:name=".ui.mine.activity.PersonDetailActivity" />
-        <activity android:name=".ui.mine.activity.ConsumptionActivity"></activity>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+
     </application>
 
 </manifest>

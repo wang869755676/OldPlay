@@ -21,6 +21,7 @@ import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
 import com.td.oldplay.bean.CourseBean;
 import com.td.oldplay.bean.CourseTypeBean;
+import com.td.oldplay.ui.SearchActivity;
 import com.td.oldplay.ui.course.activity.CourseListActivity;
 import com.td.oldplay.ui.course.activity.TeacherListActivity;
 import com.td.oldplay.ui.course.adapter.CoureseTypeAdapter;
@@ -224,6 +225,10 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
             case R.id.left_text:
                 break;
             case R.id.right_text:
+                intent = new Intent(mActivity, SearchActivity.class);
+                intent.putExtra("type",0);
+                // intent.putExtra()
+                startActivity(intent);
                 break;
 
         }

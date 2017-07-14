@@ -10,6 +10,8 @@ import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.network.HttpUtils;
 import com.td.oldplay.utils.SharePreferenceUtil;
 import com.td.oldplay.utils.ToastUtil;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 
 /**
@@ -24,12 +26,15 @@ public class MyApplication extends Application {
     public static MyApplication getInstance() { // 通过一个方法给外面提供实例
         return instance;
     }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        IWXAPI api = WXAPIFactory.createWXAPI(this, MContants.WX_APP_ID);
+        api.registerApp(MContants.WX_APP_ID);
         instance = this;
         // sp 工具类
-        mPreferenceUtil=new SharePreferenceUtil(this, MContants.SHAREPREFERENCE_NAME);
+        mPreferenceUtil = new SharePreferenceUtil(this, MContants.SHAREPREFERENCE_NAME);
         // toast 工具类
         ToastUtil.init(this);
         /**
@@ -37,7 +42,7 @@ public class MyApplication extends Application {
          */
         HttpManager.init(this);
         // 互动直播
-       // StreamingEnv.init(this);
+        // StreamingEnv.init(this);
         RTCMediaStreamingManager.init(this);
         // 分享
         MobSDK.init(this, "1f36d53439891", "1fd1f03e6b07f7e292b71483a86d12fc");

@@ -16,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragment;
@@ -23,6 +24,7 @@ import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.CourseBean;
 import com.td.oldplay.bean.ShopBean;
+import com.td.oldplay.ui.SearchActivity;
 import com.td.oldplay.ui.course.adapter.CourserAdapter;
 import com.td.oldplay.ui.course.adapter.ShopAdapter;
 import com.td.oldplay.ui.shop.activity.ShopDetailActivity;
@@ -43,7 +45,7 @@ public class ShopFragment extends BaseFragment implements
 
 
     @BindView(R.id.shop_seach)
-    EditText shopSeach;
+    TextView shopSeach;
 
     @BindView(R.id.rb_price)
     CheckBox rbPrice;
@@ -104,6 +106,7 @@ public class ShopFragment extends BaseFragment implements
         rbPrice.setOnClickListener(this);
         rbScore.setOnClickListener(this);
         rbSell.setOnClickListener(this);
+        shopSeach.setOnClickListener(this);
 
         datas = new ArrayList<>();
         datas = new ArrayList<>();
@@ -154,6 +157,11 @@ public class ShopFragment extends BaseFragment implements
                 break;
             case R.id.rb_sell:
                 break;
+            case R.id.shop_seach:
+                Intent intent = new Intent(mActivity, SearchActivity.class);
+                intent.putExtra("type", 1);
+                // intent.putExtra()
+                startActivity(intent);
         }
     }
 }

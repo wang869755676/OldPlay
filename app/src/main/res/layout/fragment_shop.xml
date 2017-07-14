@@ -28,7 +28,8 @@
                 android:layout_marginLeft="10dp"
                 android:src="@mipmap/icon_searc_home" />
 
-            <EditText
+            <TextView
+                android:gravity="center_vertical"
                 android:id="@+id/shop_seach"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

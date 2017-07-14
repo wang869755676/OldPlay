@@ -8,7 +8,7 @@ import java.io.File;
 
 public class MContants {
 
-    public static final String SHAREPREFERENCE_NAME = "sp_应用名称";
+    public static final String SHAREPREFERENCE_NAME = "oldplay";
     // 每一页的数量
     public static final int PAGENUM = 10;
 

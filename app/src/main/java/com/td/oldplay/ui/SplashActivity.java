@@ -1,21 +1,14 @@
 package com.td.oldplay.ui;
 
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
-import com.yuyh.library.imgsel.ImageLoader;
-import com.yuyh.library.imgsel.ImgSelActivity;
-import com.yuyh.library.imgsel.ImgSelConfig;
-
-import java.util.List;
+;
 
 
 /**
@@ -24,13 +17,35 @@ import java.util.List;
 
 public class SplashActivity extends BaseFragmentActivity {
 
+    private Handler handler;
+    private Runnable runnable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_splash);
+        handler = new Handler();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(mContext, LoginActivity.class));
+                finish();
+            }
+        };
     }
 
-    // 自定义图片加载器
+    @Override
+    protected void onStart() {
+        super.onStart();
+        handler.postDelayed(runnable, 2000);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        handler.removeCallbacks(runnable);
+    }
+    /*   // 自定义图片加载器
     private ImageLoader loader = new ImageLoader() {
         @Override
         public void displayImage(Context context, String path, ImageView imageView) {
@@ -81,5 +96,5 @@ public class SplashActivity extends BaseFragmentActivity {
                 //  tvResult.append(path + "\n");
             }
         }
-    }
+    }*/
 }

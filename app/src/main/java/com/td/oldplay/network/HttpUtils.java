@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class HttpUtils {
 
-    private static final String BASE_URL = "https://api.github.com";
+    private static final String BASE_URL = "http://172.16.0.203:8080";
     private Retrofit mRetrofit;
     private HttpService mPlayService;
     private ErrorListener mErrorListener;
@@ -47,7 +47,6 @@ public class HttpUtils {
 
                 Request originRequest = chain.request();
                 Request authorisedRequest = originRequest.newBuilder()
-                        .header("X-Auth-Token", userDataUtils.getToken())  //TODO TOKEN的判断
                         .build();
                 Response response = chain.proceed(authorisedRequest);
                 if (response.code() == 403 || response.code() == 500) {

@@ -6,8 +6,8 @@ import org.json.JSONObject;
 
 import com.td.oldplay.contants.MContants;
 import com.tencent.mm.opensdk.modelpay.PayReq;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import android.app.Activity;
 import android.os.Bundle;

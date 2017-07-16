@@ -43,6 +43,7 @@ import com.td.oldplay.ui.course.fragment.CourseFragment;
 import com.td.oldplay.ui.course.fragment.IntruceFragment;
 import com.td.oldplay.ui.course.fragment.ShopFragment;
 import com.td.oldplay.ui.live.LiveBaseActivity;
+import com.td.oldplay.ui.window.CustomDialog;
 import com.td.oldplay.ui.window.SharePopupWindow;
 import com.td.oldplay.utils.LiveUtils;
 import com.td.oldplay.utils.ScreenUtils;
@@ -64,7 +65,7 @@ import cn.sharesdk.tencent.qq.QQ;
 public class TeacherDetailActivity extends LiveBaseActivity implements
         PLMediaPlayer.OnCompletionListener,
         PLMediaPlayer.OnVideoSizeChangedListener,
-        PLMediaPlayer.OnErrorListener, View.OnClickListener {
+        PLMediaPlayer.OnErrorListener, View.OnClickListener,CustomDialog.DialogClick{
 
     private static final String TAG = "TeacherDetailActivity";
     @BindView(R.id.title)
@@ -114,6 +115,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     @BindView(R.id.ll_comment)
     LinearLayout llComment;
 
+    private CustomDialog customDialog;
 
     private RTCMediaStreamingManager mRTCStreamingManager;
     // private RTCConferenceOptions options;
@@ -141,6 +143,9 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
+        customDialog=new CustomDialog(mContext);
+        customDialog.setTitleVisible(View.GONE);
+        customDialog.setDialogClick(this);
         landan.setOnClickListener(this);
         joinCon.setOnClickListener(this);
         concernAction.setOnClickListener(this);
@@ -292,6 +297,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         switch (v.getId()) {
             case R.id.join_con:
                 //向主播发送连麦请求
+                customDialog.setContent("支付多少钱连麦");
+                customDialog.show();
                 break;
             case R.id.landan:
                 if (island) {
@@ -596,4 +603,13 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     }
 
 
+    @Override
+    public void onCancel() {
+
+    }
+
+    @Override
+    public void onOk() {
+
+    }
 }

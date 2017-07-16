@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="245dp"
+    android:layout_height="160dp"
+    android:background="@drawable/corwhite"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/corwhite"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/dialog_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:maxLines="3"
+            android:padding="10dp"
+            android:text="支付成功"
+            android:textColor="@color/tv_red"
+            android:textSize="18sp" />
+
+        <TextView
+            android:background="@drawable/cor_gray_5"
+            android:layout_marginTop="15dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/dialog_content"
+            android:id="@+id/dialog_ok"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/coure_tv"
+            android:textSize="14sp" />
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

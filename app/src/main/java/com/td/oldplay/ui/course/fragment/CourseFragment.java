@@ -12,11 +12,11 @@ import android.view.ViewGroup;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragment;
+import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
-import com.td.oldplay.bean.CommentBean;
 import com.td.oldplay.bean.CourseBean;
-import com.td.oldplay.ui.course.adapter.CommentAdapter;
 import com.td.oldplay.ui.course.adapter.CourserAdapter;
+import com.td.oldplay.ui.window.CustomDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,17 +28,21 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CourseFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener, LoadMoreWrapper.OnLoadMoreListener {
+public class CourseFragment extends BaseFragment implements
+        SwipeRefreshLayout.OnRefreshListener,
+        LoadMoreWrapper.OnLoadMoreListener,
+        CustomDialog.DialogClick {
 
     @BindView(R.id.swipeToLoadLayout)
     SwipeRefreshLayout swipeToLoadLayout;
     Unbinder unbinder;
     @BindView(R.id.swipe_target)
     RecyclerView swipeTarget;
+    int page;
     private List<CourseBean> datas;
     private LoadMoreWrapper adapter;
-
-    int page;
+    private CourserAdapter courserAdapter;
+    private CustomDialog customDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,22 +68,50 @@ public class CourseFragment extends BaseFragment implements SwipeRefreshLayout.O
 
     @Override
     protected void init(View view) {
+        datas = new ArrayList<>();
+        datas = new ArrayList<>();
+        datas.add(new CourseBean());
+        datas.add(new CourseBean());
+
         swipeToLoadLayout.setOnRefreshListener(this);
-        datas = new ArrayList<>();
-        datas = new ArrayList<>();
-        datas.add(new CourseBean());
-        datas.add(new CourseBean());
+        customDialog = new CustomDialog(mActivity);
+        customDialog.setTitleVisible(View.GONE);
+        customDialog.setDialogClick(this);
         swipeTarget.setLayoutManager(new LinearLayoutManager(mActivity));
-        adapter = new LoadMoreWrapper(new CourserAdapter(mActivity, R.layout.item_courese, datas));
+        courserAdapter = new CourserAdapter(mActivity, R.layout.item_courese, datas);
+        adapter = new LoadMoreWrapper(courserAdapter);
         //adapter.setLoadMoreView(R.layout.default_loading);
         adapter.setOnLoadMoreListener(this);
         swipeTarget.setAdapter(adapter);
+        courserAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+
+                customDialog.setContent("支付XX元购买课程");
+                customDialog.show();
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
 
     }
 
     @Override
     public void onLoadMoreRequested() {
         page++;
+
+    }
+
+    @Override
+    public void onCancel() {
+
+    }
+
+    @Override
+    public void onOk() {
 
     }
 }

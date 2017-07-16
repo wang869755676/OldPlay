@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pop_share_root"
+    android:layout_width="200dp"
+    android:layout_height="120dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <com.td.oldplay.widget.CircleImageView
+            android:id="@+id/pop_user_iv"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/icon_avator_default" />
+
+        <TextView
+            android:id="@+id/pop_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/pop_user_iv"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@id/pop_user_iv"
+            android:gravity="center"
+            android:text="微信"
+            android:textColor="@color/coure_tv"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/pop_user_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/pop_user_iv"
+            android:layout_alignLeft="@id/pop_user_name"
+            android:layout_marginBottom="8dp"
+            android:layout_toRightOf="@id/pop_user_iv"
+            android:gravity="center"
+            android:text="微信"
+            android:textColor="@color/home_gray"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

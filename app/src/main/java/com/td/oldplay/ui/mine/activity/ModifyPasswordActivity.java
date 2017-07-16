@@ -7,9 +7,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.td.oldplay.MyApplication;
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
+import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +44,7 @@ public class ModifyPasswordActivity extends BaseFragmentActivity implements View
     private String oldPws;
     private String newPws;
     private String reNewPws;
+    private HashMap<String, Object> params = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +59,7 @@ public class ModifyPasswordActivity extends BaseFragmentActivity implements View
         }
         title.setOnLeftListener(this);
         queUpdatePwd.setOnClickListener(this);
+        params.put("userId", MyApplication.getInstance().mPreferenceUtil.getUserId());
     }
 
     @Override
@@ -60,7 +69,9 @@ public class ModifyPasswordActivity extends BaseFragmentActivity implements View
                 finish();
                 break;
             case R.id.que_update_pwd:
-                if(checkInput()){
+                if (checkInput()) {
+                    params.put("password",oldPwd);
+                    params.put("newPpassword",newPws);
                     updatePassword();
                 }
 
@@ -84,11 +95,36 @@ public class ModifyPasswordActivity extends BaseFragmentActivity implements View
         } else if (!newPws.equals(reNewPws)) {
             reUpdatePwd.setError("两次密码不一致");
             return false;
-        } else
+        }
 
-            return true;
+        return true;
     }
 
     private void updatePassword() {
+        if (type == 0) {
+            HttpManager.getInstance().modifyLoginPws(params, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+                @Override
+                public void onSuccess(String s) {
+                    ToastUtil.show("修改成功");
+                }
+
+                @Override
+                public void onError(int code, String errorMsg) {
+                    ToastUtil.show(errorMsg);
+                }
+            }));
+        } else if (type == 1) {
+            HttpManager.getInstance().modifyZhifuPws(params, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+                @Override
+                public void onSuccess(String s) {
+                    ToastUtil.show("修改成功");
+                }
+
+                @Override
+                public void onError(int code, String errorMsg) {
+                    ToastUtil.show(errorMsg);
+                }
+            }));
+        }
     }
 }

@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragment;
+import com.td.oldplay.base.EventMessage;
+import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.ui.mine.activity.AboutActivity;
 import com.td.oldplay.ui.mine.activity.FeedBackActivity;
 import com.td.oldplay.ui.mine.activity.MyAddressActivity;
@@ -25,8 +27,13 @@ import com.td.oldplay.ui.mine.activity.MyOrdersActivity;
 import com.td.oldplay.ui.mine.activity.MyPasswordActivity;
 import com.td.oldplay.ui.mine.activity.MyWalletActivity;
 import com.td.oldplay.ui.mine.activity.PersonDetailActivity;
+import com.td.oldplay.utils.GlideUtils;
 import com.td.oldplay.widget.CircleImageView;
 import com.td.oldplay.widget.CustomTitlebarLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -134,6 +141,11 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
     RelativeLayout mineAbout;
     @BindView(R.id.swipe_target)
     NestedScrollView swipeTarget;
+    @BindView(R.id.mine_scoree)
+    TextView mineScoree;
+    @BindView(R.id.go_about)
+    ImageView goAbout;
+    private UserBean user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -141,7 +153,34 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home_my, container, false);
         unbinder = ButterKnife.bind(this, view);
+        EventBus.getDefault().register(this);
+        setUser();
         return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void handEventMessage(EventMessage message) {
+        if ("userUpdate".equals(message.action)) {
+            // mineUserHeadImage
+            setUser();
+
+
+        }
+    }
+
+    private void setUser() {
+        if (user != null) {
+            GlideUtils.setAvatorImage(mActivity, user.avatar, mineUserHeadImage);
+            mineNickname.setText(user.nickName);
+            mineScoree.setText(user.score + "");
+        }
+
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.td.oldplay.http.api.ApiResponse;
 import com.td.oldplay.http.api.ApiService;
 import com.td.oldplay.http.api.NetWorkAPI;
 import com.td.oldplay.http.exception.ApiException;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,10 +24,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Part;
 
 public class HttpManager {
     public static final String TAG = HttpManager.class.getSimpleName();
@@ -115,5 +118,20 @@ public class HttpManager {
     public void getCode(String phone, Observer<String> observer) {
         toSubscribe(mApiService.getCode(phone), observer);
     }
+    public void modifyLoginPws(HashMap<String, Object> params, Observer<String> observer) {
+        toSubscribe(mApiService.modifyLoginPws(params), observer);
+    }
 
+    public void modifyZhifuPws(HashMap<String, Object> params, Observer<String> observer) {
+        toSubscribe(mApiService.modifyZhifuPws(params), observer);
+    }
+
+    public void modifyUser(HashMap<String, Object> params, MultipartBody.Part file,HttpSubscriber<UserBean> observer) {
+        toSubscribe(mApiService.modifyUser(params,file), observer);
+
+    }
+
+    public void forgetPws(HashMap<String, Object> params, Observer<String> observer) {
+        toSubscribe(mApiService.forgetPws(params), observer);
+    }
 }

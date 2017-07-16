@@ -8,9 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
-
 import com.kaopiz.kprogresshud.KProgressHUD;
-import com.td.oldplay.contants.MContants;
+import com.td.oldplay.MyApplication;
 import com.td.oldplay.utils.SharePreferenceUtil;
 
 /**
@@ -19,8 +18,9 @@ import com.td.oldplay.utils.SharePreferenceUtil;
 public abstract class BaseFragment extends Fragment {
     protected BaseFragmentActivity mBaseActivity = null;
     protected Activity mActivity = null;
-    public SharePreferenceUtil mSpUtil;
+    protected String userId;
     private KProgressHUD hud;
+    private SharePreferenceUtil spUilts;
 
     @SuppressWarnings("deprecation")
     @Override
@@ -30,7 +30,8 @@ public abstract class BaseFragment extends Fragment {
             this.mBaseActivity = (BaseFragmentActivity) activity;
         }
         this.mActivity = activity;
-        mSpUtil = new SharePreferenceUtil(mActivity, MContants.UserLogin);
+        userId = MyApplication.getInstance().mPreferenceUtil.getUserId();
+        spUilts = MyApplication.getInstance().mPreferenceUtil;
     }
 
     @Override

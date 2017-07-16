@@ -82,7 +82,7 @@
                     android:layout_gravity="left|center_vertical"
                     android:button="@null"
                     android:checked="true"
-                    android:drawableLeft="@drawable/selector_adr"
+
                     android:drawablePadding="5dp"
                     android:text="设为默认" />
             </FrameLayout>

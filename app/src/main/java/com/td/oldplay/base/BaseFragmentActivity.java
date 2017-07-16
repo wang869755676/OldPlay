@@ -1,27 +1,30 @@
 package com.td.oldplay.base;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.td.oldplay.MyApplication;
+import com.td.oldplay.utils.SharePreferenceUtil;
 
 
 public abstract class BaseFragmentActivity extends FragmentActivity {
 
     public Context mContext;   //吐司的上下文
     protected Context AContext;
+    protected String userId;
     private KProgressHUD hud;
+    protected SharePreferenceUtil spUilts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mContext =this;
-        AContext=getApplicationContext();
+        mContext = this;
+        AContext = getApplicationContext();
+        userId= MyApplication.getInstance().mPreferenceUtil.getUserId();
+        spUilts= MyApplication.getInstance().mPreferenceUtil;
       /*  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
             window.setFlags(
@@ -36,6 +39,7 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
                 .setCancellable(false).show();
 
     }
+
     public void showLoading(String msg) {
         hud = KProgressHUD.create(mContext)
                 .setLabel(msg)

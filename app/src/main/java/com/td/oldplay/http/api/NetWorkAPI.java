@@ -22,4 +22,12 @@ public class NetWorkAPI {
     public final static String LOGIN_API = "lnrzb/user/userLogin";
 
     public final static String GETCODE_API = "lnrzb/user/sendvcode";
+
+    public final static String UPDATEZPWS_API = "lnrzb/user/revisePassword";
+
+    public final static String UPDATEPWS_API = "lnrzb/user/revisePassword";
+
+    public final static String FORGETPWS_API = "lnrzb/user/forgetPassword";
+
+    public final static String UPDATEUSE_API = "lnrzb/user/updateUser";
 }

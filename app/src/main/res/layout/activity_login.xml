@@ -1,148 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/icon_login_bg"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context="com.td.oldplay.ui.LoginActivity">
 
-    <com.td.oldplay.widget.CustomTitlebarLayout
-        android:visibility="gone"
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/titlebar_height"></com.td.oldplay.widget.CustomTitlebarLayout>
-
-    <com.td.oldplay.widget.CircleImageView
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/icon_avator_default" />
-
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+      >
+
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="手机号:" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            android:text="登录"
+            android:textColor="@color/coure_tv"
+            android:textSize="25sp"
+            android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/login_phone"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:text="" />
-    </LinearLayout>
+            android:layout_marginTop="15dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="登录类型:"
+                android:textColor="@color/coure_tv"
+                android:textSize="18sp" />
+
+            <RadioGroup
+                android:id="@+id/login_type"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/login_typ_zhubo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:button="@null"
+                    android:checked="true"
+                    android:drawableLeft="@drawable/selector_order_type"
+                    android:text="主播"
+                    android:textColor="@color/coure_tv"
+                    android:textSize="18sp" />
+
+                <RadioButton
+                    android:id="@+id/login_typ_common"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/selector_order_type"
+                    android:text="普通用户"
+                    android:textColor="@color/coure_tv"
+                    android:textSize="18sp" />
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="账号"
+                android:textColor="@color/coure_tv"
+                android:textSize="18sp" />
+
+            <EditText
+                android:lines="1"
+                android:textColor="@color/home_gray"
+                android:textSize="18sp"
+                android:id="@+id/login_phone"
+                android:layout_width="200dp"
+                android:layout_height="38dp"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/cor_gray_line"
+                android:inputType="phone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="密码"
+                android:textColor="@color/coure_tv"
+                android:textSize="18sp" />
+
+            <EditText
+                android:inputType="textPassword"
+                android:lines="1"
+                android:textColor="@color/home_gray"
+                android:textSize="18sp"
+                android:id="@+id/login_pws"
+                android:layout_width="200dp"
+                android:layout_height="38dp"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/cor_gray_line" />
+
+
+        </LinearLayout>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="密码:" />
-
-        <EditText
-            android:id="@+id/login_pws"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:maxLength="6"
-            android:text="" />
+            android:id="@+id/login_servier"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/cor_login"
+            android:gravity="center"
+            android:text="登录"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/login_forget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="忘记密码" />
+            android:layout_marginTop="15dp"
+            android:text="忘记密码"
+            android:textColor="#777777"
+            android:textSize="12sp" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="登录类型:" />
-
-         <RadioGroup
-             android:id="@+id/login_type"
-             android:orientation="horizontal"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content">
-             <RadioButton
-                 android:checked="true"
-                 android:id="@+id/login_typ_zhubo"
-                 android:button="@null"
-                 android:text="主播"
-                 android:drawableLeft="@drawable/selector_order_type"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content" />
-             <RadioButton
-                 android:id="@+id/login_typ_common"
-                 android:button="@null"
-                 android:text="普通用户"
-                 android:drawableLeft="@drawable/selector_order_type"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content" />
-         </RadioGroup>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+            android:layout_marginTop="30dp"
+            android:text="还没有账户?"
+            android:textColor="#777777"
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/login_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="注册" />
+            android:layout_marginTop="15sp"
+            android:text="现在注册"
+            android:textColor="#5dabef"
+            android:textSize="12sp" />
 
-        <TextView
-            android:id="@+id/login_servier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="登录" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="其他登录方式" />
-
-        <View
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/bg_gray"></View>
-
-        <TextView
-            android:id="@+id/login_weixin"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="微信登录" />
+            android:layout_marginTop="30dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="249dp"
+                android:layout_height="1dp"
+                android:background="#7a7a7a"></View>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="使用其他登录方式"
+                android:textColor="#777777"
+                android:textSize="12sp" />
+
+
+            <ImageView
+                android:id="@+id/login_weixin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:src="@mipmap/icon_login_weixin" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</android.support.v4.widget.NestedScrollView>

@@ -1,11 +1,13 @@
 package com.td.oldplay.ui.course.adapter;
 
 import android.content.Context;
+import android.widget.ImageView;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
 import com.td.oldplay.bean.TeacherBean;
+import com.td.oldplay.utils.GlideUtils;
 
 import java.util.List;
 
@@ -25,7 +27,9 @@ public class TeacherAdapter extends CommonAdapter<TeacherBean> {
     @Override
     protected void convert(ViewHolder holder, TeacherBean teacherBean, int position) {
         if (type == 0) {
-            holder.setText(R.id.item_school, "ddddd");
+            holder.setText(R.id.item_school,"课时:" +teacherBean.classHour+"节");
         }
+        GlideUtils.setImage(mContext,teacherBean.avatar, (ImageView) holder.getView(R.id.circularImage));
+        holder.setText(R.id.item_introduce,"    " +teacherBean.profile);
     }
 }

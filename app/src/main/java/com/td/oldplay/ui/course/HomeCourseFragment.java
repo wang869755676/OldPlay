@@ -19,8 +19,13 @@ import com.td.oldplay.base.BaseFragment;
 import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
+import com.td.oldplay.bean.BannerInfo;
 import com.td.oldplay.bean.CourseBean;
 import com.td.oldplay.bean.CourseTypeBean;
+import com.td.oldplay.bean.HomeCourseInfo;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.SearchActivity;
 import com.td.oldplay.ui.course.activity.CourseListActivity;
 import com.td.oldplay.ui.course.activity.TeacherListActivity;
@@ -71,16 +76,14 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
     @BindView(R.id.view2)
     View view2;
 
-    private List<String> banners;
-    private List<CourseBean> datas;
+    private List<BannerInfo> banners = new ArrayList<>();
     private List<CourseTypeBean> typeBeens = new ArrayList<>();
+    private List<CourseTypeBean> hotBeens = new ArrayList<>();
+    private List<CourseTypeBean> recomendBeens = new ArrayList<>();
+
     private Adapter recommendAdapter;
     private Adapter hotAdapter;
     private CoureseTypeAdapter typeAdapter;
-
-    public HomeCourseFragment() {
-        // Required empty public constructor
-    }
 
 
     @Override
@@ -99,19 +102,8 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         title.setLeftImageResource(R.mipmap.icon_updown);
         title.setOnRightListener(this);
         title.setOnLeftListener(this);
-        banners = new ArrayList<>();
-        banners.add("http://img2.imgtn.bdimg.com/it/u=49292017,22064401&fm=28&gp=0.jpg");
-        banners.add("http://pic.58pic.com/58pic/13/85/85/73T58PIC9aj_1024.jpg");
-        banners.add("http://img2.imgtn.bdimg.com/it/u=49292017,22064401&fm=28&gp=0.jpg");
-        banners.add("http://pic.58pic.com/58pic/13/85/85/73T58PIC9aj_1024.jpg");
-
         homrCoureseBanner.setIndicatorVisible(false);
-        homrCoureseBanner.setPages(banners, new MZHolderCreator<BannerViewHolder>() {
-            @Override
-            public BannerViewHolder createViewHolder() {
-                return new BannerViewHolder();
-            }
-        });
+
         homrCoureseBanner.getViewPager().setPageTransformer(true, new CustPagerTransformer(mActivity));
         homrCoureseBanner.getViewPager().setPageMargin(50);
 
@@ -134,15 +126,9 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
             }
         });
 
-        datas = new ArrayList<>();
-        datas.add(new CourseBean());
-        datas.add(new CourseBean());
 
-        typeBeens.add(new CourseTypeBean());
-        typeBeens.add(new CourseTypeBean());
-
-        hotAdapter = new Adapter(mActivity, R.layout.item_home_course, datas);
-        recommendAdapter = new Adapter(mActivity, R.layout.item_home_course, datas);
+        hotAdapter = new Adapter(mActivity, R.layout.item_home_course, hotBeens);
+        recommendAdapter = new Adapter(mActivity, R.layout.item_home_course, recomendBeens);
         typeAdapter = new CoureseTypeAdapter(mActivity, R.layout.item_course_type, typeBeens);
         homeCouresType.setAdapter(typeAdapter);
         homeCoureHot.setAdapter(hotAdapter);
@@ -150,7 +136,11 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         typeAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                startActivity(new Intent(mActivity, CourseListActivity.class));
+                Intent intent = new Intent(mActivity, CourseListActivity.class);
+                intent.putExtra("type", 1);
+                intent.putExtra("title",typeBeens.get(position).name+"类课程");
+                intent.putExtra("id",typeBeens.get(position).id);
+                startActivity(intent);
             }
 
             @Override
@@ -161,7 +151,9 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         hotAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                startActivity(new Intent(mActivity, TeacherListActivity.class));
+                Intent intent = new Intent(mActivity, TeacherListActivity.class);
+                intent.putExtra("courseId", hotBeens.get(position).id);
+                startActivity(intent);
             }
 
             @Override
@@ -172,7 +164,9 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         recommendAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                startActivity(new Intent(mActivity, TeacherListActivity.class));
+                Intent intent = new Intent(mActivity, TeacherListActivity.class);
+                intent.putExtra("courseId", hotBeens.get(position).id);
+                startActivity(intent);
             }
 
             @Override
@@ -184,6 +178,46 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         homeMoreHot.setOnClickListener(this);
         homeMoreRecoment.setOnClickListener(this);
         moreTypeBtn.setOnClickListener(this);
+
+        getData();
+    }
+
+    private void getData() {
+        HttpManager.getInstance().getHomeCourse(new HttpSubscriber<HomeCourseInfo>(new OnResultCallBack<HomeCourseInfo>() {
+            @Override
+            public void onSuccess(HomeCourseInfo homeCourseInfo) {
+                if (homeCourseInfo != null) {
+                    if (homeCourseInfo.coursesBannerLis != null && homeCourseInfo.coursesBannerLis.size() > 0) {
+                        homrCoureseBanner.setPages(homeCourseInfo.coursesBannerLis, new MZHolderCreator<BannerViewHolder>() {
+                            @Override
+                            public BannerViewHolder createViewHolder() {
+                                return new BannerViewHolder();
+                            }
+                        });
+                    }
+
+                    if (homeCourseInfo.coursesTypeList != null) {
+                        typeBeens.addAll(homeCourseInfo.coursesTypeList);
+                        typeAdapter.notifyDataSetChanged();
+                    }
+
+                    if (homeCourseInfo.commendCourseList != null) {
+                        recomendBeens.addAll(homeCourseInfo.commendCourseList);
+                        recommendAdapter.notifyDataSetChanged();
+                    }
+
+                    if (homeCourseInfo.hotCoursesList != null) {
+                        hotBeens.addAll(homeCourseInfo.hotCoursesList);
+                        hotAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+
+            }
+        }));
     }
 
     @Override
@@ -209,24 +243,25 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         switch (v.getId()) {
             case R.id.home_more_hot:
                 intent = new Intent(mActivity, CourseListActivity.class);
-                // intent.putExtra()
+                intent.putExtra("type", 3);
                 startActivity(intent);
                 break;
             case R.id.home_more_recoment:
                 intent = new Intent(mActivity, CourseListActivity.class);
-                // intent.putExtra()
+                intent.putExtra("type", 2);
                 startActivity(intent);
                 break;
             case R.id.more_type_btn:
                 intent = new Intent(mActivity, CourseListActivity.class);
-                // intent.putExtra()
+                intent.putExtra("type", 1);
+                intent.putExtra("id","");
                 startActivity(intent);
                 break;
             case R.id.left_text:
                 break;
             case R.id.right_text:
                 intent = new Intent(mActivity, SearchActivity.class);
-                intent.putExtra("type",0);
+                intent.putExtra("type", 0);
                 // intent.putExtra()
                 startActivity(intent);
                 break;
@@ -234,7 +269,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         }
     }
 
-    public static class BannerViewHolder implements MZViewHolder<String> {
+    public static class BannerViewHolder implements MZViewHolder<BannerInfo> {
         private ImageView mImageView;
 
         @Override
@@ -246,19 +281,26 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         }
 
         @Override
-        public void onBind(Context context, int position, String data) {
-            GlideUtils.setImage(context, data, mImageView);
+        public void onBind(Context context, int position, BannerInfo data) {
+            if (data != null) {
+                GlideUtils.setImage(context, data.picUrl, mImageView);
+            }
+
         }
     }
 
-    private static class Adapter extends CommonAdapter<CourseBean> {
-        public Adapter(Context context, int layoutId, List<CourseBean> datas) {
+    private static class Adapter extends CommonAdapter<CourseTypeBean> {
+        public Adapter(Context context, int layoutId, List<CourseTypeBean> datas) {
             super(context, layoutId, datas);
         }
 
         @Override
-        protected void convert(ViewHolder holder, CourseBean homeCourseBean, int position) {
-            GlideUtils.setImage(mContext, "http://pic.58pic.com/58pic/13/85/85/73T58PIC9aj_1024.jpg", (ImageView) holder.getView(R.id.item_home_iv));
+        protected void convert(ViewHolder holder, CourseTypeBean homeCourseBean, int position) {
+            if (homeCourseBean != null) {
+                GlideUtils.setImage(mContext, homeCourseBean.picUrl, (ImageView) holder.getView(R.id.item_home_iv));
+                holder.setText(R.id.item_courese_name, homeCourseBean.name);
+            }
+
         }
 
     }

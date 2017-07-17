@@ -12,6 +12,7 @@ import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.CourseBean;
+import com.td.oldplay.bean.CourseTypeBean;
 import com.td.oldplay.ui.course.activity.TeacherListActivity;
 import com.td.oldplay.ui.course.adapter.CourserListAdapter;
 import com.td.oldplay.widget.CustomTitlebarLayout;
@@ -36,7 +37,7 @@ public class MyCoureseActivity extends BaseFragmentActivity
     private LoadMoreWrapper adapter;
     private CourserListAdapter coureseAdapter;
     private int page = 1;
-    private List<CourseBean> datas = new ArrayList<>();
+    private List<CourseTypeBean> datas = new ArrayList<>();
 
 
     @Override
@@ -54,7 +55,7 @@ public class MyCoureseActivity extends BaseFragmentActivity
         title.setOnLeftListener(this);
         swipeLayout.setOnRefreshListener(this);
         swipeTarget.setLayoutManager(new LinearLayoutManager(mContext));
-        datas.add(new CourseBean());
+       // datas.add(new CourseBean());
 
         coureseAdapter = new CourserListAdapter(mContext, R.layout.item_my_teacher_list, datas);
         adapter = new LoadMoreWrapper(coureseAdapter);

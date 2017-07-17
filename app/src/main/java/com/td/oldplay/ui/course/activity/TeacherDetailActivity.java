@@ -65,7 +65,7 @@ import cn.sharesdk.tencent.qq.QQ;
 public class TeacherDetailActivity extends LiveBaseActivity implements
         PLMediaPlayer.OnCompletionListener,
         PLMediaPlayer.OnVideoSizeChangedListener,
-        PLMediaPlayer.OnErrorListener, View.OnClickListener,CustomDialog.DialogClick{
+        PLMediaPlayer.OnErrorListener, View.OnClickListener, CustomDialog.DialogClick {
 
     private static final String TAG = "TeacherDetailActivity";
     @BindView(R.id.title)
@@ -139,11 +139,14 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     private SharePopupWindow popupWindow;
 
+    private String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        customDialog=new CustomDialog(mContext);
+        userId = getIntent().getStringExtra("id");
+        customDialog = new CustomDialog(mContext);
         customDialog.setTitleVisible(View.GONE);
         customDialog.setDialogClick(this);
         landan.setOnClickListener(this);

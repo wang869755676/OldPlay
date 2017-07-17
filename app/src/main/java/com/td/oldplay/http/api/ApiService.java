@@ -1,6 +1,10 @@
 package com.td.oldplay.http.api;
 
 
+import com.td.oldplay.bean.CommentBean;
+import com.td.oldplay.bean.CourseBean;
+import com.td.oldplay.bean.CourseTypeBean;
+import com.td.oldplay.bean.HomeCourseInfo;
 import com.td.oldplay.bean.TeacherBean;
 import com.td.oldplay.bean.TestBean;
 import com.td.oldplay.bean.UserBean;
@@ -58,4 +62,37 @@ public interface ApiService {
     @FormUrlEncoded
     @POST(NetWorkAPI.FORGETPWS_API)
     Observable<ApiResponse<String>> forgetPws(@FieldMap() HashMap<String,Object>maps);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.COURSE_TYPE_API)
+    Observable<ApiResponse<List<CourseTypeBean>>> getCourseTypes(@Field("parentId") String parentId,@Field("page") int  page);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.COURSE_RECOMMENT_API)
+    Observable<ApiResponse<List<CourseTypeBean>>> getCourseRecomments(@Field("page") int  page);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.COURSE_HOT_API)
+    Observable<ApiResponse<List<CourseTypeBean>>> getCourseHots(@Field("page") int  page);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.COURSE_TEACHER_API)
+    Observable<ApiResponse<List<TeacherBean>>> getTeachersInCourse(@Field("page") int  page,@Field("coursesTypeId") String coursesTypeId);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.TEACHER_COURSE_API)
+    Observable<ApiResponse<List<CourseBean>>> getcoursesInTeacher(@Field("page") int  page, @Field("userId") String userId);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.COURSE_COMMENT_API)
+    Observable<ApiResponse<List<CommentBean>>> getCommentsInTeacher(@Field("page") int  page, @Field("teacherId") String userId);
+
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.SEARCH_C_T_API)
+    Observable<ApiResponse<String>> searchCommentsTeachers(@Field("teacherId") String userId);
+
+
+    @POST(NetWorkAPI.HOME_COURS_API)
+    Observable<ApiResponse<HomeCourseInfo>> getHomeCourse();
 }

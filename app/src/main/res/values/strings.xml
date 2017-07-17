@@ -73,4 +73,15 @@
         <item>商城</item>
         <item>评论</item>
     </array>
+
+    <array name="color">
+        <item>#f47ec2</item>
+        <item>#ff7979</item>
+        <item>#bbd94f</item>
+        <item>#5deed5</item>
+        <item>#ca84ef</item>
+        <item>#5dabef</item>
+        <item>#fad660</item>
+        <item>#f47ec2</item>
+    </array>
 </resources>

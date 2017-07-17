@@ -9,13 +9,18 @@
     android:layout_marginTop="10dp"
     android:orientation="vertical">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/item_type_color"
+    <FrameLayout
+
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="center"
-        android:orientation="vertical"
-        apps:cardCornerRadius="30dp">
+        android:orientation="vertical">
+
+        <com.td.oldplay.widget.CircleImageView
+            android:id="@+id/item_type_color"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/tv_red" />
 
         <TextView
             android:id="@+id/item_type_name"
@@ -23,7 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="dd"
-            android:textSize="16sp" />
+            android:textColor="@color/white"
+            android:textSize="12sp" />
 
-    </android.support.v7.widget.CardView>
+    </FrameLayout>
 </FrameLayout>

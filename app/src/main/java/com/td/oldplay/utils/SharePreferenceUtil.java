@@ -27,17 +27,14 @@ public class SharePreferenceUtil {
         editor = sp.edit();
     }
 
-    // 记录用户是否第一打开应用程序
-    public boolean isFisrt() {
-        return sp.getBoolean("isFirst", true);
-    }
-
-    public void setIsFirst(boolean isFirst) {
-        editor.putBoolean("isFirst", isFirst);
+    public void setIsLogin(boolean f) {
+        editor.putBoolean("login", f);
         editor.commit();
     }
 
-
+    public boolean getIsLogin() {
+       return sp.getBoolean("login", false);
+    }
 
     /**
      * @param userId

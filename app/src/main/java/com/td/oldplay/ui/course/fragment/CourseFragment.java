@@ -15,8 +15,14 @@ import com.td.oldplay.base.BaseFragment;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.CourseBean;
+import com.td.oldplay.bean.CourseTypeBean;
+import com.td.oldplay.contants.MContants;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.course.adapter.CourserAdapter;
 import com.td.oldplay.ui.window.CustomDialog;
+import com.td.oldplay.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,11 +44,12 @@ public class CourseFragment extends BaseFragment implements
     Unbinder unbinder;
     @BindView(R.id.swipe_target)
     RecyclerView swipeTarget;
-    int page;
+    int page=1;
     private List<CourseBean> datas;
     private LoadMoreWrapper adapter;
     private CourserAdapter courserAdapter;
     private CustomDialog customDialog;
+    private String id;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,6 +57,7 @@ public class CourseFragment extends BaseFragment implements
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_course, container, false);
         unbinder = ButterKnife.bind(this, view);
+        id = mActivity.getIntent().getStringExtra("id");
         return view;
     }
 
@@ -58,11 +66,6 @@ public class CourseFragment extends BaseFragment implements
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-    }
-
-    @Override
-    public void onRefresh() {
-        page = 0;
     }
 
 
@@ -97,12 +100,54 @@ public class CourseFragment extends BaseFragment implements
             }
         });
 
+        getData();
+
+    }
+
+    private void getData() {
+        HttpManager.getInstance().getcoursesInTeacher(page, id, new HttpSubscriber<List<CourseBean>>(new OnResultCallBack<List<CourseBean>>() {
+
+
+            @Override
+            public void onSuccess(List<CourseBean> courseBeen) {
+                swipeToLoadLayout.setRefreshing(false);
+                if (courseBeen != null && courseBeen.size() > 0) {
+                    if (page == 1) {
+                        datas.clear();
+                        if (datas.size() >= MContants.PAGENUM) {
+                            adapter.setLoadMoreView(R.layout.default_loading);
+                        }
+
+                    }
+                    datas.addAll(courseBeen);
+                } else {
+                    if (page > 1) {
+                        adapter.setLoadMoreView(0);
+                        ToastUtil.show("没有更多数据了");
+                    }
+                }
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                swipeToLoadLayout.setRefreshing(false);
+                ToastUtil.show(errorMsg);
+            }
+        }));
+    }
+
+    @Override
+    public void onRefresh() {
+        page = 1;
+        getData();
     }
 
     @Override
     public void onLoadMoreRequested() {
         page++;
-
+        getData();
     }
 
     @Override
@@ -114,4 +159,6 @@ public class CourseFragment extends BaseFragment implements
     public void onOk() {
 
     }
+
+
 }

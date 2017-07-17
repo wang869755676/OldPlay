@@ -5,4 +5,12 @@ package com.td.oldplay.bean;
  */
 
 public class CommentBean {
+
+
+    public String content;
+    public int id;
+    public int teacherId;
+    public UserBean user;
+    public int userId;
+    public String time;
 }

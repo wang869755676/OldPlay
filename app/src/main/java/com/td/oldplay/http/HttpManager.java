@@ -4,6 +4,10 @@ import android.content.Context;
 import android.util.Log;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import com.td.oldplay.bean.CommentBean;
+import com.td.oldplay.bean.CourseBean;
+import com.td.oldplay.bean.CourseTypeBean;
+import com.td.oldplay.bean.HomeCourseInfo;
 import com.td.oldplay.bean.TeacherBean;
 import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.contants.MContants;
@@ -29,6 +33,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.POST;
 import retrofit2.http.Part;
 
 public class HttpManager {
@@ -118,6 +125,7 @@ public class HttpManager {
     public void getCode(String phone, Observer<String> observer) {
         toSubscribe(mApiService.getCode(phone), observer);
     }
+
     public void modifyLoginPws(HashMap<String, Object> params, Observer<String> observer) {
         toSubscribe(mApiService.modifyLoginPws(params), observer);
     }
@@ -126,12 +134,42 @@ public class HttpManager {
         toSubscribe(mApiService.modifyZhifuPws(params), observer);
     }
 
-    public void modifyUser(HashMap<String, Object> params, MultipartBody.Part file,HttpSubscriber<UserBean> observer) {
-        toSubscribe(mApiService.modifyUser(params,file), observer);
+    public void modifyUser(HashMap<String, Object> params, MultipartBody.Part file, HttpSubscriber<UserBean> observer) {
+        toSubscribe(mApiService.modifyUser(params, file), observer);
 
     }
 
     public void forgetPws(HashMap<String, Object> params, Observer<String> observer) {
         toSubscribe(mApiService.forgetPws(params), observer);
+    }
+
+    // 课程
+
+    public void getCourseTypes(String parentId, int page, Observer<List<CourseTypeBean>> observer) {
+        toSubscribe(mApiService.getCourseTypes(parentId, page), observer);
+    }
+
+    public void getCourseRecomments(int page, Observer<List<CourseTypeBean>> observer) {
+        toSubscribe(mApiService.getCourseRecomments(page), observer);
+    }
+
+    public void getCourseHots(int page, Observer<List<CourseTypeBean>> observer) {
+        toSubscribe(mApiService.getCourseHots(page), observer);
+    }
+
+    public void getTeachersInCourse(int page, String id, Observer<List<TeacherBean>> observer) {
+        toSubscribe(mApiService.getTeachersInCourse(page, id), observer);
+    }
+
+    public void getcoursesInTeacher(int page, String id, Observer<List<CourseBean>> observer) {
+        toSubscribe(mApiService.getcoursesInTeacher(page, id), observer);
+    }
+
+    public void getCommentsInTeacher(int page, String id, Observer<List<CommentBean>> observer) {
+        toSubscribe(mApiService.getCommentsInTeacher(page, id), observer);
+    }
+
+    public void getHomeCourse( Observer<HomeCourseInfo> observer) {
+        toSubscribe(mApiService.getHomeCourse(), observer);
     }
 }

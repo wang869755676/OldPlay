@@ -24,12 +24,19 @@ public class SplashActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        spUilts.setIsLogin(false);
         handler = new Handler();
         runnable = new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(mContext, LoginActivity.class));
-                finish();
+                if(spUilts.getIsLogin()){
+                    startActivity(new Intent(mContext, MainActivity.class));
+                    finish();
+                }else{
+                    startActivity(new Intent(mContext, LoginActivity.class));
+                    finish();
+                }
+
             }
         };
     }

@@ -30,4 +30,26 @@ public class NetWorkAPI {
     public final static String FORGETPWS_API = "lnrzb/user/forgetPassword";
 
     public final static String UPDATEUSE_API = "lnrzb/user/updateUser";
+
+
+    public final static String COURSE_TYPE_API = "lnrzb/courses/findCoursesType";
+
+    public final static String COURSE_RECOMMENT_API = "lnrzb/courses/findCommendCourses";
+
+    public final static String COURSE_HOT_API = "lnrzb/courses/findHotCourses";
+    /**
+     *  课程下的老师
+     */
+    public final static String COURSE_TEACHER_API = "lnrzb/courses/findteacherByCourseId";
+
+    /**
+     *  老师所对应的课程
+     */
+    public final static String TEACHER_COURSE_API = "lnrzb/courses/findCoursesByUserId";
+
+    public final static String COURSE_COMMENT_API = "lnrzb/courses/findTeacherComment";
+
+    public final static String SEARCH_C_T_API = "lnrzb/courses/findTeacherOrCourses";
+
+    public final static String HOME_COURS_API = "lnrzb/courses/toCourseHomePage";
 }

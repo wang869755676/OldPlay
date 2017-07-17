@@ -363,6 +363,13 @@ public class MZBannerView<T> extends RelativeLayout {
         initIndicator();
     }
 
+    public void refreshData(List<T> refreshDatas){
+        if(this.mDatas!=null){
+            mDatas.addAll(refreshDatas);
+            mAdapter.notifyDataSetChanged();
+
+        }
+    }
     /**
      * 设置Indicator 的对齐方式
      * @param indicatorAlign {@link IndicatorAlign#CENTER }{@link IndicatorAlign#LEFT }{@link IndicatorAlign#RIGHT }

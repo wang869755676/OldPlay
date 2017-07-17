@@ -1,162 +1,275 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@mipmap/icon_login_bg"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.td.oldplay.ui.RegisterActivity">
-
-    <com.td.oldplay.widget.CustomTitlebarLayout
-
-        android:id="@+id/title"
+    tools:context="com.td.oldplay.ui.LoginActivity">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/titlebar_height"></com.td.oldplay.widget.CustomTitlebarLayout>
+        android:layout_height="match_parent"
+        android:background="@mipmap/icon_register_bg"
+        android:orientation="vertical"
+        tools:context="com.td.oldplay.ui.RegisterActivity">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+        <com.td.oldplay.widget.CustomTitlebarLayout
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="手机号：" />
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/titlebar_height"></com.td.oldplay.widget.CustomTitlebarLayout>
 
-        <EditText
-            android:id="@+id/register_phone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:text="" />
-    </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="账号："
+                android:textColor="@color/coure_tv"
+                android:textSize="18sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="昵称：" />
+            <EditText
+                android:padding="5dp"
+                android:hint="请输入手机号"
+                android:textSize="14sp"
+                android:lines="1"
+                android:textColor="@color/home_gray"
+                android:id="@+id/register_phone"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@drawable/cor_gray_line"
+                android:inputType="phone" />
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/register_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="" />
-    </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="昵称："
+                android:textColor="@color/coure_tv"
+                android:textSize="18sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="登录密码：" />
+            <EditText
+                android:padding="5dp"
+                android:hint="请输入昵称"
+                android:textSize="16sp"
+                android:lines="1"
+                android:textColor="@color/home_gray"
+                android:id="@+id/register_name"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@drawable/cor_gray_line" />
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/register_passworad"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="" />
-    </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="登录密码："
+                android:textColor="@color/coure_tv"
+                android:textSize="18sp" />
+
+            <EditText
+                android:padding="5dp"
+                android:hint="支持英文+数字，不少于8位"
+                android:inputType="textPassword"
+                android:textSize="16sp"
+                android:lines="1"
+                android:textColor="@color/home_gray"
+                android:id="@+id/register_passworad"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@drawable/cor_gray_line" />
+        </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="确认登录密码" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="确认登录密码"
+                android:textColor="@color/coure_tv"
+                android:textSize="18sp" />
 
-        <EditText
-            android:id="@+id/register_rePas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="" />
-    </LinearLayout>
+            <EditText
+                android:padding="5dp"
+                android:hint="支持英文+数字，不少于8位"
+                android:id="@+id/register_rePas"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@drawable/cor_gray_line"
+                android:inputType="textPassword"
+                android:lines="1"
+                android:textColor="@color/home_gray"
+                android:textSize="16sp" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="支付密码:" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="支付密码:"
+                android:textColor="@color/coure_tv"
+                android:textSize="18sp" />
 
-        <EditText
-            android:id="@+id/register_zhifuPas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:maxLength="6"
-            android:text="" />
-    </LinearLayout>
+            <EditText
+                android:padding="5dp"
+                android:hint="请输入6位数字"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@drawable/cor_gray_line"
+                android:textSize="16sp"
+                android:lines="1"
+                android:textColor="@color/home_gray"
+                android:id="@+id/register_zhifuPas"
+                android:inputType="numberPassword"
+                android:maxLength="6"
+                android:text="" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="确认支付密码:" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="确认支付密码:"
+                android:textColor="@color/coure_tv"
+                android:textSize="18sp" />
 
-        <EditText
-            android:id="@+id/register_rezhifuPas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:maxLength="6"
-            android:text="" />
-    </LinearLayout>
+            <EditText
+                android:padding="5dp"
+                android:hint="请输入6位数字"
+                android:inputType="numberPassword"
+                android:textSize="16sp"
+                android:lines="1"
+                android:textColor="@color/home_gray"
+                android:id="@+id/register_rezhifuPas"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@drawable/cor_gray_line" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="支付密码:" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="支付密码:"
+                android:textColor="@color/coure_tv"
+                android:textSize="18sp" />
+            <LinearLayout
+                android:layout_weight="2"
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <EditText
+                    android:padding="5dp"
+                    android:hint="验证码"
+                    android:textSize="16sp"
+                    android:lines="1"
+                    android:textColor="@color/home_gray"
+                    android:id="@+id/register_code"
+                    android:layout_width="74dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="@drawable/cor_gray_line" />
 
-        <EditText
-            android:id="@+id/register_code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:text="" />
+                <Button
+                    android:textColor="@color/white"
+                    android:background="@drawable/cor_blue"
+                    android:layout_marginLeft="15dp"
+                    android:id="@+id/tv_getCode"
+                    android:layout_width="121dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="发送验证码"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
 
         <Button
-            android:id="@+id/tv_getCode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/register_submint"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/cor_login"
             android:gravity="center"
-            android:text="发送验证码"
-            android:textSize="12sp" />
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:text="提交" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/register_submint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="提交" />
-</LinearLayout>
+</android.support.v4.widget.NestedScrollView>

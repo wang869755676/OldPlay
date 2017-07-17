@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -36,8 +37,7 @@ import cn.tee3.avd.User;
 
 public class LoginActivity extends BaseFragmentActivity implements View.OnClickListener {
 
-    @BindView(R.id.title)
-    CustomTitlebarLayout title;
+
     @BindView(R.id.login_phone)
     EditText loginPhone;
     @BindView(R.id.login_pws)
@@ -50,7 +50,7 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
     @BindView(R.id.login_forget)
     TextView loginForget;
     @BindView(R.id.login_weixin)
-    TextView loginWeixin;
+    ImageView loginWeixin;
     @BindView(R.id.login_typ_zhubo)
     RadioButton loginTypZhubo;
     @BindView(R.id.login_typ_common)
@@ -94,6 +94,7 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login_forget:
+                startActivity(new Intent(mContext, ForgetPwsActivity.class));
                 break;
             case R.id.login_register:
                 startActivity(new Intent(mContext, RegisterActivity.class));
@@ -130,8 +131,11 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
             @Override
             public void onSuccess(UserBean userBean) {
                 if (userBean != null) {
-                    MyApplication.getInstance().mPreferenceUtil.setUser(userBean);
-                    MyApplication.getInstance().mPreferenceUtil.setUserId(userBean.userId);
+                    spUilts.setUser(userBean);
+                    spUilts.setUserId(userBean.userId);
+                    spUilts.setIsLogin(true);
+                    startActivity(new Intent(mContext, MainActivity.class));
+                    finish();
                 }
 
             }

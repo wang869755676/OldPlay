@@ -34,12 +34,19 @@ public class AddressAdapter extends CommonAdapter<AddressBean> {
 
     @Override
     protected void convert(ViewHolder holder, final AddressBean addressBean, final int position) {
-
+        holder.setText(R.id.item_addrs_name, "收货人: " + addressBean.consignee);
+        holder.setText(R.id.item_addrs_phone, "联系电话:"  + addressBean.mobile);
+        holder.setText(R.id.item_addrs_addr, "收货地址: " + addressBean.address);
+       if(addressBean.isDefault==1){
+           holder.setChecked(R.id.addr_default,true);
+       }else{
+           holder.setChecked(R.id.addr_default,false);
+       }
         holder.setOnClickListener(R.id.addr_default, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (actionListener != null) {
-                    actionListener.onAction("default", position,addressBean);
+                    actionListener.onAction("default", position, addressBean);
                 }
             }
         });
@@ -47,7 +54,7 @@ public class AddressAdapter extends CommonAdapter<AddressBean> {
             @Override
             public void onClick(View v) {
                 if (actionListener != null) {
-                    actionListener.onAction("update", position,addressBean);
+                    actionListener.onAction("update", position, addressBean);
                 }
 
             }
@@ -56,7 +63,7 @@ public class AddressAdapter extends CommonAdapter<AddressBean> {
             @Override
             public void onClick(View v) {
                 if (actionListener != null) {
-                    actionListener.onAction("default", position,addressBean);
+                    actionListener.onAction("delete", position, addressBean);
                 }
             }
         });

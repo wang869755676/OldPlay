@@ -13,6 +13,7 @@ import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
+import com.td.oldplay.bean.AddressBean;
 import com.td.oldplay.bean.GoodBean;
 import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.bean.TeacherBean;
@@ -99,6 +100,7 @@ public class MyOrdersActivity extends BaseFragmentActivity
     }
 
     private void getData() {
+
         HttpManager.getInstance().getTeacherLists("eyJsYXRpdHVkZSI6IjMwLjMxMjUzNyIsImxvbmdpdHVkZSI6IjEyMC4xMjkwNTYiLCJ0b2tlbiI6Ik1UTXdOVEV5TmpFNU1UUVx1MDAzZCIsInBhZ2UiOjF9",
                 new HttpSubscriber<List<TeacherBean>>(new OnResultCallBack<List<TeacherBean>>() {
                     @Override

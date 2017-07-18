@@ -151,7 +151,7 @@ public class CourseListActivity extends BaseFragmentActivity
             if (courseTypeBeen != null && courseTypeBeen.size() > 0) {
                 if (page == 1) {
                     datas.clear();
-                    if (datas.size() >= MContants.PAGENUM) {
+                    if (courseTypeBeen.size() >= MContants.PAGENUM) {
                         adapter.setLoadMoreView(R.layout.default_loading);
                     }
 

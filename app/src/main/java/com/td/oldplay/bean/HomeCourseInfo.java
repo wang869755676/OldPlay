@@ -9,7 +9,7 @@ import java.util.List;
 public class HomeCourseInfo {
 
     public List<CourseTypeBean> commendCourseList;
-    public List<BannerInfo> coursesBannerLis;
+    public List<BannerInfo> coursesBannerList;
     public List<CourseTypeBean> coursesTypeList;
     public List<CourseTypeBean> hotCoursesList;
 

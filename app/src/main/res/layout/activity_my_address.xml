@@ -32,12 +32,6 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/forum_publish"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:gravity="center"
-        android:text="发布" />
+
 </FrameLayout>
 

@@ -1,10 +1,12 @@
 package com.td.oldplay.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by my on 2017/7/14.
  */
 
-public class UserBean {
+public class UserBean  implements Serializable{
 
     /**
      * avatar : /images/1499762427663.jpg

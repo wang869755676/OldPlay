@@ -15,6 +15,7 @@ import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.CommentBean;
 import com.td.oldplay.ui.course.adapter.CommentAdapter;
+import com.tencent.mm.opensdk.utils.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ShopCommentFragment extends BaseFragment implements LoadMoreWrapper.OnLoadMoreListener{
+public class ShopCommentFragment extends BaseFragment implements LoadMoreWrapper.OnLoadMoreListener {
 
 
     @BindView(R.id.swipe_target)
@@ -53,16 +54,26 @@ public class ShopCommentFragment extends BaseFragment implements LoadMoreWrapper
 
     @Override
     protected void init(View view) {
-        datas=new ArrayList<>();
+        datas = new ArrayList<>();
         datas.add(new CommentBean());
         datas.add(new CommentBean());
         datas.add(new CommentBean());
         datas.add(new CommentBean());
         datas.add(new CommentBean());
-
+        datas.add(new CommentBean());
+        datas.add(new CommentBean());
+        datas.add(new CommentBean());
+        datas.add(new CommentBean());
+        datas.add(new CommentBean());
+        datas.add(new CommentBean());
+        datas.add(new CommentBean());
+        datas.add(new CommentBean());
+        datas.add(new CommentBean());
+        datas.add(new CommentBean());
+        Log.e("===", datas.size() + "---------------------");
         swipeTarget.setLayoutManager(new LinearLayoutManager(mActivity));
-        commentAdapter=new CommentAdapter(mActivity,R.layout.item_comment,datas);
-        adapter=new LoadMoreWrapper(commentAdapter);
+        commentAdapter = new CommentAdapter(mActivity, R.layout.item_comment, datas);
+        adapter = new LoadMoreWrapper(commentAdapter);
         swipeTarget.setAdapter(adapter);
 
     }

@@ -22,6 +22,7 @@ import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
 import com.td.oldplay.bean.ShopBean;
 import com.td.oldplay.ui.SearchActivity;
 import com.td.oldplay.ui.course.adapter.ShopAdapter;
+import com.td.oldplay.ui.shop.activity.ShopDetailActivity;
 import com.td.oldplay.ui.shop.activity.ShopListActivity;
 import com.td.oldplay.utils.GlideUtils;
 import com.td.oldplay.widget.CustPagerTransformer;
@@ -106,6 +107,8 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
         title.setOnLeftListener(this);
         homeShopGreen.setOnClickListener(this);
         homeShopStudy.setOnClickListener(this);
+        moreHotBtn.setOnClickListener(this);
+        moreRecommentBtn.setOnClickListener(this);
         banners = new ArrayList<>();
         banners.add("http://img2.imgtn.bdimg.com/it/u=49292017,22064401&fm=28&gp=0.jpg");
         banners.add("http://pic.58pic.com/58pic/13/85/85/73T58PIC9aj_1024.jpg");
@@ -136,7 +139,7 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
         recommendShopAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                startActivity(new Intent(mActivity, ShopListActivity.class));
+                startActivity(new Intent(mActivity, ShopDetailActivity.class));
             }
 
             @Override
@@ -159,7 +162,7 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
         LastShopAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                startActivity(new Intent(mActivity, ShopListActivity.class));
+                startActivity(new Intent(mActivity, ShopDetailActivity.class));
             }
 
             @Override
@@ -177,11 +180,25 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
         switch (v.getId()) {
             case R.id.home_shop_green:
                 intent = new Intent(mActivity, ShopListActivity.class);
-                startActivity(new Intent(mActivity, ShopListActivity.class));
+                intent.putExtra("type",1);
+                intent.putExtra("goodTypeId",1);
+                startActivity(intent);
                 break;
             case R.id.home_shop_study:
                 intent = new Intent(mActivity, ShopListActivity.class);
-                startActivity(new Intent(mActivity, ShopListActivity.class));
+                intent.putExtra("type",1);
+                intent.putExtra("goodTypeId",2);
+                startActivity(intent);
+                break;
+            case R.id.more_hot_btn:
+                intent = new Intent(mActivity, ShopListActivity.class);
+                intent.putExtra("type",3);
+                startActivity(intent);
+                break;
+            case R.id.more_recomment_btn:
+                intent = new Intent(mActivity, ShopListActivity.class);
+                intent.putExtra("type",1);
+                startActivity(intent);
                 break;
             case R.id.right_text:
                 intent = new Intent(mActivity, SearchActivity.class);

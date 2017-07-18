@@ -23,7 +23,6 @@ public class NetWorkAPI {
 
     public final static String GETCODE_API = "lnrzb/user/sendvcode";
 
-    public final static String UPDATEZPWS_API = "lnrzb/user/revisePassword";
 
     public final static String UPDATEPWS_API = "lnrzb/user/revisePassword";
 
@@ -52,4 +51,35 @@ public class NetWorkAPI {
     public final static String SEARCH_C_T_API = "lnrzb/courses/findTeacherOrCourses";
 
     public final static String HOME_COURS_API = "lnrzb/courses/toCourseHomePage";
+
+    public final static String TEACHER_DETAIL_API = "lnrzb/courses/findDescribes";
+
+    public final static String SHOP_TEACHER_API = "lnrzb/courses/findGoodsByUserId";
+    // 商品相关
+
+    public final static String SHOP_RECOMMENT_API = " lnrzb/goods/findCommendGoods";
+
+
+    public final static String SHOP_COMMENT_API = "lnrzb/goods/findGoodsAssess";
+
+    // 产片分类
+    public final static String FIND_SHOPBYID_API = "lnrzb/goods/findGoodsByType";
+
+    /**
+     *  商品详情
+     */
+    public final static String SHOP_DETAIL_API = "lnrzb/goods/findGoodsById";
+
+
+
+
+    // 地址管理=====================================================
+
+    public final static String GET_ADDRESS_API = "lnrzb/address/findAllAddress";
+    public final static String UPDATE_ADDRESS_API = "lnrzb/address/updateAddress";
+    public final static String DELETE_ADDRESS_API = "lnrzb/address/delAddress";
+    public final static String ADD_ADDRESS_API = "lnrzb/address/saveAddress";
+    public final static String SET_ADDRESS_API = "lnrzb/address/setDefault";
+
+
 }

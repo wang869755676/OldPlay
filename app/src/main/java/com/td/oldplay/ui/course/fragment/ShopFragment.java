@@ -23,11 +23,18 @@ import com.td.oldplay.base.BaseFragment;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.CourseBean;
+import com.td.oldplay.bean.CourseTypeBean;
 import com.td.oldplay.bean.ShopBean;
+import com.td.oldplay.contants.MContants;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.SearchActivity;
+import com.td.oldplay.ui.course.activity.CourseListActivity;
 import com.td.oldplay.ui.course.adapter.CourserAdapter;
 import com.td.oldplay.ui.course.adapter.ShopAdapter;
 import com.td.oldplay.ui.shop.activity.ShopDetailActivity;
+import com.td.oldplay.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +42,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.Observer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,18 +78,25 @@ public class ShopFragment extends BaseFragment implements
 
     private List<ShopBean> datas;
     private LoadMoreWrapper adapter;
-    private int page;
+    private int page=1;
     private ShopAdapter shopAdapter;
     private boolean priceup;
     private boolean sellup;
     private boolean scoreup;
 
+    private int type;
+    private int goodType; //1 绿色产品 2教学产品
+    private callBack callBack;
+    private String id;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_shop, container, false);
         unbinder = ButterKnife.bind(this, view);
+        type = mActivity.getIntent().getIntExtra("type", 0);
+        goodType = mActivity.getIntent().getIntExtra("goodTypeId", 0);
+        id = mActivity.getIntent().getStringExtra("id");
         return view;
     }
 
@@ -93,12 +108,14 @@ public class ShopFragment extends BaseFragment implements
 
     @Override
     public void onRefresh() {
-        page = 0;
+        page = 1;
+        getData();
     }
 
 
     @Override
     protected void init(View view) {
+        callBack=new callBack();
         swipeToLoadLayout.setOnRefreshListener(this);
         rbPrice.setOnCheckedChangeListener(this);
         rbScore.setOnCheckedChangeListener(this);
@@ -110,8 +127,7 @@ public class ShopFragment extends BaseFragment implements
 
         datas = new ArrayList<>();
         datas = new ArrayList<>();
-        datas.add(new ShopBean());
-        datas.add(new ShopBean());
+
         swipeTarget.setLayoutManager(new LinearLayoutManager(mActivity));
         shopAdapter = new ShopAdapter(mActivity, R.layout.item_shop, datas);
         adapter = new LoadMoreWrapper(shopAdapter);
@@ -129,11 +145,32 @@ public class ShopFragment extends BaseFragment implements
             }
         });
 
+        getData();
+
+    }
+
+    private void getData() {
+        switch (type) {
+            case 1:
+                HttpManager.getInstance().getShopByType(page,goodType,new HttpSubscriber<List<ShopBean>>(callBack));
+                break;
+            case 2:
+                HttpManager.getInstance().getShopRecomments(page,new HttpSubscriber<List<ShopBean>>(callBack));
+                break;
+            case 3:
+                HttpManager.getInstance().getShopRecomments(page,new HttpSubscriber<List<ShopBean>>(callBack));
+                break;
+            default:
+                // 老师中的商品
+                HttpManager.getInstance().getShopInTeacher(id,page,new HttpSubscriber<List<ShopBean>>(callBack));
+                break;
+        }
     }
 
     @Override
     public void onLoadMoreRequested() {
         page++;
+        getData();
     }
 
     @Override
@@ -162,6 +199,36 @@ public class ShopFragment extends BaseFragment implements
                 intent.putExtra("type", 1);
                 // intent.putExtra()
                 startActivity(intent);
+        }
+    }
+
+    private class callBack implements OnResultCallBack<List<ShopBean>> {
+
+        @Override
+        public void onSuccess(List<ShopBean> shopBean) {
+            swipeToLoadLayout.setRefreshing(false);
+            if (shopBean != null && shopBean.size() > 0) {
+                if (page == 1) {
+                    datas.clear();
+                    if (shopBean.size() >= MContants.PAGENUM) {
+                        adapter.setLoadMoreView(R.layout.default_loading);
+                    }
+
+                }
+                datas.addAll(shopBean);
+            } else {
+                adapter.setLoadMoreView(0);
+                if (page > 1) {
+                    ToastUtil.show("没有更多数据了");
+                }
+            }
+            adapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onError(int code, String errorMsg) {
+            ToastUtil.show(errorMsg);
+            swipeToLoadLayout.setRefreshing(false);
         }
     }
 }

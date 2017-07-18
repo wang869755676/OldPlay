@@ -98,7 +98,7 @@ public class CommentFragment extends BaseFragment implements SwipeRefreshLayout.
                 if (commentBeen != null && commentBeen.size() > 0) {
                     if (page == 1) {
                         datas.clear();
-                        if (datas.size() >= MContants.PAGENUM) {
+                        if (commentBeen.size() >= MContants.PAGENUM) {
                             adapter.setLoadMoreView(R.layout.default_loading);
                         }
 

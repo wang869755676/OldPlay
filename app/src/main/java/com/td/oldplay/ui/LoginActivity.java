@@ -127,6 +127,7 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
     }
 
     private void loginServier() {
+        showLoading();
         HttpManager.getInstance().loginUser(params, new HttpSubscriber<UserBean>(new OnResultCallBack<UserBean>() {
             @Override
             public void onSuccess(UserBean userBean) {
@@ -142,7 +143,7 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
 
             @Override
             public void onError(int code, String errorMsg) {
-
+                ToastUtil.show(errorMsg);
             }
         }));
 

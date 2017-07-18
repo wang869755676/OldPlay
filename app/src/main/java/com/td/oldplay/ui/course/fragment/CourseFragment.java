@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragment;
+import com.td.oldplay.base.EventMessage;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.CourseBean;
@@ -20,9 +21,12 @@ import com.td.oldplay.contants.MContants;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
+import com.td.oldplay.ui.course.activity.TeacherDetailActivity;
 import com.td.oldplay.ui.course.adapter.CourserAdapter;
 import com.td.oldplay.ui.window.CustomDialog;
 import com.td.oldplay.utils.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +48,7 @@ public class CourseFragment extends BaseFragment implements
     Unbinder unbinder;
     @BindView(R.id.swipe_target)
     RecyclerView swipeTarget;
-    int page=1;
+    int page = 1;
     private List<CourseBean> datas;
     private LoadMoreWrapper adapter;
     private CourserAdapter courserAdapter;
@@ -73,8 +77,6 @@ public class CourseFragment extends BaseFragment implements
     protected void init(View view) {
         datas = new ArrayList<>();
         datas = new ArrayList<>();
-        datas.add(new CourseBean());
-        datas.add(new CourseBean());
 
         swipeToLoadLayout.setOnRefreshListener(this);
         customDialog = new CustomDialog(mActivity);
@@ -89,8 +91,8 @@ public class CourseFragment extends BaseFragment implements
         courserAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-
-                customDialog.setContent("支付XX元购买课程");
+                ((TeacherDetailActivity) mActivity).currentBean = datas.get(position);
+                customDialog.setContent("支付" + datas.get(position).price + "元购买课程");
                 customDialog.show();
             }
 
@@ -114,7 +116,7 @@ public class CourseFragment extends BaseFragment implements
                 if (courseBeen != null && courseBeen.size() > 0) {
                     if (page == 1) {
                         datas.clear();
-                        if (datas.size() >= MContants.PAGENUM) {
+                        if (courseBeen.size() >= MContants.PAGENUM) {
                             adapter.setLoadMoreView(R.layout.default_loading);
                         }
 
@@ -127,6 +129,11 @@ public class CourseFragment extends BaseFragment implements
                     }
                 }
                 adapter.notifyDataSetChanged();
+                if (page == 1 && datas.size() > 0) {
+                    ((TeacherDetailActivity) mActivity).currentBean = datas.get(0);
+                    EventBus.getDefault().post(new EventMessage("changeCourse"));
+                }
+
 
             }
 
@@ -157,7 +164,7 @@ public class CourseFragment extends BaseFragment implements
 
     @Override
     public void onOk() {
-
+        EventBus.getDefault().post(new EventMessage("changeCourse"));
     }
 
 

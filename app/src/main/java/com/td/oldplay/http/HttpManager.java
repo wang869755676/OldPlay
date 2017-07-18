@@ -4,11 +4,15 @@ import android.content.Context;
 import android.util.Log;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import com.td.oldplay.bean.AddressBean;
 import com.td.oldplay.bean.CommentBean;
 import com.td.oldplay.bean.CourseBean;
 import com.td.oldplay.bean.CourseTypeBean;
 import com.td.oldplay.bean.HomeCourseInfo;
+import com.td.oldplay.bean.SearchCourse;
+import com.td.oldplay.bean.ShopBean;
 import com.td.oldplay.bean.TeacherBean;
+import com.td.oldplay.bean.TeacherDetail;
 import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.contants.MContants;
 import com.td.oldplay.http.api.ApiResponse;
@@ -30,6 +34,8 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -101,6 +107,9 @@ public class HttpManager {
                         if (code != MContants.SUCCESS_CODE) {
                             throw new ApiException(code, response.getErrdesc());
                         } else {
+                           /* if(response.getData()==null){
+                                return  new T();
+                            }*/
                             return response.getData();
                         }
                     }
@@ -130,12 +139,10 @@ public class HttpManager {
         toSubscribe(mApiService.modifyLoginPws(params), observer);
     }
 
-    public void modifyZhifuPws(HashMap<String, Object> params, Observer<String> observer) {
-        toSubscribe(mApiService.modifyZhifuPws(params), observer);
-    }
 
-    public void modifyUser(HashMap<String, Object> params, MultipartBody.Part file, HttpSubscriber<UserBean> observer) {
-        toSubscribe(mApiService.modifyUser(params, file), observer);
+
+    public void modifyUser(HashMap<String, RequestBody> params, HttpSubscriber<UserBean> observer) {
+        toSubscribe(mApiService.modifyUser(params), observer);
 
     }
 
@@ -169,7 +176,52 @@ public class HttpManager {
         toSubscribe(mApiService.getCommentsInTeacher(page, id), observer);
     }
 
-    public void getHomeCourse( Observer<HomeCourseInfo> observer) {
+    public void getHomeCourse(Observer<HomeCourseInfo> observer) {
         toSubscribe(mApiService.getHomeCourse(), observer);
+    }
+
+
+    public void searchCommentsTeachers(String id, Observer<List<CourseTypeBean>> observer) {
+        toSubscribe(mApiService.searchCommentsTeachers(id), observer);
+    }
+
+    public void getShopInTeacher(String id,int page, Observer<List<ShopBean>> observer) {
+        toSubscribe(mApiService.getShopInTeacher(id,page), observer);
+    }
+    public void getCourseDetail(String id, Observer<TeacherDetail> observer) {
+        toSubscribe(mApiService.getCourseDetail(id), observer);
+    }
+
+
+    //========================
+    public void getShopRecomments(int page, Observer<List<ShopBean>> observer) {
+        toSubscribe(mApiService.getShopRecomments(page), observer);
+    }
+
+    public void getShopRecomments(int page, String id, Observer<List<CommentBean>> observer) {
+        toSubscribe(mApiService.getCommentsInShop(page, id), observer);
+    }
+
+    public void getShopByType(int page, int type, Observer<List<ShopBean>> observer) {
+        toSubscribe(mApiService.getShopByType(page, type), observer);
+    }
+
+    public void getAddresse(int page, String id, Observer<List<AddressBean>> observer) {
+        toSubscribe(mApiService.getAddress(page,id), observer);
+    }
+
+    public void updateAddress(HashMap<String,Object> params, Observer<String> observer) {
+        toSubscribe(mApiService.updateAddress(params), observer);
+    }
+
+    public void deleteAddress(String id, Observer<String> observer) {
+        toSubscribe(mApiService.deleteAddress(id), observer);
+    }
+    public void setDefaultAddress(String id,String userId ,Observer<String> observer) {
+        toSubscribe(mApiService.setDefaultAddress(id,userId), observer);
+    }
+
+    public void addAddress(HashMap<String,Object> params, Observer<String> observer) {
+        toSubscribe(mApiService.addAddress(params), observer);
     }
 }

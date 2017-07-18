@@ -7,7 +7,6 @@
     android:orientation="vertical"
     tools:context="com.td.oldplay.ui.shop.activity.ShopListActivity">
 
-    <View style="@style/stateBarStyle" />
 
     <com.td.oldplay.widget.CustomTitlebarLayout
         android:id="@+id/title"

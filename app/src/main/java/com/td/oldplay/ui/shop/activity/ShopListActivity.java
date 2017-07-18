@@ -20,7 +20,8 @@ public class ShopListActivity extends BaseFragmentActivity implements View.OnCli
     @BindView(R.id.shop_list_container)
     FrameLayout shopListContainer;
 
-    private int type; //0 绿色产品 1教学产品
+    private int type;
+    private int goodType; //1 绿色产品 2教学产品
     private ShopFragment fragment;
 
     @Override
@@ -30,13 +31,24 @@ public class ShopListActivity extends BaseFragmentActivity implements View.OnCli
         ButterKnife.bind(this);
 
         type = getIntent().getIntExtra("type",0);
-        if(type==0){
-            title.setTitle("绿色产品");
-        }else{
-            title.setTitle("教学产品");
+        goodType=getIntent().getIntExtra("goodTypeId",0);
+        switch (type){
+            case 1:
+                if(goodType==1){
+                    title.setTitle("绿色产品");
+                }else if(goodType==2){
+                    title.setTitle("教学产品");
+                }
+                break;
+            case 2:
+                title.setTitle("推荐商品");
+                break;
+            case 3:
+                title.setTitle("最新优惠");
+                break;
         }
-        title.setOnLeftListener(this);
 
+        title.setOnLeftListener(this);
         fragment=new ShopFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.shop_list_container,fragment).commit();
     }

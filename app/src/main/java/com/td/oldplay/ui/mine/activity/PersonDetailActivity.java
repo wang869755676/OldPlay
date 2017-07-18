@@ -28,12 +28,15 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.tee3.avd.User;
 import me.zuichu.picker.ImagePicker;
 import me.zuichu.picker.bean.ImageItem;
 import me.zuichu.picker.ui.image.ImageGridActivity;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.http.PartMap;
 
 public class PersonDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
 
@@ -46,22 +49,34 @@ public class PersonDetailActivity extends BaseFragmentActivity implements View.O
     @BindView(R.id.person_save)
     Button personSave;
 
-    private HashMap<String, Object> params = new HashMap<>();
+    private HashMap<String, RequestBody> params = new HashMap<>();
     private String name;
     private ImagePicker imagePicker;
     private String filePath;
-    private  MultipartBody.Part part;
+    private MultipartBody.Part part;
+    private UserBean userBean;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_detail);
         ButterKnife.bind(this);
+        userBean = (UserBean) getIntent().getSerializableExtra("model");
         title.setTitle("个人资料");
         title.setOnLeftListener(this);
         personSave.setOnClickListener(this);
         personIv.setOnClickListener(this);
-        params.put("userId", userId);
+        params.put("userId", toRequestBody(userId));
+        if (userBean != null) {
+            GlideUtils.setAvatorImage(mContext, userBean.avatar, personIv);
+            personName.setText(userBean.nickName);
+        }
         initPicker();
+
+    }
+
+    private RequestBody toRequestBody(String userId) {
+        return RequestBody.create(MediaType.parse("text.plain"), userId);
     }
 
     private void initPicker() {
@@ -85,6 +100,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements View.O
                     ToastUtil.show("请输入昵称");
                     return;
                 }
+                params.put("nickName", toRequestBody(name));
                 if (!TextUtils.isEmpty(filePath)) {
                     //        1、根据地址拿到File
                     File file = new File(filePath);
@@ -94,8 +110,9 @@ public class PersonDetailActivity extends BaseFragmentActivity implements View.O
 
 //        3、创建`MultipartBody.Part`，其中需要注意第一个参数`fileUpload`需要与服务器对应,也就是`键`
                     part = MultipartBody.Part.createFormData("picFile", file.getName(), requestFile);
-
+                    params.put("picFile\"; filename=\""+file.getName(),requestFile);
                 }
+
                 saveSerer();
                 break;
             case R.id.left_text:
@@ -122,7 +139,7 @@ public class PersonDetailActivity extends BaseFragmentActivity implements View.O
     }
 
     private void saveSerer() {
-        HttpManager.getInstance().modifyUser(params,part, new HttpSubscriber<UserBean>(new OnResultCallBack<UserBean>() {
+        HttpManager.getInstance().modifyUser(params, new HttpSubscriber<UserBean>(new OnResultCallBack<UserBean>() {
 
             @Override
             public void onSuccess(UserBean userBean) {
@@ -137,5 +154,20 @@ public class PersonDetailActivity extends BaseFragmentActivity implements View.O
                 ToastUtil.show(errorMsg);
             }
         }));
+       /* HttpManager.getInstance().modifyUser(params, part, new HttpSubscriber<UserBean>(new OnResultCallBack<UserBean>() {
+
+            @Override
+            public void onSuccess(UserBean userBean) {
+                ToastUtil.show("修改成功");
+                spUilts.setUser(userBean);
+                EventBus.getDefault().post(new EventMessage("userUpdate"));
+                finish();
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                ToastUtil.show(errorMsg);
+            }
+        }));*/
     }
 }

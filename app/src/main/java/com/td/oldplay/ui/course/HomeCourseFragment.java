@@ -103,7 +103,6 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         title.setOnRightListener(this);
         title.setOnLeftListener(this);
         homrCoureseBanner.setIndicatorVisible(false);
-
         homrCoureseBanner.getViewPager().setPageTransformer(true, new CustPagerTransformer(mActivity));
         homrCoureseBanner.getViewPager().setPageMargin(50);
 
@@ -187,8 +186,8 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
             @Override
             public void onSuccess(HomeCourseInfo homeCourseInfo) {
                 if (homeCourseInfo != null) {
-                    if (homeCourseInfo.coursesBannerLis != null && homeCourseInfo.coursesBannerLis.size() > 0) {
-                        homrCoureseBanner.setPages(homeCourseInfo.coursesBannerLis, new MZHolderCreator<BannerViewHolder>() {
+                    if (homeCourseInfo.coursesBannerList != null && homeCourseInfo.coursesBannerList.size() > 0) {
+                        homrCoureseBanner.setPages(homeCourseInfo.coursesBannerList, new MZHolderCreator<BannerViewHolder>() {
                             @Override
                             public BannerViewHolder createViewHolder() {
                                 return new BannerViewHolder();

@@ -41,7 +41,7 @@
                         android:scaleType="centerCrop"></com.td.oldplay.widget.CircleImageView>
 
                     <TextView
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="15dp"
                         android:id="@+id/mine_nickname"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -57,8 +57,9 @@
                         android:layout_height="wrap_content"
                         android:layout_alignLeft="@id/mine_nickname"
                         android:layout_below="@id/mine_nickname"
-                        android:layout_marginLeft="15dp"
-                        android:text="加分"
+
+
+                        android:text="积分"
                         android:textColor="@color/white"
                         android:textSize="13sp" />
 

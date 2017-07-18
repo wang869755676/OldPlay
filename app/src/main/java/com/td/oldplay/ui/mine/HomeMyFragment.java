@@ -145,7 +145,6 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
     TextView mineScoree;
     @BindView(R.id.go_about)
     ImageView goAbout;
-    private UserBean user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -175,10 +174,10 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
     }
 
     private void setUser() {
-        if (user != null) {
-            GlideUtils.setAvatorImage(mActivity, user.avatar, mineUserHeadImage);
-            mineNickname.setText(user.nickName);
-            mineScoree.setText(user.score + "");
+        if (userBean != null) {
+            GlideUtils.setAvatorImage(mActivity, userBean.avatar, mineUserHeadImage);
+            mineNickname.setText(userBean.nickName);
+            mineScoree.setText("积分: "+userBean.score);
         }
 
     }
@@ -251,6 +250,7 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.mine_user_head_image:
                 intent = new Intent(mActivity, PersonDetailActivity.class);
+                intent.putExtra("model",userBean);
                 startActivity(intent);
                 break;
         }

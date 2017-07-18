@@ -59,7 +59,7 @@ public class ModifyPasswordActivity extends BaseFragmentActivity implements View
         }
         title.setOnLeftListener(this);
         queUpdatePwd.setOnClickListener(this);
-        params.put("userId", MyApplication.getInstance().mPreferenceUtil.getUserId());
+        params.put("userId", userId);
     }
 
     @Override
@@ -70,8 +70,14 @@ public class ModifyPasswordActivity extends BaseFragmentActivity implements View
                 break;
             case R.id.que_update_pwd:
                 if (checkInput()) {
-                    params.put("password",oldPwd);
-                    params.put("newPpassword",newPws);
+                    if (type == 0) {
+                        params.put("password", oldPws);
+                        params.put("newPpassword", newPws);
+                    } else {
+                        params.put("payPassword", oldPws);
+                        params.put("newPassword", newPws);
+                    }
+
                     updatePassword();
                 }
 
@@ -101,30 +107,16 @@ public class ModifyPasswordActivity extends BaseFragmentActivity implements View
     }
 
     private void updatePassword() {
-        if (type == 0) {
-            HttpManager.getInstance().modifyLoginPws(params, new HttpSubscriber<String>(new OnResultCallBack<String>() {
-                @Override
-                public void onSuccess(String s) {
-                    ToastUtil.show("修改成功");
-                }
+        HttpManager.getInstance().modifyLoginPws(params, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+            @Override
+            public void onSuccess(String s) {
+                ToastUtil.show("修改成功");
+            }
 
-                @Override
-                public void onError(int code, String errorMsg) {
-                    ToastUtil.show(errorMsg);
-                }
-            }));
-        } else if (type == 1) {
-            HttpManager.getInstance().modifyZhifuPws(params, new HttpSubscriber<String>(new OnResultCallBack<String>() {
-                @Override
-                public void onSuccess(String s) {
-                    ToastUtil.show("修改成功");
-                }
-
-                @Override
-                public void onError(int code, String errorMsg) {
-                    ToastUtil.show(errorMsg);
-                }
-            }));
-        }
+            @Override
+            public void onError(int code, String errorMsg) {
+                ToastUtil.show(errorMsg);
+            }
+        }));
     }
 }

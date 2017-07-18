@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.td.oldplay.MyApplication;
+import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.utils.SharePreferenceUtil;
 
 /**
@@ -19,6 +20,7 @@ public abstract class BaseFragment extends Fragment {
     protected BaseFragmentActivity mBaseActivity = null;
     protected Activity mActivity = null;
     protected String userId;
+    protected UserBean userBean;
     private KProgressHUD hud;
     private SharePreferenceUtil spUilts;
 
@@ -30,8 +32,10 @@ public abstract class BaseFragment extends Fragment {
             this.mBaseActivity = (BaseFragmentActivity) activity;
         }
         this.mActivity = activity;
-        userId = MyApplication.getInstance().mPreferenceUtil.getUserId();
         spUilts = MyApplication.getInstance().mPreferenceUtil;
+        userId = spUilts.getUserId();
+        userBean = spUilts.getUser();
+
     }
 
     @Override

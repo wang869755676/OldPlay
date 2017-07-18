@@ -1,6 +1,7 @@
 package com.td.oldplay.ui.course.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.td.oldplay.R;
@@ -24,10 +25,13 @@ public class CommentAdapter extends CommonAdapter<CommentBean> {
     protected void convert(ViewHolder holder, CommentBean commentBean, int position) {
 
         if (commentBean != null) {
-            GlideUtils.setAvatorImage(mContext, commentBean.user.avatar, (ImageView) holder.getView(R.id.item_commen_iv));
-            holder.setText(R.id.item_comment, commentBean.content);
-            holder.setText(R.id.item_name, commentBean.user.nickName);
-            holder.setText(R.id.item_time, commentBean.time);
+            if(commentBean.user!=null){
+                GlideUtils.setAvatorImage(mContext, commentBean.user.avatar, (ImageView) holder.getView(R.id.item_commen_iv));
+                holder.setText(R.id.item_name, commentBean.user.nickName);
+            }
+
+            holder.setText(R.id.pinjia_content, commentBean.content);
+            holder.setText(R.id.item_comment_time, commentBean.time);
 
         }
     }

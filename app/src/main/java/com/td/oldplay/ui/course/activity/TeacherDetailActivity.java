@@ -31,7 +31,9 @@ import com.qiniu.pili.droid.streaming.CameraStreamingSetting;
 import com.qiniu.pili.droid.streaming.StreamingProfile;
 import com.qiniu.pili.droid.streaming.widget.AspectFrameLayout;
 import com.td.oldplay.R;
+import com.td.oldplay.base.EventMessage;
 import com.td.oldplay.base.adapter.BasePagerAdapter;
+import com.td.oldplay.bean.CourseBean;
 import com.td.oldplay.bean.MessageEvent;
 import com.td.oldplay.permission.MPermission;
 import com.td.oldplay.permission.annotation.OnMPermissionDenied;
@@ -51,6 +53,10 @@ import com.td.oldplay.utils.ShareSDKUtils;
 import com.td.oldplay.utils.StreamUtils;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -141,6 +147,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     private String userId;
 
+    public CourseBean currentBean;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,6 +175,14 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         initPlay();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMessage(EventMessage message){
+           if("changeCourse".equals(message.action)){
+              // 切换直播视频
+           }
+    }
+
+
     /**
      * 初始化Viewpager
      */
@@ -178,6 +194,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         fragments.add(new IntruceFragment());
         fragments.add(new ShopFragment());
         fragments.add(new CommentFragment());
+        viewPager.setOffscreenPageLimit(4);
         viewPager.setAdapter(new BasePagerAdapter(getSupportFragmentManager(), fragments) {
             @Override
             public CharSequence getPageTitle(int position) {

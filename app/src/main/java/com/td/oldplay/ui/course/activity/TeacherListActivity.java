@@ -96,15 +96,16 @@ public class TeacherListActivity extends BaseFragmentActivity
                 if (teacherBeen != null && teacherBeen.size() > 0) {
                     if (page == 1) {
                         datas.clear();
-                        if (datas.size() >= MContants.PAGENUM) {
+                        if (teacherBeen.size() >= MContants.PAGENUM) {
                             adapter.setLoadMoreView(R.layout.default_loading);
                         }
 
                     }
                     datas.addAll(teacherBeen);
                 } else {
+                    adapter.setLoadMoreView(0);
                     if (page > 1) {
-                        adapter.setLoadMoreView(0);
+
                         ToastUtil.show("没有更多数据了");
                     }
                 }

@@ -28,7 +28,7 @@ public class ShopBean {
     public String goodsName;
     public int goodsTypeId;
     public int isCommend;
-    public int isPreferential;
+    public int isPreferential;  //0.不优惠,1.满减,2:团购
     public String picUrl;
     public int price;
     public String profile;

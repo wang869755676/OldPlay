@@ -5,9 +5,12 @@ import com.td.oldplay.bean.AddressBean;
 import com.td.oldplay.bean.CommentBean;
 import com.td.oldplay.bean.CourseBean;
 import com.td.oldplay.bean.CourseTypeBean;
+import com.td.oldplay.bean.CreateOrder;
 import com.td.oldplay.bean.HomeCourseInfo;
+import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.bean.SearchCourse;
 import com.td.oldplay.bean.ShopBean;
+import com.td.oldplay.bean.ShopDetail;
 import com.td.oldplay.bean.TeacherBean;
 import com.td.oldplay.bean.TeacherDetail;
 import com.td.oldplay.bean.TestBean;
@@ -17,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -124,6 +128,33 @@ public interface ApiService {
     @FormUrlEncoded
     @POST(NetWorkAPI.SHOP_COMMENT_API)
     Observable<ApiResponse<List<CommentBean>>> getCommentsInShop(@Field("page") int page, @Field("goodsId") String id);
+
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.SHOP_DETAIL_API)
+    Observable<ApiResponse<ShopDetail>> getShopDetail(@Field("goodsId")String shopId) ;
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.GET_COMMENTS_API)
+    Observable<ApiResponse<List<CommentBean>>> getShopComments(@Field("goodsId")String shopId,@Field("page")int page) ;
+
+
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.CREATE_ORDER_API)
+    Observable<ApiResponse<OrderBean>> createOrder(@FieldMap() HashMap<String, Object> maps) ;
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.ADD_CAR_API)
+    Observable<ApiResponse<String>> addCar(@FieldMap() HashMap<String, Object> maps) ;
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.GET_CARS_API)
+    Observable<ApiResponse<String>> getCars(@Field("userId")String userId,@Field("page")int page) ;
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.DELET_CAR_API)
+    Observable<ApiResponse<String>> deleteCars(@Field("cartId")String cartId) ;
 
 
 

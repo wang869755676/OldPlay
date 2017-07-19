@@ -70,8 +70,13 @@ public class NetWorkAPI {
      */
     public final static String SHOP_DETAIL_API = "lnrzb/goods/findGoodsById";
 
+    public final static String GET_COMMENTS_API = "lnrzb/goods/findGoodsAssess";
+    public final static String CREATE_ORDER_API = "lnrzb/order/createOrderByGoods";
+    public final static String ADD_CAR_API = "lnrzb/cart/saveCart";
 
+    public final static String GET_CARS_API = "lnrzb/cart/findCartByUserId";
 
+    public final static String DELET_CAR_API = "lnrzb/cart/deleteCart";
 
     // 地址管理=====================================================
 

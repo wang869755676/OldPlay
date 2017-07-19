@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.bean.GoodBean;
+import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.ui.shop.adapter.GoodAdapter;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 
@@ -60,12 +61,14 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
     private List<GoodBean> datas;
     private GoodAdapter goodAdapter;
     private int payType; // 支付的类型
+    private OrderBean orderBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirm);
         ButterKnife.bind(this);
+        orderBean = (OrderBean) getIntent().getSerializableExtra("model");
         initView();
     }
 
@@ -93,12 +96,23 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
             }
         });
         datas = new ArrayList<>();
-        datas.add(new GoodBean());
-        datas.add(new GoodBean());
-        datas.add(new GoodBean());
-        datas.add(new GoodBean());
         goodAdapter = new GoodAdapter(mContext, R.layout.item_confirm_orderr, datas);
         swipeTarget.setAdapter(goodAdapter);
+        setData();
+    }
+
+    private void setData() {
+        if (orderBean != null) {
+            if (orderBean.goodBeanList != null && orderBean.goodBeanList.size() > 0) {
+                datas.addAll(orderBean.goodBeanList);
+                goodAdapter.notifyDataSetChanged();
+            }
+            if (orderBean.address != null) {
+                buyAddressName.setText("收货人: " + orderBean.address.consignee);
+                buyAddressTelphone.setText("收货人: " + orderBean.address.mobile);
+                buyAddressInfo.setText("收货人: " + orderBean.address.address);
+            }
+        }
     }
 
     @Override

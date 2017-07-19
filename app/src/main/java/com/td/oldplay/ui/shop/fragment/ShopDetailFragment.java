@@ -16,6 +16,7 @@ import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragment;
 import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
+import com.td.oldplay.bean.ShopDetail;
 import com.td.oldplay.utils.GlideUtils;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class ShopDetailFragment extends BaseFragment {
     @BindView(R.id.swipe_target)
     RecyclerView swipeTarget;
     Unbinder unbinder;
-    private List<String > datas;
+    private List<ShopDetail.GoodsImageListBean> datas;
 
 
     @Override
@@ -47,21 +48,28 @@ public class ShopDetailFragment extends BaseFragment {
 
     @Override
     protected void init(View view) {
-        datas=new ArrayList<>();
-        datas.add("http://pic.58pic.com/58pic/14/84/31/25C58PICBQi_1024.jpg");
+        datas = new ArrayList<>();
         swipeTarget.setLayoutManager(new LinearLayoutManager(mActivity));
-        swipeTarget.setAdapter(new CommonAdapter<String>(mActivity,R.layout.item_shop_pic,datas) {
 
-            @Override
-            protected void convert(ViewHolder holder, String s, int position) {
-                GlideUtils.setImage(mActivity,s, (ImageView) holder.getView(R.id.item_shop_de_pic));
-            }
-        });
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    public void refreshData(List<ShopDetail.GoodsImageListBean> ss) {
+        datas = ss;
+        swipeTarget.setAdapter(new CommonAdapter<ShopDetail.GoodsImageListBean>(mActivity, R.layout.item_shop_pic, datas) {
+
+            @Override
+            protected void convert(ViewHolder holder, ShopDetail.GoodsImageListBean s, int position) {
+                if(s!=null){
+                    GlideUtils.setImage(mActivity, s.imageUrl, (ImageView) holder.getView(R.id.item_shop_de_pic));
+                }
+
+            }
+        });
     }
 }

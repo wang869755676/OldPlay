@@ -136,7 +136,10 @@ public class ShopFragment extends BaseFragment implements
         shopAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                startActivity(new Intent(mActivity, ShopDetailActivity.class));
+                Intent intent=new Intent(mActivity, ShopDetailActivity.class);
+                intent.putExtra("id",datas.get(position).goodsId);
+                startActivity(intent);
+
             }
 
             @Override

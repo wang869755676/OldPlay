@@ -3,19 +3,25 @@ package com.td.oldplay.ui.shop.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragment;
-import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.CommentBean;
+import com.td.oldplay.bean.TeacherBean;
+import com.td.oldplay.contants.MContants;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.course.adapter.CommentAdapter;
-import com.tencent.mm.opensdk.utils.Log;
+import com.td.oldplay.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,15 +33,20 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ShopCommentFragment extends BaseFragment implements LoadMoreWrapper.OnLoadMoreListener {
+public class ShopCommentFragment extends BaseFragment implements LoadMoreWrapper.OnLoadMoreListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
 
     @BindView(R.id.swipe_target)
     RecyclerView swipeTarget;
     Unbinder unbinder;
+    @BindView(R.id.swipeToLoadLayout)
+    SwipeRefreshLayout swipeToLoadLayout;
     private CommentAdapter commentAdapter;
     private LoadMoreWrapper adapter;
     private List<CommentBean> datas;
+    private int page = 1;
+    private String goodId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,6 +54,7 @@ public class ShopCommentFragment extends BaseFragment implements LoadMoreWrapper
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_shop_comment, container, false);
         unbinder = ButterKnife.bind(this, view);
+        goodId = mActivity.getIntent().getStringExtra("id");
         return view;
     }
 
@@ -55,31 +67,61 @@ public class ShopCommentFragment extends BaseFragment implements LoadMoreWrapper
     @Override
     protected void init(View view) {
         datas = new ArrayList<>();
-        datas.add(new CommentBean());
-        datas.add(new CommentBean());
-        datas.add(new CommentBean());
-        datas.add(new CommentBean());
-        datas.add(new CommentBean());
-        datas.add(new CommentBean());
-        datas.add(new CommentBean());
-        datas.add(new CommentBean());
-        datas.add(new CommentBean());
-        datas.add(new CommentBean());
-        datas.add(new CommentBean());
-        datas.add(new CommentBean());
-        datas.add(new CommentBean());
-        datas.add(new CommentBean());
-        datas.add(new CommentBean());
-        Log.e("===", datas.size() + "---------------------");
+        swipeToLoadLayout.setOnRefreshListener(this);
         swipeTarget.setLayoutManager(new LinearLayoutManager(mActivity));
         commentAdapter = new CommentAdapter(mActivity, R.layout.item_comment, datas);
         adapter = new LoadMoreWrapper(commentAdapter);
         swipeTarget.setAdapter(adapter);
+        getData();
+
+    }
+
+    private void getData() {
+        HttpManager.getInstance().getShopComments(goodId, page, new HttpSubscriber<List<CommentBean>>(new OnResultCallBack<List<CommentBean>>() {
+
+            @Override
+            public void onSuccess(List<CommentBean> commentBean) {
+                swipeToLoadLayout.setRefreshing(false);
+                if (commentBean != null && commentBean.size() > 0) {
+                    if (page == 1) {
+                        datas.clear();
+                        if (commentBean.size() >= MContants.PAGENUM) {
+                            adapter.setLoadMoreView(R.layout.default_loading);
+                        }
+
+                    }
+                    datas.addAll(commentBean);
+                } else {
+                    adapter.setLoadMoreView(0);
+                    if (page > 1) {
+
+                        ToastUtil.show("没有更多数据了");
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                swipeToLoadLayout.setRefreshing(false);
+                ToastUtil.show(errorMsg);
+            }
+        }));
+
+
+    }
+
+
+    @Override
+    public void onLoadMoreRequested() {
+        page++;
+        getData();
 
     }
 
     @Override
-    public void onLoadMoreRequested() {
-
+    public void onRefresh() {
+        page = 1;
+        getData();
     }
 }

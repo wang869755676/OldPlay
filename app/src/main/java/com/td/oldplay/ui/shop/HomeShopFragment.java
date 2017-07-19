@@ -139,7 +139,9 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
         recommendShopAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                startActivity(new Intent(mActivity, ShopDetailActivity.class));
+                Intent intent=new Intent(mActivity, ShopDetailActivity.class);
+                intent.putExtra("id",recommenddatas.get(position).goodsId);
+                startActivity(intent);
             }
 
             @Override
@@ -162,7 +164,9 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
         LastShopAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                startActivity(new Intent(mActivity, ShopDetailActivity.class));
+                Intent intent=new Intent(mActivity, ShopDetailActivity.class);
+                intent.putExtra("id",Lastdatas.get(position).goodsId);
+                startActivity(intent);
             }
 
             @Override

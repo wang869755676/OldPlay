@@ -2,20 +2,32 @@ package com.td.oldplay.ui.window;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.td.oldplay.R;
+import com.td.oldplay.base.EventMessage;
 import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
+import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
+import com.td.oldplay.bean.ColorListBean;
 import com.td.oldplay.bean.ShopBean;
+import com.td.oldplay.bean.ShopDetail;
+import com.td.oldplay.ui.shop.activity.OrderConfirmActivity;
+import com.td.oldplay.utils.DeviceUtil;
+import com.td.oldplay.utils.ToastUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -27,7 +39,7 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
     private Context context;
 
     private View.OnClickListener listener;
-    private ShopBean shopBean;
+    private ShopDetail shopBean;
 
     private TextView modeTv;
     private TextView colorTv;
@@ -41,14 +53,19 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
     private Adapter modeAdapter;
 
     private ListPopupWindow colorWindow;
-    private Adapter colorAdpater;
-    private int num = 0;
-
-    public ShopCarDialog(@NonNull Context context, View.OnClickListener listener, ShopBean shopBean) {
+    private ColorAdapter colorAdpater;
+    private int num = 1;
+    private int type;
+    private int totalMoney;
+    private String ColorId = "0";
+    private String size = "默认";
+    EventMessage message;
+    public ShopCarDialog(@NonNull Context context, View.OnClickListener listener, ShopDetail shopBean, int Type) {
         super(context);
         this.context = context;
         this.listener = listener;
         this.shopBean = shopBean;
+        this.type = Type;
         initalize();
     }
 
@@ -72,10 +89,54 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
         colorTv.setOnClickListener(this);
         decTv.setOnClickListener(this);
         addTv.setOnClickListener(this);
+        okTv.setOnClickListener(this);
+        if(shopBean.goods!=null){
+            moneyTv.setText("￥"+shopBean.goods.price+"");
+        }
+        if (shopBean.sizeList != null) {
+            if (shopBean.sizeList.size() > 0) {
+                modeTv.setText(shopBean.sizeList.get(0));
+            } else {
+                modeTv.setText("默认");
+            }
 
-        okTv.setOnClickListener(listener);
-        //  modeAdapter=new Adapter(context,R.layout.item_month);
-        //   colorAdpater=new Adapter(context,R.layout.item_month);
+            modeAdapter = new Adapter(context, R.layout.item_month, shopBean.sizeList);
+            modeAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                    size = shopBean.sizeList.get(position);
+                    modeTv.setText(size);
+
+                }
+
+                @Override
+                public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                    return false;
+                }
+            });
+        }
+
+        if (shopBean.colorList != null) {
+            if (shopBean.colorList.size() > 0) {
+                colorTv.setText(shopBean.colorList.get(0).name);
+            } else {
+                colorTv.setText("默认");
+            }
+
+            colorAdpater = new ColorAdapter(context, R.layout.item_month, shopBean.colorList);
+            colorAdpater.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                    ColorId = shopBean.colorList.get(position).colorId;
+                    colorTv.setText(shopBean.colorList.get(position).name);
+                }
+
+                @Override
+                public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                    return false;
+                }
+            });
+        }
 
 
     }
@@ -99,23 +160,83 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.dialog_car_add:
-                numTv.setText((num++) + "");
+                if (shopBean.goods != null && shopBean.groupBuy != null) {
+                    if (shopBean.goods.isPreferential == 2) {
+                        if (num >= shopBean.groupBuy.buyNum) {
+                            addTv.setEnabled(false);
+                            ToastUtil.show("团购最大数量为" + shopBean.groupBuy.buyNum);
+                            return;
+
+                        }
+                    }
+                }
+                numTv.setText((++num) + "");
+                if(num>1){
+                  decTv.setEnabled(true);
+                }
+                CalTotal();
                 break;
             case R.id.dialog_car_dec:
-                numTv.setText((num--) + "");
+                if (shopBean.goods != null && shopBean.groupBuy != null) {
+                    if (shopBean.goods.isPreferential == 2) {
+                        if (num <shopBean.groupBuy.buyNum) {
+                            addTv.setEnabled(true);
+
+                        }
+                    }
+                }
+                if (num == 1) {
+                    decTv.setEnabled(false);
+                    ToastUtil.show("不能再减了");
+                } else {
+                    num--;
+
+                }
+                numTv.setText((num) + "");
+                CalTotal();
                 break;
             case R.id.dialog_type:
-              /*  if(modelWindow!=null){
-                    modelWindow=new ListPopupWindow(context,new Adapter(context,R.layout.item_))
-                }*/
+                if (modelWindow != null) {
+                    modelWindow = new ListPopupWindow(context, modeAdapter, ViewGroup.LayoutParams.MATCH_PARENT, DeviceUtil.dip2px(context, 100));
+                }
                 break;
             case R.id.dialog_color:
-              /*  if(modelWindow!=null){
-                    modelWindow=new ListPopupWindow(context,new Adapter(context,R.layout.item_))
-                }*/
+                if (modelWindow != null) {
+                    modelWindow = new ListPopupWindow(context, colorAdpater, ViewGroup.LayoutParams.MATCH_PARENT, DeviceUtil.dip2px(context, 100));
+                }
                 break;
+            case R.id.dialog_ok:
+                dismiss();
+                message=new EventMessage("shop");
+                message.colorId=ColorId;
+                message.num=num;
+                message.size=size;
+                message.total=totalMoney;
+                EventBus.getDefault().post(message);
+                break;
+
         }
 
+    }
+
+    private void CalTotal() {
+        if (shopBean.goods != null) {
+            totalMoney = shopBean.goods.price * num;
+         /*   if (shopBean.goods.isPreferential == 0) {
+
+
+            } else if (shopBean.goods.isPreferential == 1) {
+                if (shopBean.markDown != null) {
+                    if (shopBean.markDown.conditions == 0) {
+
+                    } else {
+
+                    }
+                }
+            }*/
+        }
+
+        moneyTv.setText("￥" + totalMoney);
     }
 
     private static class Adapter extends CommonAdapter<String> {
@@ -127,6 +248,22 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
         @Override
         protected void convert(ViewHolder holder, String s, int position) {
             holder.setText(R.id.item_tv, s);
+        }
+    }
+
+
+    private static class ColorAdapter extends CommonAdapter<ColorListBean> {
+
+        public ColorAdapter(Context context, int layoutId, List<ColorListBean> datas) {
+            super(context, layoutId, datas);
+        }
+
+        @Override
+        protected void convert(ViewHolder holder, ColorListBean s, int position) {
+            if (s != null) {
+                holder.setText(R.id.item_tv, s.name);
+            }
+
         }
     }
 }

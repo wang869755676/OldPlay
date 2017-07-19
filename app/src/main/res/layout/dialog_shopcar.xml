@@ -149,7 +149,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="￥ 20"
+                android:text="好了"
                 android:textColor="@color/tv_red"
                 android:textSize="18sp" />
         </LinearLayout>

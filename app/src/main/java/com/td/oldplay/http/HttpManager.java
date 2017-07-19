@@ -9,12 +9,14 @@ import com.td.oldplay.bean.CommentBean;
 import com.td.oldplay.bean.CourseBean;
 import com.td.oldplay.bean.CourseTypeBean;
 import com.td.oldplay.bean.HomeCourseInfo;
-import com.td.oldplay.bean.SearchCourse;
+import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.bean.ShopBean;
+import com.td.oldplay.bean.ShopDetail;
 import com.td.oldplay.bean.TeacherBean;
 import com.td.oldplay.bean.TeacherDetail;
 import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.contants.MContants;
+import com.td.oldplay.http.Converter.CustomGsonConverterFactory;
 import com.td.oldplay.http.api.ApiResponse;
 import com.td.oldplay.http.api.ApiService;
 import com.td.oldplay.http.api.NetWorkAPI;
@@ -23,7 +25,6 @@ import com.td.oldplay.http.subscriber.HttpSubscriber;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -32,17 +33,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.POST;
-import retrofit2.http.Part;
 
 public class HttpManager {
     public static final String TAG = HttpManager.class.getSimpleName();
@@ -72,7 +66,7 @@ public class HttpManager {
         OkHttpClient okHttpClient = builder.build();
 
         mRetrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(CustomGsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(NetWorkAPI.BASE_URL)
                 .client(okHttpClient)
@@ -205,6 +199,36 @@ public class HttpManager {
     public void getShopByType(int page, int type, Observer<List<ShopBean>> observer) {
         toSubscribe(mApiService.getShopByType(page, type), observer);
     }
+
+    public void getShopDetail(String shopId, Observer<ShopDetail> observer) {
+        toSubscribe(mApiService.getShopDetail(shopId), observer);
+    }
+
+    public void getShopComments(String shopId,int page, Observer<List<CommentBean>> observer) {
+        toSubscribe(mApiService.getShopComments(shopId,page), observer);
+    }
+    public void createOrder(HashMap<String,Object> params, Observer<OrderBean> observer) {
+        toSubscribe(mApiService.createOrder(params), observer);
+    }
+
+    public void addCar(HashMap<String,Object> params, Observer<String> observer) {
+        toSubscribe(mApiService.addCar(params), observer);
+    }
+
+    public void getCars(String userId,int page, Observer<String> observer) {
+        toSubscribe(mApiService.getCars(userId,page), observer);
+    }
+
+    public void deleteCars(String carId, Observer<String> observer) {
+        toSubscribe(mApiService.deleteCars(carId), observer);
+    }
+
+
+
+
+
+
+    //=============================
 
     public void getAddresse(int page, String id, Observer<List<AddressBean>> observer) {
         toSubscribe(mApiService.getAddress(page,id), observer);

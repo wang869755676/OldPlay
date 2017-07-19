@@ -1,248 +1,401 @@
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bg_gray">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bg_gray">
-
+        android:layout_height="wrap_content">
 
         <com.td.oldplay.widget.CustomTitlebarLayout
             android:id="@+id/title"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/titlebar_height"></com.td.oldplay.widget.CustomTitlebarLayout>
-
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/title"
-            android:fillViewport="true"
-            android:orientation="vertical">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <com.td.oldplay.widget.banner.MZBannerView
-                    android:id="@+id/shop_detail_banner"
-                    android:layout_width="match_parent"
-                    android:layout_height="170dp"
-                    android:layout_marginTop="10dp"
-                    app:canLoop="true"
-                    app:indicatorAlign="center"
-                    app:indicatorPaddingLeft="10dp"
-                    app:open_mz_mode="false" />
-
-                <!-- 正常产品的详情-->
-                <RelativeLayout
-                    android:id="@+id/rl_normal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:padding="5dp">
-
-                    <TextView
-                        android:id="@+id/shop_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="商品名称    "
-                        android:textColor="@color/coure_tv"
-                        android:textSize="14sp" />
-
-
-                    <TextView
-                        android:id="@+id/shop_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@id/shop_name"
-                        android:layout_below="@id/shop_name"
-                        android:layout_marginTop="10dp"
-                        android:drawableLeft="@mipmap/icon_price"
-                        android:ellipsize="end"
-                        android:gravity="center_vertical"
-                        android:lines="1"
-                        android:text="1000"
-                        android:textColor="@color/tv_red"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/shop_old_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBaseline="@id/shop_price"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_toRightOf="@+id/shop_price"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="原价"
-                        android:textColor="@color/home_gray"
-                        android:textSize="12sp"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/item_shop_sell"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignTop="@id/shop_price"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_toRightOf="@+id/shop_old_price"
-                        android:drawableLeft="@mipmap/icon_sell"
-                        android:ellipsize="end"
-                        android:gravity="center_vertical"
-                        android:lines="1"
-                        android:text="月售1000"
-                        android:textColor="@color/home_gray"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/shop_de_tuangoudes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@id/shop_price"
-                        android:layout_below="@id/shop_price"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="5dp"
-                        android:text="团购人数"
-                        android:textColor="@color/home_gray"
-                        android:textSize="12sp"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/shop_de_tuangouscore"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@id/shop_price"
-                        android:layout_below="@id/shop_de_tuangoudes"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="5dp"
-                        android:text="(fdf)"
-                        android:textColor="@color/home_gray"
-                        android:textSize="12sp"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/item_shop_score"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@id/shop_name"
-                        android:layout_below="@id/shop_price"
-                        android:drawableLeft="@mipmap/icon_score"
-                        android:ellipsize="end"
-                        android:gravity="center_vertical"
-                        android:lines="1"
-                        android:text="购买可得积分"
-                        android:textColor="@color/home_gray"
-                        android:textSize="12sp" />
-
-
-                </RelativeLayout>
-
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/tab_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="49dp"
-                    android:background="@color/white"
-                    app:tabGravity="fill"
-                    app:tabIndicatorColor="@color/tv_red"
-                    app:tabSelectedTextColor="@color/tv_red"
-                    app:tabTextColor="@color/home_gray"></android.support.design.widget.TabLayout>
-
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/viewPager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"></android.support.v4.view.ViewPager>
-
-            </LinearLayout>
-
-
-        </android.support.v4.widget.NestedScrollView>
+            android:layout_height="@dimen/titlebar_height"
+            app:layout_scrollFlags="scroll|enterAlways"></com.td.oldplay.widget.CustomTitlebarLayout>
 
         <LinearLayout
-            android:id="@+id/ll"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_alignParentBottom="true"
-            android:background="@mipmap/rec_bg"
-            android:orientation="horizontal"
-            android:paddingTop="5dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <ImageView
+                android:id="@+id/shop_detail_banner"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:scaleType="fitXY" />
+
+            <!-- 正常产品的详情-->
+            <RelativeLayout
+                android:id="@+id/rl_normal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="5dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/shop_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="商品名称    "
+                    android:textColor="@color/coure_tv"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/shop_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/shop_name"
+                    android:layout_below="@id/shop_name"
+                    android:layout_marginTop="10dp"
+                    android:drawableLeft="@mipmap/icon_price"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:text="1000"
+                    android:textColor="@color/tv_red"
+                    android:textSize="14sp" />
+
+
+                <TextView
+
+                    android:id="@+id/item_shop_sell"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@id/shop_price"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_toRightOf="@id/shop_price"
+                    android:drawableLeft="@mipmap/icon_sell"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:text="月售1000"
+                    android:textColor="@color/home_gray"
+                    android:textSize="12sp" />
+
+
+                <TextView
+                    android:id="@+id/item_shop_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/shop_name"
+                    android:layout_below="@id/shop_price"
+                    android:drawableLeft="@mipmap/icon_score"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:text="购买可得积分"
+                    android:textColor="@color/home_gray"
+                    android:textSize="12sp" />
+
+
+            </RelativeLayout>
+            <!-- 团购的详情-->
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/rl_tuangou"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/shop_tuanghou_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="商品名称    "
+                    android:textColor="@color/coure_tv"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/shop_tuangou_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/shop_tuanghou_name"
+                    android:layout_below="@id/shop_tuanghou_name"
+                    android:layout_marginTop="5dp"
+                    android:drawableLeft="@mipmap/icon_price"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:text="1000"
+                    android:textColor="@color/tv_red"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/shop_old_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@id/shop_tuangou_price"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/shop_tuangou_price"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="原价"
+                    android:textColor="@color/home_gray"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/ishop_tuanggou_sell"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@id/shop_tuangou_price"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toRightOf="@+id/shop_old_price"
+                    android:drawableLeft="@mipmap/icon_sell"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:text="月售1000"
+                    android:textColor="@color/home_gray"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/shop_de_tuangoudes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/shop_tuangou_price"
+                    android:layout_below="@id/shop_tuangou_price"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:text="团购人数(5.30)"
+                    android:textColor="@color/coure_tv"
+                    android:textSize="12sp" />
+                <!-- 倒计时组件-->
+                <com.td.oldplay.widget.countDown.CountdownView
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/cv_countdownView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_below="@id/shop_tuangou_price"
+                    android:layout_toRightOf="@id/shop_de_tuangoudes"
+                    app:isShowDay="true"
+                    app:isShowHour="true"
+                    app:isShowMillisecond="false"
+                    app:isShowMinute="true"
+                    app:isShowSecond="true"
+                    app:isTimeTextBold="true"
+                    app:suffixDay="天"
+                    app:suffixGravity="bottom"
+                    app:suffixHour="小时"
+                    app:suffixMinute="分钟"
+                    app:suffixSecond="秒"
+                    app:suffixTextColor="@color/home_gray"
+                    app:suffixTextSize="10sp"
+                    app:timeTextColor="@color/home_gray"
+                    app:timeTextSize="14sp" />
+
+                <TextView
+                    android:id="@+id/shop_de_tuangouscore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/shop_tuangou_price"
+                    android:layout_below="@id/shop_de_tuangoudes"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:text="(fdf)"
+                    android:textColor="@color/home_gray"
+                    android:textSize="12sp" />
+
+
+            </RelativeLayout>
+            <!-- 满减的详情-->
+            <RelativeLayout
+                android:id="@+id/rl_manjian"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="5dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/shop_manjian_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:text="商品名称    "
+                    android:textColor="@color/coure_tv"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/shop_manjian_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/shop_manjian_name"
+                    android:layout_below="@id/shop_manjian_name"
+                    android:layout_marginTop="5dp"
+                    android:drawableLeft="@mipmap/icon_price"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:text="1000"
+                    android:textColor="@color/tv_red"
+                    android:textSize="14sp" />
+
+
+                <TextView
+                    android:id="@+id/ishop_manjian_sell"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@id/shop_manjian_price"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toRightOf="@+id/shop_manjian_price"
+                    android:drawableLeft="@mipmap/icon_sell"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:text="月售1000"
+                    android:textColor="@color/home_gray"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/shop_de_manjian"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/shop_manjian_price"
+                    android:layout_below="@id/shop_manjian_price"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:text="团购人数dddddddddddddddddddd"
+                    android:textColor="@color/tv_red"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/shop_de_manjianscore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/shop_manjian_price"
+                    android:layout_below="@id/shop_de_manjian"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:text="(fdf)"
+                    android:textColor="@color/home_gray"
+                    android:textSize="12sp" />
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:background="@color/white"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/tv_red"
+            app:tabSelectedTextColor="@color/tv_red"
+            app:tabTextColor="@color/home_gray"></android.support.design.widget.TabLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"></android.support.v4.view.ViewPager>
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="@mipmap/rec_bg"
+        android:orientation="horizontal"
+        android:paddingTop="5dp">
+
+        <TextView
+            android:id="@+id/shop_detail_teacher"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:drawableTop="@mipmap/icon_te_home"
+            android:gravity="center"
+            android:text="讲师的主页"
+            android:textColor="@color/home_gray"
+            android:textSize="11sp" />
+
+        <FrameLayout
+            android:id="@+id/fl_car"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp">
 
             <TextView
-                android:id="@+id/shop_detail_teacher"
+                android:id="@+id/shop_detail_cart"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:drawableTop="@mipmap/icon_te_home"
+                android:drawableTop="@mipmap/icon_car"
                 android:gravity="center"
-                android:text="讲师的主页"
+                android:text="购物车"
                 android:textColor="@color/home_gray"
                 android:textSize="11sp" />
 
-            <FrameLayout
-                android:id="@+id/fl_car"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp">
-
-                <TextView
-                    android:id="@+id/shop_detail_cart"
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent"
-                    android:drawableTop="@mipmap/icon_car"
-                    android:gravity="center"
-                    android:text="购物车"
-                    android:textColor="@color/home_gray"
-                    android:textSize="11sp" />
-
-                <TextView
-                    android:id="@+id/shop_de_car_num"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_gravity="right"
-                    android:background="@drawable/cir_red"
-                    android:gravity="center"
-                    android:text="5"
-                    android:textColor="@color/white"
-                    android:textSize="7sp"
-                    android:visibility="gone" />
-            </FrameLayout>
-
-
             <TextView
-                android:id="@+id/shop_detail_add_cart"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="#fd9b32"
+                android:id="@+id/shop_de_car_num"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="right"
+                android:background="@drawable/cir_red"
                 android:gravity="center"
-                android:text="加入购物车"
+                android:text="5"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/shop_detail_buy"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/tv_red"
-                android:gravity="center"
-                android:text="立即购买"
-                android:textColor="@color/white"
-                android:textSize="15dp" />
-        </LinearLayout>
+                android:textSize="7sp"
+                android:visibility="gone" />
+        </FrameLayout>
 
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/shop_detail_add_cart"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="#fd9b32"
+            android:gravity="center"
+            android:text="加入购物车"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
-</android.support.v4.widget.SwipeRefreshLayout>
+        <TextView
+            android:id="@+id/shop_detail_buy"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/tv_red"
+            android:gravity="center"
+            android:text="立即购买"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>
+

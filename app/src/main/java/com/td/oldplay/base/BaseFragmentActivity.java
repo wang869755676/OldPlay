@@ -7,6 +7,7 @@ import android.view.View;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.td.oldplay.MyApplication;
+import com.td.oldplay.utils.GlideUtils;
 import com.td.oldplay.utils.SharePreferenceUtil;
 
 
@@ -60,5 +61,9 @@ public abstract class BaseFragmentActivity extends FragmentActivity {
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        GlideUtils.destroyRequest(AContext);
+    }
 }

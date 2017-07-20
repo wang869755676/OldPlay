@@ -7,9 +7,9 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:paddingBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="5dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp">
 
@@ -17,8 +17,7 @@
             android:id="@+id/item_forum_iv"
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:layout_marginTop="15dp"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_marginTop="15dp" />
 
 
         <ImageView

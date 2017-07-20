@@ -22,7 +22,7 @@ public class TeacherDetail {
     public String coursesId;
     public int coursesTypeId;
     public String name;
-    public int price;
+    public float price;
     public String profile;
     public UserBean user;
     public String userId;

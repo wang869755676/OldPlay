@@ -2,6 +2,7 @@ package com.td.oldplay.ui.course.fragment;
 
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -78,7 +79,7 @@ public class ShopFragment extends BaseFragment implements
 
     private List<ShopBean> datas;
     private LoadMoreWrapper adapter;
-    private int page=1;
+    private int page = 1;
     private ShopAdapter shopAdapter;
     private boolean priceup;
     private boolean sellup;
@@ -88,6 +89,15 @@ public class ShopFragment extends BaseFragment implements
     private int goodType; //1 绿色产品 2教学产品
     private callBack callBack;
     private String id;
+    private int sortType = 0; //排序的类型,0:价格,1:积分,2:销量
+    private int sort = 0; //排序方式,0:降序,1:升序
+    private boolean priceDec = true;
+    private boolean scoreSell = true;
+    private boolean sellDec = true;
+    private Drawable greyDrawable;
+    private Drawable upDrawable;
+    private Drawable downDrawable;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -115,7 +125,7 @@ public class ShopFragment extends BaseFragment implements
 
     @Override
     protected void init(View view) {
-        callBack=new callBack();
+        callBack = new callBack();
         swipeToLoadLayout.setOnRefreshListener(this);
         rbPrice.setOnCheckedChangeListener(this);
         rbScore.setOnCheckedChangeListener(this);
@@ -136,8 +146,8 @@ public class ShopFragment extends BaseFragment implements
         shopAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent=new Intent(mActivity, ShopDetailActivity.class);
-                intent.putExtra("id",datas.get(position).goodsId);
+                Intent intent = new Intent(mActivity, ShopDetailActivity.class);
+                intent.putExtra("id", datas.get(position).goodsId);
                 startActivity(intent);
 
             }
@@ -148,6 +158,9 @@ public class ShopFragment extends BaseFragment implements
             }
         });
 
+        greyDrawable = getResources().getDrawable(R.mipmap.icon_shop_gray);
+        upDrawable = getResources().getDrawable(R.mipmap.icon_tri_up);
+        downDrawable = getResources().getDrawable(R.mipmap.icon_tri_down);
         getData();
 
     }
@@ -155,17 +168,17 @@ public class ShopFragment extends BaseFragment implements
     private void getData() {
         switch (type) {
             case 1:
-                HttpManager.getInstance().getShopByType(page,goodType,new HttpSubscriber<List<ShopBean>>(callBack));
+                HttpManager.getInstance().getShopByType(page, goodType, sortType, sort, new HttpSubscriber<List<ShopBean>>(callBack));
                 break;
             case 2:
-                HttpManager.getInstance().getShopRecomments(page,new HttpSubscriber<List<ShopBean>>(callBack));
+                HttpManager.getInstance().getShopRecomments(page, sortType, sort, new HttpSubscriber<List<ShopBean>>(callBack));
                 break;
             case 3:
-                HttpManager.getInstance().getShopRecomments(page,new HttpSubscriber<List<ShopBean>>(callBack));
+                HttpManager.getInstance().getShopDiscounts(page, sortType, sort, new HttpSubscriber<List<ShopBean>>(callBack));
                 break;
             default:
                 // 老师中的商品
-                HttpManager.getInstance().getShopInTeacher(id,page,new HttpSubscriber<List<ShopBean>>(callBack));
+                HttpManager.getInstance().getShopInTeacher(id, page, sortType, sort, new HttpSubscriber<List<ShopBean>>(callBack));
                 break;
         }
     }
@@ -181,10 +194,52 @@ public class ShopFragment extends BaseFragment implements
         switch (v.getId()) {
 
             case R.id.rb_price:
+                clearDrawable();
+                if (priceDec) {
+
+                    priceDec = false;
+                    sort = 1;
+                    rbPrice.setCompoundDrawablesWithIntrinsicBounds(null, null, upDrawable, null);
+                } else {
+                    priceDec = true;
+                    sort = 0;
+                    rbPrice.setCompoundDrawablesWithIntrinsicBounds(null, null, downDrawable, null);
+                }
+
             case R.id.rb_score:
+                if (scoreSell) {
+                    scoreSell = false;
+                    sort = 1;
+                    rbScore.setCompoundDrawablesWithIntrinsicBounds(null, null, upDrawable, null);
+                } else {
+                    scoreSell = true;
+                    sort = 0;
+                    rbScore.setCompoundDrawablesWithIntrinsicBounds(null, null, downDrawable, null);
+                }
             case R.id.rb_sell:
+
+                if (sellDec) {
+                    sellDec = false;
+                    sort = 1;
+                    rbSell.setCompoundDrawablesWithIntrinsicBounds(null, null, upDrawable, null);
+                } else {
+                    sellDec = true;
+                    sort = 0;
+                    rbSell.setCompoundDrawablesWithIntrinsicBounds(null, null, downDrawable, null);
+
+                }
                 break;
+
         }
+        page = 1;
+        getData();
+    }
+
+    private void clearDrawable() {
+        rbPrice.setCompoundDrawablesWithIntrinsicBounds(null, null, greyDrawable, null);
+        rbSell.setCompoundDrawablesWithIntrinsicBounds(null, null, greyDrawable, null);
+        rbScore.setCompoundDrawablesWithIntrinsicBounds(null, null, greyDrawable, null);
+
     }
 
     @Override

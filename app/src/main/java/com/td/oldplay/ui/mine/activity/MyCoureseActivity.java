@@ -13,8 +13,14 @@ import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.CourseBean;
 import com.td.oldplay.bean.CourseTypeBean;
+import com.td.oldplay.bean.TeacherBean;
+import com.td.oldplay.contants.MContants;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.course.activity.TeacherListActivity;
 import com.td.oldplay.ui.course.adapter.CourserListAdapter;
+import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 
 import java.util.ArrayList;
@@ -55,8 +61,6 @@ public class MyCoureseActivity extends BaseFragmentActivity
         title.setOnLeftListener(this);
         swipeLayout.setOnRefreshListener(this);
         swipeTarget.setLayoutManager(new LinearLayoutManager(mContext));
-       // datas.add(new CourseBean());
-
         coureseAdapter = new CourserListAdapter(mContext, R.layout.item_my_teacher_list, datas);
         adapter = new LoadMoreWrapper(coureseAdapter);
         swipeTarget.setAdapter(adapter);
@@ -65,7 +69,9 @@ public class MyCoureseActivity extends BaseFragmentActivity
         coureseAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                startActivity(new Intent(mContext, TeacherListActivity.class));
+                Intent intent=new Intent(mContext, TeacherListActivity.class);
+                intent.putExtra("courseId",datas.get(position).id);
+                startActivity(intent);
             }
 
             @Override
@@ -77,38 +83,35 @@ public class MyCoureseActivity extends BaseFragmentActivity
     }
 
     private void getData() {
-    /*    HttpManager.getInstance().getTeacherLists("eyJsYXRpdHVkZSI6IjMwLjMxMjUzNyIsImxvbmdpdHVkZSI6IjEyMC4xMjkwNTYiLCJ0b2tlbiI6Ik1UTXdOVEV5TmpFNU1UUVx1MDAzZCIsInBhZ2UiOjF9",
-                new HttpSubscriber<List<TeacherBean>>(new OnResultCallBack<List<TeacherBean>>() {
-                    @Override
-                    public void onSuccess(List<TeacherBean> o) {
-                        swipeToLoadLayout.setRefreshing(false);
-                        if (o != null && o.size() > 0) {
-                            if (page == 1) {
-                                datas.clear();
-                                if (datas.size() >= MContants.PAGENUM) {
-                                    adapter.setLoadMoreView(R.layout.default_loading);
-                                }
-
-                            }
-                            datas.addAll(o);
-                        } else {
-                            if (page > 1) {
-                                adapter.setLoadMoreView(0);
-                                ToastUtil.show("没有更多数据了");
-                            }
+        HttpManager.getInstance().getMyCourses(userId, new HttpSubscriber<List<CourseTypeBean>>(new OnResultCallBack<List<CourseTypeBean>>() {
+            @Override
+            public void onSuccess(List<CourseTypeBean> teacherBeen) {
+                swipeLayout.setRefreshing(false);
+                if (teacherBeen != null && teacherBeen.size() > 0) {
+                    if (page == 1) {
+                        datas.clear();
+                        if (datas.size() >= MContants.PAGENUM) {
+                            adapter.setLoadMoreView(R.layout.default_loading);
                         }
-                        Log.e("===", datas.size() + "-----------------");
-                        coureseAdapter.notifyDataSetChanged();
-                        adapter.notifyDataSetChanged();
-                    }
 
-                    @Override
-                    public void onError(int code, String errorMsg) {
-                        Log.e("==", errorMsg);
-                        swipeToLoadLayout.setRefreshing(false);
                     }
-                }));
-*/
+                    datas.addAll(teacherBeen);
+                } else {
+                    adapter.setLoadMoreView(0);
+                    if (page > 1) {
+                        ToastUtil.show("没有更多数据了");
+                    }
+                }
+
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                swipeLayout.setRefreshing(false);
+                ToastUtil.show(errorMsg);
+            }
+        }));
     }
 
     @Override

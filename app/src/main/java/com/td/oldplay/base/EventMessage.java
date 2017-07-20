@@ -10,7 +10,7 @@ public class EventMessage {
     public int num;
     public String colorId;
     public String size;
-    public int total;
+    public float total;
     public EventMessage(String action) {
         this.action = action;
     }

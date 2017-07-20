@@ -26,6 +26,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -80,7 +81,7 @@ public class MyAddressActivity extends BaseFragmentActivity
         title.setOnRightListener(this);
         title.setRightImageResource(R.mipmap.icon_adr_publish);
         swipeLayout.setOnRefreshListener(this);
-        swipeTarget.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL,true));
+        swipeTarget.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL,false));
         addressAdapter = new AddressAdapter(mContext, R.layout.item_address, datas);
         addressAdapter.setActionListener(this);
         adapter = new LoadMoreWrapper(addressAdapter);
@@ -112,7 +113,7 @@ public class MyAddressActivity extends BaseFragmentActivity
                     }
 
                 }
-                Log.e("===", datas.size() + "-----------------------");
+                Collections.reverse(datas);
                 adapter.notifyDataSetChanged();
 
             }

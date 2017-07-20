@@ -17,7 +17,7 @@ public class ShopCarBean {
     public String goodsId;
     public int number;
     public String size;
-    public int total;
+    public float total;
     public String userId;
 
     public ColorListBean getColor() {

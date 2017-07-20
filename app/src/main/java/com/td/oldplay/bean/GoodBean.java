@@ -28,7 +28,7 @@ public class GoodBean {
     public MarkDownBean markDown;
     public int number;
     public int orderId;
-    public int price;
+    public float price;
     public String size;
 
 

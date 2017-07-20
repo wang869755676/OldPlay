@@ -10,176 +10,184 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/titlebar_height" />
 
-    <android.support.v4.widget.NestedScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-
-        <LinearLayout
+        android:layout_height="match_parent">
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            tools:context="com.td.oldplay.ui.course.CourseHomeFragment">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="@color/gray"></View>
-
-            <com.td.oldplay.widget.banner.MZBannerView
-                android:id="@+id/homr_courese_banner"
-                android:layout_width="match_parent"
-                android:layout_height="164dp"
-                android:background="@color/white"
-                app:canLoop="true"
-                app:indicatorAlign="center"
-                app:indicatorPaddingLeft="10dp"
-                app:open_mz_mode="true" />
-
-            <LinearLayout
-              android:paddingTop="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="horizontal"
-                android:paddingBottom="5dp">
-
-                <TextView
-                    android:id="@+id/home_shop_green"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:drawablePadding="5dp"
-                    android:drawableTop="@mipmap/icon_shop_green"
-                    android:gravity="center"
-                    android:text="绿色产品"
-                    android:textColor="@color/coure_tv"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/home_shop_study"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:drawablePadding="5dp"
-                    android:drawableTop="@mipmap/icon_shop_tec"
-                    android:gravity="center"
-                    android:text="教学产品"
-                    android:textColor="@color/coure_tv"
-                    android:textSize="14sp" />
-            </LinearLayout>
+            android:orientation="vertical">
 
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:context="com.td.oldplay.ui.course.CourseHomeFragment">
 
-                <RelativeLayout
-                    android:id="@+id/home_more_essence"
+
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="33dp"
-                    android:background="@color/bg_gray"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
+                    android:layout_height="10dp"
+                    android:background="@color/gray"></View>
 
-                    <View
-                        android:id="@+id/view1"
-                        android:layout_width="3dp"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginBottom="6dp"
-                        android:layout_marginTop="6dp"
-                        android:background="@color/tv_red" />
+                <com.td.oldplay.widget.banner.MZBannerView
+                    android:id="@+id/homr_courese_banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="164dp"
+                    android:background="@color/white"
+                    app:canLoop="true"
+                    app:indicatorAlign="center"
+                    app:indicatorPaddingLeft="10dp"
+                    app:open_mz_mode="true" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="17dp"
-                        android:layout_toRightOf="@+id/view1"
-                        android:text="推荐商品"
-                        android:textColor="@color/coure_tv"
-                        android:textSize="14sp" />
-
-                    <TextView
-                        android:id="@+id/more_recomment_btn"
-                        android:layout_width="80dp"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:background="@null"
-                        android:drawableRight="@mipmap/icon_right"
-                        android:gravity="right|center"
-                        android:text="更多"
-                        android:textColor="@color/coure_tv"
-                        android:textSize="14sp" />
-                </RelativeLayout>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/home_shop_essence"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"></android.support.v7.widget.RecyclerView>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:id="@+id/home_more_hot"
-                    android:layout_width="match_parent"
-                    android:layout_height="33dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/bg_gray"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp">
-
-                    <View
-                        android:id="@+id/view2"
-                        android:layout_width="3dp"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentLeft="true"
-                        android:layout_marginBottom="6dp"
-                        android:layout_marginTop="6dp"
-                        android:background="@color/tv_red" />
+                    android:background="@color/white"
+                    android:orientation="horizontal"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="10dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="17dp"
-                        android:layout_toRightOf="@+id/view2"
-                        android:text="最新优惠"
+                        android:id="@+id/home_shop_green"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:drawableTop="@mipmap/icon_shop_green"
+                        android:gravity="center"
+                        android:text="绿色产品"
                         android:textColor="@color/coure_tv"
                         android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/more_hot_btn"
-                        android:layout_width="80dp"
+                        android:id="@+id/home_shop_study"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:background="@null"
-                        android:drawableRight="@mipmap/icon_right"
-                        android:gravity="right|center"
-                        android:text="更多"
+                        android:layout_weight="1"
+                        android:drawablePadding="5dp"
+                        android:drawableTop="@mipmap/icon_shop_tec"
+                        android:gravity="center"
+                        android:text="教学产品"
                         android:textColor="@color/coure_tv"
                         android:textSize="14sp" />
-                </RelativeLayout>
+                </LinearLayout>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/home_coure_hot"
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"></android.support.v7.widget.RecyclerView>
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/home_more_essence"
+                        android:layout_width="match_parent"
+                        android:layout_height="33dp"
+                        android:background="@color/bg_gray"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <View
+                            android:id="@+id/view1"
+                            android:layout_width="3dp"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginBottom="6dp"
+                            android:layout_marginTop="6dp"
+                            android:background="@color/tv_red" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="17dp"
+                            android:layout_toRightOf="@+id/view1"
+                            android:text="推荐商品"
+                            android:textColor="@color/coure_tv"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/more_recomment_btn"
+                            android:layout_width="80dp"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:background="@null"
+                            android:drawableRight="@mipmap/icon_right"
+                            android:gravity="right|center"
+                            android:text="更多"
+                            android:textColor="@color/coure_tv"
+                            android:textSize="14sp" />
+                    </RelativeLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/home_shop_essence"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"></android.support.v7.widget.RecyclerView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/home_more_hot"
+                        android:layout_width="match_parent"
+                        android:layout_height="33dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/bg_gray"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp">
+
+                        <View
+                            android:id="@+id/view2"
+                            android:layout_width="3dp"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginBottom="6dp"
+                            android:layout_marginTop="6dp"
+                            android:background="@color/tv_red" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="17dp"
+                            android:layout_toRightOf="@+id/view2"
+                            android:text="最新优惠"
+                            android:textColor="@color/coure_tv"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/more_hot_btn"
+                            android:layout_width="80dp"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:background="@null"
+                            android:drawableRight="@mipmap/icon_right"
+                            android:gravity="right|center"
+                            android:text="更多"
+                            android:textColor="@color/coure_tv"
+                            android:textSize="14sp" />
+                    </RelativeLayout>
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/home_coure_hot"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"></android.support.v7.widget.RecyclerView>
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
 
-    </android.support.v4.widget.NestedScrollView>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
 </LinearLayout>

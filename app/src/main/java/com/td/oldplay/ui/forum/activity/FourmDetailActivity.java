@@ -14,7 +14,16 @@ import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.CommentBean;
+import com.td.oldplay.bean.ForumBean;
+import com.td.oldplay.bean.ForumDetial;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.course.adapter.CommentAdapter;
+import com.td.oldplay.ui.course.adapter.ShopAdapter;
+import com.td.oldplay.ui.forum.adapter.PicAdapter;
+import com.td.oldplay.ui.forum.adapter.VideAdapter;
+import com.td.oldplay.ui.forum.adapter.VoiceAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,23 +70,38 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
     TextView commentSend;
     @BindView(R.id.ll_comment)
     LinearLayout llComment;
+    @BindView(R.id.ry_pic)
+    RecyclerView ryPic;
+    @BindView(R.id.ry_au)
+    RecyclerView ryAu;
+    @BindView(R.id.ry_video)
+    RecyclerView ryVideo;
     private List<CommentBean> datas = new ArrayList<>();
     private CommentAdapter commentAdapter;
     private LoadMoreWrapper Adapter;
+
+    private List<String> picStr = new ArrayList<>();
+    private List<String> voiceStr = new ArrayList<>();
+    private List<String> videoStr = new ArrayList<>();
+    private PicAdapter picAdapter;
+    private VoiceAdapter voiceAdapter;
+    private VideAdapter videAdapter;
+
+    private ForumDetial forumDetial;
+
+    private HttpSubscriber<ForumDetial> subscriber;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fourm_detail);
         ButterKnife.bind(this);
+        id = getIntent().getStringExtra("id");
         initView();
     }
 
     private void initView() {
-        datas.add(new CommentBean());
-        datas.add(new CommentBean());
-        datas.add(new CommentBean());
-        datas.add(new CommentBean());
         titleText.setText("详情");
         titleBack.setOnClickListener(this);
         rightImage.setOnClickListener(this);
@@ -90,7 +114,60 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
         commentAdapter = new CommentAdapter(mContext, R.layout.item_comment, datas);
         Adapter = new LoadMoreWrapper(commentAdapter);
         swipeTarget.setAdapter(Adapter);
+        ryAu.setLayoutManager(new LinearLayoutManager(mContext));
+        ryVideo.setLayoutManager(new LinearLayoutManager(mContext));
+        ryPic.setLayoutManager(new LinearLayoutManager(mContext));
+        picAdapter = new PicAdapter(mContext, R.layout.item_shop_pic, picStr);
+        videAdapter = new VideAdapter(mContext, R.layout.item_videoview, videoStr);
+        // picAdapter=new PicAdapter(mContext,R.layout.item_shop_pic,picStr);
+        ryPic.setAdapter(picAdapter);
+        ryVideo.setAdapter(Adapter);
+        subscriber = new HttpSubscriber<>(new OnResultCallBack<ForumDetial>() {
 
+            @Override
+            public void onSuccess(ForumDetial forumDetial) {
+                if (forumDetial != null) {
+                    setData();
+                }
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+
+            }
+        });
+        getData();
+    }
+
+    private void setData() {
+        if (forumDetial.topic != null) {
+            forumDetailTitle.setText(forumDetial.topic.title);
+            forumDetailComment.setText(forumDetial.topic.replyCount + "评论");
+            forumDetailName.setText(forumDetial.topic.userName);
+            if (forumDetial.topic.userId.equals(userId)) {
+                forumDetailEdit.setVisibility(View.VISIBLE);
+            } else {
+                forumDetailEdit.setVisibility(View.GONE);
+            }
+        }
+        if (forumDetial.imageUrlList != null) {
+            picStr.addAll(forumDetial.imageUrlList);
+            picAdapter.notifyDataSetChanged();
+        }
+     /*   if (forumDetial.speechUrlList!=null) {
+            voiceStr.addAll(forumDetial.speechUrlList);
+            voiceAdapter.notifyDataSetChanged();
+        }*/
+        if (forumDetial.videoUrlList != null) {
+            videoStr.addAll(forumDetial.videoUrlList);
+            videAdapter.notifyDataSetChanged();
+        }
+
+
+    }
+
+    private void getData() {
+        HttpManager.getInstance().getForumDetials(id, subscriber);
     }
 
     @Override
@@ -120,4 +197,5 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
     public void onLoadMoreRequested() {
 
     }
+
 }

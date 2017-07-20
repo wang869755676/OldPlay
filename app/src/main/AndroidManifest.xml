@@ -42,14 +42,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".ui.MainActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.live.LiveActivity"
             android:screenOrientation="portrait"
@@ -159,11 +155,10 @@
             android:theme="@style/search"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:theme="@style/AlertDialogStyle"
             android:name=".ui.mine.activity.AddAddressActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AlertDialogStyle"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-
         <activity
             android:name=".ui.ForgetPwsActivity"
             android:screenOrientation="portrait"
@@ -175,7 +170,7 @@
         <activity
             android:name=".ui.shop.activity.LogisticsActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <!-- ShareSDK的activity -->
         <activity
             android:name="com.mob.tools.MobUIShell"
@@ -229,7 +224,19 @@
             android:exported="false"
             android:screenOrientation="behind"
             android:windowSoftInputMode="adjustResize|stateHidden" />
-
+        <activity
+            android:name=".ui.forum.activity.PublishForumActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".ui.forum.activity.VoiceActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <action android:name="recordVoice"></action>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

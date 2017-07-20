@@ -30,7 +30,7 @@ public class ShopBean {
     public int isCommend;
     public int isPreferential;  //0.不优惠,1.满减,2:团购
     public String picUrl;
-    public int price;
+    public float price;
     public String profile;
     public int score;
     public int sellNum;

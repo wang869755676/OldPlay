@@ -8,7 +8,11 @@ import com.td.oldplay.bean.AddressBean;
 import com.td.oldplay.bean.CommentBean;
 import com.td.oldplay.bean.CourseBean;
 import com.td.oldplay.bean.CourseTypeBean;
+import com.td.oldplay.bean.ForumBean;
+import com.td.oldplay.bean.ForumDetial;
+import com.td.oldplay.bean.ForumType;
 import com.td.oldplay.bean.HomeCourseInfo;
+import com.td.oldplay.bean.HomeShopInfo;
 import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.bean.ShopBean;
 import com.td.oldplay.bean.ShopDetail;
@@ -179,8 +183,8 @@ public class HttpManager {
         toSubscribe(mApiService.searchCommentsTeachers(id), observer);
     }
 
-    public void getShopInTeacher(String id,int page, Observer<List<ShopBean>> observer) {
-        toSubscribe(mApiService.getShopInTeacher(id,page), observer);
+    public void getShopInTeacher(String id,int page,int scortType,int scort, Observer<List<ShopBean>> observer) {
+        toSubscribe(mApiService.getShopInTeacher(id,page,scortType,scort), observer);
     }
     public void getCourseDetail(String id, Observer<TeacherDetail> observer) {
         toSubscribe(mApiService.getCourseDetail(id), observer);
@@ -188,16 +192,16 @@ public class HttpManager {
 
 
     //========================
-    public void getShopRecomments(int page, Observer<List<ShopBean>> observer) {
-        toSubscribe(mApiService.getShopRecomments(page), observer);
+    public void getShopRecomments(int page,int scortType,int scort, Observer<List<ShopBean>> observer) {
+        toSubscribe(mApiService.getShopRecomments(page,scortType,scort), observer);
     }
 
-    public void getShopRecomments(int page, String id, Observer<List<CommentBean>> observer) {
-        toSubscribe(mApiService.getCommentsInShop(page, id), observer);
+    public void getShopDiscounts(int page,int scortType,int scort, Observer<List<ShopBean>> observer) {
+        toSubscribe(mApiService.getShopDiscounts(page, scortType,scort), observer);
     }
 
-    public void getShopByType(int page, int type, Observer<List<ShopBean>> observer) {
-        toSubscribe(mApiService.getShopByType(page, type), observer);
+    public void getShopByType(int page, int type,int scortType,int scort, Observer<List<ShopBean>> observer) {
+        toSubscribe(mApiService.getShopByType(page, type,scortType,scort), observer);
     }
 
     public void getShopDetail(String shopId, Observer<ShopDetail> observer) {
@@ -223,6 +227,9 @@ public class HttpManager {
         toSubscribe(mApiService.deleteCars(carId), observer);
     }
 
+    public void getHomeShop( Observer<HomeShopInfo> observer) {
+        toSubscribe(mApiService.getHomeShop(), observer);
+    }
 
 
 
@@ -247,5 +254,27 @@ public class HttpManager {
 
     public void addAddress(HashMap<String,Object> params, Observer<String> observer) {
         toSubscribe(mApiService.addAddress(params), observer);
+    }
+
+    public void getMyCourses(String userId ,Observer<List<CourseTypeBean>> observer) {
+        toSubscribe(mApiService.getMyCourses(userId), observer);
+    }
+
+    public void getMyConCerns(String userId ,Observer<List<TeacherBean>> observer) {
+        toSubscribe(mApiService.getMyConCerns(userId), observer);
+    }
+
+
+    //=========================论坛=========================
+    public void getHomeForums(Observer<List<ForumType>> observer) {
+        toSubscribe(mApiService.getHomeForums(), observer);
+    }
+
+    public void getForumsNyId(String borad,int page,Observer<List<ForumBean>> observer) {
+        toSubscribe(mApiService.getForumsNyId(borad,page), observer);
+    }
+
+    public void getForumDetials(String id,Observer<ForumDetial> observer) {
+        toSubscribe(mApiService.getForumDetials(id), observer);
     }
 }

@@ -14,7 +14,12 @@ import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.ForumBean;
+import com.td.oldplay.contants.MContants;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.forum.adapter.ForumListAdapter;
+import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 
 import java.util.ArrayList;
@@ -37,23 +42,26 @@ public class ForumListActivity extends BaseFragmentActivity implements View.OnCl
     private List<ForumBean> datas = new ArrayList<>();
     private ForumListAdapter listAdapter;
     private LoadMoreWrapper adapter;
-    private int page = 0;
+    private int page = 1;
+    private String id;
+    private String titleStr;
+    private HttpSubscriber<List<ForumBean>> subscriber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum_list);
         ButterKnife.bind(this);
+        id = getIntent().getStringExtra("id");
+        titleStr = getIntent().getStringExtra("title");
         initView();
     }
 
     private void initView() {
-        title.setTitle("XX板块");
+        title.setTitle(titleStr + "板块");
         title.setOnLeftListener(this);
         swipeLayout.setOnRefreshListener(this);
         forumPublish.setOnClickListener(this);
-        datas.add(new ForumBean());
-        datas.add(new ForumBean());
         swipeTarget.setLayoutManager(new LinearLayoutManager(mContext));
         listAdapter = new ForumListAdapter(mContext, R.layout.item_forum, datas);
         adapter = new LoadMoreWrapper(listAdapter);
@@ -62,7 +70,9 @@ public class ForumListActivity extends BaseFragmentActivity implements View.OnCl
         listAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                startActivity(new Intent(AContext, FourmDetailActivity.class));
+                Intent intent=new Intent(AContext, FourmDetailActivity.class);
+                intent.putExtra("id",datas.get(position).topicId);
+                startActivity(intent);
             }
 
             @Override
@@ -70,6 +80,39 @@ public class ForumListActivity extends BaseFragmentActivity implements View.OnCl
                 return false;
             }
         });
+        subscriber=new HttpSubscriber<List<ForumBean>>(new OnResultCallBack<List<ForumBean>>() {
+
+            @Override
+            public void onSuccess(List<ForumBean> forumBeen) {
+                swipeLayout.setRefreshing(false);
+                if (forumBeen != null && forumBeen.size() > 0) {
+                    if (page == 1) {
+                        datas.clear();
+                        if (forumBeen.size() >= MContants.PAGENUM) {
+                            adapter.setLoadMoreView(R.layout.default_loading);
+                        }
+
+                    }
+                    datas.addAll(forumBeen);
+                } else {
+                    if (page > 1) {
+                        adapter.setLoadMoreView(0);
+                        ToastUtil.show("没有更多数据了");
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                ToastUtil.show(errorMsg);
+                swipeLayout.setRefreshing(false);
+            }});
+        getData();
+    }
+
+    private void getData() {
+        HttpManager.getInstance().getForumsNyId(id,page,subscriber);
     }
 
     @Override
@@ -79,6 +122,7 @@ public class ForumListActivity extends BaseFragmentActivity implements View.OnCl
                 finish();
                 break;
             case R.id.forum_publish:
+                startActivity(new Intent(mContext, PublishForumActivity.class));
                 break;
         }
 
@@ -86,11 +130,19 @@ public class ForumListActivity extends BaseFragmentActivity implements View.OnCl
 
     @Override
     public void onRefresh() {
-        page = 0;
+        page = 1;
+        getData();
     }
 
     @Override
     public void onLoadMoreRequested() {
         page++;
+        getData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        subscriber.unSubscribe();
     }
 }

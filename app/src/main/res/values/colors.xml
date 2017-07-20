@@ -19,5 +19,5 @@
     <color name="bg_gray">#F0F0F0</color>
     <color name="coure_tv">#333333</color>
     <color name="home_gray">#666666</color>
-
+    <color name="transparent">#00000000</color>
 </resources>

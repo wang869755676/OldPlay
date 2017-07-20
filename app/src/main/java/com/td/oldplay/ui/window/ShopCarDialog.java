@@ -56,7 +56,7 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
     private ColorAdapter colorAdpater;
     private int num = 1;
     private int type;
-    private int totalMoney;
+    private float totalMoney;
     private String ColorId = "0";
     private String size = "默认";
     EventMessage message;

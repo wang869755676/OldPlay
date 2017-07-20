@@ -105,9 +105,23 @@
                         android:textSize="12sp" />
                 </RelativeLayout>
                 <!-- 视频图片的内容-->
-                <FrameLayout
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/ry_pic"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></FrameLayout>
+                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/ry_au"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/ry_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
                 <!--评价信息-->
                 <TextView
                     android:id="@+id/tv_coment_total"

@@ -58,7 +58,7 @@ public class NetWorkAPI {
     // 商品相关
 
     public final static String SHOP_RECOMMENT_API = " lnrzb/goods/findCommendGoods";
-
+    public final static String SHOP_DISCOUNT_API = " lnrzb/goods/findPreferentialGoods";
 
     public final static String SHOP_COMMENT_API = "lnrzb/goods/findGoodsAssess";
 
@@ -78,6 +78,11 @@ public class NetWorkAPI {
 
     public final static String DELET_CAR_API = "lnrzb/cart/deleteCart";
 
+
+    public final static String HOME_SHOP_API = " lnrzb/goods/toGoodsHomePage";
+
+
+
     // 地址管理=====================================================
 
     public final static String GET_ADDRESS_API = "lnrzb/address/findAllAddress";
@@ -86,5 +91,19 @@ public class NetWorkAPI {
     public final static String ADD_ADDRESS_API = "lnrzb/address/saveAddress";
     public final static String SET_ADDRESS_API = "lnrzb/address/setDefault";
 
+     // 我的相关==================
+     public final static String GET_MYCONCERNS_API = "lnrzb/userfocus/getUserFocus";
+    public final static String GET_MYCOURSES_API = "lnrzb/userCourses/getUserCourses";
 
+
+    // 论坛相关===========================
+    public final static String GET_HOMR_FORUMS_API = "lnrzb/forum/findAllBoard";
+
+
+    public final static String GET_FORUMS_BY_TYPE_API = "lnrzb/forum/findTopicByBoardId";
+
+    public final static String POST_FORUMS_CONTENT_API = "lnrzb/forum/findTopicByBoardId";
+
+
+    public final static String FORUMS_DETAIL_API = "lnrzb/forum/findTopicDetail";
 }

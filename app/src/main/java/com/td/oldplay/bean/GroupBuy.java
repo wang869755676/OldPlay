@@ -9,7 +9,7 @@ public class GroupBuy {
     public String goodsId;
     public String id;
     public int number;
-    public int price;
+    public float price;
     public TimeInfo startTime;
     public int status; //优惠状态0:优惠还未开始,1:优惠中,2:优惠已结束
 

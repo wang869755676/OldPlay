@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,7 +21,6 @@ import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
 import com.td.oldplay.bean.BannerInfo;
-import com.td.oldplay.bean.CourseBean;
 import com.td.oldplay.bean.CourseTypeBean;
 import com.td.oldplay.bean.HomeCourseInfo;
 import com.td.oldplay.http.HttpManager;
@@ -31,6 +31,7 @@ import com.td.oldplay.ui.course.activity.CourseListActivity;
 import com.td.oldplay.ui.course.activity.TeacherListActivity;
 import com.td.oldplay.ui.course.adapter.CoureseTypeAdapter;
 import com.td.oldplay.utils.GlideUtils;
+import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustPagerTransformer;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 import com.td.oldplay.widget.banner.MZBannerView;
@@ -47,7 +48,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeCourseFragment extends BaseFragment implements View.OnClickListener {
+public class HomeCourseFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
 
     @BindView(R.id.homr_courese_banner)
@@ -75,6 +76,8 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
     View view1;
     @BindView(R.id.view2)
     View view2;
+    @BindView(R.id.swipeLayout)
+    SwipeRefreshLayout swipeLayout;
 
     private List<BannerInfo> banners = new ArrayList<>();
     private List<CourseTypeBean> typeBeens = new ArrayList<>();
@@ -102,6 +105,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         title.setLeftImageResource(R.mipmap.icon_updown);
         title.setOnRightListener(this);
         title.setOnLeftListener(this);
+        swipeLayout.setOnRefreshListener(this);
         homrCoureseBanner.setIndicatorVisible(false);
         homrCoureseBanner.getViewPager().setPageTransformer(true, new CustPagerTransformer(mActivity));
         homrCoureseBanner.getViewPager().setPageMargin(50);
@@ -137,8 +141,8 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent = new Intent(mActivity, CourseListActivity.class);
                 intent.putExtra("type", 1);
-                intent.putExtra("title",typeBeens.get(position).name+"类课程");
-                intent.putExtra("id",typeBeens.get(position).id);
+                intent.putExtra("title", typeBeens.get(position).name + "类课程");
+                intent.putExtra("id", typeBeens.get(position).id);
                 startActivity(intent);
             }
 
@@ -185,6 +189,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         HttpManager.getInstance().getHomeCourse(new HttpSubscriber<HomeCourseInfo>(new OnResultCallBack<HomeCourseInfo>() {
             @Override
             public void onSuccess(HomeCourseInfo homeCourseInfo) {
+                swipeLayout.setRefreshing(false);
                 if (homeCourseInfo != null) {
                     if (homeCourseInfo.coursesBannerList != null && homeCourseInfo.coursesBannerList.size() > 0) {
                         homrCoureseBanner.setPages(homeCourseInfo.coursesBannerList, new MZHolderCreator<BannerViewHolder>() {
@@ -214,7 +219,8 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
 
             @Override
             public void onError(int code, String errorMsg) {
-
+                swipeLayout.setRefreshing(false);
+                ToastUtil.show(errorMsg);
             }
         }));
     }
@@ -253,7 +259,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
             case R.id.more_type_btn:
                 intent = new Intent(mActivity, CourseListActivity.class);
                 intent.putExtra("type", 1);
-                intent.putExtra("id","");
+                intent.putExtra("id", "");
                 startActivity(intent);
                 break;
             case R.id.left_text:
@@ -266,6 +272,14 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
                 break;
 
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        hotBeens.clear();
+        recomendBeens.clear();
+        typeBeens.clear();
+        getData();
     }
 
     public static class BannerViewHolder implements MZViewHolder<BannerInfo> {

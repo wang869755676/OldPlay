@@ -20,7 +20,7 @@ public class CourseBean {
     public String coursesId;
     public int coursesTypeId;
     public String name;
-    public int price;
+    public float price;
     public String profile;
     public String userId;
 

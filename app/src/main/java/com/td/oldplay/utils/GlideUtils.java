@@ -55,15 +55,22 @@ public class GlideUtils {
 
     public static void setPhotoImage(Context context, String url, ImageView imageView) {
 
-        defaultOptions.error(R.mipmap.default_image)           //设置错误图片
+        defaultOptions.error(R.mipmap.default_image)//设置错误图片
                 .placeholder(R.mipmap.default_image)     //设置占位图片
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true);
+                .skipMemoryCache(false);
         Glide.with(context)                             //配置上下文
                 .load(Uri.fromFile(new File(url)))      //设置图片路径(fix #8,文件名包含%符号 无法识别和显示)
                 .apply(defaultOptions)
                 .into(imageView);
 
+
+    }
+    // 效果glid请求
+
+    public static void destroyRequest(Context context) {
+        Glide.with(context)
+                .pauseRequests();
 
     }
 }

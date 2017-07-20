@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,12 +20,17 @@ import com.td.oldplay.base.BaseFragment;
 import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
+import com.td.oldplay.bean.HomeShopInfo;
 import com.td.oldplay.bean.ShopBean;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.SearchActivity;
-import com.td.oldplay.ui.course.adapter.ShopAdapter;
+import com.td.oldplay.ui.course.HomeCourseFragment;
 import com.td.oldplay.ui.shop.activity.ShopDetailActivity;
 import com.td.oldplay.ui.shop.activity.ShopListActivity;
 import com.td.oldplay.utils.GlideUtils;
+import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustPagerTransformer;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 import com.td.oldplay.widget.banner.MZBannerView;
@@ -41,7 +47,7 @@ import butterknife.Unbinder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeShopFragment extends BaseFragment implements View.OnClickListener {
+public class HomeShopFragment extends BaseFragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
 
     Unbinder unbinder;
@@ -69,10 +75,12 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
     RecyclerView homeCoureHot;
     @BindView(R.id.title)
     CustomTitlebarLayout title;
+    @BindView(R.id.swipeLayout)
+    SwipeRefreshLayout swipeLayout;
 
     private List<String> banners;
-    private List<ShopBean> recommenddatas;
-    private List<ShopBean> Lastdatas;
+    private List<ShopBean> recommenddatas = new ArrayList<>();
+    private List<ShopBean> Lastdatas = new ArrayList<>();
     private Adapter recommendShopAdapter;
     private Adapter LastShopAdapter;
 
@@ -105,23 +113,11 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
         title.setLeftImageResource(R.mipmap.icon_updown);
         title.setOnRightListener(this);
         title.setOnLeftListener(this);
+        swipeLayout.setOnRefreshListener(this);
         homeShopGreen.setOnClickListener(this);
         homeShopStudy.setOnClickListener(this);
         moreHotBtn.setOnClickListener(this);
         moreRecommentBtn.setOnClickListener(this);
-        banners = new ArrayList<>();
-        banners.add("http://img2.imgtn.bdimg.com/it/u=49292017,22064401&fm=28&gp=0.jpg");
-        banners.add("http://pic.58pic.com/58pic/13/85/85/73T58PIC9aj_1024.jpg");
-        banners.add("http://img2.imgtn.bdimg.com/it/u=49292017,22064401&fm=28&gp=0.jpg");
-        banners.add("http://pic.58pic.com/58pic/13/85/85/73T58PIC9aj_1024.jpg");
-
-        homrCoureseBanner.setIndicatorVisible(false);
-        homrCoureseBanner.setPages(banners, new MZHolderCreator<BannerViewHolder>() {
-            @Override
-            public BannerViewHolder createViewHolder() {
-                return new BannerViewHolder();
-            }
-        });
         homrCoureseBanner.getViewPager().setPageTransformer(true, new CustPagerTransformer(mActivity));
         homrCoureseBanner.getViewPager().setPageMargin(50);
 
@@ -131,16 +127,14 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
                 return false;
             }
         });
-        recommenddatas = new ArrayList<>();
-        recommenddatas.add(new ShopBean());
-        recommenddatas.add(new ShopBean());
+
         recommendShopAdapter = new Adapter(mActivity, R.layout.item_home_course, recommenddatas);
         homeShopEssence.setAdapter(recommendShopAdapter);
         recommendShopAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent=new Intent(mActivity, ShopDetailActivity.class);
-                intent.putExtra("id",recommenddatas.get(position).goodsId);
+                Intent intent = new Intent(mActivity, ShopDetailActivity.class);
+                intent.putExtra("id", recommenddatas.get(position).goodsId);
                 startActivity(intent);
             }
 
@@ -155,17 +149,14 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
                 return false;
             }
         });
-        Lastdatas = new ArrayList<>();
-        Lastdatas.add(new ShopBean());
-        Lastdatas.add(new ShopBean());
-        Lastdatas.add(new ShopBean());
+
         LastShopAdapter = new Adapter(mActivity, R.layout.item_home_course, Lastdatas);
         homeCoureHot.setAdapter(LastShopAdapter);
         LastShopAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent=new Intent(mActivity, ShopDetailActivity.class);
-                intent.putExtra("id",Lastdatas.get(position).goodsId);
+                Intent intent = new Intent(mActivity, ShopDetailActivity.class);
+                intent.putExtra("id", Lastdatas.get(position).goodsId);
                 startActivity(intent);
             }
 
@@ -175,8 +166,47 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
             }
         });
 
-
+        getData();
     }
+
+
+    private void getData() {
+        HttpManager.getInstance().getHomeShop(new HttpSubscriber<HomeShopInfo>(new OnResultCallBack<HomeShopInfo>() {
+            @Override
+            public void onSuccess(HomeShopInfo homeShopInfo) {
+                swipeLayout.setRefreshing(false);
+                if (homeShopInfo != null) {
+                    if (homeShopInfo.goodsBannerList != null && homeShopInfo.goodsBannerList.size() > 0) {
+                        homrCoureseBanner.setPages(homeShopInfo.goodsBannerList, new MZHolderCreator<HomeCourseFragment.BannerViewHolder>() {
+                            @Override
+                            public HomeCourseFragment.BannerViewHolder createViewHolder() {
+                                return new HomeCourseFragment.BannerViewHolder();
+                            }
+                        });
+                    }
+
+                    if (homeShopInfo.commendGoodsList != null) {
+                        recommenddatas.addAll(homeShopInfo.commendGoodsList);
+                        recommendShopAdapter.notifyDataSetChanged();
+                    }
+
+                    if (homeShopInfo.preferentialGoodsList != null) {
+                        Lastdatas.addAll(homeShopInfo.preferentialGoodsList);
+                        LastShopAdapter.notifyDataSetChanged();
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                swipeLayout.setRefreshing(false);
+                ToastUtil.show(errorMsg);
+            }
+        }));
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -184,33 +214,41 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
         switch (v.getId()) {
             case R.id.home_shop_green:
                 intent = new Intent(mActivity, ShopListActivity.class);
-                intent.putExtra("type",1);
-                intent.putExtra("goodTypeId",1);
+                intent.putExtra("type", 1);
+                intent.putExtra("goodTypeId", 1);
                 startActivity(intent);
                 break;
             case R.id.home_shop_study:
                 intent = new Intent(mActivity, ShopListActivity.class);
-                intent.putExtra("type",1);
-                intent.putExtra("goodTypeId",2);
+                intent.putExtra("type", 1);
+                intent.putExtra("goodTypeId", 2);
                 startActivity(intent);
                 break;
             case R.id.more_hot_btn:
                 intent = new Intent(mActivity, ShopListActivity.class);
-                intent.putExtra("type",3);
+                intent.putExtra("type", 3);
                 startActivity(intent);
                 break;
             case R.id.more_recomment_btn:
                 intent = new Intent(mActivity, ShopListActivity.class);
-                intent.putExtra("type",1);
+                intent.putExtra("type", 2);
                 startActivity(intent);
                 break;
             case R.id.right_text:
                 intent = new Intent(mActivity, SearchActivity.class);
-                intent.putExtra("type",0);
+                intent.putExtra("type", 0);
                 // intent.putExtra()
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        Lastdatas.clear();
+        recommenddatas.clear();
+        ;
+        getData();
     }
 
     public static class BannerViewHolder implements MZViewHolder<String> {

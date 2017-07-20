@@ -6,7 +6,11 @@ import com.td.oldplay.bean.CommentBean;
 import com.td.oldplay.bean.CourseBean;
 import com.td.oldplay.bean.CourseTypeBean;
 import com.td.oldplay.bean.CreateOrder;
+import com.td.oldplay.bean.ForumBean;
+import com.td.oldplay.bean.ForumDetial;
+import com.td.oldplay.bean.ForumType;
 import com.td.oldplay.bean.HomeCourseInfo;
+import com.td.oldplay.bean.HomeShopInfo;
 import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.bean.SearchCourse;
 import com.td.oldplay.bean.ShopBean;
@@ -62,7 +66,6 @@ public interface ApiService {
     Observable<ApiResponse<String>> modifyLoginPws(@FieldMap() HashMap<String, Object> maps);
 
 
-
     @Multipart
     @POST(NetWorkAPI.UPDATEUSE_API)
     Observable<ApiResponse<UserBean>> modifyUser(@PartMap() HashMap<String, RequestBody
@@ -109,21 +112,26 @@ public interface ApiService {
     @FormUrlEncoded
     @POST(NetWorkAPI.TEACHER_DETAIL_API)
     Observable<ApiResponse<TeacherDetail>> getCourseDetail(@Field("coursesId") String coursesId);
+
     @FormUrlEncoded
     @POST(NetWorkAPI.SHOP_TEACHER_API)
-    Observable<ApiResponse<List<ShopBean>>> getShopInTeacher(@Field("userId") String userId,@Field("page") int page);
+    Observable<ApiResponse<List<ShopBean>>> getShopInTeacher(@Field("userId") String userId, @Field("page") int page, @Field("type") int type, @Field("sort") int sort);
 
     // =================商品============
     @FormUrlEncoded
     @POST(NetWorkAPI.FIND_SHOPBYID_API)
-    Observable<ApiResponse<List<ShopBean>>> getShopByType(@Field("page")int page, @Field("goodTypeId")int type);
+    Observable<ApiResponse<List<ShopBean>>> getShopByType(@Field("page") int page, @Field("goodsTypeId") int type, @Field("type") int Sortype, @Field("sort") int sort);
 
     /*   @FormUrlEncoded
        @POST(NetWorkAPI.SHOP_COMMENT_API)
        Observable<ApiResponse<List<ShopBean>>> getShopHots(int page);*/
     @FormUrlEncoded
     @POST(NetWorkAPI.SHOP_RECOMMENT_API)
-    Observable<ApiResponse<List<ShopBean>>> getShopRecomments(@Field("page")int page);
+    Observable<ApiResponse<List<ShopBean>>> getShopRecomments(@Field("page") int page, @Field("type") int type, @Field("sort") int sort);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.SHOP_DISCOUNT_API)
+    Observable<ApiResponse<List<ShopBean>>> getShopDiscounts(@Field("page") int page, @Field("type") int type, @Field("sort") int sort);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.SHOP_COMMENT_API)
@@ -132,30 +140,30 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.SHOP_DETAIL_API)
-    Observable<ApiResponse<ShopDetail>> getShopDetail(@Field("goodsId")String shopId) ;
+    Observable<ApiResponse<ShopDetail>> getShopDetail(@Field("goodsId") String shopId);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.GET_COMMENTS_API)
-    Observable<ApiResponse<List<CommentBean>>> getShopComments(@Field("goodsId")String shopId,@Field("page")int page) ;
+    Observable<ApiResponse<List<CommentBean>>> getShopComments(@Field("goodsId") String shopId, @Field("page") int page);
+
+    @POST(NetWorkAPI.HOME_SHOP_API)
+    Observable<ApiResponse<HomeShopInfo>> getHomeShop();
 
 
-
-    @FormUrlEncoded
     @POST(NetWorkAPI.CREATE_ORDER_API)
-    Observable<ApiResponse<OrderBean>> createOrder(@FieldMap() HashMap<String, Object> maps) ;
+    Observable<ApiResponse<OrderBean>> createOrder(@FieldMap() HashMap<String, Object> maps);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.ADD_CAR_API)
-    Observable<ApiResponse<String>> addCar(@FieldMap() HashMap<String, Object> maps) ;
+    Observable<ApiResponse<String>> addCar(@FieldMap() HashMap<String, Object> maps);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.GET_CARS_API)
-    Observable<ApiResponse<String>> getCars(@Field("userId")String userId,@Field("page")int page) ;
+    Observable<ApiResponse<String>> getCars(@Field("userId") String userId, @Field("page") int page);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.DELET_CAR_API)
-    Observable<ApiResponse<String>> deleteCars(@Field("cartId")String cartId) ;
-
+    Observable<ApiResponse<String>> deleteCars(@Field("cartId") String cartId);
 
 
     @FormUrlEncoded
@@ -164,11 +172,11 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.UPDATE_ADDRESS_API)
-    Observable<ApiResponse<String>> updateAddress(@FieldMap() HashMap<String,Object> params);
+    Observable<ApiResponse<String>> updateAddress(@FieldMap() HashMap<String, Object> params);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.DELETE_ADDRESS_API)
-    Observable<ApiResponse<String >> deleteAddress(@Field("addressId") String id);
+    Observable<ApiResponse<String>> deleteAddress(@Field("addressId") String id);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.SET_ADDRESS_API)
@@ -176,7 +184,28 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.ADD_ADDRESS_API)
-    Observable<ApiResponse<String>> addAddress(@FieldMap() HashMap<String,Object> params);
+    Observable<ApiResponse<String>> addAddress(@FieldMap() HashMap<String, Object> params);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.GET_MYCOURSES_API)
+    Observable<ApiResponse<List<CourseTypeBean>>> getMyCourses(@Field("userId") String id);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.GET_MYCONCERNS_API)
+    Observable<ApiResponse<List<TeacherBean>>> getMyConCerns(@Field("userId") String id);
 
 
+    //======================================luntan
+
+    @POST(NetWorkAPI.GET_HOMR_FORUMS_API)
+    Observable<ApiResponse<List<ForumType>>> getHomeForums();
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.GET_FORUMS_BY_TYPE_API)
+    Observable<ApiResponse<List<ForumBean>>> getForumsNyId(@Field("boardId") String boardId, @Field("page") int page);
+
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.FORUMS_DETAIL_API)
+    Observable<ApiResponse<ForumDetial>> getForumDetials(@Field("topicId") String topicId);
 }

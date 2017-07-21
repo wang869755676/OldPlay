@@ -17,6 +17,10 @@ import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.ShopCarBean;
+import com.td.oldplay.contants.MContants;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 
@@ -46,8 +50,8 @@ public class ShopCarActivity extends BaseFragmentActivity
 
     private List<ShopCarBean> datas = new ArrayList<>();
     private CarAdapter carAdapter;
-    private LoadMoreWrapper addapter;
-
+    private LoadMoreWrapper adapter;
+    private int page = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +70,9 @@ public class ShopCarActivity extends BaseFragmentActivity
         swipeToLoadLayout.setOnRefreshListener(this);
         swipeTarget.setLayoutManager(new LinearLayoutManager(mContext));
         carAdapter = new CarAdapter(mContext, R.layout.item_car, datas);
-        addapter = new LoadMoreWrapper(carAdapter);
-        addapter.setOnLoadMoreListener(this);
-        swipeTarget.setAdapter(addapter);
+        adapter = new LoadMoreWrapper(carAdapter);
+        adapter.setOnLoadMoreListener(this);
+        swipeTarget.setAdapter(adapter);
         carJiesuan.setOnClickListener(this);
         carCbAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -78,6 +82,39 @@ public class ShopCarActivity extends BaseFragmentActivity
 
             }
         });
+        getData();
+    }
+
+    private void getData() {
+        HttpManager.getInstance().getCars(userId, page, new HttpSubscriber<List<ShopCarBean>>(new OnResultCallBack<List<ShopCarBean>>() {
+
+            @Override
+            public void onSuccess(List<ShopCarBean> shopCarBeen) {
+                swipeToLoadLayout.setRefreshing(false);
+                if (shopCarBeen != null && shopCarBeen.size() > 0) {
+                    if (page == 1) {
+                        datas.clear();
+                        if (datas.size() >= MContants.PAGENUM) {
+                            adapter.setLoadMoreView(R.layout.default_loading);
+                        }
+
+                    }
+                    datas.addAll(shopCarBeen);
+                } else {
+                    adapter.setLoadMoreView(0);
+                    if (page > 1) {
+                        ToastUtil.show("没有更多数据了");
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                swipeToLoadLayout.setRefreshing(false);
+                ToastUtil.show(errorMsg);
+            }
+        }));
     }
 
     /**
@@ -90,7 +127,7 @@ public class ShopCarActivity extends BaseFragmentActivity
                 datas) {
             carBean.isCheck = isChecked;
         }
-        addapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 
     @Override

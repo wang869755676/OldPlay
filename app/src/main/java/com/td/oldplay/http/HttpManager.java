@@ -15,6 +15,7 @@ import com.td.oldplay.bean.HomeCourseInfo;
 import com.td.oldplay.bean.HomeShopInfo;
 import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.bean.ShopBean;
+import com.td.oldplay.bean.ShopCarBean;
 import com.td.oldplay.bean.ShopDetail;
 import com.td.oldplay.bean.TeacherBean;
 import com.td.oldplay.bean.TeacherDetail;
@@ -220,7 +221,7 @@ public class HttpManager {
         toSubscribe(mApiService.addCar(params), observer);
     }
 
-    public void getCars(String userId, int page, Observer<String> observer) {
+    public void getCars(String userId, int page, Observer<List<ShopCarBean>> observer) {
         toSubscribe(mApiService.getCars(userId, page), observer);
     }
 

@@ -14,6 +14,7 @@ import com.td.oldplay.bean.HomeShopInfo;
 import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.bean.SearchCourse;
 import com.td.oldplay.bean.ShopBean;
+import com.td.oldplay.bean.ShopCarBean;
 import com.td.oldplay.bean.ShopDetail;
 import com.td.oldplay.bean.TeacherBean;
 import com.td.oldplay.bean.TeacherDetail;
@@ -159,7 +160,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.GET_CARS_API)
-    Observable<ApiResponse<String>> getCars(@Field("userId") String userId, @Field("page") int page);
+    Observable<ApiResponse<List<ShopCarBean>>> getCars(@Field("userId") String userId, @Field("page") int page);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.DELET_CAR_API)

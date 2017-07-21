@@ -13,4 +13,6 @@ public class CommentBean {
     public UserBean user;
     public int userId;
     public String time;
+    public String replyId;
+
 }

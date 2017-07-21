@@ -24,7 +24,7 @@ public class GlideUtils {
         defaultOptions.placeholder(R.color.gray);
         Glide
                 .with(context)
-                .load(NetWorkAPI.BASE_URL + url)
+                .load(url)
                 .apply(defaultOptions)
                 .into(imageView);
 
@@ -35,7 +35,7 @@ public class GlideUtils {
         defaultOptions.placeholder(R.mipmap.icon_avator_default);
         Glide
                 .with(context)
-                .load(NetWorkAPI.BASE_URL + url)
+                .load(url)
                 .apply(defaultOptions)
                 .into(imageView);
 

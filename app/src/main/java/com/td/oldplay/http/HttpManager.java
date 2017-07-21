@@ -138,7 +138,6 @@ public class HttpManager {
     }
 
 
-
     public void modifyUser(HashMap<String, RequestBody> params, HttpSubscriber<UserBean> observer) {
         toSubscribe(mApiService.modifyUser(params), observer);
 
@@ -183,84 +182,84 @@ public class HttpManager {
         toSubscribe(mApiService.searchCommentsTeachers(id), observer);
     }
 
-    public void getShopInTeacher(String id,int page,int scortType,int scort, Observer<List<ShopBean>> observer) {
-        toSubscribe(mApiService.getShopInTeacher(id,page,scortType,scort), observer);
+    public void getShopInTeacher(String id, int page, int scortType, int scort, Observer<List<ShopBean>> observer) {
+        toSubscribe(mApiService.getShopInTeacher(id, page, scortType, scort), observer);
     }
+
     public void getCourseDetail(String id, Observer<TeacherDetail> observer) {
         toSubscribe(mApiService.getCourseDetail(id), observer);
     }
 
 
     //========================
-    public void getShopRecomments(int page,int scortType,int scort, Observer<List<ShopBean>> observer) {
-        toSubscribe(mApiService.getShopRecomments(page,scortType,scort), observer);
+    public void getShopRecomments(int page, int scortType, int scort, Observer<List<ShopBean>> observer) {
+        toSubscribe(mApiService.getShopRecomments(page, scortType, scort), observer);
     }
 
-    public void getShopDiscounts(int page,int scortType,int scort, Observer<List<ShopBean>> observer) {
-        toSubscribe(mApiService.getShopDiscounts(page, scortType,scort), observer);
+    public void getShopDiscounts(int page, int scortType, int scort, Observer<List<ShopBean>> observer) {
+        toSubscribe(mApiService.getShopDiscounts(page, scortType, scort), observer);
     }
 
-    public void getShopByType(int page, int type,int scortType,int scort, Observer<List<ShopBean>> observer) {
-        toSubscribe(mApiService.getShopByType(page, type,scortType,scort), observer);
+    public void getShopByType(int page, int type, int scortType, int scort, Observer<List<ShopBean>> observer) {
+        toSubscribe(mApiService.getShopByType(page, type, scortType, scort), observer);
     }
 
     public void getShopDetail(String shopId, Observer<ShopDetail> observer) {
         toSubscribe(mApiService.getShopDetail(shopId), observer);
     }
 
-    public void getShopComments(String shopId,int page, Observer<List<CommentBean>> observer) {
-        toSubscribe(mApiService.getShopComments(shopId,page), observer);
+    public void getShopComments(String shopId, int page, Observer<List<CommentBean>> observer) {
+        toSubscribe(mApiService.getShopComments(shopId, page), observer);
     }
-    public void createOrder(HashMap<String,Object> params, Observer<OrderBean> observer) {
+
+    public void createOrder(HashMap<String, Object> params, Observer<OrderBean> observer) {
         toSubscribe(mApiService.createOrder(params), observer);
     }
 
-    public void addCar(HashMap<String,Object> params, Observer<String> observer) {
+    public void addCar(HashMap<String, Object> params, Observer<String> observer) {
         toSubscribe(mApiService.addCar(params), observer);
     }
 
-    public void getCars(String userId,int page, Observer<String> observer) {
-        toSubscribe(mApiService.getCars(userId,page), observer);
+    public void getCars(String userId, int page, Observer<String> observer) {
+        toSubscribe(mApiService.getCars(userId, page), observer);
     }
 
     public void deleteCars(String carId, Observer<String> observer) {
         toSubscribe(mApiService.deleteCars(carId), observer);
     }
 
-    public void getHomeShop( Observer<HomeShopInfo> observer) {
+    public void getHomeShop(Observer<HomeShopInfo> observer) {
         toSubscribe(mApiService.getHomeShop(), observer);
     }
-
-
-
 
 
     //=============================
 
     public void getAddresse(int page, String id, Observer<List<AddressBean>> observer) {
-        toSubscribe(mApiService.getAddress(page,id), observer);
+        toSubscribe(mApiService.getAddress(page, id), observer);
     }
 
-    public void updateAddress(HashMap<String,Object> params, Observer<String> observer) {
+    public void updateAddress(HashMap<String, Object> params, Observer<String> observer) {
         toSubscribe(mApiService.updateAddress(params), observer);
     }
 
     public void deleteAddress(String id, Observer<String> observer) {
         toSubscribe(mApiService.deleteAddress(id), observer);
     }
-    public void setDefaultAddress(String id,String userId ,Observer<String> observer) {
-        toSubscribe(mApiService.setDefaultAddress(id,userId), observer);
+
+    public void setDefaultAddress(String id, String userId, Observer<String> observer) {
+        toSubscribe(mApiService.setDefaultAddress(id, userId), observer);
     }
 
-    public void addAddress(HashMap<String,Object> params, Observer<String> observer) {
+    public void addAddress(HashMap<String, Object> params, Observer<String> observer) {
         toSubscribe(mApiService.addAddress(params), observer);
     }
 
-    public void getMyCourses(String userId ,Observer<List<CourseTypeBean>> observer) {
+    public void getMyCourses(String userId, Observer<List<CourseTypeBean>> observer) {
         toSubscribe(mApiService.getMyCourses(userId), observer);
     }
 
-    public void getMyConCerns(String userId ,Observer<List<TeacherBean>> observer) {
+    public void getMyConCerns(String userId, Observer<List<TeacherBean>> observer) {
         toSubscribe(mApiService.getMyConCerns(userId), observer);
     }
 
@@ -270,11 +269,35 @@ public class HttpManager {
         toSubscribe(mApiService.getHomeForums(), observer);
     }
 
-    public void getForumsNyId(String borad,int page,Observer<List<ForumBean>> observer) {
-        toSubscribe(mApiService.getForumsNyId(borad,page), observer);
+    public void getForumsNyId(String borad, int page, Observer<List<ForumBean>> observer) {
+        toSubscribe(mApiService.getForumsNyId(borad, page), observer);
     }
 
-    public void getForumDetials(String id,Observer<ForumDetial> observer) {
+    public void getForumDetials(String id, Observer<ForumDetial> observer) {
         toSubscribe(mApiService.getForumDetials(id), observer);
+    }
+
+    public void getForumComment(String id, int page, Observer<List<CommentBean>> observer) {
+        toSubscribe(mApiService.getForumComment(id, page), observer);
+    }
+
+    public void sendComment(HashMap<String, Object> params, Observer<String> observer) {
+        toSubscribe(mApiService.sendComment(params), observer);
+    }
+
+    public void postForumContent(HashMap<String, Object> params, Observer<String> observer) {
+        toSubscribe(mApiService.postForumContent(params), observer);
+    }
+
+    public void postForumPic(HashMap<String, RequestBody> params, Observer<String> observer) {
+        toSubscribe(mApiService.postForumPic(params), observer);
+    }
+
+    public void postForumVideo(HashMap<String, RequestBody> params, Observer<String> observer) {
+        toSubscribe(mApiService.postForumVideo(params), observer);
+    }
+
+    public void postForumVoicec(HashMap<String, RequestBody> params, Observer<String> observer) {
+        toSubscribe(mApiService.postForumVoicec(params), observer);
     }
 }

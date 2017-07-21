@@ -208,4 +208,32 @@ public interface ApiService {
     @FormUrlEncoded
     @POST(NetWorkAPI.FORUMS_DETAIL_API)
     Observable<ApiResponse<ForumDetial>> getForumDetials(@Field("topicId") String topicId);
+
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.GET_FORUM_COMMENT_API)
+    Observable<ApiResponse<List<CommentBean>>> getForumComment(@Field("topicId") String id, @Field("page") int page);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.SEND_COMMENT_API)
+    Observable<ApiResponse<String>> sendComment(@FieldMap() HashMap<String, Object> params);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.POST_FORUMS_CONTENT_API)
+    Observable<ApiResponse<String>> postForumContent(@FieldMap() HashMap<String, Object> params);
+
+
+    @Multipart
+    @POST(NetWorkAPI.POST_FORUMS_PIC_API)
+    Observable<ApiResponse<String>> postForumPic(@PartMap() HashMap<String, RequestBody> maps);
+
+
+    @Multipart
+    @POST(NetWorkAPI.POST_FORUMS_VIDEO_API)
+    Observable<ApiResponse<String>> postForumVideo(@PartMap() HashMap<String, RequestBody> maps);
+
+
+    @Multipart
+    @POST(NetWorkAPI.POST_FORUMS_VOICE_API)
+    Observable<ApiResponse<String>> postForumVoicec(@PartMap() HashMap<String, RequestBody> maps);
 }

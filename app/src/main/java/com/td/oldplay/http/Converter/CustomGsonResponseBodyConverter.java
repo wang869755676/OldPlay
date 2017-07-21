@@ -32,11 +32,11 @@ final class CustomGsonResponseBodyConverter<T> implements Converter<ResponseBody
     public T convert(ResponseBody value) throws IOException {
         String response = value.string();
         ApiResponse httpStatus = gson.fromJson(response, ApiResponse.class);
-        if (httpStatus.getData() == null) {
+        if (httpStatus.getData() == null) {  // 处理返回的数据为你ull
             value.close();
             throw new ApiException(Integer.parseInt(httpStatus.getErrcode()), httpStatus.getErrdesc());
         }
-        if (httpStatus.getData() instanceof String) {
+        if (httpStatus.getData() instanceof String && !httpStatus.getErrcode().equals("0")) {
             value.close();
             throw new ApiException(Integer.parseInt(httpStatus.getErrcode()), httpStatus.getErrdesc());
         }

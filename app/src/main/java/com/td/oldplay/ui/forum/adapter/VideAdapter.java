@@ -5,6 +5,9 @@ import android.content.Context;
 import com.td.oldplay.R;
 import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
+import com.td.oldplay.contants.MContants;
+import com.td.oldplay.http.api.NetWorkAPI;
+import com.td.oldplay.utils.GlideUtils;
 
 import java.util.List;
 
@@ -25,7 +28,9 @@ public class VideAdapter extends CommonAdapter<String> {
     @Override
     protected void convert(ViewHolder holder, String strings, int position) {
         jcVideoPlayer = holder.getView(R.id.videoplayer);
-        jcVideoPlayer.setUp(strings, JCVideoPlayer.SCREEN_LAYOUT_LIST, "");
+        jcVideoPlayer.setUp(strings,JCVideoPlayer.SCREEN_LAYOUT_LIST, "");
+
+       // jcVideoPlayer.setUp("http://tanzi27niu.cdsb.mobiwps/wp-content/uploads/2017/05/2017-05-17_17-33-30.mp4", JCVideoPlayer.SCREEN_LAYOUT_LIST, "");
 
     }
 }

@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
+         android:layout_marginTop="10dp"
         android:id="@+id/videoplayer"
         android:layout_width="match_parent"
         android:layout_height="200dp" />

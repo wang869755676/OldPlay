@@ -3,6 +3,7 @@ package com.td.oldplay.base;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -11,7 +12,7 @@ import com.td.oldplay.utils.GlideUtils;
 import com.td.oldplay.utils.SharePreferenceUtil;
 
 
-public abstract class BaseFragmentActivity extends FragmentActivity {
+public abstract class BaseFragmentActivity extends AppCompatActivity {
 
     public Context mContext;   //吐司的上下文
     protected Context AContext;

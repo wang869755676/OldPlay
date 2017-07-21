@@ -1,12 +1,13 @@
 package com.td.oldplay.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by my on 2017/7/20.
  */
 
-public class ForumDetial {
+public class ForumDetial implements Serializable {
 
     /**
      * imageUrlList : ["/image/1.png","/image/1.png"]

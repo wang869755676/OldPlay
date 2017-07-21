@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
+import com.td.oldplay.base.EventMessage;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.ForumBean;
@@ -21,6 +22,10 @@ import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.forum.adapter.ForumListAdapter;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +51,7 @@ public class ForumListActivity extends BaseFragmentActivity implements View.OnCl
     private String id;
     private String titleStr;
     private HttpSubscriber<List<ForumBean>> subscriber;
+    private ForumBean currentBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +60,10 @@ public class ForumListActivity extends BaseFragmentActivity implements View.OnCl
         ButterKnife.bind(this);
         id = getIntent().getStringExtra("id");
         titleStr = getIntent().getStringExtra("title");
+        EventBus.getDefault().register(this);
         initView();
     }
+
 
     private void initView() {
         title.setTitle(titleStr + "板块");
@@ -70,8 +78,9 @@ public class ForumListActivity extends BaseFragmentActivity implements View.OnCl
         listAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent=new Intent(AContext, FourmDetailActivity.class);
-                intent.putExtra("id",datas.get(position).topicId);
+                currentBean = datas.get(position);
+                Intent intent = new Intent(AContext, FourmDetailActivity.class);
+                intent.putExtra("id", datas.get(position).topicId);
                 startActivity(intent);
             }
 
@@ -80,7 +89,7 @@ public class ForumListActivity extends BaseFragmentActivity implements View.OnCl
                 return false;
             }
         });
-        subscriber=new HttpSubscriber<List<ForumBean>>(new OnResultCallBack<List<ForumBean>>() {
+        subscriber = new HttpSubscriber<List<ForumBean>>(new OnResultCallBack<List<ForumBean>>() {
 
             @Override
             public void onSuccess(List<ForumBean> forumBeen) {
@@ -107,12 +116,13 @@ public class ForumListActivity extends BaseFragmentActivity implements View.OnCl
             public void onError(int code, String errorMsg) {
                 ToastUtil.show(errorMsg);
                 swipeLayout.setRefreshing(false);
-            }});
+            }
+        });
         getData();
     }
 
     private void getData() {
-        HttpManager.getInstance().getForumsNyId(id,page,subscriber);
+        HttpManager.getInstance().getForumsNyId(id, page, subscriber);
     }
 
     @Override
@@ -122,7 +132,9 @@ public class ForumListActivity extends BaseFragmentActivity implements View.OnCl
                 finish();
                 break;
             case R.id.forum_publish:
-                startActivity(new Intent(mContext, PublishForumActivity.class));
+                Intent intent = new Intent(mContext, PublishForumActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
                 break;
         }
 
@@ -144,5 +156,18 @@ public class ForumListActivity extends BaseFragmentActivity implements View.OnCl
     protected void onDestroy() {
         super.onDestroy();
         subscriber.unSubscribe();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMessage(EventMessage message) {
+        if ("publish".equals(message.action)) {
+            onRefresh();
+        } else if ("forumCommnet".equals(message.action)) {
+            if (currentBean != null) {
+                currentBean.replyCount++;
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 }

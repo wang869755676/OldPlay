@@ -102,8 +102,14 @@ public class NetWorkAPI {
 
     public final static String GET_FORUMS_BY_TYPE_API = "lnrzb/forum/findTopicByBoardId";
 
-    public final static String POST_FORUMS_CONTENT_API = "lnrzb/forum/findTopicByBoardId";
-
-
     public final static String FORUMS_DETAIL_API = "lnrzb/forum/findTopicDetail";
+
+    public final static String GET_FORUM_COMMENT_API = "lnrzb/forum/findTopicComment";
+
+    public final static String SEND_COMMENT_API = "lnrzb/forum/sendComment";
+
+    public final static String POST_FORUMS_CONTENT_API = "lnrzb/forum/sendTopic";
+    public final static String POST_FORUMS_PIC_API = "lnrzb/forum/uploadImages";
+    public final static String POST_FORUMS_VIDEO_API = "lnrzb/forum/uploadVideos";
+    public final static String POST_FORUMS_VOICE_API = "lnrzb/forum/uploadSpeechs";
 }

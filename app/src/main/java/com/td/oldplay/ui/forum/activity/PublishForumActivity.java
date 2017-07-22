@@ -176,6 +176,17 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
                 }
             }
         }
+        if(imageList.size()>0){
+            paramC.put("imageUrlList",imageList);
+        }
+        if(videList.size()>0){
+            paramC.put("videoUrlList",videList);
+
+        }
+        if(audioList.size()>0){
+            paramC.put("speechUrlList",audioList);
+
+        }
 
     }
 
@@ -216,7 +227,10 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
             @Override
             public void onSuccess(String s) {
                 contentId = s;
-                Log.e("===",contentId+"---------------");
+                Log.e("===", contentId + "---------------");
+                if (forumDetial != null) {
+                    contentId = forumDetial.topic.topicId;
+                }
                 publishOther();
 
             }
@@ -379,7 +393,7 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
         @Override
         public void onSuccess(String s) {
             successContent++;
-            Log.e("===",successContent+"        "+count);
+            Log.e("===", successContent + "        " + count);
             if (successContent == count) {
                 hideLoading();
                 successContent = 0;

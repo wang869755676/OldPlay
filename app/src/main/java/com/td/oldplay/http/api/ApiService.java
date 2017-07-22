@@ -14,6 +14,7 @@ import com.td.oldplay.bean.HomeShopInfo;
 import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.bean.SearchCourse;
 import com.td.oldplay.bean.ShopBean;
+import com.td.oldplay.bean.ShopCarBean;
 import com.td.oldplay.bean.ShopDetail;
 import com.td.oldplay.bean.TeacherBean;
 import com.td.oldplay.bean.TeacherDetail;
@@ -149,7 +150,11 @@ public interface ApiService {
     @POST(NetWorkAPI.HOME_SHOP_API)
     Observable<ApiResponse<HomeShopInfo>> getHomeShop();
 
+    @FormUrlEncoded
+    @POST(NetWorkAPI.CREATE_ORDER_CAR_API)
+    Observable<ApiResponse<OrderBean>> createOrderCars(@Field("cartIds")List<String> carIds,@Field("userId")String userId);
 
+    @FormUrlEncoded
     @POST(NetWorkAPI.CREATE_ORDER_API)
     Observable<ApiResponse<OrderBean>> createOrder(@FieldMap() HashMap<String, Object> maps);
 
@@ -159,7 +164,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.GET_CARS_API)
-    Observable<ApiResponse<String>> getCars(@Field("userId") String userId, @Field("page") int page);
+    Observable<ApiResponse<List<ShopCarBean>>> getCars(@Field("userId") String userId, @Field("page") int page);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.DELET_CAR_API)
@@ -193,6 +198,10 @@ public interface ApiService {
     @FormUrlEncoded
     @POST(NetWorkAPI.GET_MYCONCERNS_API)
     Observable<ApiResponse<List<TeacherBean>>> getMyConCerns(@Field("userId") String id);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.GET_MYORDERS_API)
+    Observable<ApiResponse<List<OrderBean>>> getMyOrders(@Field("userId") String id,@Field("page") int page);
 
 
     //======================================luntan

@@ -30,6 +30,7 @@ public class GoodBean {
     public int orderId;
     public float price;
     public String size;
+    public String goodsImageUrl;
 
 
 }

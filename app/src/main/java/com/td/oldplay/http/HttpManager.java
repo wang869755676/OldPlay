@@ -15,6 +15,7 @@ import com.td.oldplay.bean.HomeCourseInfo;
 import com.td.oldplay.bean.HomeShopInfo;
 import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.bean.ShopBean;
+import com.td.oldplay.bean.ShopCarBean;
 import com.td.oldplay.bean.ShopDetail;
 import com.td.oldplay.bean.TeacherBean;
 import com.td.oldplay.bean.TeacherDetail;
@@ -212,6 +213,10 @@ public class HttpManager {
         toSubscribe(mApiService.getShopComments(shopId, page), observer);
     }
 
+    public void createOrderCars(List<String> carIds,String userId, Observer<OrderBean> observer) {
+        toSubscribe(mApiService.createOrderCars(carIds,userId), observer);
+    }
+
     public void createOrder(HashMap<String, Object> params, Observer<OrderBean> observer) {
         toSubscribe(mApiService.createOrder(params), observer);
     }
@@ -220,7 +225,7 @@ public class HttpManager {
         toSubscribe(mApiService.addCar(params), observer);
     }
 
-    public void getCars(String userId, int page, Observer<String> observer) {
+    public void getCars(String userId, int page, Observer<List<ShopCarBean>> observer) {
         toSubscribe(mApiService.getCars(userId, page), observer);
     }
 
@@ -262,7 +267,9 @@ public class HttpManager {
     public void getMyConCerns(String userId, Observer<List<TeacherBean>> observer) {
         toSubscribe(mApiService.getMyConCerns(userId), observer);
     }
-
+    public void getMyOrders(String userId, int page,Observer<List<OrderBean>> observer) {
+        toSubscribe(mApiService.getMyOrders(userId,page), observer);
+    }
 
     //=========================论坛=========================
     public void getHomeForums(Observer<List<ForumType>> observer) {

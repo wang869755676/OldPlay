@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -14,8 +15,10 @@ import android.widget.TextView;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
+import com.td.oldplay.bean.AddressBean;
 import com.td.oldplay.bean.GoodBean;
 import com.td.oldplay.bean.OrderBean;
+import com.td.oldplay.ui.mine.activity.MyAddressActivity;
 import com.td.oldplay.ui.shop.adapter.GoodAdapter;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 
@@ -62,6 +65,8 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
     private GoodAdapter goodAdapter;
     private int payType; // 支付的类型
     private OrderBean orderBean;
+    private int scoreCount;
+    private float scoreMoney;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,11 +103,24 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
         datas = new ArrayList<>();
         goodAdapter = new GoodAdapter(mContext, R.layout.item_confirm_orderr, datas);
         swipeTarget.setAdapter(goodAdapter);
+        acore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if(b){
+                        ortderTotal.setText("￥ "+(orderBean.amount_payable-scoreMoney) );
+                    }else{
+                        ortderTotal.setText("￥ "+(orderBean.amount_payable) );
+                    }
+            }
+        });
         setData();
     }
 
     private void setData() {
         if (orderBean != null) {
+            ortderTotal.setText("￥ "+orderBean.amount_paid);
+            orederConfirmTotal.setText("￥ "+orderBean.amount_payable);
+           // orederConfirmScore.setText();
             if (orderBean.goodBeanList != null && orderBean.goodBeanList.size() > 0) {
                 datas.addAll(orderBean.goodBeanList);
                 goodAdapter.notifyDataSetChanged();
@@ -111,6 +129,18 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
                 buyAddressName.setText("收货人: " + orderBean.address.consignee);
                 buyAddressTelphone.setText("收货人: " + orderBean.address.mobile);
                 buyAddressInfo.setText("收货人: " + orderBean.address.address);
+            }
+
+            if(orderBean.scoreOffset!=null){
+                scoreCount= (int) Math.floor(orderBean.scoreOffset.score/orderBean.scoreOffset.money);
+                if(scoreCount>0){
+                    acore.setVisibility(View.VISIBLE);
+                    scoreMoney=scoreCount*orderBean.scoreOffset.money;
+                    acore.setText(orderBean.scoreOffset.content);
+                }
+
+            }else{
+                acore.setVisibility(View.GONE);
             }
         }
     }
@@ -122,11 +152,31 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
                 finish();
                 break;
             case R.id.buy_address_btn:
-                startActivity(new Intent(mContext, ShopCarActivity.class));
+                startActivityForResult(new Intent(mContext, MyAddressActivity.class),1002);
                 break;
             case R.id.ortder_confirm:
                 // 调用支付接口
                 break;
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1002 && resultCode==RESULT_OK){
+            if(orderBean!=null){
+                orderBean.address= (AddressBean) getIntent().getSerializableExtra("model");
+                setAddress();
+            }
+        }
+    }
+
+    private void setAddress() {
+        if (orderBean.address != null) {
+            buyAddressName.setText("收货人: " + orderBean.address.consignee);
+            buyAddressTelphone.setText("收货人: " + orderBean.address.mobile);
+            buyAddressInfo.setText("收货人: " + orderBean.address.address);
         }
 
     }

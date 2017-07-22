@@ -10,6 +10,7 @@ import android.view.View;
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.base.EventMessage;
+import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.AddressBean;
 import com.td.oldplay.contants.MContants;
@@ -19,7 +20,6 @@ import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.mine.adapter.AddressAdapter;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
-import com.tencent.mm.opensdk.utils.Log;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -81,12 +81,23 @@ public class MyAddressActivity extends BaseFragmentActivity
         title.setOnRightListener(this);
         title.setRightImageResource(R.mipmap.icon_adr_publish);
         swipeLayout.setOnRefreshListener(this);
-        swipeTarget.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL,false));
+        swipeTarget.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
         addressAdapter = new AddressAdapter(mContext, R.layout.item_address, datas);
         addressAdapter.setActionListener(this);
         adapter = new LoadMoreWrapper(addressAdapter);
         adapter.setOnLoadMoreListener(this);
         swipeTarget.setAdapter(adapter);
+        addressAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                setResult(RESULT_OK, new Intent().putExtra("model", datas.get(position)));
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
         getData();
     }
 

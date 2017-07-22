@@ -1,6 +1,7 @@
 package com.td.oldplay.ui.forum.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.td.oldplay.R;
@@ -26,7 +27,10 @@ public class ForumListAdapter extends CommonAdapter<ForumBean> {
         holder.setText(R.id.item_content,forumBean.content);
         holder.setText(R.id.item_name,forumBean.userName);
         holder.setText(R.id.item_comment,forumBean.replyCount+"评论");
-        holder.setText(R.id.item_time, TimeMangerUtil.friendsCirclePastDate(forumBean.formatTime));
+        if(!TextUtils.isEmpty(forumBean.formatTime)){
+            holder.setText(R.id.item_time, TimeMangerUtil.friendsCirclePastDate(forumBean.formatTime));
+        }
+
         if(forumBean.label==1){
             holder.setVisible(R.id.item_sence,true);
         }else{

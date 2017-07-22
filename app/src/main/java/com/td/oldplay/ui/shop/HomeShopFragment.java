@@ -276,7 +276,8 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
 
         @Override
         protected void convert(ViewHolder holder, ShopBean shopBean, int position) {
-            GlideUtils.setImage(mContext, "http://pic.58pic.com/58pic/13/85/85/73T58PIC9aj_1024.jpg", (ImageView) holder.getView(R.id.item_home_iv));
+            GlideUtils.setImage(mContext, shopBean.picUrl, (ImageView) holder.getView(R.id.item_home_iv));
+            holder.setText(R.id.item_courese_name,shopBean.goodsName);
         }
     }
 }

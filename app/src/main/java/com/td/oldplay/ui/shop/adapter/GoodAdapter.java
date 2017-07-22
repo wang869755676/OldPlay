@@ -20,6 +20,12 @@ public class GoodAdapter extends CommonAdapter<GoodBean> {
 
     @Override
     protected void convert(ViewHolder holder, GoodBean goodBean, int position) {
+
+        holder.setText(R.id.item_order_goods_name,goodBean.goodsName);
+        holder.setText(R.id.item_order_goods_num,"x "+goodBean.number+"");
+        holder.setText(R.id.item_order_good_typr,"型号: "+goodBean.size);
+        holder.setText(R.id.item_order_good_color,"颜色: "+goodBean.color);
+        holder.setText(R.id.item_order_good_price,"￥ "+goodBean.price);
         if(goodBean.groupBuy!=null){
             holder.setVisible(R.id.item_shop_tuangou,true);
             holder.setText(R.id.item_shop_tuangou_des,"("+goodBean.groupBuy.buyNum+"/"+goodBean.groupBuy.conditions+")");

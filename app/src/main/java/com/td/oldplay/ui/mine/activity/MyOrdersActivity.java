@@ -34,6 +34,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.http.HTTP;
 
 public class MyOrdersActivity extends BaseFragmentActivity
         implements View.OnClickListener,
@@ -100,38 +101,37 @@ public class MyOrdersActivity extends BaseFragmentActivity
     }
 
     private void getData() {
+        HttpManager.getInstance().getMyOrders(userId,page,new HttpSubscriber<List<OrderBean>>(new OnResultCallBack<List<OrderBean>>() {
 
-        HttpManager.getInstance().getTeacherLists("eyJsYXRpdHVkZSI6IjMwLjMxMjUzNyIsImxvbmdpdHVkZSI6IjEyMC4xMjkwNTYiLCJ0b2tlbiI6Ik1UTXdOVEV5TmpFNU1UUVx1MDAzZCIsInBhZ2UiOjF9",
-                new HttpSubscriber<List<TeacherBean>>(new OnResultCallBack<List<TeacherBean>>() {
-                    @Override
-                    public void onSuccess(List<TeacherBean> o) {
-                        swipeToLoadLayout.setRefreshing(false);
-                        /*if (o != null && o.size() > 0) {
-                            if (page == 1) {
-                                datas.clear();
-                                if (datas.size() >= MContants.PAGENUM) {
-                                    adapter.setLoadMoreView(R.layout.default_loading);
-                                }
 
-                            }
-                            datas.addAll(o);
-                        } else {
-                            if (page > 1) {
-                                adapter.setLoadMoreView(0);
-                                ToastUtil.show("没有更多数据了");
-                            }
+            @Override
+            public void onSuccess(List<OrderBean> orderBeen) {
+                swipeToLoadLayout.setRefreshing(false);
+                if (orderBeen != null && orderBeen.size() > 0) {
+                    if (page == 1) {
+                        datas.clear();
+                        if (datas.size() >= MContants.PAGENUM) {
+                            adapter.setLoadMoreView(R.layout.default_loading);
                         }
-                        Log.e("===", datas.size() + "-----------------");
-                        orderAdapter.notifyDataSetChanged();
-                        adapter.notifyDataSetChanged();*/
-                    }
 
-                    @Override
-                    public void onError(int code, String errorMsg) {
-                        Log.e("==", errorMsg);
-                        swipeToLoadLayout.setRefreshing(false);
                     }
-                }));
+                    datas.addAll(orderBeen);
+                } else {
+                    adapter.setLoadMoreView(0);
+                    if (page > 1) {
+                        ToastUtil.show("没有更多数据了");
+                    }
+                }
+
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                swipeToLoadLayout.setRefreshing(false);
+                ToastUtil.show(errorMsg);
+            }
+        }));
 
     }
 

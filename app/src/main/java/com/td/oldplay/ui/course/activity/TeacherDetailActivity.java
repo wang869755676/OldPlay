@@ -389,6 +389,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             case R.id.reword:
                 break;
             case R.id.pause:
+                //mRTCStreamingManager.sto
                 break;
             case R.id.left_text:
                 finish();

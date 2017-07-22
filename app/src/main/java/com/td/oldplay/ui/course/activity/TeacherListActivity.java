@@ -61,6 +61,7 @@ public class TeacherListActivity extends BaseFragmentActivity
     }
 
     private void init() {
+        datas.add(new TeacherBean());
         title.setTitle("讲师列表");
         title.setOnLeftListener(this);
         swipeToLoadLayout.setOnRefreshListener(this);

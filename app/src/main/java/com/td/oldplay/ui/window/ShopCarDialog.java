@@ -59,6 +59,7 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
     private float totalMoney;
     private String ColorId = "0";
     private String size = "默认";
+    private float money;
     EventMessage message;
     public ShopCarDialog(@NonNull Context context, View.OnClickListener listener, ShopDetail shopBean, int Type) {
         super(context);
@@ -85,13 +86,18 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
         moneyTv = (TextView) view.findViewById(R.id.dialog_money);
         okTv = (TextView) view.findViewById(R.id.dialog_ok);
 
+        modeTv.setOnClickListener(this);
         moneyTv.setOnClickListener(this);
         colorTv.setOnClickListener(this);
         decTv.setOnClickListener(this);
         addTv.setOnClickListener(this);
         okTv.setOnClickListener(this);
+        if(shopBean==null){
+            return;
+        }
         if(shopBean.goods!=null){
             moneyTv.setText("￥"+shopBean.goods.price+"");
+            money=shopBean.goods.price;
         }
         if (shopBean.sizeList != null) {
             if (shopBean.sizeList.size() > 0) {
@@ -104,6 +110,7 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
             modeAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                    modelWindow.dismiss();
                     size = shopBean.sizeList.get(position);
                     modeTv.setText(size);
 
@@ -118,6 +125,7 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
 
         if (shopBean.colorList != null) {
             if (shopBean.colorList.size() > 0) {
+                ColorId=shopBean.colorList.get(0).colorId;
                 colorTv.setText(shopBean.colorList.get(0).name);
             } else {
                 colorTv.setText("默认");
@@ -127,6 +135,7 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
             colorAdpater.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                    colorWindow.dismiss();
                     ColorId = shopBean.colorList.get(position).colorId;
                     colorTv.setText(shopBean.colorList.get(position).name);
                 }
@@ -196,14 +205,16 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
                 CalTotal();
                 break;
             case R.id.dialog_type:
-                if (modelWindow != null) {
+                if (modelWindow == null) {
                     modelWindow = new ListPopupWindow(context, modeAdapter, ViewGroup.LayoutParams.MATCH_PARENT, DeviceUtil.dip2px(context, 100));
                 }
+                modelWindow.showPopupWindow(v);
                 break;
             case R.id.dialog_color:
-                if (modelWindow != null) {
-                    modelWindow = new ListPopupWindow(context, colorAdpater, ViewGroup.LayoutParams.MATCH_PARENT, DeviceUtil.dip2px(context, 100));
+                if (colorWindow== null) {
+                    colorWindow = new ListPopupWindow(context, colorAdpater, ViewGroup.LayoutParams.MATCH_PARENT, DeviceUtil.dip2px(context, 100));
                 }
+                colorWindow.showPopupWindow(v);
                 break;
             case R.id.dialog_ok:
                 dismiss();
@@ -211,7 +222,7 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
                 message.colorId=ColorId;
                 message.num=num;
                 message.size=size;
-                message.total=totalMoney;
+                message.total=money;
                 EventBus.getDefault().post(message);
                 break;
 

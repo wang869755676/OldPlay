@@ -421,7 +421,7 @@ public class VoiceManager {
      * @param filePath 音频存放文件夹
      */
     public void startPlay(String filePath) {
-        if (TextUtils.isEmpty(filePath)|| !new File(filePath).exists())
+        if (TextUtils.isEmpty(filePath))
         {
             if (voicePlayCallBack != null) {
                 voicePlayCallBack.playFinish();
@@ -432,6 +432,7 @@ public class VoiceManager {
             playFilePath = filePath;
             startPlay(true);
         }
+
     }
     /**
      * 开始播放（内部调）
@@ -448,7 +449,14 @@ public class VoiceManager {
 
             mMediaPlayer = new MediaPlayer();
             mMediaPlayer.setOnCompletionListener(mPlayCompetedListener);
-
+            mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    if (voicePlayCallBack != null) {
+                        voicePlayCallBack.playStart();
+                    }
+                }
+            });
             if (prepareMedia(mMediaPlayer, playFilePath)) {
                 mDeviceState = MEDIA_STATE_PLAY_DOING;
                 //总时间长度

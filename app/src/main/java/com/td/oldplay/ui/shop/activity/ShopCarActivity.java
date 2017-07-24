@@ -56,8 +56,8 @@ public class ShopCarActivity extends BaseFragmentActivity
     private CarAdapter carAdapter;
     private LoadMoreWrapper adapter;
     private int page = 1;
-    private  int checkNum;
-    private List<String> carsId=new ArrayList<>();
+    private int checkNum;
+    private List<String> carsId = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +138,7 @@ public class ShopCarActivity extends BaseFragmentActivity
 
     @Override
     public void onRefresh() {
-        page=1;
+        page = 1;
         getData();
 
     }
@@ -167,28 +167,12 @@ public class ShopCarActivity extends BaseFragmentActivity
      * 结算商品
      */
     private void createOrderCar() {
-        showLoading("生成订单中");
-        HttpManager.getInstance().createOrderCars(carsId,userId, new HttpSubscriber<OrderBean>(new OnResultCallBack<OrderBean>() {
+        Intent intent = new Intent(mContext, OrdersConfirmActivity.class);
+        intent.putStringArrayListExtra("carIds", (ArrayList<String>) carsId);
+        startActivity(intent);
+    }
 
-            @Override
-            public void onSuccess(OrderBean orderBean) {
-                hideLoading();
-                if (orderBean != null) {
-                    Intent intent = new Intent(mContext, OrderConfirmActivity.class);
-                    intent.putExtra("moide", orderBean);
-                    startActivity(intent);
-                }
-
-            }
-
-            @Override
-            public void onError(int code, String errorMsg) {
-                hideLoading();
-                ToastUtil.show(errorMsg);
-            }
-        }));    }
-
-    private  class CarAdapter extends CommonAdapter<ShopCarBean> {
+    private class CarAdapter extends CommonAdapter<ShopCarBean> {
 
         public CarAdapter(Context context, int layoutId, List<ShopCarBean> datas) {
             super(context, layoutId, datas);
@@ -196,12 +180,14 @@ public class ShopCarActivity extends BaseFragmentActivity
 
         @Override
         protected void convert(final ViewHolder holder, final ShopCarBean shopCarBean, final int position) {
-            holder.setText(R.id.item_car_num,shopCarBean.num+"");
-            if(shopCarBean.color!=null){
-                holder.setText(R.id.item_car_color,"颜色: "+shopCarBean.color.name);
+            holder.setText(R.id.item_car_num, shopCarBean.number + "");
+            if (shopCarBean.goods != null)
+                holder.setText(R.id.item_car_name, shopCarBean.goods.goodsName);
+            if (shopCarBean.color != null) {
+                holder.setText(R.id.item_car_color, "颜色: " + shopCarBean.color.name);
             }
-            holder.setText(R.id.item_car_type,"型号: "+shopCarBean.size);
-            holder.setText(R.id.item_car_price,"￥"+shopCarBean.total);
+            holder.setText(R.id.item_car_type, "型号: " + shopCarBean.size);
+            holder.setText(R.id.item_car_price, "￥" + shopCarBean.total);
 
             ((CheckBox) holder.getView(R.id.item_car_checked)).setChecked(shopCarBean.isCheck);
             holder.setOnClickListener(R.id.item_car_add, new View.OnClickListener() {
@@ -209,6 +195,7 @@ public class ShopCarActivity extends BaseFragmentActivity
                 public void onClick(View v) {
                     shopCarBean.num++;
                     ((TextView) holder.getView(R.id.item_car_num)).setText(shopCarBean.num + "");
+                    holder.setText(R.id.item_car_price, "￥" + (shopCarBean.goods.price * shopCarBean.num));
                 }
             });
             holder.setOnClickListener(R.id.item_car_dec, new View.OnClickListener() {
@@ -219,6 +206,7 @@ public class ShopCarActivity extends BaseFragmentActivity
                     } else {
                         shopCarBean.num--;
                         ((TextView) holder.getView(R.id.item_car_num)).setText(shopCarBean.num + "");
+                        holder.setText(R.id.item_car_price, "￥" + (shopCarBean.goods.price * shopCarBean.num));
                     }
 
                 }
@@ -227,17 +215,17 @@ public class ShopCarActivity extends BaseFragmentActivity
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     shopCarBean.isCheck = isChecked;
-                    if(isChecked){
+                    if (isChecked) {
                         checkNum++;
                         carsId.add(shopCarBean.cartId);
-                    }else{
+                    } else {
                         checkNum--;
                         carsId.remove(shopCarBean.cartId);
                     }
-                    if(checkNum==0){
+                    if (checkNum == 0) {
                         carCbAll.setChecked(false);
                     }
-                    if(checkNum==datas.size()){
+                    if (checkNum == datas.size()) {
                         carCbAll.setChecked(true);
                     }
                 }
@@ -245,7 +233,7 @@ public class ShopCarActivity extends BaseFragmentActivity
             holder.setOnClickListener(R.id.item_car_delete, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                     deleteCar(datas.get(position).cartId);
+                    deleteCar(datas.get(position).cartId);
                 }
             });
         }
@@ -254,15 +242,15 @@ public class ShopCarActivity extends BaseFragmentActivity
     }
 
     /**
-     *  删除商品
+     * 删除商品
      */
     private void deleteCar(String carid) {
-        HttpManager.getInstance().deleteCars(carid,new HttpSubscriber<String>(new OnResultCallBack<String>() {
+        HttpManager.getInstance().deleteCars(carid, new HttpSubscriber<String>(new OnResultCallBack<String>() {
 
             @Override
             public void onSuccess(String s) {
                 ToastUtil.show("删除成功");
-                 onRefresh();
+                onRefresh();
             }
 
             @Override

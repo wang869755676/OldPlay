@@ -1,10 +1,12 @@
 package com.td.oldplay.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by my on 2017/7/11.
  */
 
-public class GoodBean {
+public class GoodBean implements Serializable{
 
 
     /**

@@ -7,6 +7,7 @@ import com.td.oldplay.R;
 import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
 import com.td.oldplay.utils.GlideUtils;
+import com.tencent.mm.opensdk.utils.Log;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class PicAdapter extends CommonAdapter<String> {
 
     @Override
     protected void convert(ViewHolder holder, String strings, int position) {
+        Log.e("===",strings);
         GlideUtils.setImage(mContext, strings, (ImageView) holder.getView(R.id.item_shop_de_pic));
     }
 }

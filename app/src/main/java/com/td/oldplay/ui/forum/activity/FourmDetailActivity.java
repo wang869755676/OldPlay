@@ -33,6 +33,8 @@ import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.voicemanager.VoiceManager;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -136,9 +138,10 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
         ryPic.setLayoutManager(new LinearLayoutManager(mContext));
         picAdapter = new PicAdapter(mContext, R.layout.item_shop_pic, picStr);
         videAdapter = new VideAdapter(mContext, R.layout.item_videoview, videoStr);
-        // picAdapter=new PicAdapter(mContext,R.layout.item_shop_pic,picStr);
+        voiceAdapter=new VoiceAdapter(mContext,R.layout.item_voice,picStr,voiceStr);
         ryPic.setAdapter(picAdapter);
         ryVideo.setAdapter(videAdapter);
+        ryAu.setAdapter(voiceAdapter);
         subscriber = new HttpSubscriber<>(new OnResultCallBack<ForumDetial>() {
 
             @Override
@@ -185,8 +188,13 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
                 ToastUtil.show(errorMsg);
             }
         });
-        HttpManager.getInstance().getForumDetials(id, subscriber);
+        getDetails();
+
         getData();
+    }
+
+    private void getDetails() {
+        HttpManager.getInstance().getForumDetials(id, subscriber);
     }
 
     private void setData() {
@@ -204,10 +212,10 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
             picStr.addAll(forumDetial.imageUrlList);
             picAdapter.notifyDataSetChanged();
         }
-     /*   if (forumDetial.speechUrlList!=null) {
+        if (forumDetial.speechUrlList!=null) {
             voiceStr.addAll(forumDetial.speechUrlList);
             voiceAdapter.notifyDataSetChanged();
-        }*/
+        }
         if (forumDetial.videoUrlList != null) {
             videoStr.addAll(forumDetial.videoUrlList);
             videAdapter.notifyDataSetChanged();
@@ -294,6 +302,14 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
     protected void onPause() {
         super.onPause();
         JCVideoPlayer.releaseAllVideos();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMessage(EventMessage message){
+        if("publish".equals(message.action)){
+            getDetails();
+        }
+
     }
 
 }

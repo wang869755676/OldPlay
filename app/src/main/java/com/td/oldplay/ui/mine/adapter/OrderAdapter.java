@@ -48,9 +48,9 @@ public class OrderAdapter extends CommonAdapter<OrderBean> {
         }
         holder.setText(R.id.item_order_smoney,"合计 "+orderBean.amount_paid);
         recyclerView = holder.getView(R.id.item_goods);
-        if (orderBean.goodBeanList != null && orderBean.goodBeanList.size() > 0) {
+        if (orderBean.orderDetails != null && orderBean.orderDetails.size() > 0) {
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-            goodAdapter=new GoodAdapter(mContext, R.layout.item_mine_order_inner, orderBean.goodBeanList);
+            goodAdapter=new GoodAdapter(mContext, R.layout.item_mine_order_inner, orderBean.orderDetails);
             recyclerView.setAdapter(goodAdapter);
           /*  recyclerView.setAdapter(new CommonAdapter<GoodBean>(mContext, R.layout.item_mine_order_inner, orderBean.goodBeanList) {
                 @Override

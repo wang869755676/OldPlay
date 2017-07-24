@@ -1,10 +1,12 @@
 package com.td.oldplay.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by jin on 2017/7/22.
  */
 
-public class ScoreOffset {
+public class ScoreOffset implements Serializable {
  /*   {
         "content": "1积分抵消0.02元",
             "id": 1,

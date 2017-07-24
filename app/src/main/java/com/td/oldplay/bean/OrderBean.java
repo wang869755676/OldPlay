@@ -8,7 +8,7 @@ import java.util.List;
  */
 
 public class OrderBean implements Serializable {
-    public List<GoodBean> goodBeanList;
+
 
     /**
      * addTime : {"date":18,"day":2,"hours":17,"minutes":51,"month":6,"seconds":19,"time":1500371479679,"timezoneOffset":-480,"year":117}

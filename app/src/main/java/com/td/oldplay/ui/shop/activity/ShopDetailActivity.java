@@ -311,7 +311,7 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
                 hideLoading();
                 if (orderBean != null) {
                     Intent intent = new Intent(mContext, OrderConfirmActivity.class);
-                    intent.putExtra("moide", orderBean);
+                    intent.putExtra("model", orderBean);
                     startActivity(intent);
                 }
 

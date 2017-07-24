@@ -14,13 +14,13 @@
         android:layout_height="@dimen/titlebar_height"></com.td.oldplay.widget.CustomTitlebarLayout>
 
     <android.support.v4.widget.NestedScrollView
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/title"
+        android:layout_marginBottom="55dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,55 +31,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:text="商品详情"
-                    android:textColor="@color/coure_tv"
-                    android:textSize="14sp" />
+                android:orientation="vertical">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/swipe_target"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/white"></android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/bg_gray"></View>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="20dp">
-
-                    <TextView
-                        android:id="@+id/oreder_confirm_score"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableLeft="@mipmap/icon_score"
-                        android:gravity="center"
-                        android:text="购买可得100积分"
-                        android:textColor="@color/home_gray"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/oreder_confirm_total"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center|right"
-                        android:text="购买可得100积分"
-                        android:textColor="@color/tv_red"
-                        android:textSize="15sp" />
-                </LinearLayout>
             </LinearLayout>
 
             <RelativeLayout
@@ -166,10 +124,10 @@
                         android:textSize="12sp" />
 
                     <RadioButton
-                        android:layout_marginTop="10dp"
                         android:id="@+id/weixin"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:button="@null"
                         android:drawableLeft="@drawable/selector_order_type"
                         android:drawablePadding="10dp"
@@ -178,10 +136,10 @@
                         android:textSize="12sp" />
 
                     <RadioButton
-                        android:layout_marginTop="10dp"
                         android:id="@+id/zhifubao"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:button="@null"
                         android:drawableLeft="@drawable/selector_order_type"
                         android:drawablePadding="10dp"
@@ -212,9 +170,9 @@
     </android.support.v4.widget.NestedScrollView>
 
     <LinearLayout
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
         android:background="@mipmap/rec_bg">
 
         <TextView

@@ -42,6 +42,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
+import retrofit2.http.Field;
 
 public class HttpManager {
     public static final String TAG = HttpManager.class.getSimpleName();
@@ -187,10 +188,20 @@ public class HttpManager {
         toSubscribe(mApiService.getShopInTeacher(id, page, scortType, scort), observer);
     }
 
-    public void getCourseDetail(String id, Observer<TeacherDetail> observer) {
+      public void getCourseDetail(String id, Observer<TeacherDetail> observer) {
         toSubscribe(mApiService.getCourseDetail(id), observer);
     }
 
+    public void isConcernTeacher(String userId,String teacherId, Observer<Integer> observer) {
+        toSubscribe(mApiService.isConcernTeacher(userId,teacherId), observer);
+    }
+
+    public void concernTeacher(String userId,String teacherId, Observer<String> observer) {
+        toSubscribe(mApiService.concernTeacher(userId,teacherId), observer);
+    }
+    public void commentTeacher(String userId,String teacherId,String content, Observer<String> observer) {
+        toSubscribe(mApiService.commentTeacher(userId,teacherId,content), observer);
+    }
 
     //========================
     public void getShopRecomments(int page, int scortType, int scort, Observer<List<ShopBean>> observer) {
@@ -213,7 +224,7 @@ public class HttpManager {
         toSubscribe(mApiService.getShopComments(shopId, page), observer);
     }
 
-    public void createOrderCars(List<String> carIds,String userId, Observer<OrderBean> observer) {
+    public void createOrderCars(List<String> carIds,String userId, Observer<List<OrderBean>> observer) {
         toSubscribe(mApiService.createOrderCars(carIds,userId), observer);
     }
 

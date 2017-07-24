@@ -118,6 +118,17 @@ public interface ApiService {
     @POST(NetWorkAPI.SHOP_TEACHER_API)
     Observable<ApiResponse<List<ShopBean>>> getShopInTeacher(@Field("userId") String userId, @Field("page") int page, @Field("type") int type, @Field("sort") int sort);
 
+    @FormUrlEncoded
+    @POST(NetWorkAPI.CONCERN_TEACHER_API)
+    Observable<ApiResponse<String>> concernTeacher(@Field("userId") String userId,@Field("teacherId") String teacherId);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.COMMENT_TEACHER_API)
+    Observable<ApiResponse<String>> commentTeacher(@Field("userId") String userId,@Field("teacherId") String teacherId,@Field("content") String content);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.COMMENT_TEACHER_API)
+    Observable<ApiResponse<Integer>> isConcernTeacher(@Field("userId") String userId,@Field("teacherId") String teacherId);
     // =================商品============
     @FormUrlEncoded
     @POST(NetWorkAPI.FIND_SHOPBYID_API)
@@ -152,7 +163,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.CREATE_ORDER_CAR_API)
-    Observable<ApiResponse<OrderBean>> createOrderCars(@Field("cartIds")List<String> carIds,@Field("userId")String userId);
+    Observable<ApiResponse<List<OrderBean>>> createOrderCars(@Field("cartIds")List<String> carIds,@Field("userId")String userId);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.CREATE_ORDER_API)

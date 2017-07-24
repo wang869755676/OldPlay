@@ -176,17 +176,7 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
                 }
             }
         }
-        if(imageList.size()>0){
-            paramC.put("imageUrlList",imageList);
-        }
-        if(videList.size()>0){
-            paramC.put("videoUrlList",videList);
 
-        }
-        if(audioList.size()>0){
-            paramC.put("speechUrlList",audioList);
-
-        }
 
     }
 
@@ -237,6 +227,8 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
 
             @Override
             public void onError(int code, String errorMsg) {
+
+                hideLoading();
                 ToastUtil.show(errorMsg);
             }
         }));
@@ -276,9 +268,20 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
 
                 }
             }
+            if(imageList.size()>0){
+                paramC.put("imageUrlList",imageList);
+            }
+            if(videList.size()>0){
+                paramC.put("videoUrlList",videList);
 
+            }
+            if(audioList.size()>0){
+                paramC.put("speechUrlList",audioList);
+
+            }
 
         }
+
     }
 
     private void publishOther() {
@@ -364,6 +367,7 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
                     GlideUtils.setImage(mContext, ((ImageItem) o).path, (ImageView) holder.getView(R.id.item_media_iv));
                 } else {
                     GlideUtils.setPhotoImage(mContext, ((ImageItem) o).path, (ImageView) holder.getView(R.id.item_media_iv));
+               Log.e("===", ((ImageItem) o).path);
                 }
 
 

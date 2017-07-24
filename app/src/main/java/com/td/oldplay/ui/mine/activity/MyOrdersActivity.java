@@ -75,7 +75,7 @@ public class MyOrdersActivity extends BaseFragmentActivity
         goodBeen.add(new GoodBean());
         goodBeen.add(new GoodBean());
         goodBeen.add(new GoodBean());
-        bean.goodBeanList = goodBeen;
+        bean.orderDetails = goodBeen;
         datas.add(bean);
         datas.add(new OrderBean());
         datas.add(new OrderBean());

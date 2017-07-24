@@ -46,6 +46,7 @@ public class ListPopupWindow<T> extends PopupWindow {
         setFocusable(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerView.setAdapter(adapter);
+
     }
 
 

@@ -121,8 +121,8 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
             ortderTotal.setText("￥ "+orderBean.amount_paid);
             orederConfirmTotal.setText("￥ "+orderBean.amount_payable);
            // orederConfirmScore.setText();
-            if (orderBean.goodBeanList != null && orderBean.goodBeanList.size() > 0) {
-                datas.addAll(orderBean.goodBeanList);
+            if (orderBean.orderDetails!= null && orderBean.orderDetails.size() > 0) {
+                datas.addAll(orderBean.orderDetails);
                 goodAdapter.notifyDataSetChanged();
             }
             if (orderBean.address != null) {
@@ -166,7 +166,7 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==1002 && resultCode==RESULT_OK){
             if(orderBean!=null){
-                orderBean.address= (AddressBean) getIntent().getSerializableExtra("model");
+                orderBean.address= (AddressBean) data.getSerializableExtra("model");
                 setAddress();
             }
         }

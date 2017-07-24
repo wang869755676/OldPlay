@@ -91,6 +91,7 @@ public class MyAddressActivity extends BaseFragmentActivity
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 setResult(RESULT_OK, new Intent().putExtra("model", datas.get(position)));
+                finish();
             }
 
             @Override

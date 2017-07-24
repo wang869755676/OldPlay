@@ -150,7 +150,11 @@ public interface ApiService {
     @POST(NetWorkAPI.HOME_SHOP_API)
     Observable<ApiResponse<HomeShopInfo>> getHomeShop();
 
+    @FormUrlEncoded
+    @POST(NetWorkAPI.CREATE_ORDER_CAR_API)
+    Observable<ApiResponse<OrderBean>> createOrderCars(@Field("cartIds")List<String> carIds,@Field("userId")String userId);
 
+    @FormUrlEncoded
     @POST(NetWorkAPI.CREATE_ORDER_API)
     Observable<ApiResponse<OrderBean>> createOrder(@FieldMap() HashMap<String, Object> maps);
 
@@ -194,6 +198,10 @@ public interface ApiService {
     @FormUrlEncoded
     @POST(NetWorkAPI.GET_MYCONCERNS_API)
     Observable<ApiResponse<List<TeacherBean>>> getMyConCerns(@Field("userId") String id);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.GET_MYORDERS_API)
+    Observable<ApiResponse<List<OrderBean>>> getMyOrders(@Field("userId") String id,@Field("page") int page);
 
 
     //======================================luntan

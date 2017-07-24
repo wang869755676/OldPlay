@@ -36,6 +36,12 @@
         <activity
             android:name=".ui.SplashActivity"
             android:theme="@style/Theme.AppStartLoadTranslucent">
+
+        </activity>
+        <activity
+            android:name=".ui.MainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,10 +49,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MainActivity"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-        <activity
+            android:configChanges="orientation|screenSize"
             android:name=".ui.live.LiveActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeFullscreen" />
@@ -55,6 +58,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeFullscreen" />
         <activity
+            android:configChanges="orientation|screenSize"
             android:name=".ui.course.activity.TeacherDetailActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />

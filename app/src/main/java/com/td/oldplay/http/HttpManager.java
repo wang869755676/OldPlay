@@ -213,6 +213,10 @@ public class HttpManager {
         toSubscribe(mApiService.getShopComments(shopId, page), observer);
     }
 
+    public void createOrderCars(List<String> carIds,String userId, Observer<OrderBean> observer) {
+        toSubscribe(mApiService.createOrderCars(carIds,userId), observer);
+    }
+
     public void createOrder(HashMap<String, Object> params, Observer<OrderBean> observer) {
         toSubscribe(mApiService.createOrder(params), observer);
     }
@@ -263,7 +267,9 @@ public class HttpManager {
     public void getMyConCerns(String userId, Observer<List<TeacherBean>> observer) {
         toSubscribe(mApiService.getMyConCerns(userId), observer);
     }
-
+    public void getMyOrders(String userId, int page,Observer<List<OrderBean>> observer) {
+        toSubscribe(mApiService.getMyOrders(userId,page), observer);
+    }
 
     //=========================论坛=========================
     public void getHomeForums(Observer<List<ForumType>> observer) {

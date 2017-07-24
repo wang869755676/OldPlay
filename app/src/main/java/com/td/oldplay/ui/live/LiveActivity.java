@@ -155,7 +155,7 @@ public class LiveActivity extends LiveBaseActivity {
                 .setPreferredVideoEncodingSize(options.getVideoEncodingWidth(), options.getVideoEncodingHeight())
                 .setFpsControllerEnable(true)
                 .setSendingBufferProfile(new StreamingProfile.SendingBufferProfile(0.2f, 0.8f, 3.0f, 20 * 1000));
-        mStreamingProfile.setEncodingOrientation(StreamingProfile.ENCODING_ORIENTATION.PORT);
+        mStreamingProfile.setEncodingOrientation(StreamingProfile.ENCODING_ORIENTATION.LAND);
         // 动态切换横竖跑屏时 要调用 mMediaStreamingManager.notifyActivityOrientationChanged(); mMediaStreamingManager.notifyActivityOrientationChanged();
         if (role == 0) {
             mRTCStreamingManager.prepare(cameraStreamingSetting, null, watermarksetting, mStreamingProfile);

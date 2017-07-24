@@ -1,9 +1,9 @@
 package com.td.oldplay.ui.course.activity;
 
+import android.content.pm.ActivityInfo;
 import android.opengl.GLSurfaceView;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -13,7 +13,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -49,24 +48,18 @@ import com.td.oldplay.ui.window.CustomDialog;
 import com.td.oldplay.ui.window.SharePopupWindow;
 import com.td.oldplay.utils.LiveUtils;
 import com.td.oldplay.utils.ScreenUtils;
-import com.td.oldplay.utils.ShareSDKUtils;
 import com.td.oldplay.utils.StreamUtils;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.tencent.qq.QQ;
 
 public class TeacherDetailActivity extends LiveBaseActivity implements
         PLMediaPlayer.OnCompletionListener,
@@ -74,6 +67,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         PLMediaPlayer.OnErrorListener, View.OnClickListener, CustomDialog.DialogClick {
 
     private static final String TAG = "TeacherDetailActivity";
+    public CourseBean currentBean;
     @BindView(R.id.title)
     CustomTitlebarLayout title;
     @BindView(R.id.au_videoview)
@@ -120,16 +114,13 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     TextView commentSend;
     @BindView(R.id.ll_comment)
     LinearLayout llComment;
-
     private CustomDialog customDialog;
-
     private RTCMediaStreamingManager mRTCStreamingManager;
     // private RTCConferenceOptions options;
     private RTCVideoWindow windowA;
     //  private WatermarkSetting watermarksetting;
     private CameraStreamingSetting cameraStreamingSetting;
     private StreamingProfile mStreamingProfile;
-
     private int mCurrentCamFacingIndex; // 记录当前摄像头的方向
     private boolean isSwCodec; // 编码的方式 true 软 false 硬
     private boolean mIsActivityPaused;
@@ -137,17 +128,61 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     private String mRoomName;
     private boolean isPermissionGrant;
     private List<Fragment> fragments;
-
     private LinearLayout.LayoutParams params;
     private boolean island;
-
     private String[] titles;
-
     private SharePopupWindow popupWindow;
-
     private String userId;
+    /***
+     * 连麦的操作监听
+     */
+    private RTCConferenceStateChangedListener mRTCStreamingStateChangedListener = new RTCConferenceStateChangedListener() {
+        @Override
+        public void onConferenceStateChanged(RTCConferenceState state, int extra) {
+            switch (state) {
+                case READY:
+                    break;
+                case CONNECT_FAIL:
+                    // 连麦失败
+                    break;
+                case VIDEO_PUBLISH_FAILED:
+                case AUDIO_PUBLISH_FAILED:
+                    break;
+                case VIDEO_PUBLISH_SUCCESS:
+                    // 连接成功掉
+                    showOnMis();
+                    break;
+                case AUDIO_PUBLISH_SUCCESS:
+                    break;
+                case USER_JOINED_AGAIN:
+                    break;
+                case USER_KICKOUT_BY_HOST:
+                    break;
+                case OPEN_CAMERA_FAIL:
+                    break;
+                case AUDIO_RECORDING_FAIL:
+                    break;
+                default:
+                    return;
+            }
+        }
+    };
+    private RTCRemoteWindowEventListener mRTCRemoteWindowEventListener = new RTCRemoteWindowEventListener() {
+        @Override
+        public void onRemoteWindowAttached(RTCVideoWindow window, String remoteUserId) {
+            Log.d(TAG, "onRemoteWindowAttached: " + remoteUserId);
+        }
 
-    public CourseBean currentBean;
+        @Override
+        public void onRemoteWindowDetached(RTCVideoWindow window, String remoteUserId) {
+            Log.d(TAG, "onRemoteWindowDetached: " + remoteUserId);
+        }
+
+        @Override
+        public void onFirstRemoteFrameArrived(String remoteUserId) {
+            Log.d(TAG, "onFirstRemoteFrameArrived: " + remoteUserId);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,12 +211,11 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMessage(EventMessage message){
-           if("changeCourse".equals(message.action)){
-              // 切换直播视频
-           }
+    public void onEventMessage(EventMessage message) {
+        if ("changeCourse".equals(message.action)) {
+            // 切换直播视频
+        }
     }
-
 
     /**
      * 初始化Viewpager
@@ -296,7 +330,6 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         initPlay();
     }
 
-
     @Override
     protected void exitQueue(MessageEvent event) {
 
@@ -321,14 +354,27 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 customDialog.show();
                 break;
             case R.id.landan:
+                setRequestedOrientation(island ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                mRTCStreamingManager.notifyActivityOrientationChanged();
                 if (island) {
-                    island = false;
+                    title.setVisibility(View.VISIBLE);
+                    if (viewPager.getCurrentItem() == 3) {
+                        llComment.setVisibility(View.VISIBLE);
+                    } else {
+                        llAction.setVisibility(View.VISIBLE);
+                    }
                     params.height = ScreenUtils.dip2px(AContext, 200);
                 } else {
-                    island = true;
+                    title.setVisibility(View.GONE);
+                    if (viewPager.getCurrentItem() == 3) {
+                        llComment.setVisibility(View.GONE);
+                    } else {
+                        llAction.setVisibility(View.GONE);
+                    }
                     params.height = LinearLayout.LayoutParams.MATCH_PARENT;
                 }
                 liveRoot.setLayoutParams(params);
+                island = !island;
                 break;
             case R.id.collection_action:
                 break;
@@ -343,6 +389,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             case R.id.reword:
                 break;
             case R.id.pause:
+                //mRTCStreamingManager.sto
                 break;
             case R.id.left_text:
                 finish();
@@ -415,7 +462,6 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         return true;
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -441,6 +487,27 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         auVideoview.stopPlayback();
         mRTCStreamingManager.destroy();
         RTCMediaStreamingManager.deinit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(island){
+            setRequestedOrientation(island ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            mRTCStreamingManager.notifyActivityOrientationChanged();
+            island = false;
+            title.setVisibility(View.VISIBLE);
+            if (viewPager.getCurrentItem() == 3) {
+                llComment.setVisibility(View.VISIBLE);
+            } else {
+                llAction.setVisibility(View.VISIBLE);
+            }
+            params.height = ScreenUtils.dip2px(AContext, 200);
+            liveRoot.setLayoutParams(params);
+        }else{
+            super.onBackPressed();
+        }
+
+
     }
 
     /**
@@ -493,59 +560,6 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         mRTCStreamingManager.prepare(cameraStreamingSetting, null);
 
     }
-
-    /***
-     * 连麦的操作监听
-     */
-    private RTCConferenceStateChangedListener mRTCStreamingStateChangedListener = new RTCConferenceStateChangedListener() {
-        @Override
-        public void onConferenceStateChanged(RTCConferenceState state, int extra) {
-            switch (state) {
-                case READY:
-                    break;
-                case CONNECT_FAIL:
-                    // 连麦失败
-                    break;
-                case VIDEO_PUBLISH_FAILED:
-                case AUDIO_PUBLISH_FAILED:
-                    break;
-                case VIDEO_PUBLISH_SUCCESS:
-                    // 连接成功掉
-                    showOnMis();
-                    break;
-                case AUDIO_PUBLISH_SUCCESS:
-                    break;
-                case USER_JOINED_AGAIN:
-                    break;
-                case USER_KICKOUT_BY_HOST:
-                    break;
-                case OPEN_CAMERA_FAIL:
-                    break;
-                case AUDIO_RECORDING_FAIL:
-                    break;
-                default:
-                    return;
-            }
-        }
-    };
-
-
-    private RTCRemoteWindowEventListener mRTCRemoteWindowEventListener = new RTCRemoteWindowEventListener() {
-        @Override
-        public void onRemoteWindowAttached(RTCVideoWindow window, String remoteUserId) {
-            Log.d(TAG, "onRemoteWindowAttached: " + remoteUserId);
-        }
-
-        @Override
-        public void onRemoteWindowDetached(RTCVideoWindow window, String remoteUserId) {
-            Log.d(TAG, "onRemoteWindowDetached: " + remoteUserId);
-        }
-
-        @Override
-        public void onFirstRemoteFrameArrived(String remoteUserId) {
-            Log.d(TAG, "onFirstRemoteFrameArrived: " + remoteUserId);
-        }
-    };
 
     @Override
     public void onCompletion(PLMediaPlayer plMediaPlayer) {

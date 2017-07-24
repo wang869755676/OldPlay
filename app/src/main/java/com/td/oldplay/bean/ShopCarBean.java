@@ -5,10 +5,9 @@ package com.td.oldplay.bean;
  */
 
 public class ShopCarBean {
+
     public boolean isCheck;
     public int num;
-
-
 
     public String cartId;
     public ColorListBean color;

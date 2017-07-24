@@ -1,14 +1,17 @@
 package com.td.oldplay.ui.shop.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.td.oldplay.R;
@@ -16,6 +19,7 @@ import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
+import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.bean.ShopCarBean;
 import com.td.oldplay.contants.MContants;
 import com.td.oldplay.http.HttpManager;
@@ -52,6 +56,8 @@ public class ShopCarActivity extends BaseFragmentActivity
     private CarAdapter carAdapter;
     private LoadMoreWrapper adapter;
     private int page = 1;
+    private  int checkNum;
+    private List<String> carsId=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,11 +138,15 @@ public class ShopCarActivity extends BaseFragmentActivity
 
     @Override
     public void onRefresh() {
+        page=1;
+        getData();
 
     }
 
     @Override
     public void onLoadMoreRequested() {
+        page++;
+        getData();
 
     }
 
@@ -147,19 +157,52 @@ public class ShopCarActivity extends BaseFragmentActivity
                 finish();
                 break;
             case R.id.car_jiesuan:
+                createOrderCar();
                 break;
         }
 
     }
 
-    private static class CarAdapter extends CommonAdapter<ShopCarBean> {
+    /**
+     * 结算商品
+     */
+    private void createOrderCar() {
+        showLoading("生成订单中");
+        HttpManager.getInstance().createOrderCars(carsId,userId, new HttpSubscriber<OrderBean>(new OnResultCallBack<OrderBean>() {
+
+            @Override
+            public void onSuccess(OrderBean orderBean) {
+                hideLoading();
+                if (orderBean != null) {
+                    Intent intent = new Intent(mContext, OrderConfirmActivity.class);
+                    intent.putExtra("moide", orderBean);
+                    startActivity(intent);
+                }
+
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                hideLoading();
+                ToastUtil.show(errorMsg);
+            }
+        }));    }
+
+    private  class CarAdapter extends CommonAdapter<ShopCarBean> {
 
         public CarAdapter(Context context, int layoutId, List<ShopCarBean> datas) {
             super(context, layoutId, datas);
         }
 
         @Override
-        protected void convert(final ViewHolder holder, final ShopCarBean shopCarBean, int position) {
+        protected void convert(final ViewHolder holder, final ShopCarBean shopCarBean, final int position) {
+            holder.setText(R.id.item_car_num,shopCarBean.num+"");
+            if(shopCarBean.color!=null){
+                holder.setText(R.id.item_car_color,"颜色: "+shopCarBean.color.name);
+            }
+            holder.setText(R.id.item_car_type,"型号: "+shopCarBean.size);
+            holder.setText(R.id.item_car_price,"￥"+shopCarBean.total);
+
             ((CheckBox) holder.getView(R.id.item_car_checked)).setChecked(shopCarBean.isCheck);
             holder.setOnClickListener(R.id.item_car_add, new View.OnClickListener() {
                 @Override
@@ -168,11 +211,11 @@ public class ShopCarActivity extends BaseFragmentActivity
                     ((TextView) holder.getView(R.id.item_car_num)).setText(shopCarBean.num + "");
                 }
             });
-            holder.setOnClickListener(R.id.item_car_add, new View.OnClickListener() {
+            holder.setOnClickListener(R.id.item_car_dec, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (shopCarBean.num == 0) {
-                        ToastUtil.show("当前数量为0,不能再减了");
+                    if (shopCarBean.num == 1) {
+                        ToastUtil.show("当前数量为1,不能再减了");
                     } else {
                         shopCarBean.num--;
                         ((TextView) holder.getView(R.id.item_car_num)).setText(shopCarBean.num + "");
@@ -184,21 +227,48 @@ public class ShopCarActivity extends BaseFragmentActivity
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     shopCarBean.isCheck = isChecked;
+                    if(isChecked){
+                        checkNum++;
+                        carsId.add(shopCarBean.cartId);
+                    }else{
+                        checkNum--;
+                        carsId.remove(shopCarBean.cartId);
+                    }
+                    if(checkNum==0){
+                        carCbAll.setChecked(false);
+                    }
+                    if(checkNum==datas.size()){
+                        carCbAll.setChecked(true);
+                    }
+                }
+            });
+            holder.setOnClickListener(R.id.item_car_delete, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                     deleteCar(datas.get(position).cartId);
                 }
             });
         }
 
-        private static View.OnClickListener ClickListenr = new View.OnClickListener() {
+
+    }
+
+    /**
+     *  删除商品
+     */
+    private void deleteCar(String carid) {
+        HttpManager.getInstance().deleteCars(carid,new HttpSubscriber<String>(new OnResultCallBack<String>() {
 
             @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.item_car_add:
-
-                        break;
-                }
+            public void onSuccess(String s) {
+                ToastUtil.show("删除成功");
+                 onRefresh();
             }
-        };
 
+            @Override
+            public void onError(int code, String errorMsg) {
+                ToastUtil.show(errorMsg);
+            }
+        }));
     }
 }

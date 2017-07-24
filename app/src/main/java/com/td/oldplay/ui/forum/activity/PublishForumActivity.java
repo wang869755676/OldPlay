@@ -176,6 +176,17 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
                 }
             }
         }
+        if(imageList.size()>0){
+            paramC.put("imageUrlList",imageList);
+        }
+        if(videList.size()>0){
+            paramC.put("videoUrlList",videList);
+
+        }
+        if(audioList.size()>0){
+            paramC.put("speechUrlList",audioList);
+
+        }
 
     }
 

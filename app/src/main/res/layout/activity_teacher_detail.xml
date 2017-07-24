@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -31,42 +30,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center" />
-
-                <ImageView
-                    android:id="@+id/reword"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left|bottom"
-                    android:layout_marginBottom="60dp"
-                    android:layout_marginLeft="10dp"
-                    android:src="@mipmap/icon_reward" />
-
-                <ImageView
-                    android:id="@+id/join_con"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|bottom"
-                    android:layout_marginBottom="60dp"
-                    android:layout_marginRight="10dp"
-                    android:src="@mipmap/icon_conne" />
-
-                <ImageView
-                    android:id="@+id/landan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|bottom"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginRight="10dp"
-                    android:src="@mipmap/icon_land" />
-
-                <ImageView
-                    android:id="@+id/pause"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left|bottom"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:src="@mipmap/icon_pause" />
 
                 <FrameLayout
                     android:id="@+id/live"
@@ -113,13 +76,51 @@
                     </LinearLayout>
                 </FrameLayout>
 
+                <ImageView
+                    android:id="@+id/reword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|bottom"
+                    android:layout_marginBottom="60dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/icon_reward" />
+
+                <ImageView
+                    android:id="@+id/join_con"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:layout_marginBottom="60dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@mipmap/icon_conne" />
+
+                <ImageView
+                    android:id="@+id/landan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|bottom"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@mipmap/icon_land" />
+
+                <ImageView
+                    android:visibility="invisible"
+                    android:id="@+id/pause"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|bottom"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/icon_pause" />
+
+
             </FrameLayout>
 
             <android.support.design.widget.TabLayout
-                android:background="@color/white"
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="49dp"
+                android:background="@color/white"
                 app:tabGravity="fill"
                 app:tabIndicatorColor="@color/tv_red"
                 app:tabSelectedTextColor="@color/tv_red"
@@ -199,13 +200,13 @@
     </LinearLayout>
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/ll_comment"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_gravity="bottom"
         android:background="@color/white"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="wrap_content"

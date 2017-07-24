@@ -42,4 +42,9 @@ public class OrderBean implements Serializable {
     public int status;
     public int userId;
     public List<GoodBean> orderDetails;
+    public ScoreOffset scoreOffset;
+    public String formatTime;
+    public int isApplyScore; //是否使用积分抵消  0 否 1 是
+
+
 }

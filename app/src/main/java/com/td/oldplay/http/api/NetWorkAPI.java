@@ -81,7 +81,7 @@ public class NetWorkAPI {
 
     public final static String HOME_SHOP_API = " lnrzb/goods/toGoodsHomePage";
 
-
+    public final static String CREATE_ORDER_CAR_API = "lnrzb/order/createOrder";
 
     // 地址管理=====================================================
 
@@ -94,7 +94,7 @@ public class NetWorkAPI {
      // 我的相关==================
      public final static String GET_MYCONCERNS_API = "lnrzb/userfocus/getUserFocus";
     public final static String GET_MYCOURSES_API = "lnrzb/userCourses/getUserCourses";
-
+    public final static String GET_MYORDERS_API = "lnrzb/mine/mineOrder";
 
     // 论坛相关===========================
     public final static String GET_HOMR_FORUMS_API = "lnrzb/forum/findAllBoard";

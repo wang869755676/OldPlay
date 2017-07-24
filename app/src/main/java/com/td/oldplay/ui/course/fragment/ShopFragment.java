@@ -136,7 +136,7 @@ public class ShopFragment extends BaseFragment implements
         shopSeach.setOnClickListener(this);
 
         datas = new ArrayList<>();
-        datas = new ArrayList<>();
+        datas.add(new ShopBean());
 
         swipeTarget.setLayoutManager(new LinearLayoutManager(mActivity));
         shopAdapter = new ShopAdapter(mActivity, R.layout.item_shop, datas);

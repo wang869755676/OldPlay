@@ -65,6 +65,7 @@ public class CourseListActivity extends BaseFragmentActivity
     }
 
     private void init() {
+        datas.add(new CourseTypeBean());
         switch (type) {
             case 1:
                 if (TextUtils.isEmpty(titles)) {

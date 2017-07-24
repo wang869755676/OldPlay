@@ -75,7 +75,7 @@
                 android:background="@android:color/white"
                 android:button="@null"
                 android:drawablePadding="5dp"
-                android:drawableRight="@drawable/selector_shop_tri"
+                android:drawableRight="@mipmap/icon_shop_gray"
                 android:text="价格 "
                 android:textColor="@color/tv_red"
                 android:textSize="14sp" />
@@ -104,7 +104,7 @@
                 android:background="@android:color/white"
                 android:button="@null"
                 android:drawablePadding="5dp"
-                android:drawableRight="@drawable/selector_shop_tri"
+                android:drawableRight="@mipmap/icon_shop_gray"
                 android:gravity="center"
                 android:text="积分"
                 android:textColor="@color/tv_red"
@@ -135,7 +135,7 @@
                 android:background="@android:color/white"
                 android:button="@null"
                 android:drawablePadding="5dp"
-                android:drawableRight="@drawable/selector_shop_tri"
+                android:drawableRight="@mipmap/icon_shop_gray"
                 android:text="销量 "
                 android:textColor="@color/tv_red"
                 android:textSize="13sp" />

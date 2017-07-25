@@ -242,7 +242,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.shop.activity.OrdersConfirmActivity" />
-        <activity android:name=".ui.shop.activity.OrderDetailActivity"></activity>
+        <activity android:name=".ui.shop.activity.OrderDetailActivity" />
+        <activity android:name=".ui.shop.activity.ShopTypeListActivity"></activity>
     </application>
 
 </manifest>

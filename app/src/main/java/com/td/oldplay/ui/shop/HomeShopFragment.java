@@ -29,6 +29,7 @@ import com.td.oldplay.ui.SearchActivity;
 import com.td.oldplay.ui.course.HomeCourseFragment;
 import com.td.oldplay.ui.shop.activity.ShopDetailActivity;
 import com.td.oldplay.ui.shop.activity.ShopListActivity;
+import com.td.oldplay.ui.shop.activity.ShopTypeListActivity;
 import com.td.oldplay.ui.window.SeachPopupWindow;
 import com.td.oldplay.utils.GlideUtils;
 import com.td.oldplay.utils.ToastUtil;
@@ -221,14 +222,12 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
         Intent intent = null;
         switch (v.getId()) {
             case R.id.home_shop_green:
-                intent = new Intent(mActivity, ShopListActivity.class);
-                intent.putExtra("type", 1);
+                intent = new Intent(mActivity, ShopTypeListActivity.class);
                 intent.putExtra("goodTypeId", 1);
                 startActivity(intent);
                 break;
             case R.id.home_shop_study:
-                intent = new Intent(mActivity, ShopListActivity.class);
-                intent.putExtra("type", 1);
+                intent = new Intent(mActivity, ShopTypeListActivity.class);
                 intent.putExtra("goodTypeId", 2);
                 startActivity(intent);
                 break;

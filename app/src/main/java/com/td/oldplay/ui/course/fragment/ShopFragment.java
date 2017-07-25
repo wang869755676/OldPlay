@@ -53,7 +53,7 @@ import io.reactivex.disposables.Disposable;
  */
 public class ShopFragment extends BaseFragment implements
         SwipeRefreshLayout.OnRefreshListener, LoadMoreWrapper.OnLoadMoreListener,
-        View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+        View.OnClickListener{
 
 
     @BindView(R.id.shop_seach)
@@ -84,9 +84,6 @@ public class ShopFragment extends BaseFragment implements
     private LoadMoreWrapper adapter;
     private int page = 1;
     private ShopAdapter shopAdapter;
-    private boolean priceup;
-    private boolean sellup;
-    private boolean scoreup;
 
     private int type;
     private int goodType; //1 绿色产品 2教学产品
@@ -95,8 +92,11 @@ public class ShopFragment extends BaseFragment implements
     private int sortType = 0; //排序的类型,0:价格,1:积分,2:销量
     private int sort = 0; //排序方式,0:降序,1:升序
     private boolean priceDec = true;
+    private int priceSort;
     private boolean scoreSell = true;
+    private int scoreSort;
     private boolean sellDec = true;
+    private int sellSort;
     private Drawable greyDrawable;
     private Drawable upDrawable;
     private Drawable downDrawable;
@@ -132,16 +132,26 @@ public class ShopFragment extends BaseFragment implements
     protected void init(View view) {
         callBack = new callBack();
         swipeToLoadLayout.setOnRefreshListener(this);
-        rbPrice.setOnCheckedChangeListener(this);
-        rbScore.setOnCheckedChangeListener(this);
-        rbSell.setOnCheckedChangeListener(this);
         rbPrice.setOnClickListener(this);
         rbScore.setOnClickListener(this);
         rbSell.setOnClickListener(this);
-        shopSeach.setOnClickListener(this);
+        shopSeach.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (type == 1) {
+                    if (popupWindow == null) {
+                        popupWindow = new SeachPopupWindow(mActivity, 1, goodType);
+                    }
+                } else {
+                    if (popupWindow == null) {
+                        popupWindow = new SeachPopupWindow(mActivity, 1);
+                    }
+                }
+                popupWindow.showPopup(v);
+            }
+        });
 
         datas = new ArrayList<>();
-        datas.add(new ShopBean());
 
         swipeTarget.setLayoutManager(new LinearLayoutManager(mActivity));
         shopAdapter = new ShopAdapter(mActivity, R.layout.item_shop, datas);
@@ -196,58 +206,47 @@ public class ShopFragment extends BaseFragment implements
 
     @Override
     public void onClick(View v) {
+        clearDrawable();
         switch (v.getId()) {
-
             case R.id.rb_price:
-                clearDrawable();
                 if (priceDec) {
 
                     priceDec = false;
-                    sort = 1;
+                   priceSort = 1;
                     rbPrice.setCompoundDrawablesWithIntrinsicBounds(null, null, upDrawable, null);
                 } else {
                     priceDec = true;
-                    sort = 0;
+                    priceSort = 0;
                     rbPrice.setCompoundDrawablesWithIntrinsicBounds(null, null, downDrawable, null);
                 }
+                sort = priceSort;
                 break;
             case R.id.rb_score:
                 if (scoreSell) {
                     scoreSell = false;
-                    sort = 1;
+                    scoreSort = 1;
                     rbScore.setCompoundDrawablesWithIntrinsicBounds(null, null, upDrawable, null);
                 } else {
                     scoreSell = true;
-                    sort = 0;
+                    scoreSort = 0;
                     rbScore.setCompoundDrawablesWithIntrinsicBounds(null, null, downDrawable, null);
                 }
+                sort = scoreSort;
                 break;
             case R.id.rb_sell:
 
                 if (sellDec) {
                     sellDec = false;
-                    sort = 1;
+                    sellSort= 1;
                     rbSell.setCompoundDrawablesWithIntrinsicBounds(null, null, upDrawable, null);
                 } else {
                     sellDec = true;
-                    sort = 0;
+                    sellSort = 0;
                     rbSell.setCompoundDrawablesWithIntrinsicBounds(null, null, downDrawable, null);
 
                 }
+                sort=sellSort;
                 break;
-            case R.id.shop_seach:
-                if (type == 1) {
-                    if (popupWindow == null) {
-                        popupWindow = new SeachPopupWindow(mActivity, 1, goodType);
-                    }
-                } else {
-                    if (popupWindow == null) {
-                        popupWindow = new SeachPopupWindow(mActivity, 1);
-                    }
-                }
-                popupWindow.showPopup(v);
-                break;
-
         }
         page = 1;
         getData();
@@ -258,24 +257,6 @@ public class ShopFragment extends BaseFragment implements
         rbSell.setCompoundDrawablesWithIntrinsicBounds(null, null, greyDrawable, null);
         rbScore.setCompoundDrawablesWithIntrinsicBounds(null, null, greyDrawable, null);
 
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()) {
-            case R.id.rb_price:
-                priceup = true;
-                break;
-            case R.id.rb_score:
-                break;
-            case R.id.rb_sell:
-                break;
-            case R.id.shop_seach:
-                Intent intent = new Intent(mActivity, SearchActivity.class);
-                intent.putExtra("type", 1);
-                // intent.putExtra()
-                startActivity(intent);
-        }
     }
 
     private class callBack implements OnResultCallBack<List<ShopBean>> {

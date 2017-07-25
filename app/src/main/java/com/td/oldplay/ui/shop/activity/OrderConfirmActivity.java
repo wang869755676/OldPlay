@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -23,8 +24,10 @@ import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.mine.activity.MyAddressActivity;
 import com.td.oldplay.ui.shop.adapter.GoodAdapter;
+import com.td.oldplay.ui.window.CustomDialog;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
+import com.td.oldplay.widget.password.PasswordInputView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +77,10 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
     private float scoreMoney;
     private List<String> orderIds;
 
+    private CustomDialog customDialog;
+    private PasswordInputView passwordInputView;
+    private View dialogView;
+    private String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +89,27 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
         ButterKnife.bind(this);
         orderBean = (OrderBean) getIntent().getSerializableExtra("model");
         initView();
+        initDialog();
+    }
+
+    private void initDialog() {
+        customDialog = new CustomDialog(mContext);
+        customDialog.setTitle("输入密码");
+        dialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_password, null);
+        passwordInputView = (PasswordInputView) dialogView.findViewById(R.id.password);
+        customDialog.setContanier(dialogView);
+        customDialog.setDialogClick(new CustomDialog.DialogClick() {
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onOk() {
+               password=passwordInputView.getText().toString();
+                // 使用账户支付
+            }
+        });
     }
 
     private void initView() {
@@ -166,6 +194,16 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
                 break;
             case R.id.ortder_confirm:
                 // 调用支付接口
+                switch (payType) {
+                    case 0:
+                        customDialog.show();
+                        break;
+                    case 1: // 微信支付
+                        break;
+                    case 2:  // 支付宝支付
+                        break;
+
+                }
                 break;
         }
 

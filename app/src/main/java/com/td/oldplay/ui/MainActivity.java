@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -16,7 +18,9 @@ import com.td.oldplay.ui.course.HomeCourseFragment;
 import com.td.oldplay.ui.forum.HomeForumFragment;
 import com.td.oldplay.ui.mine.HomeMyFragment;
 import com.td.oldplay.ui.shop.HomeShopFragment;
+import com.td.oldplay.ui.window.CustomDialog;
 import com.td.oldplay.utils.ToastUtil;
+import com.td.oldplay.widget.password.PasswordInputView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +55,6 @@ public class MainActivity extends BaseFragmentActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         init();
-
     }
 
     private void init() {

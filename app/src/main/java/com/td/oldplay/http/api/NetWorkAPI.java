@@ -7,12 +7,12 @@ package com.td.oldplay.http.api;
 public class NetWorkAPI {
 
     /**
-     *  请求的基本路径
+     * 请求的基本路径
      */
-    public static final String BASE_URL ="http://172.16.0.203:8080/" ;
+    public static final String BASE_URL = "http://172.16.0.203:8080/";
 
     /**
-     *  老师数据
+     * 老师数据
      */
     public final static String GET_MORE_THEACHER_LIST = "app/t_students/listTeacherForMore/";
 
@@ -37,12 +37,12 @@ public class NetWorkAPI {
 
     public final static String COURSE_HOT_API = "lnrzb/courses/findHotCourses";
     /**
-     *  课程下的老师
+     * 课程下的老师
      */
     public final static String COURSE_TEACHER_API = "lnrzb/courses/findteacherByCourseId";
 
     /**
-     *  老师所对应的课程
+     * 老师所对应的课程
      */
     public final static String TEACHER_COURSE_API = "lnrzb/courses/findCoursesByUserId";
 
@@ -70,7 +70,7 @@ public class NetWorkAPI {
     public final static String FIND_SHOPBYID_API = "lnrzb/goods/findGoodsByType";
 
     /**
-     *  商品详情
+     * 商品详情
      */
     public final static String SHOP_DETAIL_API = "lnrzb/goods/findGoodsById";
 
@@ -92,6 +92,8 @@ public class NetWorkAPI {
 
     public final static String SEACHER_SHOP_API = "lnrzb/goods/findGoodsByName";
 
+    public final static String GET_SHOPTYPES_API = "lnrzb/goods/findAllgoodsType";
+
     // 地址管理=====================================================
 
     public final static String GET_ADDRESS_API = "lnrzb/address/findAllAddress";
@@ -100,8 +102,8 @@ public class NetWorkAPI {
     public final static String ADD_ADDRESS_API = "lnrzb/address/saveAddress";
     public final static String SET_ADDRESS_API = "lnrzb/address/setDefault";
 
-     // 我的相关==================
-     public final static String GET_MYCONCERNS_API = "lnrzb/userfocus/getUserFocus";
+    // 我的相关==================
+    public final static String GET_MYCONCERNS_API = "lnrzb/userfocus/getUserFocus";
     public final static String GET_MYCOURSES_API = "lnrzb/userCourses/getUserCourses";
     public final static String GET_MYORDERS_API = "lnrzb/mine/mineOrder";
 

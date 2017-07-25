@@ -19,6 +19,7 @@ import com.td.oldplay.bean.RechargeInfo;
 import com.td.oldplay.bean.ShopBean;
 import com.td.oldplay.bean.ShopCarBean;
 import com.td.oldplay.bean.ShopDetail;
+import com.td.oldplay.bean.ShopType;
 import com.td.oldplay.bean.TeacherBean;
 import com.td.oldplay.bean.TeacherDetail;
 import com.td.oldplay.bean.UserBean;
@@ -259,6 +260,9 @@ public class HttpManager {
         toSubscribe(mApiService.searchShop(params), observer);
     }
 
+    public void getShopTypesById(int parentType,Observer<List<ShopType>> observer) {
+        toSubscribe(mApiService.getShopTypesById(parentType), observer);
+    }
     //=============================
 
     public void getAddresse(int page, String id, Observer<List<AddressBean>> observer) {

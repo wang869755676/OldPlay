@@ -18,6 +18,7 @@ import com.td.oldplay.bean.SearchCourse;
 import com.td.oldplay.bean.ShopBean;
 import com.td.oldplay.bean.ShopCarBean;
 import com.td.oldplay.bean.ShopDetail;
+import com.td.oldplay.bean.ShopType;
 import com.td.oldplay.bean.TeacherBean;
 import com.td.oldplay.bean.TeacherDetail;
 import com.td.oldplay.bean.TestBean;
@@ -225,6 +226,9 @@ public interface ApiService {
     Observable<ApiResponse<List<ShopBean>>> searchShop(@FieldMap() HashMap<String, Object> params);
 
 
+    @FormUrlEncoded
+    @POST(NetWorkAPI.GET_SHOPTYPES_API)
+    Observable<ApiResponse<List<ShopType>>> getShopTypesById(@Field("parentType") int parentType);
     //======================================luntan
 
     @POST(NetWorkAPI.GET_HOMR_FORUMS_API)

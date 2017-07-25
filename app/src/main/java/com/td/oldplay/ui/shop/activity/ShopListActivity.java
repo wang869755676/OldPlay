@@ -13,7 +13,7 @@ import com.td.oldplay.widget.CustomTitlebarLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ShopListActivity extends BaseFragmentActivity implements View.OnClickListener{
+public class ShopListActivity extends BaseFragmentActivity implements View.OnClickListener {
 
     @BindView(R.id.title)
     CustomTitlebarLayout title;
@@ -23,6 +23,7 @@ public class ShopListActivity extends BaseFragmentActivity implements View.OnCli
     private int type;
     private int goodType; //1 绿色产品 2教学产品
     private ShopFragment fragment;
+    private String titleStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +31,12 @@ public class ShopListActivity extends BaseFragmentActivity implements View.OnCli
         setContentView(R.layout.activity_shop_list);
         ButterKnife.bind(this);
 
-        type = getIntent().getIntExtra("type",0);
-        goodType=getIntent().getIntExtra("goodTypeId",0);
-        switch (type){
+        type = getIntent().getIntExtra("type", 0);
+        goodType = getIntent().getIntExtra("goodTypeId", 0);
+        titleStr=getIntent().getStringExtra("title");
+        switch (type) {
             case 1:
-                if(goodType==1){
-                    title.setTitle("绿色产品");
-                }else if(goodType==2){
-                    title.setTitle("教学产品");
-                }
+                title.setTitle(titleStr);
                 break;
             case 2:
                 title.setTitle("推荐商品");
@@ -49,13 +47,13 @@ public class ShopListActivity extends BaseFragmentActivity implements View.OnCli
         }
 
         title.setOnLeftListener(this);
-        fragment=new ShopFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.shop_list_container,fragment).commit();
+        fragment = new ShopFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.shop_list_container, fragment).commit();
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.left_text:
                 finish();
                 break;

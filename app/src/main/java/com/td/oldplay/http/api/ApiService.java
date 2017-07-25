@@ -104,6 +104,9 @@ public interface ApiService {
     @FormUrlEncoded
     @POST(NetWorkAPI.COURSE_COMMENT_API)
     Observable<ApiResponse<List<CommentBean>>> getCommentsInTeacher(@Field("page") int page, @Field("teacherId") String userId);
+    @FormUrlEncoded
+    @POST(NetWorkAPI.COURSE_COMMENT_API)
+    Observable<ApiResponse<List<CommentBean>>> getCommentsInTeacher( @Field("teacherId") String userId);
 
 
     @FormUrlEncoded

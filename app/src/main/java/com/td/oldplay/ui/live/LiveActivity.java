@@ -4,13 +4,17 @@ import android.hardware.Camera;
 import android.opengl.GLSurfaceView;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.qiniu.pili.droid.rtcstreaming.RTCAudioInfo;
 import com.qiniu.pili.droid.rtcstreaming.RTCAudioLevelCallback;
@@ -32,10 +36,19 @@ import com.qiniu.pili.droid.streaming.StreamingStateChangedListener;
 import com.qiniu.pili.droid.streaming.WatermarkSetting;
 import com.qiniu.pili.droid.streaming.widget.AspectFrameLayout;
 import com.td.oldplay.R;
-import com.td.oldplay.base.BaseFragmentActivity;
+import com.td.oldplay.bean.CommentBean;
 import com.td.oldplay.bean.MessageEvent;
+import com.td.oldplay.bean.UserBean;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.permission.MPermission;
+import com.td.oldplay.permission.annotation.OnMPermissionDenied;
 import com.td.oldplay.permission.annotation.OnMPermissionGranted;
+import com.td.oldplay.permission.annotation.OnMPermissionNeverAskAgain;
+import com.td.oldplay.permission.util.MPermissionUtil;
+import com.td.oldplay.ui.live.adapter.AvatorAdapter;
+import com.td.oldplay.ui.live.adapter.CommentAdapter;
 import com.td.oldplay.utils.LiveUtils;
 import com.td.oldplay.utils.StreamUtils;
 import com.td.oldplay.utils.ToastUtil;
@@ -44,15 +57,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 /**
  * 直播或连麦的界面
  */
-public class LiveActivity extends LiveBaseActivity {
+public class LiveActivity extends LiveBaseActivity implements View.OnClickListener {
 
     private static final String TAG = "===";
     @BindView(R.id.live_sfv)
@@ -69,6 +84,14 @@ public class LiveActivity extends LiveBaseActivity {
     Button ControlButton;
     @BindView(R.id.content)
     FrameLayout content;
+    @BindView(R.id.live_person_num)
+    TextView livePersonNum;
+    @BindView(R.id.live_lianmai)
+    TextView liveLianmai;
+    @BindView(R.id.live_change)
+    LinearLayout liveChange;
+    @BindView(R.id.live_close)
+    ImageView liveClose;
 
     private RTCMediaStreamingManager mRTCStreamingManager;
     private RTCConferenceOptions options;
@@ -86,14 +109,23 @@ public class LiveActivity extends LiveBaseActivity {
     private boolean mIsInReadyState;// 是否已经准备好
     private String mRoomName = "haha";
 
+
+    private boolean isPermissionGrant;
+    private boolean isComment; //0 显示观看人的头像 1 显示评论记录
+    private AvatorAdapter avatorAdapter;
+    private List<UserBean> userDatas = new ArrayList<>();
+    private CommentAdapter commentAdapter;
+    private List<CommentBean> commentDatas = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        role=getIntent().getIntExtra("role",0);
-        mRoomName=getIntent().getStringExtra("roomName");
-        mRoomName="haha";
+        role = getIntent().getIntExtra("role", 0);
+        mRoomName = getIntent().getStringExtra("roomName");
+        mRoomName = "haha";
+        requestLivePermission(); // 请求权限
         initView();
         initCamer();
         initWater();
@@ -227,10 +259,13 @@ public class LiveActivity extends LiveBaseActivity {
      * 根据角色显示一些控件
      */
     private void initView() {
-        if (role == 0) {
-            // 显示控制连麦
-        } else {
-        }
+        liveChange.setOnClickListener(this);
+        liveClose.setOnClickListener(this);
+        liveLianmai.setOnClickListener(this);
+        avatorAdapter = new AvatorAdapter(mContext, R.layout.item_avator, userDatas);
+        commentAdapter = new CommentAdapter(mContext, R.layout.item_live_comment, commentDatas);
+        liveRvChat.setLayoutManager(new GridLayoutManager(mContext, 4));
+        liveRvChat.setAdapter(avatorAdapter);
     }
 
     /**
@@ -281,7 +316,10 @@ public class LiveActivity extends LiveBaseActivity {
          * Step 10: You must start capture before conference or streaming
          * You will receive `Ready` state callback when capture started success
          */
-        mRTCStreamingManager.startCapture();
+        if(isPermissionGrant){
+            mRTCStreamingManager.startCapture();
+        }
+
         ControlButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -531,7 +569,7 @@ public class LiveActivity extends LiveBaseActivity {
     private RTCUserEventListener mRTCUserEventListener = new RTCUserEventListener() {
         @Override
         public void onUserJoinConference(String remoteUserId) {
-           // 向连麦者发送 连接成功的消息
+            // 向连麦者发送 连接成功的消息
         }
 
         @Override
@@ -666,37 +704,31 @@ public class LiveActivity extends LiveBaseActivity {
             return null;
         }
     };
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         MPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    /***********************
+
+/*    **********************
      * 录音摄像头权限申请
      *******************************/
 
-/*
     @OnMPermissionGranted(LIVE_PERMISSION_REQUEST_CODE)
     public void onLivePermissionGranted() {
-        if (liveType == LiveType.VIDEO_TYPE) {
-            startLiveBgIv.setVisibility(View.GONE);
-        }
-        Toast.makeText(LiveActivity.this, "授权成功", Toast.LENGTH_SHORT).show();
+        ToastUtil.show("授权成功");
         isPermissionGrant = true;
-        getHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startPreview();
-            }
-        }, 50);
+        mRTCStreamingManager.startCapture();
+
     }
 
     @OnMPermissionDenied(LIVE_PERMISSION_REQUEST_CODE)
     public void onLivePermissionDenied() {
         List<String> deniedPermissions = MPermission.getDeniedPermissions(this, LIVE_PERMISSIONS);
         String tip = "您拒绝了权限" + MPermissionUtil.toString(deniedPermissions) + "，无法开启直播";
-        Toast.makeText(LiveActivity.this, tip, Toast.LENGTH_SHORT).show();
+        ToastUtil.show(tip);
     }
 
     @OnMPermissionNeverAskAgain(LIVE_PERMISSION_REQUEST_CODE)
@@ -711,7 +743,57 @@ public class LiveActivity extends LiveBaseActivity {
             sb.append(MPermissionUtil.toString(deniedPermissions));
         }
 
-        Toast.makeText(LiveActivity.this, sb.toString(), Toast.LENGTH_LONG).show();
-    }*/
+        ToastUtil.show(sb.toString());
+    }
 
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.live_close:
+                finish();
+                break;
+            case R.id.live_change:
+                if (isComment) {
+                    liveRvChat.setLayoutManager(new LinearLayoutManager(mContext));
+                    liveRvChat.setAdapter(commentAdapter);
+                    getComments();
+                } else {
+                    liveRvChat.setLayoutManager(new GridLayoutManager(mContext, 3));
+                    liveRvChat.setAdapter(avatorAdapter);
+                    getUsers();
+                }
+                isComment = !isComment;
+                break;
+        }
+
+    }
+
+    private void getComments() {
+        HttpManager.getInstance().getCommentsInTeacher(userId, new HttpSubscriber<List<CommentBean>>(new OnResultCallBack<List<CommentBean>>() {
+
+
+            @Override
+            public void onSuccess(List<CommentBean> commentBeen) {
+                commentDatas.clear();
+                commentDatas.addAll(commentBeen);
+                commentAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+        }));
+    }
+
+    private void getUsers() {
+        userDatas.add(new UserBean());
+        userDatas.add(new UserBean());
+    }
 }

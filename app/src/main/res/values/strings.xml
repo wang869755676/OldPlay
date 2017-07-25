@@ -75,13 +75,9 @@
     </array>
 
     <array name="color">
-        <item>#f47ec2</item>
-        <item>#ff7979</item>
-        <item>#bbd94f</item>
-        <item>#5deed5</item>
-        <item>#ca84ef</item>
-        <item>#5dabef</item>
-        <item>#fad660</item>
-        <item>#f47ec2</item>
+        <item>#FF7979</item>
+        <item>#F47EC2</item>
+        <item>#BBD94F</item>
+        <item>#5DEED5</item>
     </array>
 </resources>

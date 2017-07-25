@@ -31,7 +31,7 @@ public class UserBean  implements Serializable{
     public String phone;
     public String profile;
     public String score;
-    public String uType;
+    public int uType;
     public String userId;
 
 

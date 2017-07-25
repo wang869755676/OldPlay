@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.td.oldplay.MyApplication;
+import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.utils.GlideUtils;
 import com.td.oldplay.utils.SharePreferenceUtil;
 
@@ -20,6 +21,7 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
     public Context mContext;   //吐司的上下文
     protected Context AContext;
     protected String userId;
+    protected UserBean userBean;
     private KProgressHUD hud;
     protected SharePreferenceUtil spUilts;
 
@@ -28,8 +30,9 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mContext = this;
         AContext = getApplicationContext();
-        userId= MyApplication.getInstance().mPreferenceUtil.getUserId();
         spUilts= MyApplication.getInstance().mPreferenceUtil;
+        userId= spUilts.getUserId();
+        userBean = spUilts.getUser();
       /*  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
             window.setFlags(

@@ -178,6 +178,9 @@ public class HttpManager {
     public void getCommentsInTeacher(int page, String id, Observer<List<CommentBean>> observer) {
         toSubscribe(mApiService.getCommentsInTeacher(page, id), observer);
     }
+    public void getCommentsInTeacher(String id, Observer<List<CommentBean>> observer) {
+        toSubscribe(mApiService.getCommentsInTeacher( id), observer);
+    }
 
     public void getHomeCourse(Observer<HomeCourseInfo> observer) {
         toSubscribe(mApiService.getHomeCourse(), observer);

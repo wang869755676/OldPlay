@@ -1,26 +1,26 @@
 package com.td.oldplay.ui;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.ui.course.HomeCourseFragment;
 import com.td.oldplay.ui.forum.HomeForumFragment;
+import com.td.oldplay.ui.live.LiveActivity;
 import com.td.oldplay.ui.mine.HomeMyFragment;
 import com.td.oldplay.ui.shop.HomeShopFragment;
-import com.td.oldplay.ui.window.CustomDialog;
 import com.td.oldplay.utils.ToastUtil;
-import com.td.oldplay.widget.password.PasswordInputView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +41,8 @@ public class MainActivity extends BaseFragmentActivity {
     RadioGroup rgMain;
     @BindView(R.id.main_root)
     LinearLayout mainRoot;
+    @BindView(R.id.live)
+    TextView live;
     private long exitTime = 0;
     private Fragment tabCourse;
     private Fragment tabShop;
@@ -48,6 +50,7 @@ public class MainActivity extends BaseFragmentActivity {
     private Fragment tabMe;
 
     private FragmentTransaction transaction;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,17 @@ public class MainActivity extends BaseFragmentActivity {
     }
 
     private void init() {
+        if (userBean != null && userBean.uType == 1) {
+            live.setVisibility(View.VISIBLE);
+            live.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(mContext, LiveActivity.class));
+                }
+            });
+        } else {
+            live.setVisibility(View.GONE);
+        }
         rgMain.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -93,11 +107,14 @@ public class MainActivity extends BaseFragmentActivity {
                         transaction.show(tabMe).commit();
                         break;
 
+
                 }
 
             }
         });
         rbTab1.setChecked(true);
+
+
     }
 
     private void hideAll(FragmentTransaction transaction) {

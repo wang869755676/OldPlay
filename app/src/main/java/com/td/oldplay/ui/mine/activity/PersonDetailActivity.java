@@ -29,6 +29,7 @@ import java.util.HashMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.tee3.avd.User;
+import io.reactivex.disposables.Disposable;
 import me.zuichu.picker.ImagePicker;
 import me.zuichu.picker.bean.ImageItem;
 import me.zuichu.picker.ui.image.ImageGridActivity;
@@ -152,6 +153,11 @@ public class PersonDetailActivity extends BaseFragmentActivity implements View.O
             @Override
             public void onError(int code, String errorMsg) {
                 ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
             }
         }));
        /* HttpManager.getInstance().modifyUser(params, part, new HttpSubscriber<UserBean>(new OnResultCallBack<UserBean>() {

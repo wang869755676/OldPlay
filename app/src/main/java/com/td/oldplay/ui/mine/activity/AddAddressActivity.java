@@ -22,6 +22,7 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 public class AddAddressActivity extends BaseFragmentActivity implements View.OnClickListener {
 
@@ -86,6 +87,11 @@ public class AddAddressActivity extends BaseFragmentActivity implements View.OnC
                             public void onError(int code, String errorMsg) {
 
                             }
+
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                addDisposable(d);
+                            }
                         }));
                     } else {
                         HttpManager.getInstance().updateAddress(params, new HttpSubscriber<String>(new OnResultCallBack<String>() {
@@ -101,6 +107,11 @@ public class AddAddressActivity extends BaseFragmentActivity implements View.OnC
                             @Override
                             public void onError(int code, String errorMsg) {
 
+                            }
+
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                addDisposable(d);
                             }
                         }));
                     }

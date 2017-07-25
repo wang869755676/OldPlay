@@ -12,6 +12,8 @@ import com.td.oldplay.bean.ForumType;
 import com.td.oldplay.bean.HomeCourseInfo;
 import com.td.oldplay.bean.HomeShopInfo;
 import com.td.oldplay.bean.OrderBean;
+import com.td.oldplay.bean.OrderDetail;
+import com.td.oldplay.bean.RechargeInfo;
 import com.td.oldplay.bean.SearchCourse;
 import com.td.oldplay.bean.ShopBean;
 import com.td.oldplay.bean.ShopCarBean;
@@ -20,9 +22,11 @@ import com.td.oldplay.bean.TeacherBean;
 import com.td.oldplay.bean.TeacherDetail;
 import com.td.oldplay.bean.TestBean;
 import com.td.oldplay.bean.UserBean;
+import com.td.oldplay.bean.WalletBean;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -103,7 +107,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.SEARCH_C_T_API)
-    Observable<ApiResponse<List<CourseTypeBean>>> searchCommentsTeachers(@Field("teacherId") String userId);
+    Observable<ApiResponse<List<CourseTypeBean>>> searchCommentsTeachers(@Field("name") String userId, @Field("type") int type);
 
 
     @POST(NetWorkAPI.HOME_COURS_API)
@@ -120,15 +124,16 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.CONCERN_TEACHER_API)
-    Observable<ApiResponse<String>> concernTeacher(@Field("userId") String userId,@Field("teacherId") String teacherId);
+    Observable<ApiResponse<String>> concernTeacher(@Field("userId") String userId, @Field("teacherId") String teacherId);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.COMMENT_TEACHER_API)
-    Observable<ApiResponse<String>> commentTeacher(@Field("userId") String userId,@Field("teacherId") String teacherId,@Field("content") String content);
+    Observable<ApiResponse<String>> commentTeacher(@Field("userId") String userId, @Field("teacherId") String teacherId, @Field("content") String content);
 
     @FormUrlEncoded
-    @POST(NetWorkAPI.COMMENT_TEACHER_API)
-    Observable<ApiResponse<Integer>> isConcernTeacher(@Field("userId") String userId,@Field("teacherId") String teacherId);
+    @POST(NetWorkAPI.IS_TEACHER_API)
+    Observable<ApiResponse<Integer>> isConcernTeacher(@Field("userId") String userId, @Field("teacherId") String teacherId);
+
     // =================商品============
     @FormUrlEncoded
     @POST(NetWorkAPI.FIND_SHOPBYID_API)
@@ -145,10 +150,6 @@ public interface ApiService {
     @POST(NetWorkAPI.SHOP_DISCOUNT_API)
     Observable<ApiResponse<List<ShopBean>>> getShopDiscounts(@Field("page") int page, @Field("type") int type, @Field("sort") int sort);
 
-    @FormUrlEncoded
-    @POST(NetWorkAPI.SHOP_COMMENT_API)
-    Observable<ApiResponse<List<CommentBean>>> getCommentsInShop(@Field("page") int page, @Field("goodsId") String id);
-
 
     @FormUrlEncoded
     @POST(NetWorkAPI.SHOP_DETAIL_API)
@@ -163,7 +164,12 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.CREATE_ORDER_CAR_API)
-    Observable<ApiResponse<List<OrderBean>>> createOrderCars(@Field("cartIds")List<String> carIds,@Field("userId")String userId);
+    Observable<ApiResponse<List<OrderBean>>> createOrderCars(@Field("cartIds") List<String> carIds, @Field("userId") String userId);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.APPLY_SCORE_API)
+    Observable<ApiResponse<Float>> applyScore(@Field("userId") String userId, @Field("orderIds") List<String> orderIds);
+
 
     @FormUrlEncoded
     @POST(NetWorkAPI.CREATE_ORDER_API)
@@ -212,7 +218,11 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.GET_MYORDERS_API)
-    Observable<ApiResponse<List<OrderBean>>> getMyOrders(@Field("userId") String id,@Field("page") int page);
+    Observable<ApiResponse<List<OrderBean>>> getMyOrders(@Field("userId") String id, @Field("page") int page);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.SEACHER_SHOP_API)
+    Observable<ApiResponse<List<ShopBean>>> searchShop(@FieldMap() HashMap<String, Object> params);
 
 
     //======================================luntan
@@ -256,4 +266,33 @@ public interface ApiService {
     @Multipart
     @POST(NetWorkAPI.POST_FORUMS_VOICE_API)
     Observable<ApiResponse<String>> postForumVoicec(@PartMap() HashMap<String, RequestBody> maps);
+
+
+    //====================
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.GET_MYWALLET_API)
+    Observable<ApiResponse<WalletBean>> getMyWallets(@FieldMap() HashMap<String, Object> maps);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.MY_WALLET_DETAIL_API)
+    Observable<ApiResponse<RechargeInfo>> walletDetail(@Field("id") String id);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.GET_FORUM_API)
+    Observable<ApiResponse<List<ForumBean>>> getMyForums(@Field("userId") String userId, @Field("page") int page);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.FEED_BACK_API)
+    Observable<ApiResponse<String>> feedBack(@Field("userId") String userId, @Field("content") String content);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.COMMENT_SHOP_API)
+    Observable<ApiResponse<String>> commentShop(@Field("userId") String userId, @Field("goodsId") List<String> goodsId, @Field("content") List<String> content);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.ORDER_DETAIL_API)
+    Observable<ApiResponse<OrderDetail>> orderDetails(@Field("orderId") String orderId);
+
+
 }

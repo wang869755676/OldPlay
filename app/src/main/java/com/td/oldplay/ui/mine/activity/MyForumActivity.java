@@ -13,8 +13,13 @@ import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.ForumBean;
+import com.td.oldplay.contants.MContants;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.forum.activity.FourmDetailActivity;
 import com.td.oldplay.ui.forum.adapter.ForumListAdapter;
+import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 
 import java.util.ArrayList;
@@ -22,6 +27,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 public class MyForumActivity extends BaseFragmentActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, LoadMoreWrapper.OnLoadMoreListener {
 
@@ -36,7 +42,7 @@ public class MyForumActivity extends BaseFragmentActivity implements View.OnClic
     private List<ForumBean> datas = new ArrayList<>();
     private ForumListAdapter listAdapter;
     private LoadMoreWrapper adapter;
-    private int page = 0;
+    private int page = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +66,9 @@ public class MyForumActivity extends BaseFragmentActivity implements View.OnClic
         listAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                startActivity(new Intent(AContext, FourmDetailActivity.class));
+                Intent intent = new Intent(AContext, FourmDetailActivity.class);
+                intent.putExtra("id", datas.get(position).topicId);
+                startActivity(intent);
             }
 
             @Override
@@ -68,6 +76,45 @@ public class MyForumActivity extends BaseFragmentActivity implements View.OnClic
                 return false;
             }
         });
+
+        getData();
+    }
+
+    private void getData() {
+        HttpManager.getInstance().getMyForums(userId, page, new HttpSubscriber<List<ForumBean>>(new OnResultCallBack<List<ForumBean>>() {
+
+            @Override
+            public void onSuccess(List<ForumBean> forumBeen) {
+                swipeLayout.setRefreshing(false);
+                if (forumBeen != null && forumBeen.size() > 0) {
+                    if (page == 1) {
+                        datas.clear();
+                        if (forumBeen.size() >= MContants.PAGENUM) {
+                            adapter.setLoadMoreView(R.layout.default_loading);
+                        }
+
+                    }
+                    datas.addAll(forumBeen);
+                } else {
+                    if (page > 1) {
+                        adapter.setLoadMoreView(0);
+                        ToastUtil.show("没有更多数据了");
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                ToastUtil.show(errorMsg);
+                swipeLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
+        }));
     }
 
     @Override
@@ -83,11 +130,13 @@ public class MyForumActivity extends BaseFragmentActivity implements View.OnClic
 
     @Override
     public void onRefresh() {
-        page = 0;
+        page = 1;
+        getData();
     }
 
     @Override
     public void onLoadMoreRequested() {
         page++;
+        getData();
     }
 }

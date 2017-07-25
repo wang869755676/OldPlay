@@ -31,6 +31,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 public class TeacherListActivity extends BaseFragmentActivity
         implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, LoadMoreWrapper.OnLoadMoreListener {
@@ -116,6 +117,11 @@ public class TeacherListActivity extends BaseFragmentActivity
             public void onError(int code, String errorMsg) {
                 swipeToLoadLayout.setRefreshing(false);
                 ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
             }
         }));
 

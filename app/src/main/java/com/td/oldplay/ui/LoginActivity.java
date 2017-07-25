@@ -34,6 +34,7 @@ import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.tee3.avd.User;
+import io.reactivex.disposables.Disposable;
 
 public class LoginActivity extends BaseFragmentActivity implements View.OnClickListener {
 
@@ -144,6 +145,11 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
             @Override
             public void onError(int code, String errorMsg) {
                 ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
             }
         }));
 

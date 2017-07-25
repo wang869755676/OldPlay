@@ -26,6 +26,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.disposables.Disposable;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,6 +73,11 @@ public class IntruceFragment extends BaseFragment {
             @Override
             public void onError(int code, String errorMsg) {
 
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
             }
         }));
     }

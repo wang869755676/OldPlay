@@ -46,6 +46,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 public class ShopDetailActivity extends BaseFragmentActivity implements View.OnClickListener {
 
@@ -188,6 +189,11 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
             public void onError(int code, String errorMsg) {
 
             }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
         }));
     }
 
@@ -231,7 +237,7 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
 
                         break;
                 }
-                GlideUtils.setImage(mContext, bean.goods.picUrl, shopDetailBanner);
+                GlideUtils.setImage(AContext, bean.goods.picUrl, shopDetailBanner);
                 if (bean.goodsImageList != null) {
                     detailFragment.refreshData(bean.goodsImageList);
                 }
@@ -322,6 +328,11 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
                 hideLoading();
                 ToastUtil.show(errorMsg);
             }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
         }));
 
     }
@@ -343,6 +354,11 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
             @Override
             public void onError(int code, String errorMsg) {
                 ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
             }
         }));
     }

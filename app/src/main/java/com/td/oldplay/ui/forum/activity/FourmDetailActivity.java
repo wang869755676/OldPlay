@@ -43,6 +43,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+import io.reactivex.disposables.Disposable;
 
 public class FourmDetailActivity extends BaseFragmentActivity implements
         View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, LoadMoreWrapper.OnLoadMoreListener {
@@ -156,6 +157,11 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
             public void onError(int code, String errorMsg) {
 
             }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
         });
         commentSubscriber = new HttpSubscriber<>(new OnResultCallBack<List<CommentBean>>() {
 
@@ -186,6 +192,11 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
             public void onError(int code, String errorMsg) {
                 swipeLayout.setRefreshing(false);
                 ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
             }
         });
         getDetails();
@@ -268,6 +279,11 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
                         @Override
                         public void onError(int code, String errorMsg) {
 
+                        }
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            addDisposable(d);
                         }
                     }));
                 }

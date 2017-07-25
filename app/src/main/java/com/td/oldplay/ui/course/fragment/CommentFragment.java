@@ -28,6 +28,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.disposables.Disposable;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -117,6 +118,11 @@ public class CommentFragment extends BaseFragment implements SwipeRefreshLayout.
             public void onError(int code, String errorMsg) {
                 swipeToLoadLayout.setRefreshing(false);
                 ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
             }
         }));
     }

@@ -14,12 +14,15 @@ import com.td.oldplay.bean.ForumType;
 import com.td.oldplay.bean.HomeCourseInfo;
 import com.td.oldplay.bean.HomeShopInfo;
 import com.td.oldplay.bean.OrderBean;
+import com.td.oldplay.bean.OrderDetail;
+import com.td.oldplay.bean.RechargeInfo;
 import com.td.oldplay.bean.ShopBean;
 import com.td.oldplay.bean.ShopCarBean;
 import com.td.oldplay.bean.ShopDetail;
 import com.td.oldplay.bean.TeacherBean;
 import com.td.oldplay.bean.TeacherDetail;
 import com.td.oldplay.bean.UserBean;
+import com.td.oldplay.bean.WalletBean;
 import com.td.oldplay.contants.MContants;
 import com.td.oldplay.http.Converter.CustomGsonConverterFactory;
 import com.td.oldplay.http.api.ApiResponse;
@@ -180,8 +183,8 @@ public class HttpManager {
     }
 
 
-    public void searchCommentsTeachers(String id, Observer<List<CourseTypeBean>> observer) {
-        toSubscribe(mApiService.searchCommentsTeachers(id), observer);
+    public void searchCommentsTeachers(String name,int type, Observer<List<CourseTypeBean>> observer) {
+        toSubscribe(mApiService.searchCommentsTeachers(name,type), observer);
     }
 
     public void getShopInTeacher(String id, int page, int scortType, int scort, Observer<List<ShopBean>> observer) {
@@ -248,6 +251,13 @@ public class HttpManager {
         toSubscribe(mApiService.getHomeShop(), observer);
     }
 
+    public void applyScore(String userId,List<String> orderIds,Observer<Float> observer) {
+        toSubscribe(mApiService.applyScore(userId,orderIds), observer);
+    }
+
+    public void searchShop(HashMap<String,Object> params,Observer<List<ShopBean>> observer) {
+        toSubscribe(mApiService.searchShop(params), observer);
+    }
 
     //=============================
 
@@ -317,5 +327,31 @@ public class HttpManager {
 
     public void postForumVoicec(HashMap<String, RequestBody> params, Observer<String> observer) {
         toSubscribe(mApiService.postForumVoicec(params), observer);
+    }
+
+
+
+
+    public void getMyWallets(HashMap<String, Object> params, Observer<WalletBean> observer) {
+        toSubscribe(mApiService.getMyWallets(params), observer);
+    }
+
+    public void walletDetail(String id, Observer<RechargeInfo> observer) {
+        toSubscribe(mApiService.walletDetail(id), observer);
+    }
+
+    public void getMyForums(String userid,int page, Observer<List<ForumBean>> observer) {
+        toSubscribe(mApiService.getMyForums(userid,page), observer);
+    }
+    public void feedBack(String userid,String content, Observer<String> observer) {
+        toSubscribe(mApiService.feedBack(userid,content), observer);
+    }
+
+    public void commentShop(String userid,List<String> goodId,List<String>  content, Observer<String> observer) {
+        toSubscribe(mApiService.commentShop(userid,goodId,content), observer);
+    }
+
+    public void orderDetails(String orderId, Observer<OrderDetail> observer) {
+        toSubscribe(mApiService.orderDetails(orderId), observer);
     }
 }

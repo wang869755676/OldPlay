@@ -31,6 +31,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 public class CourseListActivity extends BaseFragmentActivity
         implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, LoadMoreWrapper.OnLoadMoreListener {
@@ -65,7 +66,6 @@ public class CourseListActivity extends BaseFragmentActivity
     }
 
     private void init() {
-        datas.add(new CourseTypeBean());
         switch (type) {
             case 1:
                 if (TextUtils.isEmpty(titles)) {
@@ -172,6 +172,11 @@ public class CourseListActivity extends BaseFragmentActivity
         public void onError(int code, String errorMsg) {
             ToastUtil.show(errorMsg);
             swipeToLoadLayout.setRefreshing(false);
+        }
+
+        @Override
+        public void onSubscribe(Disposable d) {
+            addDisposable(d);
         }
     }
 

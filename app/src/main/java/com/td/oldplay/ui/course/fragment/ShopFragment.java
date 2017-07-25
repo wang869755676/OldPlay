@@ -35,6 +35,8 @@ import com.td.oldplay.ui.course.activity.CourseListActivity;
 import com.td.oldplay.ui.course.adapter.CourserAdapter;
 import com.td.oldplay.ui.course.adapter.ShopAdapter;
 import com.td.oldplay.ui.shop.activity.ShopDetailActivity;
+import com.td.oldplay.ui.window.SeachPopupWindow;
+import com.td.oldplay.ui.window.SharePopupWindow;
 import com.td.oldplay.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -44,6 +46,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -97,6 +100,8 @@ public class ShopFragment extends BaseFragment implements
     private Drawable greyDrawable;
     private Drawable upDrawable;
     private Drawable downDrawable;
+
+    private SeachPopupWindow popupWindow;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -205,7 +210,7 @@ public class ShopFragment extends BaseFragment implements
                     sort = 0;
                     rbPrice.setCompoundDrawablesWithIntrinsicBounds(null, null, downDrawable, null);
                 }
-
+                break;
             case R.id.rb_score:
                 if (scoreSell) {
                     scoreSell = false;
@@ -216,6 +221,7 @@ public class ShopFragment extends BaseFragment implements
                     sort = 0;
                     rbScore.setCompoundDrawablesWithIntrinsicBounds(null, null, downDrawable, null);
                 }
+                break;
             case R.id.rb_sell:
 
                 if (sellDec) {
@@ -228,6 +234,18 @@ public class ShopFragment extends BaseFragment implements
                     rbSell.setCompoundDrawablesWithIntrinsicBounds(null, null, downDrawable, null);
 
                 }
+                break;
+            case R.id.shop_seach:
+                if (type == 1) {
+                    if (popupWindow == null) {
+                        popupWindow = new SeachPopupWindow(mActivity, 1, goodType);
+                    }
+                } else {
+                    if (popupWindow == null) {
+                        popupWindow = new SeachPopupWindow(mActivity, 1);
+                    }
+                }
+                popupWindow.showPopup(v);
                 break;
 
         }
@@ -287,6 +305,11 @@ public class ShopFragment extends BaseFragment implements
         public void onError(int code, String errorMsg) {
             ToastUtil.show(errorMsg);
             swipeToLoadLayout.setRefreshing(false);
+        }
+
+        @Override
+        public void onSubscribe(Disposable d) {
+            addDisposable(d);
         }
     }
 }

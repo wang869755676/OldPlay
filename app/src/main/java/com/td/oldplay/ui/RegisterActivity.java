@@ -21,6 +21,7 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 public class RegisterActivity extends BaseFragmentActivity implements View.OnClickListener {
 
@@ -107,6 +108,11 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
                         public void onError(int code, String errorMsg) {
                             ToastUtil.show(errorMsg);
                         }
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            addDisposable(d);
+                        }
                     }));
                 } else {
                     ToastUtil.show("手机格式不正确");
@@ -130,6 +136,11 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
                 @Override
                 public void onError(int code, String errorMsg) {
                     ToastUtil.show(errorMsg);
+                }
+
+                @Override
+                public void onSubscribe(Disposable d) {
+                    addDisposable(d);
                 }
             }));
         }

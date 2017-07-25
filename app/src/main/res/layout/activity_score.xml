@@ -13,17 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/titlebar_height"></com.td.oldplay.widget.CustomTitlebarLayout>
 
-    <EditText
-        android:id="@+id/score_ed"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
         android:layout_width="match_parent"
-        android:layout_height="159dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/white"
-        android:gravity="start"
-        android:padding="10dp"
-        android:text="宝贝满足你的期待吗？说说你的使用心得，分享给想买的他们吧"
-        android:textColor="@color/home_gray"
-        android:textSize="12sp" />
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+
 
     <Button
         android:id="@+id/score_send"

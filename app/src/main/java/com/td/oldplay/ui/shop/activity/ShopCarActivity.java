@@ -33,6 +33,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 public class ShopCarActivity extends BaseFragmentActivity
         implements SwipeRefreshLayout.OnRefreshListener,
@@ -69,8 +70,6 @@ public class ShopCarActivity extends BaseFragmentActivity
     }
 
     private void initView() {
-        datas.add(new ShopCarBean());
-        datas.add(new ShopCarBean());
         title.setTitle("购物车");
         title.setOnLeftListener(this);
         swipeToLoadLayout.setOnRefreshListener(this);
@@ -119,6 +118,11 @@ public class ShopCarActivity extends BaseFragmentActivity
             public void onError(int code, String errorMsg) {
                 swipeToLoadLayout.setRefreshing(false);
                 ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
             }
         }));
     }
@@ -256,6 +260,11 @@ public class ShopCarActivity extends BaseFragmentActivity
             @Override
             public void onError(int code, String errorMsg) {
                 ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
             }
         }));
     }

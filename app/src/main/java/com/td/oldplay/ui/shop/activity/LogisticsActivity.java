@@ -12,6 +12,7 @@ import com.td.oldplay.bean.LogisticsBean;
 import com.td.oldplay.ui.shop.adapter.LogisticsAdapter;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -26,7 +27,7 @@ public class LogisticsActivity extends BaseFragmentActivity implements SwipeRefr
     @BindView(R.id.swipeLayout)
     SwipeRefreshLayout swipeLayout;
     private LogisticsAdapter adapter;
-    private List<LogisticsBean> datas;
+    private List<LogisticsBean> datas=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

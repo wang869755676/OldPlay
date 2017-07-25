@@ -30,6 +30,7 @@ import com.td.oldplay.ui.SearchActivity;
 import com.td.oldplay.ui.course.activity.CourseListActivity;
 import com.td.oldplay.ui.course.activity.TeacherListActivity;
 import com.td.oldplay.ui.course.adapter.CoureseTypeAdapter;
+import com.td.oldplay.ui.window.SeachPopupWindow;
 import com.td.oldplay.utils.GlideUtils;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustPagerTransformer;
@@ -44,6 +45,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.disposables.Disposable;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -88,6 +90,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
     private Adapter hotAdapter;
     private CoureseTypeAdapter typeAdapter;
 
+    private SeachPopupWindow popupWindow;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -222,6 +225,11 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
                 swipeLayout.setRefreshing(false);
                 ToastUtil.show(errorMsg);
             }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
         }));
     }
 
@@ -265,10 +273,15 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
             case R.id.left_text:
                 break;
             case R.id.right_text:
-                intent = new Intent(mActivity, SearchActivity.class);
+                if(popupWindow==null)
+                {
+                    popupWindow=new SeachPopupWindow(mActivity,1);
+                }
+                popupWindow.showPopup(v);
+                /*intent = new Intent(mActivity, SearchActivity.class);
                 intent.putExtra("type", 0);
                 // intent.putExtra()
-                startActivity(intent);
+                startActivity(intent);*/
                 break;
 
         }

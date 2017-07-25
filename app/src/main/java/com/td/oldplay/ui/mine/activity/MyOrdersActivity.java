@@ -16,6 +16,7 @@ import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.AddressBean;
 import com.td.oldplay.bean.GoodBean;
 import com.td.oldplay.bean.OrderBean;
+import com.td.oldplay.bean.OrderDetail;
 import com.td.oldplay.bean.TeacherBean;
 import com.td.oldplay.contants.MContants;
 import com.td.oldplay.http.HttpManager;
@@ -25,6 +26,7 @@ import com.td.oldplay.ui.course.activity.TeacherDetailActivity;
 import com.td.oldplay.ui.course.adapter.TeacherAdapter;
 import com.td.oldplay.ui.mine.adapter.OrderAdapter;
 import com.td.oldplay.ui.shop.activity.LogisticsActivity;
+import com.td.oldplay.ui.shop.activity.OrderDetailActivity;
 import com.td.oldplay.ui.shop.activity.ScoreActivity;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
@@ -34,6 +36,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 import retrofit2.http.HTTP;
 
 public class MyOrdersActivity extends BaseFragmentActivity
@@ -70,7 +73,7 @@ public class MyOrdersActivity extends BaseFragmentActivity
         title.setOnLeftListener(this);
         swipeToLoadLayout.setOnRefreshListener(this);
         swipeTarget.setLayoutManager(new LinearLayoutManager(mContext));
-        OrderBean bean = new OrderBean();
+      /*  OrderBean bean = new OrderBean();
         List<GoodBean> goodBeen = new ArrayList<>();
         goodBeen.add(new GoodBean());
         goodBeen.add(new GoodBean());
@@ -78,7 +81,7 @@ public class MyOrdersActivity extends BaseFragmentActivity
         bean.orderDetails = goodBeen;
         datas.add(bean);
         datas.add(new OrderBean());
-        datas.add(new OrderBean());
+        datas.add(new OrderBean());*/
 
         orderAdapter = new OrderAdapter(mContext, R.layout.item_mine_order, datas);
         orderAdapter.setActionListener(this);
@@ -90,6 +93,9 @@ public class MyOrdersActivity extends BaseFragmentActivity
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 // startActivity(new Intent(mContext, TeacherDetailActivity.class));
+                Intent intent=new Intent(mContext, OrderDetailActivity.class);
+                intent.putExtra("id",datas.get(position).orderId);
+                startActivity(intent);
             }
 
             @Override
@@ -101,7 +107,7 @@ public class MyOrdersActivity extends BaseFragmentActivity
     }
 
     private void getData() {
-        HttpManager.getInstance().getMyOrders(userId,page,new HttpSubscriber<List<OrderBean>>(new OnResultCallBack<List<OrderBean>>() {
+        HttpManager.getInstance().getMyOrders(userId, page, new HttpSubscriber<List<OrderBean>>(new OnResultCallBack<List<OrderBean>>() {
 
 
             @Override
@@ -131,6 +137,11 @@ public class MyOrdersActivity extends BaseFragmentActivity
                 swipeToLoadLayout.setRefreshing(false);
                 ToastUtil.show(errorMsg);
             }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
         }));
 
     }
@@ -154,14 +165,16 @@ public class MyOrdersActivity extends BaseFragmentActivity
 
     @Override
     public void onAction(int action, int postion, OrderBean item) {
-        Intent intent=null;
+        Intent intent = null;
         switch (action) {
             case 1:
-                intent=new Intent(mContext, ScoreActivity.class);
+                intent = new Intent(mContext, LogisticsActivity.class);
+                intent.putExtra("id", item.orderId);
                 startActivity(intent);
                 break;
             case 2:
-                intent=new Intent(mContext, LogisticsActivity.class);
+                intent = new Intent(mContext, ScoreActivity.class);
+                intent.putExtra("model", item.orderDetails);
                 startActivity(intent);
                 break;
             case 3:

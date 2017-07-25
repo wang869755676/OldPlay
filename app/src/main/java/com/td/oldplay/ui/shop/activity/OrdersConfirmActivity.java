@@ -34,6 +34,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 public class OrdersConfirmActivity extends BaseFragmentActivity implements View.OnClickListener {
 
@@ -74,6 +75,8 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
 
     private int payType; // 支付的类型
     private float totalMoney;
+    private float scoreMoney;
+    private List<String> orderIds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,17 +112,7 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
                 }
             }
         });
-        acore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    // ortderTotal.setText("￥ "+(orderBean.amount_payable-scoreMoney) );
-                    // 请求积分后的数据
-                } else {
-                    //  ortderTotal.setText("￥ "+(orderBean.amount_payable) );
-                }
-            }
-        });
+
         getData();
     }
 
@@ -146,6 +139,11 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
                 hideLoading();
                 ToastUtil.show(errorMsg);
             }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
         }));
     }
 
@@ -164,10 +162,26 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
         } else {
             acore.setVisibility(View.GONE);
         }
-        for(int i=0;i<datas.size();i++){
-            totalMoney+=datas.get(i).amount_paid;
-            ortderTotal.setText("￥ "+totalMoney);
+        orderIds = new ArrayList<>();
+        for (int i = 0; i < datas.size(); i++) {
+            orderIds.add(datas.get(i).orderId);
+            totalMoney += datas.get(i).amount_paid;
+            ortderTotal.setText("￥ " + totalMoney);
         }
+        acore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    if (scoreMoney != 0) {
+                        ortderTotal.setText("￥ " + scoreMoney);
+                    } else if (orderIds != null) {
+                        HttpManager.getInstance().applyScore(userId, orderIds, scoreSubcriber);
+                    }
+                } else {
+                    ortderTotal.setText("￥ " + totalMoney);
+                }
+            }
+        });
     }
 
     @Override
@@ -224,4 +238,27 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
 
         }
     }
+
+    private HttpSubscriber<Float> scoreSubcriber = new HttpSubscriber<>(new OnResultCallBack<Float>() {
+
+
+        @Override
+        public void onSuccess(Float aFloat) {
+            scoreMoney = aFloat;
+            if (ortderTotal != null) {
+                ortderTotal.setText("￥ " + aFloat);
+            }
+
+        }
+
+        @Override
+        public void onError(int code, String errorMsg) {
+            ToastUtil.show(errorMsg);
+        }
+
+        @Override
+        public void onSubscribe(Disposable d) {
+            addDisposable(d);
+        }
+    });
 }

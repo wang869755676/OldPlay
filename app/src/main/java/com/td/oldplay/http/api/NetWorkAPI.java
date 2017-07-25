@@ -87,6 +87,11 @@ public class NetWorkAPI {
 
     public final static String CREATE_ORDER_CAR_API = "lnrzb/order/createOrder";
 
+
+    public final static String APPLY_SCORE_API = "lnrzb/order/employScore";
+
+    public final static String SEACHER_SHOP_API = "lnrzb/goods/findGoodsByName";
+
     // 地址管理=====================================================
 
     public final static String GET_ADDRESS_API = "lnrzb/address/findAllAddress";
@@ -99,6 +104,19 @@ public class NetWorkAPI {
      public final static String GET_MYCONCERNS_API = "lnrzb/userfocus/getUserFocus";
     public final static String GET_MYCOURSES_API = "lnrzb/userCourses/getUserCourses";
     public final static String GET_MYORDERS_API = "lnrzb/mine/mineOrder";
+
+    public final static String COMMENT_SHOP_API = "lnrzb/mine/sendGoodsComment";
+
+    public final static String GET_MYWALLET_API = "lnrzb/mine/myPurse";
+
+    public final static String ORDER_DETAIL_API = "lnrzb/mine/mineOrderDetail";
+
+
+    public final static String GET_FORUM_API = "lnrzb/mine/findMineTopic";
+
+    public final static String FEED_BACK_API = "lnrzb/mine/feedbackPropose";
+
+    public final static String MY_WALLET_DETAIL_API = "lnrzb/mine/findRechargeSetById";
 
     // 论坛相关===========================
     public final static String GET_HOMR_FORUMS_API = "lnrzb/forum/findAllBoard";

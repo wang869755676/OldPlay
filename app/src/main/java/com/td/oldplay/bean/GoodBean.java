@@ -23,16 +23,19 @@ public class GoodBean implements Serializable{
      */
 
     public String color;
-    public int goodsId;
+    public String goodsId;
     public String goodsName;
     public GroupBuy groupBuy;
     public int id;
     public MarkDownBean markDown;
     public int number;
-    public int orderId;
+    public String orderId;
     public float price;
     public String size;
     public String goodsImageUrl;
+
+
+    public String comment;
 
 
 }

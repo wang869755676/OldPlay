@@ -13,6 +13,9 @@ import com.td.oldplay.MyApplication;
 import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.utils.SharePreferenceUtil;
 
+import io.reactivex.disposables.Disposable;
+import io.reactivex.internal.disposables.ListCompositeDisposable;
+
 /**
  *
  */
@@ -75,4 +78,32 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
+
+    // 取消请求处理
+    private ListCompositeDisposable listCompositeDisposable = new ListCompositeDisposable();
+
+
+    protected void addDisposable(Disposable disposable) {
+        if (disposable != null && !disposable.isDisposed()) {
+            listCompositeDisposable.add(disposable);
+        }
+    }
+
+    protected void reDisposable(Disposable disposable) {
+        if (disposable != null) {
+            listCompositeDisposable.remove(disposable);
+        }
+    }
+
+    protected void clear() {
+        if (!listCompositeDisposable.isDisposed()) {
+            listCompositeDisposable.clear();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        clear();
+        super.onDestroy();
+    }
 }

@@ -41,8 +41,8 @@ public class SearchActivity extends BaseFragmentActivity {
     private ShopAdapter shopAdapter;
     private CourserListAdapter courserAdapter;
     private SearchCourse searchCourse;
-    private List<TeacherBean> teacherBeens=new ArrayList<>();
-    private List<CourseTypeBean> courseTypeBeens=new ArrayList<>();
+    private List<TeacherBean> teacherBeens = new ArrayList<>();
+    private List<CourseTypeBean> courseTypeBeens = new ArrayList<>();
 
 
     @Override
@@ -62,7 +62,9 @@ public class SearchActivity extends BaseFragmentActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(s!=null){
+                if (s == null || "".equals(s)) {
+                    seachRecycler.setVisibility(View.GONE);
+                } else {
                     search(s.toString());
                 }
 
@@ -70,9 +72,7 @@ public class SearchActivity extends BaseFragmentActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s == null || "".equals(s)) {
-                    seachRecycler.setVisibility(View.GONE);
-                }
+
             }
         });
     }
@@ -80,7 +80,7 @@ public class SearchActivity extends BaseFragmentActivity {
     //搜索数据
     private void search(String s) {
         if (type == 0) {
-            HttpManager.getInstance().searchCommentsTeachers(s, new HttpSubscriber<List<CourseTypeBean>>(new OnResultCallBack<List<CourseTypeBean>>() {
+          /*  HttpManager.getInstance().searchCommentsTeachers(s, new HttpSubscriber<List<CourseTypeBean>>(new OnResultCallBack<List<CourseTypeBean>>() {
 
 
                 @Override
@@ -97,7 +97,7 @@ public class SearchActivity extends BaseFragmentActivity {
                 public void onError(int code, String errorMsg) {
 
                 }
-            }));
+            }));*/
         } else if (type == 1) {
 
         }

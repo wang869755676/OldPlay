@@ -27,6 +27,7 @@ import com.td.oldplay.ui.mine.activity.MyOrdersActivity;
 import com.td.oldplay.ui.mine.activity.MyPasswordActivity;
 import com.td.oldplay.ui.mine.activity.MyWalletActivity;
 import com.td.oldplay.ui.mine.activity.PersonDetailActivity;
+import com.td.oldplay.ui.window.SharePopupWindow;
 import com.td.oldplay.utils.GlideUtils;
 import com.td.oldplay.widget.CircleImageView;
 import com.td.oldplay.widget.CustomTitlebarLayout;
@@ -146,6 +147,8 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
     @BindView(R.id.go_about)
     ImageView goAbout;
 
+    private SharePopupWindow popupWindow;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -177,7 +180,7 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
         if (userBean != null) {
             GlideUtils.setAvatorImage(mActivity, userBean.avatar, mineUserHeadImage);
             mineNickname.setText(userBean.nickName);
-            mineScoree.setText("积分: "+userBean.score);
+            mineScoree.setText("积分: " + userBean.score);
         }
 
     }
@@ -186,6 +189,8 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
     protected void init(View view) {
         title.setTitle("我的");
         title.setLeftGone();
+        title.setRightImageResource(R.mipmap.icon_shop_share);
+        title.setOnRightListener(this);
         mimeInfo.setOnClickListener(this);
         mineAddress.setOnClickListener(this);
         mineClass.setOnClickListener(this);
@@ -250,8 +255,14 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
                 break;
             case R.id.mine_user_head_image:
                 intent = new Intent(mActivity, PersonDetailActivity.class);
-                intent.putExtra("model",userBean);
+                intent.putExtra("model", userBean);
                 startActivity(intent);
+                break;
+            case R.id.right_text:
+                if (popupWindow == null) {
+                    popupWindow = new SharePopupWindow(mActivity, "", "", "", "");
+                }
+                popupWindow.showPopup(v);
                 break;
         }
     }

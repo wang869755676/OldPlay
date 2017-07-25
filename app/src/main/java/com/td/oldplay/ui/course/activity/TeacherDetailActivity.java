@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -34,6 +35,9 @@ import com.td.oldplay.base.EventMessage;
 import com.td.oldplay.base.adapter.BasePagerAdapter;
 import com.td.oldplay.bean.CourseBean;
 import com.td.oldplay.bean.MessageEvent;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.permission.MPermission;
 import com.td.oldplay.permission.annotation.OnMPermissionDenied;
 import com.td.oldplay.permission.annotation.OnMPermissionGranted;
@@ -48,6 +52,7 @@ import com.td.oldplay.ui.window.CustomDialog;
 import com.td.oldplay.ui.window.SharePopupWindow;
 import com.td.oldplay.utils.LiveUtils;
 import com.td.oldplay.utils.ScreenUtils;
+import com.td.oldplay.utils.SoftInputUtils;
 import com.td.oldplay.utils.StreamUtils;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
@@ -60,6 +65,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 public class TeacherDetailActivity extends LiveBaseActivity implements
         PLMediaPlayer.OnCompletionListener,
@@ -128,11 +134,13 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     private String mRoomName;
     private boolean isPermissionGrant;
     private List<Fragment> fragments;
+    private CommentFragment commentFragment;
     private LinearLayout.LayoutParams params;
     private boolean island;
     private String[] titles;
     private SharePopupWindow popupWindow;
-    private String userId;
+    private String teacherId;
+    private int type;
     /***
      * 连麦的操作监听
      */
@@ -188,7 +196,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
-        userId = getIntent().getStringExtra("id");
+        teacherId = getIntent().getStringExtra("id");
         customDialog = new CustomDialog(mContext);
         customDialog.setTitleVisible(View.GONE);
         customDialog.setDialogClick(this);
@@ -199,6 +207,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         shareAction.setOnClickListener(this);
         reword.setOnClickListener(this);
         pause.setOnClickListener(this);
+        commentSend.setOnClickListener(this);
         title.setTitle("讲师直播");
         title.setOnLeftListener(this);
         params = (LinearLayout.LayoutParams) liveRoot.getLayoutParams();
@@ -208,6 +217,33 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         initWindow();
         initStream();
         initPlay();
+        getData();
+    }
+
+    private void getData() {
+        HttpManager.getInstance().isConcernTeacher(userId, teacherId, new HttpSubscriber<Integer>(new OnResultCallBack<Integer>() {
+
+            @Override
+            public void onSuccess(Integer integer) {
+                if (integer == 1) {
+                    concernAction.setText("已关注");
+                    concernAction.setEnabled(false);
+                } else {
+                    concernAction.setText("关注");
+                    concernAction.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
+        }));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -227,7 +263,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         fragments.add(new CourseFragment());
         fragments.add(new IntruceFragment());
         fragments.add(new ShopFragment());
-        fragments.add(new CommentFragment());
+        commentFragment = new CommentFragment();
+        fragments.add(commentFragment);
         viewPager.setOffscreenPageLimit(4);
         viewPager.setAdapter(new BasePagerAdapter(getSupportFragmentManager(), fragments) {
             @Override
@@ -379,6 +416,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             case R.id.collection_action:
                 break;
             case R.id.concern_action:
+                type = 1;
+                HttpManager.getInstance().concernTeacher(userId, teacherId, httpSubscriber);
                 break;
             case R.id.share_action:
                 if (popupWindow == null) {
@@ -393,6 +432,13 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 break;
             case R.id.left_text:
                 finish();
+                break;
+            case R.id.comment_send:
+                type = 2;
+                if (TextUtils.isEmpty(commentEd.getText().toString())) {
+                    ToastUtil.show("请输入评论的内容");
+                }
+                HttpManager.getInstance().commentTeacher(userId, teacherId, commentEd.getText().toString(), httpSubscriber);
                 break;
         }
     }
@@ -491,7 +537,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     @Override
     public void onBackPressed() {
-        if(island){
+        if (island) {
             setRequestedOrientation(island ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             mRTCStreamingManager.notifyActivityOrientationChanged();
             island = false;
@@ -503,7 +549,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             }
             params.height = ScreenUtils.dip2px(AContext, 200);
             liveRoot.setLayoutParams(params);
-        }else{
+        } else {
             super.onBackPressed();
         }
 
@@ -646,4 +692,33 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     public void onOk() {
 
     }
+
+    private HttpSubscriber<String> httpSubscriber = new HttpSubscriber<>(new OnResultCallBack<String>() {
+
+        @Override
+        public void onSuccess(String s) {
+            if (type == 1) {
+                ToastUtil.show("关注成功");
+                concernAction.setText("已关注");
+                concernAction.setEnabled(false);
+            } else if (type == 2) {
+                ToastUtil.show("评论成功");
+                if (commentFragment != null)
+                    commentFragment.onRefresh();
+                commentEd.setText("");
+                SoftInputUtils.hideSoftInput(AContext, getWindow());
+            }
+        }
+
+        @Override
+        public void onError(int code, String errorMsg) {
+            ToastUtil.show(errorMsg);
+        }
+
+        @Override
+        public void onSubscribe(Disposable d) {
+            addDisposable(d);
+        }
+    });
+
 }

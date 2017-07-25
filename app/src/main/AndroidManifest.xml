@@ -241,7 +241,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.shop.activity.OrdersConfirmActivity"></activity>
+        <activity android:name=".ui.shop.activity.OrdersConfirmActivity" />
+        <activity android:name=".ui.shop.activity.OrderDetailActivity"></activity>
     </application>
 
 </manifest>

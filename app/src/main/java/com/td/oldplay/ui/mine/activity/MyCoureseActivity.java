@@ -28,6 +28,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 public class MyCoureseActivity extends BaseFragmentActivity
         implements SwipeRefreshLayout.OnRefreshListener,
@@ -110,6 +111,11 @@ public class MyCoureseActivity extends BaseFragmentActivity
             public void onError(int code, String errorMsg) {
                 swipeLayout.setRefreshing(false);
                 ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
             }
         }));
     }

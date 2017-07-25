@@ -21,6 +21,7 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 public class ForgetPwsActivity extends BaseFragmentActivity implements View.OnClickListener {
 
@@ -109,6 +110,11 @@ public class ForgetPwsActivity extends BaseFragmentActivity implements View.OnCl
                         public void onError(int code, String errorMsg) {
                             ToastUtil.show(errorMsg);
                         }
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            addDisposable(d);
+                        }
                     }));
                 } else {
                     ToastUtil.show("手机格式不正确");
@@ -131,6 +137,11 @@ public class ForgetPwsActivity extends BaseFragmentActivity implements View.OnCl
                 @Override
                 public void onError(int code, String errorMsg) {
                     ToastUtil.show(errorMsg);
+                }
+
+                @Override
+                public void onSubscribe(Disposable d) {
+                    addDisposable(d);
                 }
             }));
         }

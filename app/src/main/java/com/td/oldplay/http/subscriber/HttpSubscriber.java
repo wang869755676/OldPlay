@@ -25,6 +25,9 @@ public class HttpSubscriber<T> implements Observer<T> {
     @Override
     public void onSubscribe(Disposable d) {
         mDisposable = d;
+        if (mOnResultListener != null) {
+            mOnResultListener.onSubscribe(d);
+        }
     }
 
     @Override

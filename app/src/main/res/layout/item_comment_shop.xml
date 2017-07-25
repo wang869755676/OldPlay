@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/item_shop_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="商品名称"
+        android:textColor="@color/coure_tv"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/bg_gray"></View>
+
+    <EditText
+        android:id="@+id/score_ed"
+        android:layout_width="match_parent"
+        android:layout_height="159dp"
+        android:background="@color/white"
+        android:gravity="start"
+        android:hint="宝贝满足你的期待吗？说说你的使用心得，分享给想买的他们吧"
+        android:padding="10dp"
+        android:textColor="@color/home_gray"
+        android:textSize="12sp" />
+</LinearLayout>

@@ -11,6 +11,9 @@ import com.td.oldplay.MyApplication;
 import com.td.oldplay.utils.GlideUtils;
 import com.td.oldplay.utils.SharePreferenceUtil;
 
+import io.reactivex.disposables.Disposable;
+import io.reactivex.internal.disposables.ListCompositeDisposable;
+
 
 public abstract class BaseFragmentActivity extends AppCompatActivity {
 
@@ -64,7 +67,31 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         GlideUtils.destroyRequest(AContext);
+        clear();
+        super.onDestroy();
+
     }
+
+    private ListCompositeDisposable listCompositeDisposable = new ListCompositeDisposable();
+
+
+    protected void addDisposable(Disposable disposable) {
+        if (disposable != null && !disposable.isDisposed()) {
+            listCompositeDisposable.add(disposable);
+        }
+    }
+
+    protected void reDisposable(Disposable disposable) {
+        if (disposable != null) {
+            listCompositeDisposable.remove(disposable);
+        }
+    }
+
+    protected void clear() {
+        if (!listCompositeDisposable.isDisposed()) {
+            listCompositeDisposable.clear();
+        }
+    }
+
 }

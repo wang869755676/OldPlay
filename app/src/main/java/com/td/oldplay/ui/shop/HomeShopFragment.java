@@ -29,6 +29,7 @@ import com.td.oldplay.ui.SearchActivity;
 import com.td.oldplay.ui.course.HomeCourseFragment;
 import com.td.oldplay.ui.shop.activity.ShopDetailActivity;
 import com.td.oldplay.ui.shop.activity.ShopListActivity;
+import com.td.oldplay.ui.window.SeachPopupWindow;
 import com.td.oldplay.utils.GlideUtils;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustPagerTransformer;
@@ -43,6 +44,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.disposables.Disposable;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -84,6 +86,7 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
     private Adapter recommendShopAdapter;
     private Adapter LastShopAdapter;
 
+    private SeachPopupWindow popupWindow;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -204,6 +207,11 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
                 swipeLayout.setRefreshing(false);
                 ToastUtil.show(errorMsg);
             }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
         }));
     }
 
@@ -235,10 +243,14 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
                 startActivity(intent);
                 break;
             case R.id.right_text:
-                intent = new Intent(mActivity, SearchActivity.class);
+              /*  intent = new Intent(mActivity, SearchActivity.class);
                 intent.putExtra("type", 0);
                 // intent.putExtra()
-                startActivity(intent);
+                startActivity(intent);*/
+                if (popupWindow == null) {
+                    popupWindow = new SeachPopupWindow(mActivity, 1);
+                }
+                popupWindow.showPopup(v);
                 break;
         }
     }
@@ -277,7 +289,7 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
         @Override
         protected void convert(ViewHolder holder, ShopBean shopBean, int position) {
             GlideUtils.setImage(mContext, shopBean.picUrl, (ImageView) holder.getView(R.id.item_home_iv));
-            holder.setText(R.id.item_courese_name,shopBean.goodsName);
+            holder.setText(R.id.item_courese_name, shopBean.goodsName);
         }
     }
 }

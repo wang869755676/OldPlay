@@ -186,14 +186,7 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
                 CalTotal();
                 break;
             case R.id.dialog_car_dec:
-                if (shopBean.goods != null && shopBean.groupBuy != null) {
-                    if (shopBean.goods.isPreferential == 2) {
-                        if (num <shopBean.groupBuy.buyNum) {
-                            addTv.setEnabled(true);
 
-                        }
-                    }
-                }
                 if (num == 1) {
                     decTv.setEnabled(false);
                     ToastUtil.show("不能再减了");
@@ -202,6 +195,14 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
 
                 }
                 numTv.setText((num) + "");
+                if (shopBean.goods != null && shopBean.groupBuy != null) {
+                    if (shopBean.goods.isPreferential == 2) {
+                        if (num <shopBean.groupBuy.buyNum) {
+                            addTv.setEnabled(true);
+
+                        }
+                    }
+                }
                 CalTotal();
                 break;
             case R.id.dialog_type:

@@ -1,6 +1,7 @@
 package com.td.oldplay.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,7 +42,7 @@ public class OrderBean implements Serializable {
     public TimeInfo sendTime;
     public int status;
     public int userId;
-    public List<GoodBean> orderDetails;
+    public ArrayList<GoodBean> orderDetails;
     public ScoreOffset scoreOffset;
     public String formatTime;
     public int isApplyScore; //是否使用积分抵消  0 否 1 是

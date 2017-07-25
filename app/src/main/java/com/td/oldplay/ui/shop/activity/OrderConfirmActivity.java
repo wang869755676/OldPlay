@@ -18,8 +18,12 @@ import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.bean.AddressBean;
 import com.td.oldplay.bean.GoodBean;
 import com.td.oldplay.bean.OrderBean;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.mine.activity.MyAddressActivity;
 import com.td.oldplay.ui.shop.adapter.GoodAdapter;
+import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 
 import java.util.ArrayList;
@@ -27,6 +31,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 public class OrderConfirmActivity extends BaseFragmentActivity implements View.OnClickListener {
 
@@ -67,6 +72,8 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
     private OrderBean orderBean;
     private int scoreCount;
     private float scoreMoney;
+    private List<String> orderIds;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,25 +110,16 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
         datas = new ArrayList<>();
         goodAdapter = new GoodAdapter(mContext, R.layout.item_confirm_orderr, datas);
         swipeTarget.setAdapter(goodAdapter);
-        acore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if(b){
-                        ortderTotal.setText("￥ "+(orderBean.amount_payable-scoreMoney) );
-                    }else{
-                        ortderTotal.setText("￥ "+(orderBean.amount_payable) );
-                    }
-            }
-        });
+
         setData();
     }
 
     private void setData() {
         if (orderBean != null) {
-            ortderTotal.setText("￥ "+orderBean.amount_paid);
-            orederConfirmTotal.setText("￥ "+orderBean.amount_payable);
-           // orederConfirmScore.setText();
-            if (orderBean.orderDetails!= null && orderBean.orderDetails.size() > 0) {
+            ortderTotal.setText("￥ " + orderBean.amount_paid);
+            orederConfirmTotal.setText("￥ " + orderBean.amount_payable);
+            // orederConfirmScore.setText();
+            if (orderBean.orderDetails != null && orderBean.orderDetails.size() > 0) {
                 datas.addAll(orderBean.orderDetails);
                 goodAdapter.notifyDataSetChanged();
             }
@@ -131,17 +129,29 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
                 buyAddressInfo.setText("收货人: " + orderBean.address.address);
             }
 
-            if(orderBean.scoreOffset!=null){
-                scoreCount= (int) Math.floor(orderBean.scoreOffset.score/orderBean.scoreOffset.money);
-                if(scoreCount>0){
-                    acore.setVisibility(View.VISIBLE);
-                    scoreMoney=scoreCount*orderBean.scoreOffset.money;
-                    acore.setText(orderBean.scoreOffset.content);
-                }
+            if (orderBean.scoreOffset != null) {
+                acore.setVisibility(View.VISIBLE);
+                acore.setText(orderBean.scoreOffset.content);
 
-            }else{
+            } else {
                 acore.setVisibility(View.GONE);
             }
+            orderIds = new ArrayList<>();
+            orderIds.add(orderBean.orderId);
+            acore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) {
+                        if (scoreMoney != 0) {
+                            ortderTotal.setText("￥ " + scoreMoney);
+                        } else if (orderIds != null) {
+                            HttpManager.getInstance().applyScore(userId, orderIds, scoreSubcriber);
+                        }
+                    } else {
+                        ortderTotal.setText("￥ " + orderBean.amount_paid);
+                    }
+                }
+            });
         }
     }
 
@@ -152,7 +162,7 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
                 finish();
                 break;
             case R.id.buy_address_btn:
-                startActivityForResult(new Intent(mContext, MyAddressActivity.class),1002);
+                startActivityForResult(new Intent(mContext, MyAddressActivity.class), 1002);
                 break;
             case R.id.ortder_confirm:
                 // 调用支付接口
@@ -164,9 +174,9 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==1002 && resultCode==RESULT_OK){
-            if(orderBean!=null){
-                orderBean.address= (AddressBean) data.getSerializableExtra("model");
+        if (requestCode == 1002 && resultCode == RESULT_OK) {
+            if (orderBean != null) {
+                orderBean.address = (AddressBean) data.getSerializableExtra("model");
                 setAddress();
             }
         }
@@ -180,4 +190,27 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
         }
 
     }
+
+    private HttpSubscriber<Float> scoreSubcriber = new HttpSubscriber<>(new OnResultCallBack<Float>() {
+
+
+        @Override
+        public void onSuccess(Float aFloat) {
+            scoreMoney = aFloat;
+            if (ortderTotal != null) {
+                ortderTotal.setText("￥ " + aFloat);
+            }
+
+        }
+
+        @Override
+        public void onError(int code, String errorMsg) {
+            ToastUtil.show(errorMsg);
+        }
+
+        @Override
+        public void onSubscribe(Disposable d) {
+            addDisposable(d);
+        }
+    });
 }

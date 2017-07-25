@@ -31,6 +31,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 public class MyAddressActivity extends BaseFragmentActivity
         implements SwipeRefreshLayout.OnRefreshListener,
@@ -137,6 +138,11 @@ public class MyAddressActivity extends BaseFragmentActivity
                 ToastUtil.show(errorMsg);
 
             }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
         }));
     }
 
@@ -183,6 +189,11 @@ public class MyAddressActivity extends BaseFragmentActivity
                 public void onError(int code, String errorMsg) {
                     ToastUtil.show(errorMsg);
                 }
+
+                @Override
+                public void onSubscribe(Disposable d) {
+                    addDisposable(d);
+                }
             }));
         } else if (action.equals("update")) {
             Intent intent = new Intent(mContext, AddAddressActivity.class);
@@ -201,6 +212,11 @@ public class MyAddressActivity extends BaseFragmentActivity
                 @Override
                 public void onError(int code, String errorMsg) {
                     ToastUtil.show(errorMsg);
+                }
+
+                @Override
+                public void onSubscribe(Disposable d) {
+                    addDisposable(d);
                 }
             }));
 

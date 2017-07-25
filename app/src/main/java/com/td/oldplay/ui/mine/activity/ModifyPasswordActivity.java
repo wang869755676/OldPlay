@@ -20,6 +20,7 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 public class ModifyPasswordActivity extends BaseFragmentActivity implements View.OnClickListener {
 
@@ -116,6 +117,11 @@ public class ModifyPasswordActivity extends BaseFragmentActivity implements View
             @Override
             public void onError(int code, String errorMsg) {
                 ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
             }
         }));
     }

@@ -19,18 +19,25 @@ import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
+import com.td.oldplay.bean.RechargeInfo;
 import com.td.oldplay.bean.WalletBean;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.mine.adapter.WalletAdapter;
 import com.td.oldplay.ui.window.ListPopupWindow;
 import com.td.oldplay.utils.DeviceUtil;
 import com.td.oldplay.utils.TimeMangerUtil;
+import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 public class MyWalletActivity extends BaseFragmentActivity
         implements SwipeRefreshLayout.OnRefreshListener,
@@ -61,25 +68,28 @@ public class MyWalletActivity extends BaseFragmentActivity
     private WalletAdapter walletAdapter;
     private LoadMoreWrapper adapter;
     private int page = 1;
-    private List<WalletBean> datas = new ArrayList<>();
+    private WalletBean bean;
+    private List<RechargeInfo> datas = new ArrayList<>();
 
     private List<String> monthDatas;
     private int currentYear;
     private int currentMonth;
     private ListPopupWindow<String> popupWindow;
     private Adapter monthAdapter;
+    private HashMap<String, Object> params = new HashMap<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_wallet);
         ButterKnife.bind(this);
+        params.put("userId", userId);
         initView();
     }
 
     private void initView() {
-        datas.add(new WalletBean());
-        datas.add(new WalletBean());
+
         title.setTitle("我的钱包");
         title.setOnLeftListener(this);
         swipeLayout.setOnRefreshListener(this);
@@ -92,20 +102,27 @@ public class MyWalletActivity extends BaseFragmentActivity
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 switch (checkedId) {
                     case R.id.rb_chongzhi:
+                        params.put("type",0) ;//类型(0:充值1:提现2:消费3:直播)
                         break;
                     case R.id.rb_live:
+                        params.put("type",3) ;
                         break;
                     case R.id.rb_tixian:
+                        params.put("type",1) ;
                         break;
                     case R.id.rb_xiaofei:
+                        params.put("type",2) ;
                         break;
                 }
+                getData();
             }
         });
         walletAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                startActivity(new Intent(mContext,ConsumptionActivity.class));
+                Intent intent=new Intent(mContext, ConsumptionActivity.class);
+                intent.putExtra("id",datas.get(position).id);
+                startActivity(intent);
             }
 
             @Override
@@ -128,12 +145,17 @@ public class MyWalletActivity extends BaseFragmentActivity
             monthDatas.add(String.format("%s年%s月", currentYear, i));
         }
         walletMonth.setText(monthDatas.get(0));
+        params.put("time", monthDatas.get(0));
         monthAdapter = new Adapter(mContext, R.layout.item_month, monthDatas);
         monthAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 walletMonth.setText(monthDatas.get(position));
-                // 请求数据
+                popupWindow.dismiss();
+                params.put("time", monthDatas.get(position));
+                datas.clear();
+                adapter.notifyDataSetChanged();
+                getData();
             }
 
             @Override
@@ -141,12 +163,49 @@ public class MyWalletActivity extends BaseFragmentActivity
                 return false;
             }
         });
+        getData();
+    }
 
+    private void getData() {
+        params.put("page", page);
+        HttpManager.getInstance().getMyWallets(params, new HttpSubscriber<WalletBean>(new OnResultCallBack<WalletBean>() {
+
+            @Override
+            public void onSuccess(WalletBean walletBeen) {
+                swipeLayout.setRefreshing(false);
+                bean = walletBeen;
+                setData();
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                swipeLayout.setRefreshing(false);
+                ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
+        }));
+    }
+
+    private void setData() {
+        if (bean != null) {
+            walletTixian.setText(bean.money+"");
+            if (bean.rechargeSetsList != null) {
+                datas.clear();
+                datas.addAll(bean.rechargeSetsList);
+                adapter.notifyDataSetChanged();
+            }
+
+        }
     }
 
     @Override
     public void onRefresh() {
         page = 1;
+        getData();
     }
 
     @Override
@@ -168,6 +227,7 @@ public class MyWalletActivity extends BaseFragmentActivity
     @Override
     public void onLoadMoreRequested() {
         page++;
+        getData();
     }
 
     private static class Adapter extends CommonAdapter<String> {

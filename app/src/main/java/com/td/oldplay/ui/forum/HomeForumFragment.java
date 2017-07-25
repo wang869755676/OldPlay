@@ -30,6 +30,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.internal.disposables.ListCompositeDisposable;
 
 
@@ -95,6 +96,11 @@ public class HomeForumFragment extends BaseFragment implements View.OnClickListe
             public void onError(int code, String errorMsg) {
                 ToastUtil.show(errorMsg);
                 swipeLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
             }
         });
         getData();

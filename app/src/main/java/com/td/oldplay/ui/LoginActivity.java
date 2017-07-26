@@ -144,6 +144,7 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
 
             @Override
             public void onError(int code, String errorMsg) {
+                hideLoading();
                 ToastUtil.show(errorMsg);
             }
 

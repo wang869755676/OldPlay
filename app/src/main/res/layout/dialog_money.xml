@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="horizontal">
+
+    <EditText
+        android:gravity="right"
+        android:layout_weight="1"
+        android:id="@+id/dialog_money_ed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:ellipsize="end"
+        android:inputType="numberDecimal"
+        android:lines="1"
+        android:text="20"
+        android:textColor="@color/tv_red" />
+
+    <TextView
+        android:gravity="center"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="元"
+        android:textColor="@color/home_gray"
+        android:textSize="16sp" />
+
+</LinearLayout>

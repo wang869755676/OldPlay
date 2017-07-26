@@ -7,10 +7,13 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,6 +52,7 @@ import com.td.oldplay.permission.annotation.OnMPermissionNeverAskAgain;
 import com.td.oldplay.permission.util.MPermissionUtil;
 import com.td.oldplay.ui.live.adapter.AvatorAdapter;
 import com.td.oldplay.ui.live.adapter.CommentAdapter;
+import com.td.oldplay.ui.window.CustomDialog;
 import com.td.oldplay.utils.LiveUtils;
 import com.td.oldplay.utils.StreamUtils;
 import com.td.oldplay.utils.ToastUtil;
@@ -67,7 +71,7 @@ import io.reactivex.disposables.Disposable;
 /**
  * 直播或连麦的界面
  */
-public class LiveActivity extends LiveBaseActivity implements View.OnClickListener {
+public class LiveActivity extends LiveBaseActivity implements View.OnClickListener, CustomDialog.DialogClick {
 
     private static final String TAG = "===";
     @BindView(R.id.live_sfv)
@@ -117,6 +121,11 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     private CommentAdapter commentAdapter;
     private List<CommentBean> commentDatas = new ArrayList<>();
 
+    private CustomDialog customDialog;
+    private View dialogView;
+    private EditText dialogEd;
+    private float money;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -128,7 +137,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         requestLivePermission(); // 请求权限
         initView();
         initCamer();
-        initWater();
+        //initWater();
         initLister();
         initConference();
         initWindow();
@@ -266,6 +275,14 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         commentAdapter = new CommentAdapter(mContext, R.layout.item_live_comment, commentDatas);
         liveRvChat.setLayoutManager(new GridLayoutManager(mContext, 4));
         liveRvChat.setAdapter(avatorAdapter);
+        customDialog = new CustomDialog(mContext);
+        dialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_money, null);
+        dialogEd = (EditText) dialogView.findViewById(R.id.dialog_money_ed);
+        customDialog.setContanier(dialogView);
+        customDialog.setViewLineVisible(View.GONE);
+        customDialog.setTitle("设置连麦的金额");
+        customDialog.setDialogClick(this);
+
     }
 
     /**
@@ -300,14 +317,13 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     /**
      * 水印处理
      */
-    private void initWater() {
+/*    private void initWater() {
         watermarksetting = new WatermarkSetting(this);
         watermarksetting.setResourceId(R.mipmap.ic_launcher_round)
                 .setSize(WatermarkSetting.WATERMARK_SIZE.MEDIUM)
                 .setAlpha(100)
                 .setCustomPosition(0.5f, 0.5f);
-    }
-
+    }*/
     @Override
     protected void onResume() {
         super.onResume();
@@ -316,7 +332,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
          * Step 10: You must start capture before conference or streaming
          * You will receive `Ready` state callback when capture started success
          */
-        if(isPermissionGrant){
+        if (isPermissionGrant) {
             mRTCStreamingManager.startCapture();
         }
 
@@ -439,17 +455,18 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         }
 
         showLoading("正在准备推流... ");
-        AsyncTask.execute(new Runnable() {
+  /*      AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                startPublishStreamingInternal();
+
             }
-        });
+        });*/
+        startPublishStreamingInternal();
         return true;
     }
 
     private boolean startPublishStreamingInternal() {
-        String publishAddr = StreamUtils.requestPublishAddress("haha");
+        String publishAddr ="rtmp://pili-publish.wangliangliang.qiniuts.com/wangliangliang-piliwork/57c836b21013850579011639?key=0ee13645-890a-4c6f-8f83-6e0ee0ce8d86";
         if (publishAddr == null) {
             hideLoading();
             ToastUtil.show("无法获取房间信息/推流地址 !");
@@ -539,11 +556,12 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
                     break;
                 case CONNECT_FAIL:
-
+                    ToastUtil.show("连接失败");
                     finish();
                     break;
                 case VIDEO_PUBLISH_FAILED:
                 case AUDIO_PUBLISH_FAILED:
+                    ToastUtil.show("推流失败");
                     finish();
                     break;
                 case VIDEO_PUBLISH_SUCCESS:
@@ -765,6 +783,11 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
                 }
                 isComment = !isComment;
                 break;
+            case R.id.live_lianmai:
+                if (customDialog != null) {
+                    customDialog.show();
+                }
+                break;
         }
 
     }
@@ -795,5 +818,19 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     private void getUsers() {
         userDatas.add(new UserBean());
         userDatas.add(new UserBean());
+    }
+
+    @Override
+    public void onCancel() {
+
+    }
+
+    @Override
+    public void onOk() {
+        if (TextUtils.isEmpty(dialogEd.getText().toString())) {
+            ToastUtil.show("请输入连麦金额");
+            return;
+        }
+        money = Float.parseFloat(dialogEd.getText().toString());
     }
 }

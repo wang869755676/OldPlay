@@ -54,14 +54,14 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
-            android:scrollbarTrackVertical="@color/bg_gray"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:fadeScrollbars="false"
-            android:background="@drawable/corwhite"
-            android:scrollbarThumbVertical="@mipmap/icon_live_bars"
             android:id="@+id/live_rv_chat"
             android:layout_width="196dp"
             android:layout_height="226dp"
+            android:background="@drawable/corwhite"
+            android:fadeScrollbars="false"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarThumbVertical="@mipmap/icon_live_bars"
+            android:scrollbarTrackVertical="@color/bg_gray"
             android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
 
         <LinearLayout
@@ -100,6 +100,7 @@
 
     <!--连麦操作-->
     <TextView
+        android:background="@drawable/cor_trgray_5"
         android:id="@+id/live_lianmai"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -131,8 +132,7 @@
         android:paddingLeft="50dp"
         android:paddingRight="50dp"
         android:text="开始直播"
-        android:textColor="@android:color/white"
-        android:visibility="gone" />
+        android:textColor="@android:color/white" />
 
 
 </FrameLayout>

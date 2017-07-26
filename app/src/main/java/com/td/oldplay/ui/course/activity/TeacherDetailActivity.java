@@ -65,6 +65,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import io.reactivex.disposables.Disposable;
 
 public class TeacherDetailActivity extends LiveBaseActivity implements
@@ -120,6 +122,12 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     TextView commentSend;
     @BindView(R.id.ll_comment)
     LinearLayout llComment;
+    @BindView(R.id.videoplayer)
+    JCVideoPlayerStandard videoplayer;
+    @BindView(R.id.dianbo)
+    FrameLayout dianbo;
+    @BindView(R.id.dianbo_back)
+    ImageView dianboBack;
     private CustomDialog customDialog;
     private RTCMediaStreamingManager mRTCStreamingManager;
     // private RTCConferenceOptions options;
@@ -131,7 +139,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     private boolean isSwCodec; // 编码的方式 true 软 false 硬
     private boolean mIsActivityPaused;
     private boolean mIsConferenceStarted = false; // 是否连麦
-    private String mRoomName;
+    private String mRoomName = "9cd5821094c84894ae20d81f9068108a";
     private boolean isPermissionGrant;
     private List<Fragment> fragments;
     private CommentFragment commentFragment;
@@ -141,6 +149,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     private SharePopupWindow popupWindow;
     private String teacherId;
     private int type;
+
+
     /***
      * 连麦的操作监听
      */
@@ -208,6 +218,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         reword.setOnClickListener(this);
         pause.setOnClickListener(this);
         commentSend.setOnClickListener(this);
+        dianboBack.setOnClickListener(this);
         title.setTitle("讲师直播");
         title.setOnLeftListener(this);
         params = (LinearLayout.LayoutParams) liveRoot.getLayoutParams();
@@ -246,10 +257,24 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         }));
     }
 
+    private int position;
+    private String[] paths =
+
+            {
+                    "http://video.jiecao.fm/8/17/bGQS3BQQWUYrlzP1K4Tg4Q__.mp4",
+                    "http://video.jiecao.fm/8/17/%E6%8A%AB%E8%90%A8.mp4",
+                    "http://video.jiecao.fm/8/18/%E5%A4%A7%E5%AD%A6.mp4",};
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMessage(EventMessage message) {
-        if ("changeCourse".equals(message.action)) {
+        if ("changeCourseVideo".equals(message.action)) {
+            Log.e("===", "---------------");
             // 切换直播视频
+            mRTCStreamingManager.mute(false);
+            dianbo.setVisibility(View.VISIBLE);
+            videoplayer.setUp(paths[position], JCVideoPlayer.SCREEN_LAYOUT_NORMAL, "");
+            videoplayer.startVideo();
+            position++;
         }
     }
 
@@ -318,7 +343,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
         // 设置播放的地址
         auVideoview.setVideoPath("rtmp://v1.live.126.net/live/f05d2012107143c4908c6069057f1dc5");
-        live.setVisibility(View.VISIBLE);
+        live.setVisibility(View.GONE);
         mRTCStreamingManager.startCapture();
 
     }
@@ -440,6 +465,11 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 }
                 HttpManager.getInstance().commentTeacher(userId, teacherId, commentEd.getText().toString(), httpSubscriber);
                 break;
+            case R.id.dianbo_back:
+                JCVideoPlayer.releaseAllVideos();
+                dianbo.setVisibility(View.GONE);
+                mRTCStreamingManager.mute(false);
+                break;
         }
     }
 
@@ -459,13 +489,14 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     }
 
     private boolean startConferenceInternal() {
-        String roomToken = StreamUtils.requestRoomToken(StreamUtils.getTestUserId(this), mRoomName);
+      /*  String roomToken = StreamUtils.requestRoomToken(StreamUtils.getTestUserId(this), mRoomName);
         if (roomToken == null) {
             hideLoading();
             ToastUtil.show("无法获取房间信息 !");
             return false;
         }
-
+*/
+        String roomToken = "69a10dee6a56429a985d6956a500d07e";
         mRTCStreamingManager.startConference(StreamUtils.getTestUserId(this), mRoomName, roomToken, new RTCStartConferenceCallback() {
             @Override
             public void onStartConferenceSuccess() {
@@ -520,9 +551,9 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+        JCVideoPlayer.releaseAllVideos();
         auVideoview.pause();
         mIsActivityPaused = true;
-
         mRTCStreamingManager.stopCapture();
         stopConference();
     }
@@ -537,6 +568,9 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     @Override
     public void onBackPressed() {
+        if (JCVideoPlayer.backPress()) {
+            return;
+        }
         if (island) {
             setRequestedOrientation(island ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             mRTCStreamingManager.notifyActivityOrientationChanged();

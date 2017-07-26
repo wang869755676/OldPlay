@@ -31,6 +31,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center" />
 
+
                 <FrameLayout
                     android:id="@+id/live"
                     android:layout_width="match_parent"
@@ -104,15 +105,34 @@
                     android:src="@mipmap/icon_land" />
 
                 <ImageView
-                    android:visibility="invisible"
                     android:id="@+id/pause"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left|bottom"
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="10dp"
-                    android:src="@mipmap/icon_pause" />
+                    android:src="@mipmap/icon_pause"
+                    android:visibility="invisible" />
 
+                <!--点播时-->
+                <FrameLayout
+                    android:id="@+id/dianbo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
+                        android:id="@+id/videoplayer"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="10dp" />
+
+                    <ImageView
+                        android:id="@+id/dianbo_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:src="@mipmap/back_normal" />
+                </FrameLayout>
 
             </FrameLayout>
 

@@ -170,7 +170,7 @@ public class CourseFragment extends BaseFragment implements
 
     @Override
     public void onOk() {
-        EventBus.getDefault().post(new EventMessage("changeCourse"));
+        EventBus.getDefault().post(new EventMessage("changeCourseVideo"));
     }
 
 

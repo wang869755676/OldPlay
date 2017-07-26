@@ -100,6 +100,8 @@ public class OrderDetailActivity extends BaseFragmentActivity implements View.On
             orderDetailTime.setText(orderDetail.formatTime);
             orderDetailTotal.setText("合计: " + orderDetail.amount_paid);
             orederConfirmTotal.setText("小计" + orderDetail.amount_payable);
+          //  oreder_confirm_score
+
             swipeTarget.setLayoutManager(new LinearLayoutManager(mContext));
             if (orderDetail.orderDetails != null) {
                 swipeTarget.setAdapter(new GoodAdapter(mContext, R.layout.item_confirm_orderr, orderDetail.orderDetails));

@@ -8,6 +8,7 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -72,7 +73,7 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
         dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);//设置输入法显示模式
         WindowManager.LayoutParams lp = dialogWindow.getAttributes();
         DisplayMetrics d = context.getResources().getDisplayMetrics();//获取屏幕尺寸
-        lp.width = (int) (d.widthPixels * 0.8); //宽度为屏幕80%
+        lp.width = ViewGroup.LayoutParams.WRAP_CONTENT; //宽度为屏幕80%
         lp.gravity = Gravity.CENTER;     //中央居中
         dialogWindow.setAttributes(lp);
     }

@@ -30,6 +30,7 @@ public class VideAdapter extends CommonAdapter<String> {
         jcVideoPlayer = holder.getView(R.id.videoplayer);
         jcVideoPlayer.setUp(strings,JCVideoPlayer.SCREEN_LAYOUT_LIST, "");
 
+
        // jcVideoPlayer.setUp("http://tanzi27niu.cdsb.mobiwps/wp-content/uploads/2017/05/2017-05-17_17-33-30.mp4", JCVideoPlayer.SCREEN_LAYOUT_LIST, "");
 
     }

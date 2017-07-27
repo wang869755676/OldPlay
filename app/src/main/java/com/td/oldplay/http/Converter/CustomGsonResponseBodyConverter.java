@@ -5,6 +5,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.td.oldplay.http.api.ApiResponse;
 import com.td.oldplay.http.exception.ApiException;
+import com.tencent.mm.opensdk.utils.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -31,6 +32,7 @@ final class CustomGsonResponseBodyConverter<T> implements Converter<ResponseBody
     @Override
     public T convert(ResponseBody value) throws IOException {
         String response = value.string();
+        Log.e("===", response);
         ApiResponse httpStatus = gson.fromJson(response, ApiResponse.class);
         if (httpStatus.getData() == null) {  // 处理返回的数据为你ull
             value.close();

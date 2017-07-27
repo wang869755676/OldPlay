@@ -106,7 +106,6 @@ public class HttpManager {
                 .map(new Function<ApiResponse<T>, T>() {
                     @Override
                     public T apply(@NonNull ApiResponse<T> response) throws Exception {
-                        Log.e("===", response.toString() + "  ");
                         int code = Integer.parseInt(response.getErrcode());
                         if (code != MContants.SUCCESS_CODE) {
                             throw new ApiException(code, response.getErrdesc());

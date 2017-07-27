@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.base.EventMessage;
+import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.CommentBean;
 import com.td.oldplay.bean.ForumDetial;
@@ -24,6 +25,7 @@ import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.course.adapter.CommentAdapter;
+import com.td.oldplay.ui.displayphoto.DisplayPhotoActivity;
 import com.td.oldplay.ui.forum.adapter.PicAdapter;
 import com.td.oldplay.ui.forum.adapter.VideAdapter;
 import com.td.oldplay.ui.forum.adapter.VoiceAdapter;
@@ -96,7 +98,7 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
     private CommentAdapter commentAdapter;
     private LoadMoreWrapper adapter;
 
-    private List<String> picStr = new ArrayList<>();
+    private ArrayList<String> picStr = new ArrayList<>();
     private List<String> voiceStr = new ArrayList<>();
     private List<String> videoStr = new ArrayList<>();
     private PicAdapter picAdapter;
@@ -156,7 +158,7 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                 if (v.getChildAt(0).getHeight() - v.getHeight()
-                        == v.getScrollY()){
+                        == v.getScrollY()) {
                     loadMore();
                 }
             }
@@ -218,8 +220,22 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
                 addDisposable(d);
             }
         });
-        getDetails();
+        picAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                Intent intent = new Intent(mContext, DisplayPhotoActivity.class);
+                // 图片url,为了演示这里使用常量，一般从数据库中或网络中获取
+                intent.putExtra(DisplayPhotoActivity.INTENT_KEY_URLS, picStr);
+                intent.putExtra(DisplayPhotoActivity.INTENT_KEY_POSITION, position);
+                startActivity(intent);
+            }
 
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
+        getDetails();
         getData();
     }
 

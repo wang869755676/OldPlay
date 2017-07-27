@@ -2,6 +2,7 @@ package com.td.oldplay.ui.forum.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,20 +18,19 @@ import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.base.EventMessage;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.CommentBean;
-import com.td.oldplay.bean.ForumBean;
 import com.td.oldplay.bean.ForumDetial;
 import com.td.oldplay.contants.MContants;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.course.adapter.CommentAdapter;
-import com.td.oldplay.ui.course.adapter.ShopAdapter;
 import com.td.oldplay.ui.forum.adapter.PicAdapter;
 import com.td.oldplay.ui.forum.adapter.VideAdapter;
 import com.td.oldplay.ui.forum.adapter.VoiceAdapter;
 import com.td.oldplay.utils.SoftInputUtils;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.voicemanager.VoiceManager;
+import com.tencent.mm.opensdk.utils.Log;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -90,6 +90,8 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
     RecyclerView ryAu;
     @BindView(R.id.ry_video)
     RecyclerView ryVideo;
+    @BindView(R.id.scrollView)
+    NestedScrollView scrollView;
     private List<CommentBean> datas = new ArrayList<>();
     private CommentAdapter commentAdapter;
     private LoadMoreWrapper adapter;
@@ -118,6 +120,13 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
         params.put("userId", userId);
         params.put("topicId", id);
         initView();
+
+
+    }
+
+    private void loadMore() {
+        page++;
+        getData();
     }
 
     private void initView() {
@@ -139,10 +148,19 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
         ryPic.setLayoutManager(new LinearLayoutManager(mContext));
         picAdapter = new PicAdapter(mContext, R.layout.item_shop_pic, picStr);
         videAdapter = new VideAdapter(mContext, R.layout.item_videoview, videoStr);
-        voiceAdapter=new VoiceAdapter(mContext,R.layout.item_voice,picStr,voiceStr);
+        voiceAdapter = new VoiceAdapter(mContext, R.layout.item_voice, picStr, voiceStr);
         ryPic.setAdapter(picAdapter);
         ryVideo.setAdapter(videAdapter);
         ryAu.setAdapter(voiceAdapter);
+        scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                if (v.getChildAt(0).getHeight() - v.getHeight()
+                        == v.getScrollY()){
+                    loadMore();
+                }
+            }
+        });
         subscriber = new HttpSubscriber<>(new OnResultCallBack<ForumDetial>() {
 
             @Override
@@ -155,6 +173,7 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
 
             @Override
             public void onError(int code, String errorMsg) {
+                ToastUtil.show(errorMsg);
 
             }
 
@@ -223,7 +242,7 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
             picStr.addAll(forumDetial.imageUrlList);
             picAdapter.notifyDataSetChanged();
         }
-        if (forumDetial.speechUrlList!=null) {
+        if (forumDetial.speechUrlList != null) {
             voiceStr.addAll(forumDetial.speechUrlList);
             voiceAdapter.notifyDataSetChanged();
         }
@@ -257,36 +276,39 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
             case R.id.right_image2: // 喜欢
                 break;
             case R.id.forum_detail_edit: // 编辑信息
-                Intent intent=new Intent(mContext,PublishForumActivity.class);
-                intent.putExtra("type",1);
-                intent.putExtra("model",forumDetial);
+                Intent intent = new Intent(mContext, PublishForumActivity.class);
+                intent.putExtra("type", 1);
+                intent.putExtra("model", forumDetial);
                 startActivity(intent);
                 break;
             case R.id.comment_send: // 发表评论
-                if (!TextUtils.isEmpty(commentEd.getText().toString())) {
-                    SoftInputUtils.hideSoftInput(AContext,getWindow());
-                    params.put("content", commentEd.getText().toString());
-                    HttpManager.getInstance().sendComment(params, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+                if (forumDetial != null) {
+                    if (!TextUtils.isEmpty(commentEd.getText().toString())) {
+                        SoftInputUtils.hideSoftInput(AContext, getWindow());
+                        params.put("content", commentEd.getText().toString());
+                        HttpManager.getInstance().sendComment(params, new HttpSubscriber<String>(new OnResultCallBack<String>() {
 
-                        @Override
-                        public void onSuccess(String s) {
-                            commentEd.setText("");
-                            forumDetailComment.setText((forumDetial.topic.replyCount+1) + "评论");
-                            EventBus.getDefault().post(new EventMessage("forumCommnet"));
-                            onRefresh();
-                        }
+                            @Override
+                            public void onSuccess(String s) {
+                                commentEd.setText("");
+                                forumDetailComment.setText((forumDetial.topic.replyCount + 1) + "评论");
+                                EventBus.getDefault().post(new EventMessage("forumCommnet"));
+                                onRefresh();
+                            }
 
-                        @Override
-                        public void onError(int code, String errorMsg) {
+                            @Override
+                            public void onError(int code, String errorMsg) {
 
-                        }
+                            }
 
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            addDisposable(d);
-                        }
-                    }));
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                addDisposable(d);
+                            }
+                        }));
+                    }
                 }
+
                 break;
         }
 
@@ -294,8 +316,7 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
 
     @Override
     public void onLoadMoreRequested() {
-        page++;
-        getData();
+
     }
 
     @Override
@@ -321,11 +342,12 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEventMessage(EventMessage message){
-        if("publish".equals(message.action)){
+    public void onEventMessage(EventMessage message) {
+        if ("publish".equals(message.action)) {
             getDetails();
         }
 
     }
+
 
 }

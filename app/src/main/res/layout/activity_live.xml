@@ -108,6 +108,7 @@
         android:layout_marginRight="30dp"
         android:background="@drawable/cor_trgray_5"
         android:button="@null"
+        android:checked="true"
         android:drawableLeft="@mipmap/icon_live_lianmai"
         android:drawablePadding="6dp"
         android:gravity="center"

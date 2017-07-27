@@ -62,7 +62,7 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
     private float money;
     EventMessage message;
     public ShopCarDialog(@NonNull Context context, View.OnClickListener listener, ShopDetail shopBean, int Type) {
-        super(context);
+        super(context, R.style.AlertDialogStyle); //dialog的样式
         this.context = context;
         this.listener = listener;
         this.shopBean = shopBean;

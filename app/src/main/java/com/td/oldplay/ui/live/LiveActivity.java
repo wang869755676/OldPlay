@@ -277,6 +277,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
                     mRTCStreamingManager.kickoutUser(R.id.live_gfv_winow);
+                    liveLianmai.setText("开始连麦");
                     liveFlWindow.setVisibility(View.GONE);
                     liveGfvWinow.setVisibility(View.GONE);
                 }else{

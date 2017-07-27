@@ -113,8 +113,8 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
     @Override
     protected void init(View view) {
         title.setTitle("商城");
-       // title.setRightImageResource(R.mipmap.icon_searc_home);
-        title.setLeftImageResource(R.mipmap.icon_updown);
+        title.setRightImageResource(R.mipmap.icon_searc_home);
+       // title.setLeftImageResource(R.mipmap.icon_updown);
         title.setOnRightListener(this);
         title.setOnLeftListener(this);
         swipeLayout.setOnRefreshListener(this);

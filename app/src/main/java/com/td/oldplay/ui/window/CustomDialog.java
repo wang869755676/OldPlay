@@ -35,7 +35,7 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
     private DialogClick dialogClick;
 
     public CustomDialog(@NonNull Context context) {
-        super(context);
+        super(context, R.style.AlertDialogStyle); //dialog的样式
         this.context = context;
 
         initalize();

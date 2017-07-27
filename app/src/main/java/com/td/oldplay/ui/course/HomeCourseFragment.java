@@ -104,8 +104,8 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
     @Override
     protected void init(View view) {
         title.setTitle("课程");
-       // title.setRightImageResource(R.mipmap.icon_searc_home);
-        title.setLeftImageResource(R.mipmap.icon_updown);
+       title.setRightImageResource(R.mipmap.icon_searc_home);
+       // title.setLeftImageResource(R.mipmap.icon_updown);
         title.setOnRightListener(this);
         title.setOnLeftListener(this);
         swipeLayout.setOnRefreshListener(this);

@@ -24,7 +24,7 @@ public class AlertDialog extends Dialog implements View.OnClickListener {
 
 
     public AlertDialog(@NonNull Context context) {
-        super(context);
+        super(context, R.style.AlertDialogStyle); //dialog的样式
         this.context = context;
 
         initalize();

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_gray"
+    android:orientation="vertical">
+
+    <com.td.oldplay.widget.CustomTitlebarLayout
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/titlebar_height"></com.td.oldplay.widget.CustomTitlebarLayout>
+
+
+    <TextView
+        android:textColor="#999999"
+        android:textSize="13sp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:text="请输入持卡人本人银行卡"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/view7"
+            android:layout_width="wrap_content"
+            android:layout_height="45dip"
+            android:layout_marginLeft="15dip"
+            android:ems="4"
+            android:gravity="center_vertical"
+            android:text="持卡人"
+            android:textColor="@color/coure_tv"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:layout_toRightOf="@id/view7"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:textColor="#cccccc"
+            android:textColorHint="#cccccc"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="45dip"
+            android:layout_marginLeft="15dip"
+            android:ems="4"
+            android:gravity="center_vertical"
+            android:text="开户银行"
+            android:textColor="#282828"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/bank"
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="开户银行"
+            android:textColor="#cccccc"
+            android:textColorHint="#cccccc"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/view5"
+            android:layout_width="wrap_content"
+            android:layout_height="45dip"
+            android:layout_marginLeft="15dip"
+            android:ems="4"
+            android:gravity="center_vertical"
+            android:text="卡号"
+            android:textColor="@color/coure_tv"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/bank_num"
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:layout_toRightOf="@id/view5"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="银行卡号"
+            android:inputType="number"
+            android:textColor="#999999"
+            android:textColorHint="#999999"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@color/white">
+
+
+        <TextView
+            android:id="@+id/view1"
+            android:layout_width="wrap_content"
+            android:layout_height="45dip"
+            android:layout_marginLeft="15dip"
+            android:ems="4"
+            android:gravity="center_vertical"
+            android:text="提现金额"
+            android:textColor="@color/coure_tv"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/cash"
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:layout_toRightOf="@id/view1"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:inputType="numberDecimal"
+            android:textColor="#999999"
+            android:textColorHint="#999999"
+            android:textSize="13sp"/>
+
+    </LinearLayout>
+
+    <Button
+        android:enabled="false"
+        android:id="@+id/commit"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_marginLeft="40dip"
+        android:layout_marginRight="40dip"
+        android:layout_marginTop="80dip"
+        android:background="@drawable/selector_getcash"
+        android:text="提 现"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+</LinearLayout>

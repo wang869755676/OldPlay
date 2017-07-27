@@ -99,14 +99,15 @@
     </LinearLayout>
 
     <!--连麦操作-->
-    <TextView
-        android:background="@drawable/cor_trgray_5"
+    <CheckBox
         android:id="@+id/live_lianmai"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|bottom"
         android:layout_marginBottom="30dp"
         android:layout_marginRight="30dp"
+        android:background="@drawable/cor_trgray_5"
+        android:button="@null"
         android:drawableLeft="@mipmap/icon_live_lianmai"
         android:drawablePadding="6dp"
         android:gravity="center"

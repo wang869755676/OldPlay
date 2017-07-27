@@ -64,6 +64,10 @@ public class MyWalletActivity extends BaseFragmentActivity
     RecyclerView swipeTarget;
     @BindView(R.id.swipeLayout)
     SwipeRefreshLayout swipeLayout;
+    @BindView(R.id.wallet_chongzhi)
+    TextView walletChongzhi;
+    @BindView(R.id.wallet_tixian_action)
+    TextView walletTixianAction;
 
     private WalletAdapter walletAdapter;
     private LoadMoreWrapper adapter;
@@ -78,6 +82,7 @@ public class MyWalletActivity extends BaseFragmentActivity
     private Adapter monthAdapter;
     private HashMap<String, Object> params = new HashMap<>();
 
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +97,8 @@ public class MyWalletActivity extends BaseFragmentActivity
 
         title.setTitle("我的钱包");
         title.setOnLeftListener(this);
+        walletChongzhi.setOnClickListener(this);
+        walletTixianAction.setOnClickListener(this);
         swipeLayout.setOnRefreshListener(this);
         swipeTarget.setLayoutManager(new LinearLayoutManager(mContext));
         walletAdapter = new WalletAdapter(mContext, R.layout.item_money_detail, datas);
@@ -102,16 +109,16 @@ public class MyWalletActivity extends BaseFragmentActivity
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 switch (checkedId) {
                     case R.id.rb_chongzhi:
-                        params.put("type",0) ;//类型(0:充值1:提现2:消费3:直播)
+                        params.put("type", 0);//类型(0:充值1:提现2:消费3:直播)
                         break;
                     case R.id.rb_live:
-                        params.put("type",3) ;
+                        params.put("type", 3);
                         break;
                     case R.id.rb_tixian:
-                        params.put("type",1) ;
+                        params.put("type", 1);
                         break;
                     case R.id.rb_xiaofei:
-                        params.put("type",2) ;
+                        params.put("type", 2);
                         break;
                 }
                 getData();
@@ -120,8 +127,8 @@ public class MyWalletActivity extends BaseFragmentActivity
         walletAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent=new Intent(mContext, ConsumptionActivity.class);
-                intent.putExtra("id",datas.get(position).id);
+                Intent intent = new Intent(mContext, ConsumptionActivity.class);
+                intent.putExtra("id", datas.get(position).id);
                 startActivity(intent);
             }
 
@@ -192,7 +199,7 @@ public class MyWalletActivity extends BaseFragmentActivity
 
     private void setData() {
         if (bean != null) {
-            walletTixian.setText(bean.money+"");
+            walletTixian.setText(bean.money + "");
             if (bean.rechargeSetsList != null) {
                 datas.clear();
                 datas.addAll(bean.rechargeSetsList);
@@ -219,6 +226,19 @@ public class MyWalletActivity extends BaseFragmentActivity
                     popupWindow = new ListPopupWindow<String>(mContext, monthAdapter, ViewGroup.LayoutParams.MATCH_PARENT, DeviceUtil.dip2px(mContext, 100));
                 }
                 popupWindow.showPopupWindow(v);
+                break;
+            case R.id.wallet_tixian_action:
+                if (bean != null && bean.money > 0) {
+                    intent = new Intent(mContext, GetCashActivity.class);
+                    intent.putExtra("money", bean.money);
+                    startActivity(intent);
+                } else {
+                    ToastUtil.show("账户余额为0，无法提现");
+                }
+
+                break;
+            case R.id.wallet_chongzhi:
+                startActivity(new Intent(mContext, RechargeActivity.class));
                 break;
         }
 

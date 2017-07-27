@@ -86,14 +86,16 @@
                     android:layout_marginLeft="10dp"
                     android:src="@mipmap/icon_reward" />
 
-                <ImageView
+                <CheckBox
+
                     android:id="@+id/join_con"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right|bottom"
                     android:layout_marginBottom="60dp"
                     android:layout_marginRight="10dp"
-                    android:src="@mipmap/icon_conne" />
+                    android:button="@null"
+                    android:drawableLeft="@mipmap/icon_conne" />
 
                 <ImageView
                     android:id="@+id/landan"

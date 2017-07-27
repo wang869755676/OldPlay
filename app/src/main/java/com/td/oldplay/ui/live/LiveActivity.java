@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -91,7 +93,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     @BindView(R.id.live_person_num)
     TextView livePersonNum;
     @BindView(R.id.live_lianmai)
-    TextView liveLianmai;
+    CheckBox liveLianmai;
     @BindView(R.id.live_change)
     LinearLayout liveChange;
     @BindView(R.id.live_close)
@@ -270,7 +272,21 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     private void initView() {
         liveChange.setOnClickListener(this);
         liveClose.setOnClickListener(this);
-        liveLianmai.setOnClickListener(this);
+        liveLianmai.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    mRTCStreamingManager.kickoutUser(R.id.live_gfv_winow);
+                    liveFlWindow.setVisibility(View.GONE);
+                    liveGfvWinow.setVisibility(View.GONE);
+                }else{
+                    if (customDialog != null) {
+                        customDialog.show();
+                    }
+                }
+
+            }
+        });
         avatorAdapter = new AvatorAdapter(mContext, R.layout.item_avator, userDatas);
         commentAdapter = new CommentAdapter(mContext, R.layout.item_live_comment, commentDatas);
         liveRvChat.setLayoutManager(new GridLayoutManager(mContext, 4));
@@ -466,7 +482,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     }
 
     private boolean startPublishStreamingInternal() {
-        String publishAddr ="rtmp://pili-publish.wangliangliang.qiniuts.com/wangliangliang-piliwork/57c836b21013850579011639?key=0ee13645-890a-4c6f-8f83-6e0ee0ce8d86";
+        String publishAddr = "rtmp://pili-publish.wangliangliang.qiniuts.com/wangliangliang-piliwork/57c836b21013850579011639?key=0ee13645-890a-4c6f-8f83-6e0ee0ce8d86";
         if (publishAddr == null) {
             hideLoading();
             ToastUtil.show("无法获取房间信息/推流地址 !");
@@ -784,9 +800,15 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
                 isComment = !isComment;
                 break;
             case R.id.live_lianmai:
-                if (customDialog != null) {
-                    customDialog.show();
-                }
+               /* Log.e("===",liveLianmai.isChecked()+"  ");
+                if(liveLianmai.isChecked()){
+                    mRTCStreamingManager.kickoutUser(R.id.live_gfv_winow);
+                }else{
+                    if (customDialog != null) {
+                        customDialog.show();
+                    }
+                }*/
+
                 break;
         }
 
@@ -831,6 +853,9 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
             ToastUtil.show("请输入连麦金额");
             return;
         }
+        liveFlWindow.setVisibility(View.VISIBLE);
+        liveGfvWinow.setVisibility(View.VISIBLE);
         money = Float.parseFloat(dialogEd.getText().toString());
+        liveLianmai.setText("关闭连麦");
     }
 }

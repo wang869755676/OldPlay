@@ -13,6 +13,8 @@ import com.td.oldplay.utils.ToastUtil;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
+import cn.jpush.android.api.JPushInterface;
+
 
 /**
  * Created by smile_x on 2016/10/25.
@@ -46,6 +48,10 @@ public class MyApplication extends Application {
         RTCMediaStreamingManager.init(this);
         // 分享
         MobSDK.init(this, "1f36d53439891", "1fd1f03e6b07f7e292b71483a86d12fc");
+
+        // 极光推送
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
     }
 
 

@@ -24,6 +24,7 @@ import com.td.oldplay.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.jpush.android.api.JPushInterface;
 
 
 public class MainActivity extends BaseFragmentActivity {
@@ -61,6 +62,7 @@ public class MainActivity extends BaseFragmentActivity {
     }
 
     private void init() {
+        JPushInterface.setAlias(mContext,1,userId);
         if (userBean != null && userBean.uType == 1) {
             live.setVisibility(View.VISIBLE);
             live.setOnClickListener(new View.OnClickListener() {

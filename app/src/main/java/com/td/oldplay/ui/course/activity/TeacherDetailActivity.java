@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -83,7 +84,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     @BindView(R.id.reword)
     ImageView reword;
     @BindView(R.id.join_con)
-    ImageView joinCon;
+    CheckBox joinCon;
     @BindView(R.id.landan)
     ImageView landan;
     @BindView(R.id.pause)
@@ -674,6 +675,21 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         liveFlWindow.setVisibility(View.VISIBLE);
         liveAfl.setVisibility(View.VISIBLE);
 
+        auVideoview.setVisibility(View.GONE);
+        auVideoview.pause();
+
+    }
+
+    protected void hideOnMis() {
+        live.setVisibility(View.GONE);
+        liveFlWindow.setVisibility(View.INVISIBLE);
+        liveAfl.setVisibility(View.INVISIBLE);
+
+
+        auVideoview.setVisibility(View.VISIBLE);
+        auVideoview.start();
+
+
     }
 
 
@@ -724,6 +740,13 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     @Override
     public void onOk() {
+        if (joinCon.isChecked()) {
+            startConference();
+        } else {
+
+            stopConference();
+            hideOnMis();
+        }
 
     }
 

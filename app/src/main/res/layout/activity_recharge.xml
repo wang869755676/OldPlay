@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_gray"
+    android:orientation="vertical"
+    tools:context="com.td.oldplay.ui.mine.activity.RechargeActivity">
+
+    <com.td.oldplay.widget.CustomTitlebarLayout
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/titlebar_height"></com.td.oldplay.widget.CustomTitlebarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="133dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="15dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_wexin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="33dp"
+                android:src="@mipmap/icon_rechage_wexin" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/iv_wexin"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:text="微信"
+                android:textColor="@color/coure_tv"
+                android:textSize="14sp" />
+
+            <CheckBox
+                android:id="@+id/check_weixin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/iv_wexin"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_toLeftOf="@id/iv_wexin"
+                android:button="@null"
+                android:drawableLeft="@drawable/selector_order_type" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_weight="1">
+
+
+            <CheckBox
+                android:id="@+id/check_zhifubao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="49dp"
+                android:button="@null"
+                android:drawableLeft="@drawable/selector_order_type" />
+
+            <ImageView
+                android:id="@+id/iv_zhifubao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="33dp"
+                android:layout_toRightOf="@+id/check_zhifubao"
+                android:src="@mipmap/icon_rechange_zhifubao" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/iv_zhifubao"
+                android:layout_below="@id/iv_zhifubao"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="5dp"
+                android:text="支付宝"
+                android:textColor="@color/coure_tv"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/view7"
+            android:layout_width="wrap_content"
+            android:layout_height="45dip"
+            android:layout_marginLeft="15dip"
+            android:ems="4"
+            android:gravity="center_vertical"
+            android:text="金额"
+            android:textColor="@color/coure_tv"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/recharge_money"
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:layout_toRightOf="@id/view7"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="建议转入100元以上的金额"
+            android:textColor="#999999"
+            android:textColorHint="#999999"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/commit"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_marginLeft="40dip"
+        android:layout_marginRight="40dip"
+        android:layout_marginTop="80dip"
+        android:background="@drawable/cor_red"
+        android:enabled="false"
+        android:text="充值"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+</LinearLayout>

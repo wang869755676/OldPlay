@@ -3,7 +3,7 @@ package com.td.oldplay.utils;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.sina.weibo.SinaWeibo;
+
 
 /**
  * Created by my on 2017/7/6.

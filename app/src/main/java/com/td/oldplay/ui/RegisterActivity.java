@@ -1,6 +1,5 @@
 package com.td.oldplay.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
@@ -45,6 +44,8 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
     Button tvGetCode;
     @BindView(R.id.register_submint)
     Button registerSubmint;
+    @BindView(R.id.register_invite_phone)
+    EditText registerInvitePhone;
 
     private CountDownTimer timer;
     private String phone;
@@ -53,6 +54,7 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
     private String rePws;
     private String zhipws;
     private String zhirePws;
+    private String invitePhone;
 
     private String code;
 
@@ -207,7 +209,10 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
             ToastUtil.show("请输入验证码");
             return false;
         }
-
+        invitePhone = registerInvitePhone.getText().toString().trim();
+        if (!TextUtils.isEmpty(invitePhone)) {
+            paras.put("inviterPhone", invitePhone);
+        }
         paras.put("vcode", code);
         return true;
 

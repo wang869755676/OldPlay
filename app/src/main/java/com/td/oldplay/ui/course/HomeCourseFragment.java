@@ -28,6 +28,7 @@ import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.SearchActivity;
 import com.td.oldplay.ui.course.activity.CourseListActivity;
+import com.td.oldplay.ui.course.activity.TeacherDetailActivity;
 import com.td.oldplay.ui.course.activity.TeacherListActivity;
 import com.td.oldplay.ui.course.adapter.CoureseTypeAdapter;
 import com.td.oldplay.ui.window.SeachPopupWindow;
@@ -104,15 +105,23 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
     @Override
     protected void init(View view) {
         title.setTitle("课程");
-       title.setRightImageResource(R.mipmap.icon_searc_home);
-       // title.setLeftImageResource(R.mipmap.icon_updown);
+        title.setRightImageResource(R.mipmap.icon_searc_home);
+        title.setLeftGone();
+        // title.setLeftImageResource(R.mipmap.icon_updown);
         title.setOnRightListener(this);
         title.setOnLeftListener(this);
         swipeLayout.setOnRefreshListener(this);
         homrCoureseBanner.setIndicatorVisible(false);
         homrCoureseBanner.getViewPager().setPageTransformer(true, new CustPagerTransformer(mActivity));
         homrCoureseBanner.getViewPager().setPageMargin(50);
-
+        homrCoureseBanner.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
+            @Override
+            public void onPageClick(View view, int position) {
+                Intent intent = new Intent(mActivity, TeacherDetailActivity.class);
+                intent.putExtra("id", banners.get(position).userId);
+                startActivity(intent);
+            }
+        });
         homeCoureRecommend.setLayoutManager(new GridLayoutManager(mActivity, 2) {
             @Override
             public boolean canScrollVertically() {
@@ -195,6 +204,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
                 swipeLayout.setRefreshing(false);
                 if (homeCourseInfo != null) {
                     if (homeCourseInfo.coursesBannerList != null && homeCourseInfo.coursesBannerList.size() > 0) {
+                        banners=homeCourseInfo.coursesBannerList;
                         homrCoureseBanner.setPages(homeCourseInfo.coursesBannerList, new MZHolderCreator<BannerViewHolder>() {
                             @Override
                             public BannerViewHolder createViewHolder() {
@@ -273,9 +283,8 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
             case R.id.left_text:
                 break;
             case R.id.right_text:
-                if(popupWindow==null)
-                {
-                    popupWindow=new SeachPopupWindow(mActivity,1);
+                if (popupWindow == null) {
+                    popupWindow = new SeachPopupWindow(mActivity, 1);
                 }
                 popupWindow.showPopup(v);
                 /*intent = new Intent(mActivity, SearchActivity.class);

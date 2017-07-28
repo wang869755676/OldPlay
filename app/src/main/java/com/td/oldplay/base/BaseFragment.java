@@ -25,7 +25,7 @@ public abstract class BaseFragment extends Fragment {
     protected String userId;
     protected UserBean userBean;
     private KProgressHUD hud;
-    private SharePreferenceUtil spUilts;
+    protected SharePreferenceUtil spUilts;
 
     @SuppressWarnings("deprecation")
     @Override

@@ -99,14 +99,9 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
             moneyTv.setText("￥"+shopBean.goods.price+"");
             money=shopBean.goods.price;
         }
-        if (shopBean.sizeList != null) {
-            if (shopBean.sizeList.size() > 0) {
-                modeTv.setText(shopBean.sizeList.get(0));
-            } else {
-                modeTv.setText("默认");
-            }
-
-            modeAdapter = new Adapter(context, R.layout.item_month, shopBean.sizeList);
+        if (shopBean.sizeList != null && shopBean.sizeList.size() > 0) {
+            modeTv.setText(shopBean.sizeList.get(0));
+            modeAdapter = new Adapter(context, R.layout.item_add_car, shopBean.sizeList);
             modeAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
@@ -121,17 +116,14 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
                     return false;
                 }
             });
+        }else{
+            modeTv.setText("默认");
         }
 
-        if (shopBean.colorList != null) {
-            if (shopBean.colorList.size() > 0) {
-                ColorId=shopBean.colorList.get(0).colorId;
-                colorTv.setText(shopBean.colorList.get(0).name);
-            } else {
-                colorTv.setText("默认");
-            }
-
-            colorAdpater = new ColorAdapter(context, R.layout.item_month, shopBean.colorList);
+        if (shopBean.colorList != null && shopBean.colorList.size() > 0) {
+            ColorId=shopBean.colorList.get(0).colorId;
+            colorTv.setText(shopBean.colorList.get(0).name);
+            colorAdpater = new ColorAdapter(context, R.layout.item_add_car, shopBean.colorList);
             colorAdpater.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
@@ -145,6 +137,8 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
                     return false;
                 }
             });
+        }else{
+            colorTv.setText("默认");
         }
 
 

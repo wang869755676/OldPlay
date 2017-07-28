@@ -38,19 +38,26 @@ public class OrderAdapter extends CommonAdapter<OrderBean> {
 
     @Override
     protected void convert(ViewHolder holder, final OrderBean orderBean, final int position) {
-        holder.setText(R.id.order_time,orderBean.formatTime);
-        holder.setText(R.id.order_num,orderBean.orderNum);
-        if(orderBean.isApplyScore==1){
-            holder.setVisible(R.id.item_order_socre,true);
-            holder.setText(R.id.item_order_socre,"积分抵扣");
-        }else{
-            holder.setVisible(R.id.item_order_socre,false);
+        if (orderBean.status == 5) {
+            holder.setVisible(R.id.item_oreder_confirm, false);
+            holder.setVisible(R.id.item_order_comment, true);
+        } else {
+            holder.setVisible(R.id.item_oreder_confirm, true);
+            holder.setVisible(R.id.item_order_comment, false);
         }
-        holder.setText(R.id.item_order_smoney,"合计 "+orderBean.amount_paid);
+        holder.setText(R.id.order_time, orderBean.formatTime);
+        holder.setText(R.id.order_num, orderBean.orderNum);
+        if (orderBean.isApplyScore == 1) {
+            holder.setVisible(R.id.item_order_socre, true);
+            holder.setText(R.id.item_order_socre, "积分抵扣");
+        } else {
+            holder.setVisible(R.id.item_order_socre, false);
+        }
+        holder.setText(R.id.item_order_smoney, "合计 " + orderBean.amount_paid);
         recyclerView = holder.getView(R.id.item_goods);
         if (orderBean.orderDetails != null && orderBean.orderDetails.size() > 0) {
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-            goodAdapter=new GoodAdapter(mContext, R.layout.item_mine_order_inner, orderBean.orderDetails);
+            goodAdapter = new GoodAdapter(mContext, R.layout.item_mine_order_inner, orderBean.orderDetails);
             recyclerView.setAdapter(goodAdapter);
           /*  recyclerView.setAdapter(new CommonAdapter<GoodBean>(mContext, R.layout.item_mine_order_inner, orderBean.goodBeanList) {
                 @Override

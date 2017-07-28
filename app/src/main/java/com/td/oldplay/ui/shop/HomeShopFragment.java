@@ -20,6 +20,7 @@ import com.td.oldplay.base.BaseFragment;
 import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
+import com.td.oldplay.bean.BannerInfo;
 import com.td.oldplay.bean.HomeShopInfo;
 import com.td.oldplay.bean.ShopBean;
 import com.td.oldplay.http.HttpManager;
@@ -27,6 +28,7 @@ import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.SearchActivity;
 import com.td.oldplay.ui.course.HomeCourseFragment;
+import com.td.oldplay.ui.course.activity.TeacherDetailActivity;
 import com.td.oldplay.ui.shop.activity.ShopDetailActivity;
 import com.td.oldplay.ui.shop.activity.ShopListActivity;
 import com.td.oldplay.ui.shop.activity.ShopTypeListActivity;
@@ -81,7 +83,7 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
     @BindView(R.id.swipeLayout)
     SwipeRefreshLayout swipeLayout;
 
-    private List<String> banners;
+    private List<BannerInfo> banners;
     private List<ShopBean> recommenddatas = new ArrayList<>();
     private List<ShopBean> Lastdatas = new ArrayList<>();
     private Adapter recommendShopAdapter;
@@ -114,7 +116,8 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
     protected void init(View view) {
         title.setTitle("商城");
         title.setRightImageResource(R.mipmap.icon_searc_home);
-       // title.setLeftImageResource(R.mipmap.icon_updown);
+        // title.setLeftImageResource(R.mipmap.icon_updown);
+        title.setLeftGone();
         title.setOnRightListener(this);
         title.setOnLeftListener(this);
         swipeLayout.setOnRefreshListener(this);
@@ -124,7 +127,14 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
         moreRecommentBtn.setOnClickListener(this);
         homrCoureseBanner.getViewPager().setPageTransformer(true, new CustPagerTransformer(mActivity));
         homrCoureseBanner.getViewPager().setPageMargin(50);
-
+        homrCoureseBanner.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
+            @Override
+            public void onPageClick(View view, int position) {
+                Intent intent = new Intent(mActivity, ShopDetailActivity.class);
+                intent.putExtra("id", banners.get(position).goodsId);
+                startActivity(intent);
+            }
+        });
         homeShopEssence.setLayoutManager(new GridLayoutManager(mActivity, 2) {
             @Override
             public boolean canScrollVertically() {
@@ -181,6 +191,7 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
                 swipeLayout.setRefreshing(false);
                 if (homeShopInfo != null) {
                     if (homeShopInfo.goodsBannerList != null && homeShopInfo.goodsBannerList.size() > 0) {
+                        banners = homeShopInfo.goodsBannerList;
                         homrCoureseBanner.setPages(homeShopInfo.goodsBannerList, new MZHolderCreator<HomeCourseFragment.BannerViewHolder>() {
                             @Override
                             public HomeCourseFragment.BannerViewHolder createViewHolder() {

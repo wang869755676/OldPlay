@@ -122,10 +122,7 @@ public class HttpManager {
                 .subscribe(s);
     }
 
-    public void getTeacherLists(String data, Observer<List<TeacherBean>> observer) {
-        toSubscribe(mApiService.getTecherLists(data), observer);
-    }
-
+  //============用户登录
     public void registerUser(HashMap<String, Object> params, Observer<String> observer) {
         toSubscribe(mApiService.registerUser(params), observer);
     }
@@ -150,6 +147,10 @@ public class HttpManager {
 
     public void forgetPws(HashMap<String, Object> params, Observer<String> observer) {
         toSubscribe(mApiService.forgetPws(params), observer);
+    }
+
+    public void loginOut(Observer<String> observer) {
+        toSubscribe(mApiService.loginOut(), observer);
     }
 
     // 课程

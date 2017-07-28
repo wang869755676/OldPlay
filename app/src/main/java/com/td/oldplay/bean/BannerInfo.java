@@ -17,6 +17,8 @@ public class BannerInfo {
     public String picUrl;
     public int sort;
     public String userId;
+    public String goodsId;
+
 
 
 }

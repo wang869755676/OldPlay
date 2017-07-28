@@ -29,6 +29,8 @@ public class NetWorkAPI {
 
     public final static String FORGETPWS_API = "lnrzb/user/forgetPassword";
 
+    public final static String LOGINOUT_API = "lnrzb/user/exituser";
+
     public final static String UPDATEUSE_API = "lnrzb/user/updateUser";
 
 

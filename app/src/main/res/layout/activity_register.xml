@@ -38,11 +38,12 @@
                 android:textSize="18sp" />
 
             <EditText
+                android:textSize="12sp"
+                android:textColor="#b6b6b6"
+                android:textColorHint="#b6b6b6"
                 android:padding="5dp"
                 android:hint="请输入手机号"
-                android:textSize="14sp"
                 android:lines="1"
-                android:textColor="@color/home_gray"
                 android:id="@+id/register_phone"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -52,7 +53,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:gravity="center_vertical"
@@ -69,11 +70,12 @@
                 android:textSize="18sp" />
 
             <EditText
+                android:textSize="12sp"
+                android:textColor="#b6b6b6"
+                android:textColorHint="#b6b6b6"
                 android:padding="5dp"
                 android:hint="请输入昵称"
-                android:textSize="16sp"
                 android:lines="1"
-                android:textColor="@color/home_gray"
                 android:id="@+id/register_name"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -82,7 +84,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:gravity="center_vertical"
@@ -102,9 +104,10 @@
                 android:padding="5dp"
                 android:hint="支持英文+数字，不少于8位"
                 android:inputType="textPassword"
-                android:textSize="16sp"
                 android:lines="1"
-                android:textColor="@color/home_gray"
+                android:textSize="12sp"
+                android:textColor="#b6b6b6"
+                android:textColorHint="#b6b6b6"
                 android:id="@+id/register_passworad"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -114,7 +117,7 @@
 
 
         <LinearLayout
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:gravity="center_vertical"
@@ -140,12 +143,13 @@
                 android:background="@drawable/cor_gray_line"
                 android:inputType="textPassword"
                 android:lines="1"
-                android:textColor="@color/home_gray"
-                android:textSize="16sp" />
+                android:textSize="12sp"
+                android:textColor="#b6b6b6"
+                android:textColorHint="#b6b6b6"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:gravity="center_vertical"
@@ -168,9 +172,10 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:background="@drawable/cor_gray_line"
-                android:textSize="16sp"
                 android:lines="1"
-                android:textColor="@color/home_gray"
+                android:textSize="12sp"
+                android:textColor="#b6b6b6"
+                android:textColorHint="#b6b6b6"
                 android:id="@+id/register_zhifuPas"
                 android:inputType="numberPassword"
                 android:maxLength="6"
@@ -178,7 +183,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:gravity="center_vertical"
@@ -198,9 +203,10 @@
                 android:padding="5dp"
                 android:hint="请输入6位数字"
                 android:inputType="numberPassword"
-                android:textSize="16sp"
                 android:lines="1"
-                android:textColor="@color/home_gray"
+                android:textSize="12sp"
+                android:textColor="#b6b6b6"
+                android:textColorHint="#b6b6b6"
                 android:id="@+id/register_rezhifuPas"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -209,7 +215,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:gravity="center_vertical"
@@ -221,7 +227,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="支付密码:"
+                android:text="验证码:"
                 android:textColor="@color/coure_tv"
                 android:textSize="18sp" />
             <LinearLayout
@@ -229,17 +235,20 @@
                 android:orientation="horizontal"
                 android:layout_width="0dp"
                 android:layout_height="match_parent">
+
                 <EditText
-                    android:padding="5dp"
-                    android:hint="验证码"
-                    android:textSize="16sp"
-                    android:lines="1"
-                    android:textColor="@color/home_gray"
                     android:id="@+id/register_code"
                     android:layout_width="74dp"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
-                    android:background="@drawable/cor_gray_line" />
+                    android:background="@drawable/cor_gray_line"
+                    android:hint="验证码"
+                    android:lines="1"
+                    android:padding="5dp"
+                    android:textSize="12sp"
+                    android:textColor="#b6b6b6"
+                    android:textColorHint="#b6b6b6"
+                   />
 
                 <Button
                     android:textColor="@color/white"
@@ -255,7 +264,37 @@
 
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
 
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="邀请人手机号"
+                android:textColor="@color/coure_tv"
+                android:textSize="18sp" />
+
+            <EditText
+                android:padding="5dp"
+                android:hint="选填"
+                android:textSize="12sp"
+                android:textColor="#b6b6b6"
+                android:textColorHint="#b6b6b6"
+                android:lines="1"
+                android:id="@+id/register_invite_phone"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@drawable/cor_gray_line"
+                android:inputType="phone" />
+        </LinearLayout>
         <Button
             android:id="@+id/register_submint"
             android:layout_width="match_parent"

@@ -81,6 +81,9 @@ public interface ApiService {
     @POST(NetWorkAPI.FORGETPWS_API)
     Observable<ApiResponse<String>> forgetPws(@FieldMap() HashMap<String, Object> maps);
 
+    @POST(NetWorkAPI.LOGINOUT_API)
+    Observable<ApiResponse<String>> loginOut();
+
     @FormUrlEncoded
     @POST(NetWorkAPI.COURSE_TYPE_API)
     Observable<ApiResponse<List<CourseTypeBean>>> getCourseTypes(@Field("parentId") String parentId, @Field("page") int page);

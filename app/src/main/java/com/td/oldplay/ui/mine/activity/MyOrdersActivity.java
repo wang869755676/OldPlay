@@ -178,6 +178,7 @@ public class MyOrdersActivity extends BaseFragmentActivity
                 startActivity(intent);
                 break;
             case 3:
+                // 确认收货
                 break;
         }
     }

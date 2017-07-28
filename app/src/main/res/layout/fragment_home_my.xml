@@ -37,14 +37,14 @@
                         android:layout_height="80dp"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="25dp"
-                        android:src="@mipmap/icon_avator_default"
-                        android:scaleType="centerCrop"></com.td.oldplay.widget.CircleImageView>
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/icon_avator_default"></com.td.oldplay.widget.CircleImageView>
 
                     <TextView
-                        android:layout_marginLeft="15dp"
                         android:id="@+id/mine_nickname"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
                         android:layout_marginTop="48dp"
                         android:layout_toRightOf="@+id/mine_user_head_image"
                         android:text="fgfgdfgd  xczxcvzxczxcxzczxczxczxczxczx"
@@ -431,7 +431,7 @@
                         android:layout_marginLeft="15dp"
                         android:layout_toEndOf="@+id/mine_setting_image"
                         android:layout_toRightOf="@+id/mine_setting_image"
-                        android:text="意见反馈"
+                        android:text="建议反馈"
                         android:textColor="@color/coure_tv"
                         android:textSize="14sp" />
 
@@ -451,7 +451,53 @@
                     android:layout_height="1dp"
                     android:layout_marginLeft="25dp"
                     android:background="@color/gray" />
-                <!--意见反馈-->
+                <!--分享app-->
+                <RelativeLayout
+                    android:id="@+id/mine_share"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:paddingLeft="25dp">
+
+                    <ImageView
+                        android:id="@+id/mine_share_image"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/icon_mine_share" />
+
+                    <TextView
+                        android:id="@+id/mine_share_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toEndOf="@+id/mine_share_image"
+                        android:layout_toRightOf="@+id/mine_share_image"
+                        android:text="分享APP"
+                        android:textColor="@color/coure_tv"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/go_share"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:src="@mipmap/icon_right" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="25dp"
+                    android:background="@color/gray" />
+                <!--关于我们-->
                 <RelativeLayout
                     android:id="@+id/mine_about"
                     android:layout_width="match_parent"
@@ -493,6 +539,51 @@
                         android:src="@mipmap/icon_right" />
                 </RelativeLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="25dp"
+                    android:background="@color/gray" />
+                <!--退出账号-->
+                <RelativeLayout
+                    android:id="@+id/mine_loginout"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/white"
+                    android:paddingLeft="25dp">
+
+                    <ImageView
+                        android:id="@+id/mine_loginout_image"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/icon_mine_loginout" />
+
+                    <TextView
+                        android:id="@+id/mine_loginout_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toEndOf="@+id/mine_loginout_image"
+                        android:layout_toRightOf="@+id/mine_loginout_image"
+                        android:text="退出账号"
+                        android:textColor="@color/coure_tv"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/go_loginout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:src="@mipmap/icon_right" />
+                </RelativeLayout>
             </LinearLayout>
 
         </android.support.v4.widget.NestedScrollView>

@@ -57,7 +57,7 @@ public class GetCashActivity extends BaseFragmentActivity
         ButterKnife.bind(this);
         initDialog();
         title.setTitle("提现");
-        title.setOnClickListener(this);
+        title.setOnLeftListener(this);
         commit.setOnClickListener(this);
         cashMoney.setHint("可提现" + totalMoney);
         initListener();

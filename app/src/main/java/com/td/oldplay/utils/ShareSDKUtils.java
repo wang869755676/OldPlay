@@ -57,4 +57,16 @@ public class ShareSDKUtils {
     }
 
 
+    /**
+     *  退出第三方平摊的登录
+     * @param platformType
+     */
+    public static void loginOut(String platformType) {
+        Platform plaform= ShareSDK.getPlatform(platformType);
+        if(plaform.isAuthValid()){
+            plaform.removeAccount(true);
+        }
+
+    }
+
 }

@@ -16,7 +16,10 @@ import android.widget.TextView;
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragment;
 import com.td.oldplay.base.EventMessage;
-import com.td.oldplay.bean.UserBean;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
+import com.td.oldplay.ui.LoginActivity;
 import com.td.oldplay.ui.mine.activity.AboutActivity;
 import com.td.oldplay.ui.mine.activity.FeedBackActivity;
 import com.td.oldplay.ui.mine.activity.MyAddressActivity;
@@ -29,6 +32,8 @@ import com.td.oldplay.ui.mine.activity.MyWalletActivity;
 import com.td.oldplay.ui.mine.activity.PersonDetailActivity;
 import com.td.oldplay.ui.window.SharePopupWindow;
 import com.td.oldplay.utils.GlideUtils;
+import com.td.oldplay.utils.ShareSDKUtils;
+import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CircleImageView;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 
@@ -39,6 +44,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cn.sharesdk.wechat.friends.Wechat;
+import io.reactivex.disposables.Disposable;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -146,6 +153,14 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
     TextView mineScoree;
     @BindView(R.id.go_about)
     ImageView goAbout;
+    @BindView(R.id.mine_share_image)
+    ImageView mineShareImage;
+    @BindView(R.id.mine_share_text)
+    TextView mineShareText;
+    @BindView(R.id.mine_share)
+    RelativeLayout mineShare;
+    @BindView(R.id.mine_loginout)
+    RelativeLayout mineLoginout;
 
     private SharePopupWindow popupWindow;
 
@@ -202,6 +217,8 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
         mineForum.setOnClickListener(this);
         mineAbout.setOnClickListener(this);
         mineUserHeadImage.setOnClickListener(this);
+        mineShare.setOnClickListener(this);
+        mineLoginout.setOnClickListener(this);
     }
 
     @Override
@@ -263,6 +280,36 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
                     popupWindow = new SharePopupWindow(mActivity, "", "", "", "");
                 }
                 popupWindow.showPopup(v);
+                break;
+            case R.id.mine_share:
+                if (popupWindow == null) {
+                    popupWindow = new SharePopupWindow(mActivity, "", "", "", "");
+                }
+                popupWindow.showPopup(v);
+                break;
+            case R.id.mine_loginout:
+                HttpManager.getInstance().loginOut(new HttpSubscriber<String>(new OnResultCallBack<String>() {
+
+                    @Override
+                    public void onSuccess(String s) {
+                        ToastUtil.show("退出成功");
+                        spUilts.clearSharedPreferences();
+                        ShareSDKUtils.loginOut(Wechat.NAME);
+                        startActivity(new Intent(mActivity, LoginActivity.class));
+                    }
+
+                    @Override
+                    public void onError(int code, String errorMsg) {
+                        ToastUtil.show(errorMsg);
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+
+                    }
+                }));
+
                 break;
         }
     }

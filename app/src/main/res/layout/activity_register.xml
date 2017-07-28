@@ -7,6 +7,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context="com.td.oldplay.ui.LoginActivity">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,15 +15,15 @@
         tools:context="com.td.oldplay.ui.RegisterActivity">
 
         <com.td.oldplay.widget.CustomTitlebarLayout
-
             android:id="@+id/title"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/titlebar_height"></com.td.oldplay.widget.CustomTitlebarLayout>
+            android:layout_height="@dimen/titlebar_height"
+            android:background="@color/transparent"></com.td.oldplay.widget.CustomTitlebarLayout>
 
         <LinearLayout
-            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="38dp"
+            android:layout_marginTop="10dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="20dp"
@@ -38,24 +39,24 @@
                 android:textSize="18sp" />
 
             <EditText
-                android:textSize="12sp"
-                android:textColor="#b6b6b6"
-                android:textColorHint="#b6b6b6"
-                android:padding="5dp"
-                android:hint="请输入手机号"
-                android:lines="1"
                 android:id="@+id/register_phone"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:background="@drawable/cor_gray_line"
-                android:inputType="phone" />
+                android:hint="请输入手机号"
+                android:inputType="phone"
+                android:lines="1"
+                android:padding="5dp"
+                android:textColor="#b6b6b6"
+                android:textColorHint="#b6b6b6"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="38dp"
+            android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="20dp"
@@ -70,23 +71,23 @@
                 android:textSize="18sp" />
 
             <EditText
-                android:textSize="12sp"
-                android:textColor="#b6b6b6"
-                android:textColorHint="#b6b6b6"
-                android:padding="5dp"
-                android:hint="请输入昵称"
-                android:lines="1"
                 android:id="@+id/register_name"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:background="@drawable/cor_gray_line" />
+                android:background="@drawable/cor_gray_line"
+                android:hint="请输入昵称"
+                android:lines="1"
+                android:padding="5dp"
+                android:textColor="#b6b6b6"
+                android:textColorHint="#b6b6b6"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="38dp"
+            android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="20dp"
@@ -101,25 +102,25 @@
                 android:textSize="18sp" />
 
             <EditText
-                android:padding="5dp"
-                android:hint="支持英文+数字，不少于8位"
-                android:inputType="textPassword"
-                android:lines="1"
-                android:textSize="12sp"
-                android:textColor="#b6b6b6"
-                android:textColorHint="#b6b6b6"
                 android:id="@+id/register_passworad"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:background="@drawable/cor_gray_line" />
+                android:background="@drawable/cor_gray_line"
+                android:hint="支持英文+数字，不少于8位"
+                android:inputType="textPassword"
+                android:lines="1"
+                android:padding="5dp"
+                android:textColor="#b6b6b6"
+                android:textColorHint="#b6b6b6"
+                android:textSize="12sp" />
         </LinearLayout>
 
 
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="38dp"
+            android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="20dp"
@@ -134,24 +135,24 @@
                 android:textSize="18sp" />
 
             <EditText
-                android:padding="5dp"
-                android:hint="支持英文+数字，不少于8位"
                 android:id="@+id/register_rePas"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:background="@drawable/cor_gray_line"
+                android:hint="支持英文+数字，不少于8位"
                 android:inputType="textPassword"
                 android:lines="1"
-                android:textSize="12sp"
+                android:padding="5dp"
                 android:textColor="#b6b6b6"
-                android:textColorHint="#b6b6b6"/>
+                android:textColorHint="#b6b6b6"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="38dp"
+            android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="20dp"
@@ -166,26 +167,26 @@
                 android:textSize="18sp" />
 
             <EditText
-                android:padding="5dp"
-                android:hint="请输入6位数字"
+                android:id="@+id/register_zhifuPas"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:background="@drawable/cor_gray_line"
+                android:hint="请输入6位数字"
+                android:inputType="numberPassword"
                 android:lines="1"
-                android:textSize="12sp"
+                android:maxLength="6"
+                android:padding="5dp"
+                android:text=""
                 android:textColor="#b6b6b6"
                 android:textColorHint="#b6b6b6"
-                android:id="@+id/register_zhifuPas"
-                android:inputType="numberPassword"
-                android:maxLength="6"
-                android:text="" />
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="38dp"
+            android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="20dp"
@@ -200,24 +201,24 @@
                 android:textSize="18sp" />
 
             <EditText
-                android:padding="5dp"
-                android:hint="请输入6位数字"
-                android:inputType="numberPassword"
-                android:lines="1"
-                android:textSize="12sp"
-                android:textColor="#b6b6b6"
-                android:textColorHint="#b6b6b6"
                 android:id="@+id/register_rezhifuPas"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:background="@drawable/cor_gray_line" />
+                android:background="@drawable/cor_gray_line"
+                android:hint="请输入6位数字"
+                android:inputType="numberPassword"
+                android:lines="1"
+                android:padding="5dp"
+                android:textColor="#b6b6b6"
+                android:textColorHint="#b6b6b6"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="38dp"
+            android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="20dp"
@@ -230,11 +231,12 @@
                 android:text="验证码:"
                 android:textColor="@color/coure_tv"
                 android:textSize="18sp" />
+
             <LinearLayout
-                android:layout_weight="2"
-                android:orientation="horizontal"
                 android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/register_code"
@@ -245,29 +247,29 @@
                     android:hint="验证码"
                     android:lines="1"
                     android:padding="5dp"
-                    android:textSize="12sp"
                     android:textColor="#b6b6b6"
                     android:textColorHint="#b6b6b6"
-                   />
+                    android:textSize="12sp" />
 
                 <Button
-                    android:textColor="@color/white"
-                    android:background="@drawable/cor_blue"
-                    android:layout_marginLeft="15dp"
                     android:id="@+id/tv_getCode"
                     android:layout_width="121dp"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/cor_blue"
                     android:gravity="center"
                     android:text="发送验证码"
+                    android:textColor="@color/white"
                     android:textSize="12sp" />
             </LinearLayout>
 
 
         </LinearLayout>
+
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="38dp"
+            android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingLeft="20dp"
@@ -282,19 +284,20 @@
                 android:textSize="18sp" />
 
             <EditText
-                android:padding="5dp"
-                android:hint="选填"
-                android:textSize="12sp"
-                android:textColor="#b6b6b6"
-                android:textColorHint="#b6b6b6"
-                android:lines="1"
                 android:id="@+id/register_invite_phone"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:background="@drawable/cor_gray_line"
-                android:inputType="phone" />
+                android:hint="选填"
+                android:inputType="phone"
+                android:lines="1"
+                android:padding="5dp"
+                android:textColor="#b6b6b6"
+                android:textColorHint="#b6b6b6"
+                android:textSize="12sp" />
         </LinearLayout>
+
         <Button
             android:id="@+id/register_submint"
             android:layout_width="match_parent"
@@ -304,9 +307,9 @@
             android:layout_marginTop="30dp"
             android:background="@drawable/cor_login"
             android:gravity="center"
+            android:text="提交"
             android:textColor="@color/white"
-            android:textSize="15sp"
-            android:text="提交" />
+            android:textSize="15sp" />
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

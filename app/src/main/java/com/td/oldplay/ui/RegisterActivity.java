@@ -67,6 +67,7 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
         ButterKnife.bind(this);
         title.setTitle("注册");
         title.setOnLeftListener(this);
+        title.setTitleBarBackgroud(R.color.transparent);
         tvGetCode.setOnClickListener(this);
         registerSubmint.setOnClickListener(this);
         paras = new HashMap<>();

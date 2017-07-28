@@ -93,8 +93,8 @@ public class MyOrdersActivity extends BaseFragmentActivity
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 // startActivity(new Intent(mContext, TeacherDetailActivity.class));
-                Intent intent=new Intent(mContext, OrderDetailActivity.class);
-                intent.putExtra("id",datas.get(position).orderId);
+                Intent intent = new Intent(mContext, OrderDetailActivity.class);
+                intent.putExtra("id", datas.get(position).orderId);
                 startActivity(intent);
             }
 
@@ -164,7 +164,7 @@ public class MyOrdersActivity extends BaseFragmentActivity
     }
 
     @Override
-    public void onAction(int action, int postion, OrderBean item) {
+    public void onAction(int action, final int postion, OrderBean item) {
         Intent intent = null;
         switch (action) {
             case 1:
@@ -179,6 +179,26 @@ public class MyOrdersActivity extends BaseFragmentActivity
                 break;
             case 3:
                 // 确认收货
+                HttpManager.getInstance().confirmOrder(datas.get(postion).orderId, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+
+
+                    @Override
+                    public void onSuccess(String s) {
+                        ToastUtil.show("确认成功");
+                        datas.get(postion).status = 5;
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onError(int code, String errorMsg) {
+
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+                }));
                 break;
         }
     }

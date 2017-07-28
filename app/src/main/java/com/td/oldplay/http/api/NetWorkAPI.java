@@ -9,8 +9,8 @@ public class NetWorkAPI {
     /**
      * 请求的基本路径
      */
-   // public static final String BASE_URL = "http://172.16.0.203:8080/";
-    public static final String BASE_URL = "http://222.187.223.4:8081/";
+    //public static final String BASE_URL = "http://172.16.0.203:8080/";
+   public static final String BASE_URL = "http://222.187.223.4:8081/";
 
     /**
      * 老师数据
@@ -116,7 +116,7 @@ public class NetWorkAPI {
 
     public final static String ORDER_DETAIL_API = "lnrzb/mine/mineOrderDetail";
 
-
+    public final static String CONFIRM_ORDER_API = "lnrzb/mine/takeOveGoods";
     public final static String GET_FORUM_API = "lnrzb/mine/findMineTopic";
 
     public final static String FEED_BACK_API = "lnrzb/mine/feedbackPropose";

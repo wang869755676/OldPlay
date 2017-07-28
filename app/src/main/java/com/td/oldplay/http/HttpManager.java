@@ -361,4 +361,7 @@ public class HttpManager {
     public void orderDetails(String orderId, Observer<OrderDetail> observer) {
         toSubscribe(mApiService.orderDetails(orderId), observer);
     }
+    public void confirmOrder(String orderId, Observer<String> observer) {
+        toSubscribe(mApiService.confirmOrder(orderId), observer);
+    }
 }

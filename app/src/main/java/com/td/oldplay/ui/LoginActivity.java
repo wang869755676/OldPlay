@@ -177,7 +177,7 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
 
         params.put("password", pws);
 
-        params.put("uType", type);
+      //  params.put("uType", type);
         return true;
     }
 }

@@ -25,12 +25,14 @@
             android:visibility="gone" />
 
         <SeekBar
-
+            android:thumb="@drawable/cir_red_seekbar"
+            android:thumbOffset="0dp"
             android:id="@+id/item_voice_seek"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="20dp"
+            android:progressDrawable="@drawable/snailbar_define_style"
 
             />
     </LinearLayout>

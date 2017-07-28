@@ -267,7 +267,12 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
                 shopCarDialog.show();
                 break;
             case R.id.shop_detail_teacher:
-                startActivity(new Intent(mContext, TeacherDetailActivity.class));
+                if(bean!=null){
+                    Intent intent = new Intent(mContext, TeacherDetailActivity.class);
+                    intent.putExtra("id", bean.userId);
+                    startActivity(intent);
+                }
+
                 break;
             case R.id.shop_detail_cart:
                 startActivity(new Intent(mContext, ShopCarActivity.class));

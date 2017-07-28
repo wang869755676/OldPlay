@@ -13,6 +13,8 @@ import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.td.oldplay.utils.ToastUtil;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -486,7 +488,8 @@ public class VoiceManager {
                 }
             }
         } catch (Exception e) {
-            Log.e("播放出错了", e.getMessage());
+            ToastUtil.show("播放出错");
+            voicePlayCallBack.playError();
         }
     }
 
@@ -550,6 +553,9 @@ public class VoiceManager {
             mp.prepare();
             result = true;
         } catch (Exception e) {
+            e.printStackTrace();
+            ToastUtil.show("播放出错");
+            voicePlayCallBack.playError();
         }
 
         return result;
@@ -754,6 +760,8 @@ public class VoiceManager {
 
         //播放结束
         void playFinish();
+
+        void playError();
     }
 
     /**

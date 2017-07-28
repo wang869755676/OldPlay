@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.td.oldplay.R;
@@ -19,6 +20,7 @@ public class CustomTitlebarLayout extends LinearLayout {
     private TextView mRightView;
     private TextView mTitleView;
     private Context mContext;
+
 
     public CustomTitlebarLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -105,5 +107,7 @@ public class CustomTitlebarLayout extends LinearLayout {
         mRightView.setVisibility(GONE);
     }
 
+
 }
+
 

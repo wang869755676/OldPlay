@@ -66,10 +66,11 @@ public class ForgetPwsActivity extends BaseFragmentActivity implements View.OnCl
     private void initView() {
         title.setTitle("忘记密码");
         title.setOnLeftListener(this);
+        title.setTitleBarBackgroud(R.color.transparent);
         tvGetCode.setOnClickListener(this);
         registerSubmint.setOnClickListener(this);
         paras = new HashMap<>();
-        paras.put("userId",userId);
+        paras.put("userId", userId);
         timer = new CountDownTimer(1000, 60000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -92,7 +93,7 @@ public class ForgetPwsActivity extends BaseFragmentActivity implements View.OnCl
                 break;
             case R.id.register_submint:
                 if (checkInput()) {
-                   forgetServicer();
+                    forgetServicer();
                 }
                 break;
             case R.id.tv_getCode:

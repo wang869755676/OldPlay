@@ -9,6 +9,7 @@ import android.widget.SeekBar;
 import com.td.oldplay.R;
 import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
+import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.voicemanager.VoiceManager;
 
 import java.util.ArrayList;
@@ -46,7 +47,8 @@ public class VoiceAdapter extends CommonAdapter<String> {
         }
         holder.setOnClickListener(R.id.item_voice_start, new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
+                v.setEnabled(false);
                 if (voiceManager.isPlaying() && lastPosition == position) {
                     voiceManager.stopPlay();
                 } else {
@@ -70,12 +72,20 @@ public class VoiceAdapter extends CommonAdapter<String> {
 
                         @Override
                         public void playStart() {
-
+                            v.setEnabled(true);
 
                         }
 
                         @Override
                         public void playFinish() {
+
+                        }
+
+                        @Override
+                        public void playError() {
+                            voiceManager.stopPlay();
+                            ToastUtil.show("播放出错");
+
 
                         }
                     });

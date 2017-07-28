@@ -305,4 +305,8 @@ public interface ApiService {
     Observable<ApiResponse<OrderDetail>> orderDetails(@Field("orderId") String orderId);
 
 
+    @FormUrlEncoded
+    @POST(NetWorkAPI.CONFIRM_ORDER_API)
+    Observable<ApiResponse<String>>  confirmOrder(@Field("orderId") String orderId);
+
 }

@@ -15,6 +15,7 @@ public class ShopDetail {
     public List<ColorListBean> colorList;
     public List<GoodsImageListBean> goodsImageList;
     public List<String> sizeList;
+    public String userId;
 
 
 

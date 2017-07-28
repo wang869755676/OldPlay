@@ -1,6 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 android {
+    signingConfigs {
+        release {
+            keyAlias 'oldplay'
+            keyPassword '123456'
+            storeFile file('G:/project/OldPlay/oldplay.jks')
+            storePassword '123456'
+            v2SigningEnabled false
+        }
+    }
     compileSdkVersion 24
     buildToolsVersion '25.0.0'
     defaultConfig {
@@ -14,7 +23,11 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
 }

@@ -9,8 +9,8 @@ public class NetWorkAPI {
     /**
      * 请求的基本路径
      */
-    //public static final String BASE_URL = "http://172.16.0.203:8080/";
-   public static final String BASE_URL = "http://222.187.223.4:8081/";
+    public static final String BASE_URL = "http://172.16.0.203:8080/";
+  // public static final String BASE_URL = "http://222.187.223.4:8081/";
 
     /**
      * 老师数据
@@ -130,6 +130,8 @@ public class NetWorkAPI {
     public final static String GET_FORUMS_BY_TYPE_API = "lnrzb/forum/findTopicByBoardId";
 
     public final static String FORUMS_DETAIL_API = "lnrzb/forum/findTopicDetail";
+
+    public final static String FORUMS_LIKE_API = "lnrzb/forum/addLikeTopic";
 
     public final static String GET_FORUM_COMMENT_API = "lnrzb/forum/findTopicComment";
 

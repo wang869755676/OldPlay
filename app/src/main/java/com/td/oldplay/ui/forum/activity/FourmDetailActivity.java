@@ -113,6 +113,8 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
     private HttpSubscriber<List<CommentBean>> commentSubscriber;
     private HashMap<String, Object> params = new HashMap<>();
 
+    private boolean likeAction;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -240,7 +242,7 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
     }
 
     private void getDetails() {
-        HttpManager.getInstance().getForumDetials(id, subscriber);
+        HttpManager.getInstance().getForumDetials(id, userId, subscriber);
     }
 
     private void setData() {
@@ -267,6 +269,16 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
             videAdapter.notifyDataSetChanged();
         }
 
+        // 处理喜欢/ 非喜欢
+        likeNum.setText("" + forumDetial.likeNum);
+        if (forumDetial.type == 1) {
+            likeAction = false;
+            rightImage2.setImageResource(R.mipmap.icon_concern);
+        } else {
+            likeAction = true;
+            rightImage2.setImageResource(R.mipmap.icon_forum_like);
+        }
+
 
     }
 
@@ -290,6 +302,36 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
             case R.id.right_image: // 分享
                 break;
             case R.id.right_image2: // 喜欢
+                HttpManager.getInstance().forumLikeAction(id, userId, likeAction, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+
+                    @Override
+                    public void onSuccess(String s) {
+                        if (forumDetial != null) {
+                            if (likeAction) {   // 喜欢操作
+                                likeAction = false;
+                                likeNum.setText("" + ++forumDetial.likeNum);
+                                rightImage2.setImageResource(R.mipmap.icon_concern);
+                                ToastUtil.show("已喜欢");
+                            } else {   // 取消喜欢操作
+                                likeNum.setText("" + --forumDetial.likeNum);
+                                likeAction = true;
+                                rightImage2.setImageResource(R.mipmap.icon_forum_like);
+                                ToastUtil.show("已取消喜欢");
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(int code, String errorMsg) {
+
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+                }));
                 break;
             case R.id.forum_detail_edit: // 编辑信息
                 Intent intent = new Intent(mContext, PublishForumActivity.class);

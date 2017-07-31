@@ -107,9 +107,10 @@ public interface ApiService {
     @FormUrlEncoded
     @POST(NetWorkAPI.COURSE_COMMENT_API)
     Observable<ApiResponse<List<CommentBean>>> getCommentsInTeacher(@Field("page") int page, @Field("teacherId") String userId);
+
     @FormUrlEncoded
     @POST(NetWorkAPI.COURSE_COMMENT_API)
-    Observable<ApiResponse<List<CommentBean>>> getCommentsInTeacher( @Field("teacherId") String userId);
+    Observable<ApiResponse<List<CommentBean>>> getCommentsInTeacher(@Field("teacherId") String userId);
 
 
     @FormUrlEncoded
@@ -247,8 +248,11 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.FORUMS_DETAIL_API)
-    Observable<ApiResponse<ForumDetial>> getForumDetials(@Field("topicId") String topicId);
+    Observable<ApiResponse<ForumDetial>> getForumDetials(@Field("topicId") String topicId,@Field("userId") String userId);
 
+    @FormUrlEncoded
+    @POST(NetWorkAPI.FORUMS_LIKE_API)
+    Observable<ApiResponse<String>> forumLikeAction(@Field("topicId") String topicId, @Field("userId") String userId, @Field("flag") boolean action);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.GET_FORUM_COMMENT_API)
@@ -307,6 +311,6 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.CONFIRM_ORDER_API)
-    Observable<ApiResponse<String>>  confirmOrder(@Field("orderId") String orderId);
+    Observable<ApiResponse<String>> confirmOrder(@Field("orderId") String orderId);
 
 }

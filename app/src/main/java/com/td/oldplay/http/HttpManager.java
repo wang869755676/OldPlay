@@ -69,7 +69,7 @@ public class HttpManager {
         //拦截请求和响应日志并输出，其实有很多封装好的日志拦截插件，大家也可以根据个人喜好选择。
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                .retryOnConnectionFailure(true)
+                .retryOnConnectionFailure(false)
                 .addInterceptor(loggingInterceptor);
 
 
@@ -308,8 +308,8 @@ public class HttpManager {
         toSubscribe(mApiService.getForumsNyId(borad, page), observer);
     }
 
-    public void getForumDetials(String id, Observer<ForumDetial> observer) {
-        toSubscribe(mApiService.getForumDetials(id), observer);
+    public void getForumDetials(String id,String userId, Observer<ForumDetial> observer) {
+        toSubscribe(mApiService.getForumDetials(id,userId), observer);
     }
 
     public void getForumComment(String id, int page, Observer<List<CommentBean>> observer) {
@@ -336,6 +336,9 @@ public class HttpManager {
         toSubscribe(mApiService.postForumVoicec(params), observer);
     }
 
+    public void forumLikeAction(String topicId,String userId,boolean action, Observer<String> observer) {
+        toSubscribe(mApiService.forumLikeAction(topicId,userId,action), observer);
+    }
 
 
 

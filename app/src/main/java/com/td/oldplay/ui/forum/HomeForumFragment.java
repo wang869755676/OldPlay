@@ -84,7 +84,7 @@ public class HomeForumFragment extends BaseFragment implements View.OnClickListe
 
             @Override
             public void onSuccess(List<ForumType> forumTypes) {
-
+                datas.clear();
                 swipeLayout.setRefreshing(false);
                 if (forumTypes != null && forumTypes.size() > 0) {
                     datas.addAll(forumTypes);
@@ -126,7 +126,7 @@ public class HomeForumFragment extends BaseFragment implements View.OnClickListe
 
     @Override
     public void onRefresh() {
-        datas.clear();
+
         getData();
     }
 }

@@ -71,7 +71,7 @@ public class CourseListActivity extends BaseFragmentActivity
                 if (TextUtils.isEmpty(titles)) {
                     title.setTitle("课程分类");
                 }else{
-                    title.setTitle(titles+"类课程");
+                    title.setTitle(titles);
                 }
                 break;
             case 2:

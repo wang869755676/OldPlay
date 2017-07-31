@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -151,6 +152,10 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     private String teacherId;
     private int type;
 
+    private CustomDialog RewordDialog;
+    private View RewordDialogView;
+    private EditText RewordDialogEd;
+    private float Rewordmoney;
 
     /***
      * 连麦的操作监听
@@ -223,6 +228,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         title.setTitle("讲师直播");
         title.setOnLeftListener(this);
         params = (LinearLayout.LayoutParams) liveRoot.getLayoutParams();
+        initDialog();
         initViewPager();
         initCamer();
         initLister();
@@ -230,6 +236,32 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         initStream();
         initPlay();
         getData();
+    }
+
+    private void initDialog() {
+        RewordDialog = new CustomDialog(mContext);
+        RewordDialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_money, null);
+        RewordDialogView = (EditText) RewordDialogView.findViewById(R.id.dialog_money_ed);
+        RewordDialog.setContanier(RewordDialogView);
+        RewordDialog.setViewLineVisible(View.GONE);
+        RewordDialog.setTitle("输入打赏的金额");
+        RewordDialog.setDialogClick(new CustomDialog.DialogClick() {
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onOk() {
+                if(TextUtils.isEmpty( RewordDialogEd.getText().toString().trim())){
+                    ToastUtil.show("请输入打赏的金额");
+                    return;
+                }else{
+                    // 请求打赏 ，然后支付
+                }
+
+            }
+        });
     }
 
     private void getData() {

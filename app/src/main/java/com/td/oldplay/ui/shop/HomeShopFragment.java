@@ -185,9 +185,11 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
 
 
     private void getData() {
+        showLoading();
         HttpManager.getInstance().getHomeShop(new HttpSubscriber<HomeShopInfo>(new OnResultCallBack<HomeShopInfo>() {
             @Override
             public void onSuccess(HomeShopInfo homeShopInfo) {
+                hideLoading();
                 swipeLayout.setRefreshing(false);
                 if (homeShopInfo != null) {
                     if (homeShopInfo.goodsBannerList != null && homeShopInfo.goodsBannerList.size() > 0) {
@@ -216,6 +218,7 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
 
             @Override
             public void onError(int code, String errorMsg) {
+                hideLoading();
                 swipeLayout.setRefreshing(false);
                 ToastUtil.show(errorMsg);
             }

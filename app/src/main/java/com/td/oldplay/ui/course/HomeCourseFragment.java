@@ -198,9 +198,11 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
     }
 
     private void getData() {
+        showLoading();
         HttpManager.getInstance().getHomeCourse(new HttpSubscriber<HomeCourseInfo>(new OnResultCallBack<HomeCourseInfo>() {
             @Override
             public void onSuccess(HomeCourseInfo homeCourseInfo) {
+                hideLoading();
                 swipeLayout.setRefreshing(false);
                 if (homeCourseInfo != null) {
                     if (homeCourseInfo.coursesBannerList != null && homeCourseInfo.coursesBannerList.size() > 0) {
@@ -232,6 +234,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
 
             @Override
             public void onError(int code, String errorMsg) {
+                hideLoading();
                 swipeLayout.setRefreshing(false);
                 ToastUtil.show(errorMsg);
             }

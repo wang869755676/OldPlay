@@ -84,6 +84,7 @@ public class HomeForumFragment extends BaseFragment implements View.OnClickListe
 
             @Override
             public void onSuccess(List<ForumType> forumTypes) {
+                hideLoading();
                 datas.clear();
                 swipeLayout.setRefreshing(false);
                 if (forumTypes != null && forumTypes.size() > 0) {
@@ -94,6 +95,7 @@ public class HomeForumFragment extends BaseFragment implements View.OnClickListe
 
             @Override
             public void onError(int code, String errorMsg) {
+                hideLoading();
                 ToastUtil.show(errorMsg);
                 swipeLayout.setRefreshing(false);
             }
@@ -107,6 +109,7 @@ public class HomeForumFragment extends BaseFragment implements View.OnClickListe
     }
 
     private void getData() {
+        showLoading();
         HttpManager.getInstance().getHomeForums(subscriber);
     }
 

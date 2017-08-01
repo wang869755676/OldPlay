@@ -2,7 +2,6 @@ package com.td.oldplay.ui.window;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.icu.text.DateFormat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,6 @@ import java.util.HashMap;
 
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.sharesdk.wechat.moments.WechatMoments;
 
@@ -28,25 +26,21 @@ import cn.sharesdk.wechat.moments.WechatMoments;
  * Created by my on 2017/7/14.
  */
 
-public class SharePopupWindow extends PopupWindow implements View.OnClickListener, PlatformActionListener {
+public class PayTypePopupWindow extends PopupWindow implements View.OnClickListener {
 
-    private String title;
-    private String cocntent;
-    private String url;
-    private String imageUrl;
+
 
     private Animation animation_in;
     private Animation animation_out;
-
     private LinearLayout ll;
 
-    public SharePopupWindow(Context context, String title, String cocntent, String url, String imageUrl) {
+    private payTypeAction payTypeAction;
+   private LinearLayout teacherLl;
+
+    public PayTypePopupWindow(Context context, payTypeAction action) {
         super(context);
-        this.title = title;
-        this.cocntent = cocntent;
-        this.url = url;
-        this.imageUrl = imageUrl;
-        View view = LayoutInflater.from(context).inflate(R.layout.pop_share, null);
+        this.payTypeAction = action;
+        View view = LayoutInflater.from(context).inflate(R.layout.pop_paytype, null);
         setContentView(view);
         setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
@@ -55,8 +49,10 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         setOutsideTouchable(true);
         setFocusable(true);
         view.findViewById(R.id.pop_share_root).setOnClickListener(this);
-        view.findViewById(R.id.iv_wx).setOnClickListener(this);
-        view.findViewById(R.id.iv_pyq).setOnClickListener(this);
+        view.findViewById(R.id.iv_wx_pay).setOnClickListener(this);
+        view.findViewById(R.id.iv_zhifubao_pay).setOnClickListener(this);
+        view.findViewById(R.id.iv_teacher_pay).setOnClickListener(this);
+        teacherLl= (LinearLayout) view.findViewById(R.id.iv_teacher_pay);
         view.findViewById(R.id.btn_canel).setOnClickListener(this);
         ll = (LinearLayout) view.findViewById(R.id.share_ll);
         animation_in = AnimationUtils.loadAnimation(context, R.anim.menu_in);
@@ -87,18 +83,26 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
             case R.id.pop_share_root:
                 closeAnimation();
                 break;
-            case R.id.iv_wx:
-                ShareSDKUtils.share(Wechat.NAME, title, cocntent, url, imageUrl, this);
-                break;
-            case R.id.iv_pyq:
-                ShareSDKUtils.share(WechatMoments.NAME, title, cocntent, url, imageUrl, this);
+            case R.id.iv_wx_pay:
+            case R.id.iv_zhifubao_pay:
+            case R.id.iv_teacher_pay:
+                if (payTypeAction != null) {
+                    closeAnimation();
+                    payTypeAction.onPayType(v.getId());
+                }
+
                 break;
         }
     }
 
 
-    public void showPopup(View parent) {
+    public void showPopup(View parent,boolean isTeacher) {
         if (!this.isShowing()) {
+            if(isTeacher){
+                teacherLl.setVisibility(View.VISIBLE);
+            }else{
+                teacherLl.setVisibility(View.GONE);
+            }
             openAnimation();
             this.showAtLocation(parent, Gravity.BOTTOM, 0, 0);
         } else {
@@ -110,7 +114,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
      * 设置打开的东动画
      */
     private void openAnimation() {
-       ll.startAnimation(animation_in);
+        ll.startAnimation(animation_in);
 
 
     }
@@ -124,18 +128,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
 
     }
 
-    @Override
-    public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-        ToastUtil.show("分享成功");
-    }
-
-    @Override
-    public void onError(Platform platform, int i, Throwable throwable) {
-        ToastUtil.show("分享失败");
-    }
-
-    @Override
-    public void onCancel(Platform platform, int i) {
-
+    public  interface payTypeAction {
+        void onPayType(int viewId);
     }
 }

@@ -51,6 +51,7 @@ import com.td.oldplay.ui.course.fragment.IntruceFragment;
 import com.td.oldplay.ui.course.fragment.ShopFragment;
 import com.td.oldplay.ui.live.LiveBaseActivity;
 import com.td.oldplay.ui.window.CustomDialog;
+import com.td.oldplay.ui.window.PayTypePopupWindow;
 import com.td.oldplay.ui.window.SharePopupWindow;
 import com.td.oldplay.utils.LiveUtils;
 import com.td.oldplay.utils.ScreenUtils;
@@ -74,7 +75,10 @@ import io.reactivex.disposables.Disposable;
 public class TeacherDetailActivity extends LiveBaseActivity implements
         PLMediaPlayer.OnCompletionListener,
         PLMediaPlayer.OnVideoSizeChangedListener,
-        PLMediaPlayer.OnErrorListener, View.OnClickListener, CustomDialog.DialogClick {
+        PLMediaPlayer.OnErrorListener,
+        View.OnClickListener,
+        CustomDialog.DialogClick,
+        PayTypePopupWindow.payTypeAction {
 
     private static final String TAG = "TeacherDetailActivity";
     public CourseBean currentBean;
@@ -157,6 +161,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     private EditText RewordDialogEd;
     private float Rewordmoney;
 
+    private PayTypePopupWindow payTypePopupWindow;
+    private boolean isPayFromRewoard;
     /***
      * 连麦的操作监听
      */
@@ -241,7 +247,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     private void initDialog() {
         RewordDialog = new CustomDialog(mContext);
         RewordDialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_money, null);
-        RewordDialogView = (EditText) RewordDialogView.findViewById(R.id.dialog_money_ed);
+        RewordDialogEd = (EditText) RewordDialogView.findViewById(R.id.dialog_money_ed);
         RewordDialog.setContanier(RewordDialogView);
         RewordDialog.setViewLineVisible(View.GONE);
         RewordDialog.setTitle("输入打赏的金额");
@@ -253,11 +259,16 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
             @Override
             public void onOk() {
-                if(TextUtils.isEmpty( RewordDialogEd.getText().toString().trim())){
+                if (TextUtils.isEmpty(RewordDialogEd.getText().toString().trim())) {
                     ToastUtil.show("请输入打赏的金额");
                     return;
-                }else{
+                } else {
                     // 请求打赏 ，然后支付
+                    isPayFromRewoard = true;
+                    if (payTypePopupWindow == null) {
+                        payTypePopupWindow = new PayTypePopupWindow(mContext, TeacherDetailActivity.this);
+                    }
+                    payTypePopupWindow.showPopup(reword, false);
                 }
 
             }
@@ -484,6 +495,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 popupWindow.showPopup(v);
                 break;
             case R.id.reword:
+                RewordDialog.show();
                 break;
             case R.id.pause:
                 //mRTCStreamingManager.sto
@@ -773,13 +785,25 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     @Override
     public void onOk() {
         if (joinCon.isChecked()) {
-            startConference();
+            isPayFromRewoard = false;
+            if (payTypePopupWindow == null) {
+                payTypePopupWindow = new PayTypePopupWindow(mContext, this);
+            }
+
+            payTypePopupWindow.showPopup(joinCon, true);
+        } else {
+            stopConference();
+            hideOnMis();
+        }
+
+       /* if (joinCon.isChecked()) {
+            startConference();  // 支付成功后开通连麦
         } else {
 
             stopConference();
             hideOnMis();
         }
-
+*/
     }
 
     private HttpSubscriber<String> httpSubscriber = new HttpSubscriber<>(new OnResultCallBack<String>() {
@@ -810,4 +834,18 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         }
     });
 
+    @Override
+    public void onPayType(int viewId) {
+        switch (viewId) {
+            case R.id.iv_wx_pay:
+                ToastUtil.show("微信支付");
+                break;
+            case R.id.iv_zhifubao_pay:
+                ToastUtil.show("支付宝支付");
+                break;
+            case R.id.iv_teacher_pay:
+                ToastUtil.show("找老师开通");
+                break;
+        }
+    }
 }

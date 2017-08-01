@@ -3,6 +3,7 @@ package com.td.oldplay.ui.window;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -39,6 +40,11 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
         this.context = context;
 
         initalize();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     public void setDialogClick(DialogClick dialogClick) {

@@ -24,6 +24,7 @@ import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.course.activity.TeacherDetailActivity;
 import com.td.oldplay.ui.course.adapter.CourserAdapter;
 import com.td.oldplay.ui.window.CustomDialog;
+import com.td.oldplay.ui.window.PayTypePopupWindow;
 import com.td.oldplay.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -42,7 +43,8 @@ import io.reactivex.disposables.Disposable;
 public class CourseFragment extends BaseFragment implements
         SwipeRefreshLayout.OnRefreshListener,
         LoadMoreWrapper.OnLoadMoreListener,
-        CustomDialog.DialogClick {
+        CustomDialog.DialogClick,
+        PayTypePopupWindow.payTypeAction {
 
     @BindView(R.id.swipeToLoadLayout)
     SwipeRefreshLayout swipeToLoadLayout;
@@ -55,6 +57,7 @@ public class CourseFragment extends BaseFragment implements
     private CourserAdapter courserAdapter;
     private CustomDialog customDialog;
     private String id;
+    private PayTypePopupWindow payTypePopupWindow;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -170,8 +173,26 @@ public class CourseFragment extends BaseFragment implements
 
     @Override
     public void onOk() {
-        EventBus.getDefault().post(new EventMessage("changeCourseVideo"));
+        if (payTypePopupWindow == null) {
+            payTypePopupWindow = new PayTypePopupWindow(mActivity, this);
+        }
+        payTypePopupWindow.showPopup(swipeTarget, true);
+        EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
     }
 
 
+    @Override
+    public void onPayType(int viewId) {
+        switch (viewId) {
+            case R.id.iv_wx_pay:
+                ToastUtil.show("微信支付");
+                break;
+            case R.id.iv_zhifubao_pay:
+                ToastUtil.show("支付宝支付");
+                break;
+            case R.id.iv_teacher_pay:
+                ToastUtil.show("找老师开通");
+                break;
+        }
+    }
 }

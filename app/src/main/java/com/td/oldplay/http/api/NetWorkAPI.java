@@ -60,7 +60,11 @@ public class NetWorkAPI {
     public final static String SHOP_TEACHER_API = "lnrzb/courses/findGoodsByUserId";
 
     public final static String CONCERN_TEACHER_API = "lnrzb/courses/followTeacher";
+
     public final static String IS_TEACHER_API = "lnrzb/courses/isFollow";
+
+    public final static String OPEN_COURSE_API = "lnrzb/courses/applyCourses";
+
     public final static String COMMENT_TEACHER_API = "lnrzb/courses/sendTeacherComment";
     // 商品相关
 

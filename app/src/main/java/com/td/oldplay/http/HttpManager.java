@@ -70,7 +70,8 @@ public class HttpManager {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(false)
-                .addInterceptor(loggingInterceptor);
+                .addInterceptor(loggingInterceptor)
+        ;
 
 
         OkHttpClient okHttpClient = builder.build();
@@ -171,8 +172,8 @@ public class HttpManager {
         toSubscribe(mApiService.getTeachersInCourse(page, id), observer);
     }
 
-    public void getcoursesInTeacher(int page, String id, Observer<List<CourseBean>> observer) {
-        toSubscribe(mApiService.getcoursesInTeacher(page, id), observer);
+    public void getcoursesInTeacher(int page,String userId, String teacherId, Observer<List<CourseBean>> observer) {
+        toSubscribe(mApiService.getcoursesInTeacher(page, userId,teacherId), observer);
     }
 
     public void getCommentsInTeacher(int page, String id, Observer<List<CommentBean>> observer) {
@@ -203,6 +204,9 @@ public class HttpManager {
         toSubscribe(mApiService.isConcernTeacher(userId,teacherId), observer);
     }
 
+    public void openCourse(String userId,String courseId, Observer<String> observer) {
+        toSubscribe(mApiService.openCourse(userId,courseId), observer);
+    }
     public void concernTeacher(String userId,String teacherId, Observer<String> observer) {
         toSubscribe(mApiService.concernTeacher(userId,teacherId), observer);
     }

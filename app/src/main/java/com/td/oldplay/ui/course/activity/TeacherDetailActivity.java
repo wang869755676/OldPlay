@@ -790,7 +790,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 payTypePopupWindow = new PayTypePopupWindow(mContext, this);
             }
 
-            payTypePopupWindow.showPopup(joinCon, true);
+            payTypePopupWindow.showPopup(joinCon, false);
         } else {
             stopConference();
             hideOnMis();

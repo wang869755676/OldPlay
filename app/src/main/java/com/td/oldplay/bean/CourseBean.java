@@ -23,6 +23,7 @@ public class CourseBean {
     public float price;
     public String profile;
     public String userId;
+    public int isBuy; //	当前用户是否购买 0:未购买,1:已购买,2:开通审核中
 
 
 }

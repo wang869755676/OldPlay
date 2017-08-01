@@ -102,7 +102,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.TEACHER_COURSE_API)
-    Observable<ApiResponse<List<CourseBean>>> getcoursesInTeacher(@Field("page") int page, @Field("userId") String userId);
+    Observable<ApiResponse<List<CourseBean>>> getcoursesInTeacher(@Field("page") int page, @Field("userId") String userId, @Field("teacherId") String teacherId);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.COURSE_COMMENT_API)
@@ -141,6 +141,11 @@ public interface ApiService {
     @FormUrlEncoded
     @POST(NetWorkAPI.IS_TEACHER_API)
     Observable<ApiResponse<Integer>> isConcernTeacher(@Field("userId") String userId, @Field("teacherId") String teacherId);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.OPEN_COURSE_API)
+    Observable<ApiResponse<String>> openCourse(@Field("userId") String userId, @Field("coursesId") String coursesId);
+
 
     // =================商品============
     @FormUrlEncoded
@@ -248,7 +253,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.FORUMS_DETAIL_API)
-    Observable<ApiResponse<ForumDetial>> getForumDetials(@Field("topicId") String topicId,@Field("userId") String userId);
+    Observable<ApiResponse<ForumDetial>> getForumDetials(@Field("topicId") String topicId, @Field("userId") String userId);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.FORUMS_LIKE_API)

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,7 @@ public class CourseFragment extends BaseFragment implements
     private CustomDialog customDialog;
     private String id;
     private PayTypePopupWindow payTypePopupWindow;
+    private String currentId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,8 +98,17 @@ public class CourseFragment extends BaseFragment implements
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 ((TeacherDetailActivity) mActivity).currentBean = datas.get(position);
-                customDialog.setContent("支付" + datas.get(position).price + "元购买课程");
-                customDialog.show();
+                currentId = datas.get(position).coursesId;
+                if (datas.get(position).isBuy == 0) {
+                    customDialog.setContent("支付" + datas.get(position).price + "元购买课程");
+                    customDialog.show();
+                } else if (datas.get(position).isBuy == 1) {
+                    EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
+                } else if (datas.get(position).isBuy == 2) {
+                    ToastUtil.show("等待老师开通中");
+                }
+
+
             }
 
             @Override
@@ -111,7 +122,7 @@ public class CourseFragment extends BaseFragment implements
     }
 
     private void getData() {
-        HttpManager.getInstance().getcoursesInTeacher(page, id, new HttpSubscriber<List<CourseBean>>(new OnResultCallBack<List<CourseBean>>() {
+        HttpManager.getInstance().getcoursesInTeacher(page, userId, id, new HttpSubscriber<List<CourseBean>>(new OnResultCallBack<List<CourseBean>>() {
 
 
             @Override
@@ -177,7 +188,7 @@ public class CourseFragment extends BaseFragment implements
             payTypePopupWindow = new PayTypePopupWindow(mActivity, this);
         }
         payTypePopupWindow.showPopup(swipeTarget, true);
-        EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
+
     }
 
 
@@ -186,12 +197,34 @@ public class CourseFragment extends BaseFragment implements
         switch (viewId) {
             case R.id.iv_wx_pay:
                 ToastUtil.show("微信支付");
+                EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
                 break;
             case R.id.iv_zhifubao_pay:
                 ToastUtil.show("支付宝支付");
+                EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
                 break;
             case R.id.iv_teacher_pay:
                 ToastUtil.show("找老师开通");
+                if (!TextUtils.isEmpty(currentId)) {
+                    HttpManager.getInstance().openCourse(userId, id, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+
+                        @Override
+                        public void onSuccess(String s) {
+                            ToastUtil.show("等待老师开通");
+                        }
+
+                        @Override
+                        public void onError(int code, String errorMsg) {
+
+                        }
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            addDisposable(d);
+                        }
+                    }));
+                }
+
                 break;
         }
     }

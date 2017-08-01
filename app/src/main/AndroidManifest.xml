@@ -400,7 +400,11 @@
             android:name="JPUSH_APPKEY"
             android:value="253723eb060488612d64d862" /> <!-- </>值来自开发者平台取得的AppKey -->
 
-
+        <!--支付回调-->
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true" >
+        </activity>
     </application>
 
 </manifest>

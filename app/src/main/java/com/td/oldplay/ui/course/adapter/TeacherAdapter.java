@@ -30,6 +30,7 @@ public class TeacherAdapter extends CommonAdapter<TeacherBean> {
             if (type == 0) {
                 holder.setText(R.id.item_school,"课时:" +teacherBean.classHour+"节");
             }
+            holder.setText(R.id.item_name,teacherBean.nickName);
             GlideUtils.setImage(mContext,teacherBean.avatar, (ImageView) holder.getView(R.id.circularImage));
             holder.setText(R.id.item_introduce,"    " +teacherBean.profile);
         }

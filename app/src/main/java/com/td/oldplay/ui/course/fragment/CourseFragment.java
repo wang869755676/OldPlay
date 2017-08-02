@@ -59,7 +59,7 @@ public class CourseFragment extends BaseFragment implements
     private CustomDialog customDialog;
     private String id;
     private PayTypePopupWindow payTypePopupWindow;
-    private String currentId;
+    private CourseBean currentCourse;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,7 +98,7 @@ public class CourseFragment extends BaseFragment implements
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 ((TeacherDetailActivity) mActivity).currentBean = datas.get(position);
-                currentId = datas.get(position).coursesId;
+                currentCourse = datas.get(position);
                 if (datas.get(position).isBuy == 0) {
                     customDialog.setContent("支付" + datas.get(position).price + "元购买课程");
                     customDialog.show();
@@ -205,11 +205,13 @@ public class CourseFragment extends BaseFragment implements
                 break;
             case R.id.iv_teacher_pay:
                 ToastUtil.show("找老师开通");
-                if (!TextUtils.isEmpty(currentId)) {
-                    HttpManager.getInstance().openCourse(userId, id, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+                if (currentCourse != null) {
+                    HttpManager.getInstance().openCourse(userId, currentCourse.coursesId, new HttpSubscriber<String>(new OnResultCallBack<String>() {
 
                         @Override
                         public void onSuccess(String s) {
+                            currentCourse.isBuy = 2;
+                            courserAdapter.notifyDataSetChanged();
                             ToastUtil.show("等待老师开通");
                         }
 

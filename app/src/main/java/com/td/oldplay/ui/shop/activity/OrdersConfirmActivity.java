@@ -129,7 +129,9 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 switch (checkedId) {
                     case R.id.account:
+
                         payType = 0;
+
                         break;
                     case R.id.weixin:
                         payType = 1;
@@ -177,7 +179,7 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
     }
 
     private void setData() {
-
+        account.setText("账户余额:" + userBean.money + "元");
         if (addressBean != null) {
             buyAddressName.setText("收货人: " + addressBean.consignee);
             buyAddressTelphone.setText("收货人: " + addressBean.mobile);
@@ -197,6 +199,7 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
             totalMoney += datas.get(i).amount_paid;
             ortderTotal.setText("￥ " + totalMoney);
         }
+
         acore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -223,6 +226,10 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
                 // 调用支付接口
                 switch (payType) {
                     case 0:
+                        if (userBean.money < totalMoney - scoreMoney) {
+                            ToastUtil.show("账户余额不足");
+                            return;
+                        }
                         customDialog.show();
                         break;
                     case 1: // 微信支付
@@ -251,8 +258,8 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
     private void setAddress() {
         if (addressBean != null) {
             buyAddressName.setText("收货人: " + addressBean.consignee);
-            buyAddressTelphone.setText("收货人: " + addressBean.mobile);
-            buyAddressInfo.setText("收货人: " + addressBean.address);
+            buyAddressTelphone.setText("联系电话: " + addressBean.mobile);
+            buyAddressInfo.setText("收货地址: " + addressBean.address);
         }
 
     }

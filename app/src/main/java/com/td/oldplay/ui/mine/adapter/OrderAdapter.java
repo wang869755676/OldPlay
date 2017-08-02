@@ -56,6 +56,25 @@ public class OrderAdapter extends CommonAdapter<OrderBean> {
         holder.setText(R.id.item_order_smoney, "合计 " + orderBean.amount_paid);
         recyclerView = holder.getView(R.id.item_goods);
         if (orderBean.orderDetails != null && orderBean.orderDetails.size() > 0) {
+             if(orderBean.orderDetails.get(0).groupBuy!=null){
+                 if(orderBean.orderDetails.get(0).groupBuy.status==1){
+                     holder.setText(R.id.item_order_groupstate,"团购中");
+                     holder.setVisible(R.id.item_order_groupstate,true);
+                     holder.setVisible(R.id.item_order_done_action,false);
+                 }else if(orderBean.orderDetails.get(0).groupBuy.status==2){
+                     holder.setText(R.id.item_order_groupstate,"团购成功");
+                     holder.setVisible(R.id.item_order_groupstate,true);
+                     holder.setVisible(R.id.item_order_done_action,true);
+                 }else if(orderBean.orderDetails.get(0).groupBuy.status==2){
+                     holder.setText(R.id.item_order_groupstate,"团购取消");
+                     holder.setVisible(R.id.item_order_groupstate,true);
+                     holder.setVisible(R.id.item_order_done_action,false);
+                 }
+
+             }else {
+                 holder.setVisible(R.id.item_order_groupstate,false);
+                 holder.setVisible(R.id.item_order_done_action,true);
+             }
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
             goodAdapter = new GoodAdapter(mContext, R.layout.item_mine_order_inner, orderBean.orderDetails);
             recyclerView.setAdapter(goodAdapter);

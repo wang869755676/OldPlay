@@ -60,16 +60,19 @@ public class ShopDetailFragment extends BaseFragment {
     }
 
     public void refreshData(List<ShopDetail.GoodsImageListBean> ss) {
-        datas = ss;
-        swipeTarget.setAdapter(new CommonAdapter<ShopDetail.GoodsImageListBean>(mActivity, R.layout.item_shop_pic, datas) {
+        if (mActivity != null) {
+            datas = ss;
+            swipeTarget.setAdapter(new CommonAdapter<ShopDetail.GoodsImageListBean>(mActivity, R.layout.item_shop_pic, datas) {
 
-            @Override
-            protected void convert(ViewHolder holder, ShopDetail.GoodsImageListBean s, int position) {
-                if(s!=null){
-                    GlideUtils.setImage(mActivity, s.imageUrl, (ImageView) holder.getView(R.id.item_shop_de_pic));
+                @Override
+                protected void convert(ViewHolder holder, ShopDetail.GoodsImageListBean s, int position) {
+                    if (s != null) {
+                        GlideUtils.setImage(mActivity, s.imageUrl, (ImageView) holder.getView(R.id.item_shop_de_pic));
+                    }
+
                 }
+            });
+        }
 
-            }
-        });
     }
 }

@@ -11,6 +11,6 @@ public class GroupBuy {
     public int number;
     public float price;
     public TimeInfo startTime;
-    public int status; //优惠状态0:优惠还未开始,1:优惠中,2:优惠已结束
+    public int status; //0:团购中, 1 团购成功 2 团购失败
 
 }

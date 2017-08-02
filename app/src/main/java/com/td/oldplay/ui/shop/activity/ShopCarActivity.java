@@ -161,6 +161,10 @@ public class ShopCarActivity extends BaseFragmentActivity
                 finish();
                 break;
             case R.id.car_jiesuan:
+                if (carsId.size() <= 0) {
+                    ToastUtil.show("未选择任何商品");
+                    return;
+                }
                 createOrderCar();
                 break;
         }

@@ -24,33 +24,45 @@
         android:textSize="16sp" />
 
     <LinearLayout
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:background="@color/white"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
         <TextView
-            android:textColor="@color/coure_tv"
-            android:textSize="16sp"
+            android:drawablePadding="5dp"
+            android:drawableLeft="@mipmap/icon_about_wei"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="微信号:"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:text="微信号:dfdsfsdfdsf"
+            android:textColor="@color/coure_tv"
+            android:textSize="16sp" />
     </LinearLayout>
+
     <LinearLayout
-        android:layout_marginTop="10dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:background="@color/white"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
         <TextView
-            android:textColor="@color/coure_tv"
-            android:textSize="16sp"
+
+            android:drawablePadding="5dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@mipmap/icon_about_youciang"
             android:gravity="center"
-            android:text="邮箱号:"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:text="邮箱号:sdasdasdasd"
+            android:textColor="@color/coure_tv"
+            android:textSize="16sp" />
     </LinearLayout>
 
 </LinearLayout>

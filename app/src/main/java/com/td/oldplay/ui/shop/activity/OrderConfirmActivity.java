@@ -106,7 +106,7 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
 
             @Override
             public void onOk() {
-               password=passwordInputView.getText().toString();
+                password = passwordInputView.getText().toString();
                 // 使用账户支付
             }
         });
@@ -144,6 +144,7 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
 
     private void setData() {
         if (orderBean != null) {
+            account.setText("账户余额:" + userBean.money + "元");
             ortderTotal.setText("￥ " + orderBean.amount_paid);
             orederConfirmTotal.setText("￥ " + orderBean.amount_payable);
             // orederConfirmScore.setText();
@@ -180,6 +181,8 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
                     }
                 }
             });
+        } else {
+            return;
         }
     }
 
@@ -196,6 +199,10 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
                 // 调用支付接口
                 switch (payType) {
                     case 0:
+                        if (userBean.money < orderBean.amount_paid) {
+                            ToastUtil.show("账户余额不足");
+                            return;
+                        }
                         customDialog.show();
                         break;
                     case 1: // 微信支付
@@ -223,8 +230,8 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
     private void setAddress() {
         if (orderBean.address != null) {
             buyAddressName.setText("收货人: " + orderBean.address.consignee);
-            buyAddressTelphone.setText("收货人: " + orderBean.address.mobile);
-            buyAddressInfo.setText("收货人: " + orderBean.address.address);
+            buyAddressTelphone.setText("联系电话: " + orderBean.address.mobile);
+            buyAddressInfo.setText("收货地址: " + orderBean.address.address);
         }
 
     }

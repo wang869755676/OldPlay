@@ -181,7 +181,6 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
             @Override
             public void onSuccess(ShopDetail shopDetail) {
                 bean = shopDetail;
-
                 setData();
             }
 

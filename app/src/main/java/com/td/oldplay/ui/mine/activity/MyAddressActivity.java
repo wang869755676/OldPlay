@@ -126,8 +126,8 @@ public class MyAddressActivity extends BaseFragmentActivity
                     }
 
                 }
-                Collections.reverse(datas);
-                adapter.notifyDataSetChanged();
+               // Collections.reverse(datas);
+                addressAdapter.notifyDataSetChanged();
 
             }
 

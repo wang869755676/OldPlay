@@ -81,35 +81,51 @@
         android:gravity="center_vertical"
         android:paddingLeft="10dip"
         android:paddingRight="10dip">
-
-        <TextView
-            android:id="@+id/item_order_logistics"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:text="查看物流"
-            android:textColor="#2E2E2E"
-            android:textSize="14sp" />
-
         <TextView
             android:visibility="gone"
-            android:id="@+id/item_order_comment"
+            android:id="@+id/item_order_groupstate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="评价"
-            android:textColor="#2E2E2E"
+            android:gravity="left"
+            android:text="查看物流"
+            android:textColor="@color/tv_red"
             android:textSize="14sp" />
+        <LinearLayout
+            android:id="@+id/item_order_done_action"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/item_order_logistics"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="查看物流"
+                android:textColor="#2E2E2E"
+                android:textSize="14sp" />
 
-        <TextView
-            android:id="@+id/item_oreder_confirm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:gravity="center"
-            android:text="确认收货"
-            android:textColor="@color/tv_red" />
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/item_order_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="评价"
+                android:textColor="#2E2E2E"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/item_oreder_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:text="确认收货"
+                android:textColor="@color/tv_red" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

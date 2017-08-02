@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,13 +41,17 @@ import com.td.oldplay.widget.banner.MZBannerView;
 import com.td.oldplay.widget.banner.holder.MZHolderCreator;
 import com.td.oldplay.widget.banner.holder.MZViewHolder;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -206,7 +211,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
                 swipeLayout.setRefreshing(false);
                 if (homeCourseInfo != null) {
                     if (homeCourseInfo.coursesBannerList != null && homeCourseInfo.coursesBannerList.size() > 0) {
-                        banners=homeCourseInfo.coursesBannerList;
+                        banners = homeCourseInfo.coursesBannerList;
                         homrCoureseBanner.setPages(homeCourseInfo.coursesBannerList, new MZHolderCreator<BannerViewHolder>() {
                             @Override
                             public BannerViewHolder createViewHolder() {
@@ -268,9 +273,35 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         Intent intent = null;
         switch (v.getId()) {
             case R.id.home_more_hot:
+                HttpManager.getInstance().create("1", "https://api.mch.weixin.qq.com/pay/unifiedorder").unsubscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new HttpSubscriber<ResponseBody>(new OnResultCallBack<ResponseBody>() {
+
+
+                            @Override
+                            public void onSuccess(ResponseBody responseBody) {
+                                Log.e("==========", "-------------------------------");
+                                try {
+                                    Log.e("===", responseBody.string() + "----------------");
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onError(int code, String errorMsg) {
+
+                            }
+
+                            @Override
+                            public void onSubscribe(Disposable d) {
+
+                            }
+                        }));
+/*
                 intent = new Intent(mActivity, CourseListActivity.class);
                 intent.putExtra("type", 3);
-                startActivity(intent);
+                startActivity(intent);*/
                 break;
             case R.id.home_more_recoment:
                 intent = new Intent(mActivity, CourseListActivity.class);

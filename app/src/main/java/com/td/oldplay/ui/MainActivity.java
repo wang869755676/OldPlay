@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -15,6 +16,9 @@ import android.widget.TextView;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.course.HomeCourseFragment;
 import com.td.oldplay.ui.forum.HomeForumFragment;
 import com.td.oldplay.ui.live.LiveActivity;
@@ -22,9 +26,15 @@ import com.td.oldplay.ui.mine.HomeMyFragment;
 import com.td.oldplay.ui.shop.HomeShopFragment;
 import com.td.oldplay.utils.ToastUtil;
 
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jpush.android.api.JPushInterface;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 
 public class MainActivity extends BaseFragmentActivity {
@@ -62,7 +72,7 @@ public class MainActivity extends BaseFragmentActivity {
     }
 
     private void init() {
-        JPushInterface.setAlias(mContext,1,userId);
+        JPushInterface.setAlias(mContext, 1, userId);
         if (userBean != null && userBean.uType == 1) {
             live.setVisibility(View.VISIBLE);
             live.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +125,6 @@ public class MainActivity extends BaseFragmentActivity {
             }
         });
         rbTab1.setChecked(true);
-
 
     }
 

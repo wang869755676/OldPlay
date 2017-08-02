@@ -44,6 +44,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.http.Field;
@@ -370,5 +371,8 @@ public class HttpManager {
     }
     public void confirmOrder(String orderId, Observer<String> observer) {
         toSubscribe(mApiService.confirmOrder(orderId), observer);
+    }
+    public Observable<ResponseBody> create(String orderInfo,String path) {
+        return mApiService.create(orderInfo);
     }
 }

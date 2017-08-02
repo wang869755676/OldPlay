@@ -25,6 +25,8 @@ import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.course.activity.TeacherDetailActivity;
 import com.td.oldplay.ui.course.adapter.CourserAdapter;
 import com.td.oldplay.ui.window.CustomDialog;
+import com.td.oldplay.ui.window.PayAlertDialog;
+import com.td.oldplay.ui.window.PayTypeDialog;
 import com.td.oldplay.ui.window.PayTypePopupWindow;
 import com.td.oldplay.utils.ToastUtil;
 
@@ -45,7 +47,8 @@ public class CourseFragment extends BaseFragment implements
         SwipeRefreshLayout.OnRefreshListener,
         LoadMoreWrapper.OnLoadMoreListener,
         CustomDialog.DialogClick,
-        PayTypePopupWindow.payTypeAction {
+        PayTypePopupWindow.payTypeAction,
+        PayTypeDialog.DialogClick{
 
     @BindView(R.id.swipeToLoadLayout)
     SwipeRefreshLayout swipeToLoadLayout;
@@ -58,8 +61,15 @@ public class CourseFragment extends BaseFragment implements
     private CourserAdapter courserAdapter;
     private CustomDialog customDialog;
     private String id;
-    private PayTypePopupWindow payTypePopupWindow;
+
     private CourseBean currentCourse;
+
+
+    private PayTypeDialog payTypeDialog;
+    private PayAlertDialog teacherDialog;
+
+    private PayAlertDialog accountDialog;
+    private PayAlertDialog paySuccessDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -117,6 +127,28 @@ public class CourseFragment extends BaseFragment implements
             }
         });
 
+        teacherDialog=new PayAlertDialog(mActivity,false,false);
+        teacherDialog.setContent("申请提交成功\n" +
+                "请尽快联系老师开通课程");
+        paySuccessDialog=new PayAlertDialog(mActivity,false,false);
+        paySuccessDialog.setContent("支付成功");
+        accountDialog=new PayAlertDialog(mActivity,true,true);
+        accountDialog.setDialogClick(new PayAlertDialog.DialogClick() {
+            @Override
+            public void onBack() {
+                if(payTypeDialog!=null){
+                    payTypeDialog.show();
+                }
+            }
+
+            @Override
+            public void onnext() {
+                if(paySuccessDialog!=null){
+                    paySuccessDialog.show();
+                }
+
+            }
+        });
         getData();
 
     }
@@ -183,11 +215,61 @@ public class CourseFragment extends BaseFragment implements
     }
 
     @Override
-    public void onOk() {
-        if (payTypePopupWindow == null) {
-            payTypePopupWindow = new PayTypePopupWindow(mActivity, this);
+    public void onOk(int payType, int scoreId) {
+        switch (payType) {
+            case 0:
+                accountDialog.setContent("账户余额支付XX元");
+                accountDialog.setScore("使用积分");
+                accountDialog.show();
+                break;
+            case 1:
+                ToastUtil.show("微信支付");
+                EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
+                break;
+            case 2:
+                ToastUtil.show("支付宝支付");
+                EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
+                break;
+            case 3:
+                ToastUtil.show("找老师开通");
+                if (currentCourse != null) {
+                    HttpManager.getInstance().openCourse(userId, currentCourse.coursesId, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+
+                        @Override
+                        public void onSuccess(String s) {
+                            currentCourse.isBuy = 2;
+                            courserAdapter.notifyDataSetChanged();
+                            if(teacherDialog!=null){
+                                teacherDialog.show();
+                            }
+
+                            ToastUtil.show("等待老师开通");
+                        }
+
+                        @Override
+                        public void onError(int code, String errorMsg) {
+
+                        }
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            addDisposable(d);
+                        }
+                    }));
+                }
+
+                break;
+
         }
-        payTypePopupWindow.showPopup(swipeTarget, true);
+    }
+
+    @Override
+    public void onOk() {
+        if (payTypeDialog == null) {
+            payTypeDialog = new PayTypeDialog(mActivity, true);
+            payTypeDialog.setDialogClick(this);
+        }
+        payTypeDialog.show();
 
     }
 
@@ -230,4 +312,6 @@ public class CourseFragment extends BaseFragment implements
                 break;
         }
     }
+
+
 }

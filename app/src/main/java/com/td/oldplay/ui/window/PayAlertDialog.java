@@ -106,7 +106,9 @@ public class PayAlertDialog extends Dialog implements View.OnClickListener {
     public void setScore(String score) {
         scoreTv.setText(score);
     }
-
+    public void setOkStr(String str) {
+        okTv.setText(str);
+    }
     @Override
     public void onClick(View view) {
         switch (view.getId()) {

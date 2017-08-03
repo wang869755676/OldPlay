@@ -52,6 +52,8 @@ import com.td.oldplay.ui.course.fragment.IntruceFragment;
 import com.td.oldplay.ui.course.fragment.ShopFragment;
 import com.td.oldplay.ui.live.LiveBaseActivity;
 import com.td.oldplay.ui.window.CustomDialog;
+import com.td.oldplay.ui.window.PayAlertDialog;
+import com.td.oldplay.ui.window.PayTypeDialog;
 import com.td.oldplay.ui.window.PayTypePopupWindow;
 import com.td.oldplay.ui.window.SharePopupWindow;
 import com.td.oldplay.utils.LiveUtils;
@@ -60,7 +62,9 @@ import com.td.oldplay.utils.SoftInputUtils;
 import com.td.oldplay.utils.StreamUtils;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
+import com.td.oldplay.widget.password.PasswordInputView;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -160,10 +164,22 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     private CustomDialog RewordDialog;
     private View RewordDialogView;
     private EditText RewordDialogEd;
-    private float Rewordmoney;
+    private String Rewordmoney;
 
     private PayTypePopupWindow payTypePopupWindow;
     private boolean isPayFromRewoard;
+
+    private PayTypeDialog payTypeDialog;
+    //private PayAlertDialog accountDialog;
+    private PayAlertDialog paySuccessDialog;
+    private CustomDialog passwordDialog;
+
+
+    private PasswordInputView passwordInputView;
+    private View dialogView;
+    private String password;
+
+
     /***
      * 连麦的操作监听
      */
@@ -246,12 +262,42 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     }
 
     private void initDialog() {
+        payTypeDialog = new PayTypeDialog(mContext, false);
+        payTypeDialog.setDialogClick(new PayTypeDialog.DialogClick() {
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onOk(int payType, int scoreId) {
+                switch (payType) {
+                    case 0:
+                        if (passwordDialog != null) {
+                            passwordDialog.show();
+                        }
+                        break;
+                    case 1:
+                        ToastUtil.show("微信支付");
+                        EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
+                        break;
+                    case 2:
+                        ToastUtil.show("支付宝支付");
+                        EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
+                        break;
+
+                }
+
+            }
+        });
+
+
         RewordDialog = new CustomDialog(mContext);
-        RewordDialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_money, null);
+        RewordDialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_reword_money, null);
         RewordDialogEd = (EditText) RewordDialogView.findViewById(R.id.dialog_money_ed);
         RewordDialog.setContanier(RewordDialogView);
         RewordDialog.setViewLineVisible(View.GONE);
-        RewordDialog.setTitle("输入打赏的金额");
+        RewordDialog.setTitleVisible(View.GONE);
         RewordDialog.setDialogClick(new CustomDialog.DialogClick() {
             @Override
             public void onCancel() {
@@ -260,20 +306,88 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
             @Override
             public void onOk() {
-                if (TextUtils.isEmpty(RewordDialogEd.getText().toString().trim())) {
+                Rewordmoney = RewordDialogEd.getText().toString();
+                if (TextUtils.isEmpty(Rewordmoney)) {
                     ToastUtil.show("请输入打赏的金额");
                     return;
                 } else {
                     // 请求打赏 ，然后支付
-                    isPayFromRewoard = true;
-                    if (payTypePopupWindow == null) {
-                        payTypePopupWindow = new PayTypePopupWindow(mContext, TeacherDetailActivity.this);
-                    }
-                    payTypePopupWindow.showPopup(reword, false);
+
+                    payTypeDialog.setTitle("打赏: " + Rewordmoney + "元");
+                    payTypeDialog.show();
                 }
 
             }
         });
+
+
+        paySuccessDialog = new PayAlertDialog(mContext, false, false);
+        paySuccessDialog.setContent("支付成功");
+        paySuccessDialog.setDialogClick(new PayAlertDialog.DialogClick() {
+            @Override
+            public void onBack() {
+
+            }
+
+            @Override
+            public void onnext() {
+                if (!isPayFromRewoard) {
+                    showOnMis();
+                    startConference();
+                }
+            }
+        });
+
+        passwordDialog = new CustomDialog(mContext);
+        passwordDialog.setTitle("输入密码");
+        passwordDialog.setCancelTv("返回");
+        dialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_password, null);
+        passwordInputView = (PasswordInputView) dialogView.findViewById(R.id.password);
+        passwordDialog.setContanier(dialogView);
+        passwordDialog.setDialogClick(new CustomDialog.DialogClick() {
+            @Override
+            public void onCancel() {
+                if (payTypeDialog != null) {
+                    payTypeDialog.show();
+                }
+            }
+
+            @Override
+            public void onOk() {
+                password = passwordInputView.getText().toString();
+                if (isPayFromRewoard) {
+                    ToastUtil.show("账户支付打赏");
+
+                } else {
+                    ToastUtil.show("账户连麦");
+                    paySuccessDialog.setOkStr("开始连麦");
+                }
+                // 账户支付
+                if (paySuccessDialog != null) {
+                    paySuccessDialog.show();
+                }
+
+            }
+        });
+
+
+    /*    accountDialog = new PayAlertDialog(mContext, true, true);
+        accountDialog.setDialogClick(new PayAlertDialog.DialogClick() {
+            @Override
+            public void onBack() {
+                if (payTypeDialog != null) {
+                    payTypeDialog.show();
+                }
+            }
+
+            @Override
+            public void onnext() {
+                if (passwordDialog != null) {
+                    passwordDialog.show();
+                }
+            }
+        });
+*/
     }
 
     private void getData() {
@@ -395,7 +509,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     @Override
     protected void onMicConnectedMsg(MessageEvent event) {
-        showOnMis();
+       // showOnMis();
         auVideoview.setVisibility(View.GONE);
         auVideoview.pause();
     }
@@ -457,8 +571,16 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         switch (v.getId()) {
             case R.id.join_con:
                 //向主播发送连麦请求
-                customDialog.setContent("支付多少钱连麦");
-                customDialog.show();
+                if (mIsConferenceStarted) {
+                    stopConference();
+                    hideOnMis();
+                } else {
+                    isPayFromRewoard = false;
+                    customDialog.setContent("支付多少钱连麦");
+                    customDialog.show();
+                }
+
+
                 break;
             case R.id.landan:
                 setRequestedOrientation(island ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -496,6 +618,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 popupWindow.showPopup(v);
                 break;
             case R.id.reword:
+                isPayFromRewoard = true;
                 RewordDialog.show();
                 break;
             case R.id.pause:
@@ -531,6 +654,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 startConferenceInternal();
             }
         });
+
         return true;
     }
 
@@ -543,7 +667,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         }
 */
         String roomToken = "69a10dee6a56429a985d6956a500d07e";
-        mRTCStreamingManager.startConference(StreamUtils.getTestUserId(this), mRoomName, roomToken, new RTCStartConferenceCallback() {
+        mRTCStreamingManager.startConference("", mRoomName, roomToken, new RTCStartConferenceCallback() {
             @Override
             public void onStartConferenceSuccess() {
                 hideLoading();
@@ -785,17 +909,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     @Override
     public void onOk() {
-        if (joinCon.isChecked()) {
-            isPayFromRewoard = false;
-            if (payTypePopupWindow == null) {
-                payTypePopupWindow = new PayTypePopupWindow(mContext, this);
-            }
-
-            payTypePopupWindow.showPopup(joinCon, false);
-        } else {
-            stopConference();
-            hideOnMis();
-        }
+        payTypeDialog.setTitle("支付多少元与直播连麦");
+        payTypeDialog.show();
 
        /* if (joinCon.isChecked()) {
             startConference();  // 支付成功后开通连麦

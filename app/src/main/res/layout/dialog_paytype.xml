@@ -67,7 +67,7 @@
                     android:checked="true"
                     android:drawableLeft="@drawable/selector_order_type"
                     android:drawablePadding="10dp"
-                    android:text="账户余额"
+                    android:text="账户余额:"
                     android:textColor="@color/coure_tv"
                     android:textSize="14sp" />
 
@@ -153,7 +153,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="取消"
-                android:textColor="@color/home_gray"
+                android:textColor="@color/coure_tv"
                 android:textSize="18sp" />
 
             <View

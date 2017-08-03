@@ -68,7 +68,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="确定"
-                android:textColor="@color/coure_tv"
+                android:textColor="@color/tv_red"
                 android:textSize="18sp" />
         </LinearLayout>
 

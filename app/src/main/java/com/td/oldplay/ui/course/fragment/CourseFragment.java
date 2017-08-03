@@ -29,6 +29,7 @@ import com.td.oldplay.ui.window.PayAlertDialog;
 import com.td.oldplay.ui.window.PayTypeDialog;
 import com.td.oldplay.ui.window.PayTypePopupWindow;
 import com.td.oldplay.utils.ToastUtil;
+import com.td.oldplay.widget.password.PasswordInputView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -48,7 +49,7 @@ public class CourseFragment extends BaseFragment implements
         LoadMoreWrapper.OnLoadMoreListener,
         CustomDialog.DialogClick,
         PayTypePopupWindow.payTypeAction,
-        PayTypeDialog.DialogClick{
+        PayTypeDialog.DialogClick {
 
     @BindView(R.id.swipeToLoadLayout)
     SwipeRefreshLayout swipeToLoadLayout;
@@ -70,6 +71,11 @@ public class CourseFragment extends BaseFragment implements
 
     private PayAlertDialog accountDialog;
     private PayAlertDialog paySuccessDialog;
+    private CustomDialog passwordDialog;
+
+    private PasswordInputView passwordInputView;
+    private View dialogView;
+    private String password;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -91,7 +97,6 @@ public class CourseFragment extends BaseFragment implements
 
     @Override
     protected void init(View view) {
-        datas = new ArrayList<>();
         datas = new ArrayList<>();
 
         swipeToLoadLayout.setOnRefreshListener(this);
@@ -127,26 +132,50 @@ public class CourseFragment extends BaseFragment implements
             }
         });
 
-        teacherDialog=new PayAlertDialog(mActivity,false,false);
+        teacherDialog = new PayAlertDialog(mActivity, false, false);
         teacherDialog.setContent("申请提交成功\n" +
                 "请尽快联系老师开通课程");
-        paySuccessDialog=new PayAlertDialog(mActivity,false,false);
+        paySuccessDialog = new PayAlertDialog(mActivity, false, false);
         paySuccessDialog.setContent("支付成功");
-        accountDialog=new PayAlertDialog(mActivity,true,true);
+
+        passwordDialog = new CustomDialog(mActivity);
+        passwordDialog.setTitle("输入密码");
+        passwordDialog.setCancelTv("返回");
+        dialogView = LayoutInflater.from(mActivity).inflate(R.layout.dialog_password, null);
+        passwordInputView = (PasswordInputView) dialogView.findViewById(R.id.password);
+        passwordDialog.setContanier(dialogView);
+        passwordDialog.setDialogClick(new CustomDialog.DialogClick() {
+            @Override
+            public void onCancel() {
+                if (accountDialog != null) {
+                    accountDialog.show();
+                }
+            }
+
+            @Override
+            public void onOk() {
+                password = passwordInputView.getText().toString();
+                // 账户支付
+                if (paySuccessDialog != null) {
+                    paySuccessDialog.show();
+                }
+
+            }
+        });
+        accountDialog = new PayAlertDialog(mActivity, true, true);
         accountDialog.setDialogClick(new PayAlertDialog.DialogClick() {
             @Override
             public void onBack() {
-                if(payTypeDialog!=null){
+                if (payTypeDialog != null) {
                     payTypeDialog.show();
                 }
             }
 
             @Override
             public void onnext() {
-                if(paySuccessDialog!=null){
-                    paySuccessDialog.show();
+                if (passwordDialog != null) {
+                    passwordDialog.show();
                 }
-
             }
         });
         getData();
@@ -239,7 +268,7 @@ public class CourseFragment extends BaseFragment implements
                         public void onSuccess(String s) {
                             currentCourse.isBuy = 2;
                             courserAdapter.notifyDataSetChanged();
-                            if(teacherDialog!=null){
+                            if (teacherDialog != null) {
                                 teacherDialog.show();
                             }
 
@@ -268,7 +297,12 @@ public class CourseFragment extends BaseFragment implements
         if (payTypeDialog == null) {
             payTypeDialog = new PayTypeDialog(mActivity, true);
             payTypeDialog.setDialogClick(this);
+            if(currentCourse!=null){
+                payTypeDialog.setTitle("支付"+currentCourse.price+"购买课程");
+            }
+
         }
+        payTypeDialog.setAccount(userBean.money+"元");
         payTypeDialog.show();
 
     }

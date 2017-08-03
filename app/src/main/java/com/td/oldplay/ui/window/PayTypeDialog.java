@@ -34,6 +34,7 @@ public class PayTypeDialog extends Dialog implements View.OnClickListener {
     private TextView titletTv;
     private RadioGroup rgPay;
     private RadioButton rbTeacher;
+    private RadioButton rbAccount;
     private CheckBox cbScore;
     private View viewLine;
 
@@ -73,6 +74,7 @@ public class PayTypeDialog extends Dialog implements View.OnClickListener {
 
         rgPay = (RadioGroup) view.findViewById(R.id.dialog_pay_rg);
         rbTeacher = (RadioButton) view.findViewById(R.id.teacher);
+        rbAccount= (RadioButton) view.findViewById(R.id.account);
         if (isTeacher) {
             rbTeacher.setVisibility(View.VISIBLE);
         } else {
@@ -127,7 +129,9 @@ public class PayTypeDialog extends Dialog implements View.OnClickListener {
     public void setTitle(String title) {
         titletTv.setText(title);
     }
-
+    public void setAccount(String accocunt) {
+        rbAccount.append(accocunt);
+    }
 
     @Override
     public void onClick(View view) {

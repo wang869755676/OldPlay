@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="打赏: "
+            android:textColor="@color/coure_tv"
+            android:textSize="18sp" />
+
+        <EditText
+            android:layout_marginLeft="5dp"
+            android:id="@+id/dialog_money_ed"
+            android:layout_width="148dp"
+            android:layout_height="29dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/ed_bg"
+            android:ellipsize="end"
+            android:hint="请输入打赏金额"
+            android:inputType="numberDecimal"
+            android:maxEms="6"
+            android:paddingLeft="5dp"
+            android:textColor="#666666"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/dialog_money_ed"
+            android:text="元"
+            android:textColor="@color/coure_tv"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+
+</RelativeLayout>

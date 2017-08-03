@@ -99,13 +99,19 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
     public void setContent(String content) {
         contentTv.setText(content);
     }
-    public void setContentGravity(int gravity) {
-        contentTv.setGravity(gravity);
-    }
+
 
     public void setContanier(View view) {
         contentTv.setVisibility(View.GONE);
         contaner.addView(view);
+    }
+
+    public void setCancelTv(String str) {
+       cancelTv.setText(str);
+    }
+
+    public void setOkTv(String str) {
+        okTv.setText(str);
     }
 
     @Override

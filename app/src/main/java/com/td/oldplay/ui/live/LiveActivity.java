@@ -516,8 +516,8 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         }
         hideLoading();
         ToastUtil.show(getString(R.string.start_streaming));
-        updateControlButtonText();
         mIsPublishStreamStarted = true;
+        updateControlButtonText();
         /**
          * Because `startPublishStreaming` need a long time in some weak network
          * So we should check if the activity paused.

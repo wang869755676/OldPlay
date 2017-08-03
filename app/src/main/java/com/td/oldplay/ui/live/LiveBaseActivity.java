@@ -14,6 +14,7 @@ import com.td.oldplay.bean.LiveBean;
 import com.td.oldplay.bean.MessageEvent;
 import com.td.oldplay.bean.PushMicNotificationType;
 import com.td.oldplay.permission.MPermission;
+import com.td.oldplay.utils.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -130,5 +131,13 @@ public abstract class LiveBaseActivity extends BaseFragmentActivity {
     // 布局文件
     protected abstract int getLayout();
 
+    protected void showToast(final String text) {
 
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ToastUtil.show(text);
+            }
+        });
+    }
 }

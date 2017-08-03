@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pili.pldroid.player.AVOptions;
 import com.pili.pldroid.player.PLMediaPlayer;
@@ -257,7 +258,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         initLister();
         initWindow();
         initStream();
-        initPlay();
+       // initPlay();
         getData();
     }
 
@@ -655,6 +656,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             }
         });
 
+
         return true;
     }
 
@@ -671,7 +673,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             @Override
             public void onStartConferenceSuccess() {
                 hideLoading();
-                ToastUtil.show(getString(R.string.start_conference));
+                showToast(getString(R.string.start_conference));
                 // updateControlButtonText();
                 mIsConferenceStarted = true;
                 if (mIsActivityPaused) {
@@ -687,7 +689,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             @Override
             public void onStartConferenceFailed(int errorCode) {
                 hideLoading();
-                ToastUtil.show(getString(R.string.failed_to_start_conference));
+                hideOnMis();
+               showToast(getString(R.string.failed_to_start_conference)+errorCode);
 
             }
         });

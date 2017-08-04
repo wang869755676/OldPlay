@@ -1,5 +1,6 @@
 package com.td.oldplay.ui.course.activity;
 
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.opengl.GLSurfaceView;
 import android.os.AsyncTask;
@@ -180,6 +181,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     private View dialogView;
     private String password;
 
+    private CustomDialog AlerDialog;
 
     /***
      * 连麦的操作监听
@@ -258,7 +260,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         initLister();
         initWindow();
         initStream();
-       // initPlay();
+        // initPlay();
         getData();
     }
 
@@ -271,7 +273,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             }
 
             @Override
-            public void onOk(int payType, int scoreId) {
+            public void onOk(int payType, String scoreId) {
                 switch (payType) {
                     case 0:
                         if (passwordDialog != null) {
@@ -372,6 +374,21 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         });
 
 
+        AlerDialog = new CustomDialog(mContext);
+        AlerDialog.setTitleVisible(View.GONE);
+        AlerDialog.setTitleVisible(View.GONE);
+        AlerDialog.setContent("是否退出房间？");
+        AlerDialog.setDialogClick(new CustomDialog.DialogClick() {
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onOk() {
+                finish();
+            }
+        });
     /*    accountDialog = new PayAlertDialog(mContext, true, true);
         accountDialog.setDialogClick(new PayAlertDialog.DialogClick() {
             @Override
@@ -510,7 +527,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     @Override
     protected void onMicConnectedMsg(MessageEvent event) {
-       // showOnMis();
+        // showOnMis();
         auVideoview.setVisibility(View.GONE);
         auVideoview.pause();
     }
@@ -576,9 +593,9 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                     stopConference();
                     hideOnMis();
                 } else {
+                    getLianmaiMoney();
                     isPayFromRewoard = false;
-                    customDialog.setContent("支付多少钱连麦");
-                    customDialog.show();
+
                 }
 
 
@@ -626,7 +643,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 //mRTCStreamingManager.sto
                 break;
             case R.id.left_text:
-                finish();
+                onBackPressed();
+                //  finish();
                 break;
             case R.id.comment_send:
                 type = 2;
@@ -655,7 +673,6 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 startConferenceInternal();
             }
         });
-
 
         return true;
     }
@@ -689,8 +706,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             @Override
             public void onStartConferenceFailed(int errorCode) {
                 hideLoading();
-                hideOnMis();
-               showToast(getString(R.string.failed_to_start_conference)+errorCode);
+                //hideOnMis();
+                showToast(getString(R.string.failed_to_start_conference) + errorCode);
 
             }
         });
@@ -757,7 +774,9 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             params.height = ScreenUtils.dip2px(AContext, 200);
             liveRoot.setLayoutParams(params);
         } else {
-            super.onBackPressed();
+            AlerDialog.show();
+
+            // super.onBackPressed();
         }
 
 
@@ -856,8 +875,6 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         live.setVisibility(View.GONE);
         liveFlWindow.setVisibility(View.INVISIBLE);
         liveAfl.setVisibility(View.INVISIBLE);
-
-
         auVideoview.setVisibility(View.VISIBLE);
         auVideoview.start();
 
@@ -912,9 +929,10 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     @Override
     public void onOk() {
-        payTypeDialog.setTitle("支付多少元与直播连麦");
-        payTypeDialog.show();
 
+        payTypeDialog.setTitle("支付"+joinMoney+"元与直播连麦");
+        payTypeDialog.setScoreVisisble(View.GONE);
+        payTypeDialog.show();
        /* if (joinCon.isChecked()) {
             startConference();  // 支付成功后开通连麦
         } else {
@@ -924,6 +942,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         }
 */
     }
+
 
     private HttpSubscriber<String> httpSubscriber = new HttpSubscriber<>(new OnResultCallBack<String>() {
 
@@ -966,6 +985,38 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 ToastUtil.show("找老师开通");
                 break;
         }
+    }
+
+
+    /**
+     * 获得连麦的金额数
+     */
+    private float joinMoney;
+    private void getLianmaiMoney() {
+        HttpManager.getInstance().getJoinMoney(userId, new HttpSubscriber<Float>(new OnResultCallBack<Float>() {
+
+            @Override
+            public void onSuccess(Float aFloat) {
+                joinMoney=aFloat;
+                if (aFloat == 0) {
+                    ToastUtil.show("主播还没有开启连麦");
+                }else{
+                    customDialog.setContent("支付"+aFloat+"元连麦");
+                    customDialog.show();
+                }
+
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
+        }));
     }
 
 

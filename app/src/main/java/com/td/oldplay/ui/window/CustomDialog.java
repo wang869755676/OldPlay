@@ -125,8 +125,8 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
                 break;
             case R.id.dialog_ok:
                 if (dialogClick != null) {
-                    dismiss();
                     dialogClick.onOk();
+                    dismiss();
                 }
                 break;
         }

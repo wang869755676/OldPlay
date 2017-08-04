@@ -78,6 +78,8 @@ public class VoiceAdapter extends CommonAdapter<String> {
 
                         @Override
                         public void playFinish() {
+                            holder.getView(R.id.item_voice_pause).setVisibility(View.GONE);
+                            holder.getView(R.id.item_voice_start).setVisibility(View.VISIBLE);
 
                         }
 

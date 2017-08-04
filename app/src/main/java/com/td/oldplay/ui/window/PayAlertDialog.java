@@ -106,6 +106,10 @@ public class PayAlertDialog extends Dialog implements View.OnClickListener {
     public void setScore(String score) {
         scoreTv.setText(score);
     }
+
+    public void setScoreVisible(int visible) {
+        scoreTv.setVisibility(visible);
+    }
     public void setOkStr(String str) {
         okTv.setText(str);
     }

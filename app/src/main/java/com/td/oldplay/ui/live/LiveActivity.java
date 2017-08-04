@@ -854,9 +854,38 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
             ToastUtil.show("请输入连麦金额");
             return;
         }
-        liveFlWindow.setVisibility(View.VISIBLE);
-        liveGfvWinow.setVisibility(View.VISIBLE);
         money = Float.parseFloat(dialogEd.getText().toString());
-        liveLianmai.setText("关闭连麦");
+        if(money<=0){
+            ToastUtil.show("金额数必须大于0");
+            return;
+        }
+        setJoinMoney(dialogEd.getText().toString());
+
+    }
+
+    /**
+     *  主播设置连麦的金额
+     */
+    private void setJoinMoney(String money) {
+        HttpManager.getInstance().setJoinMoney(userId,money,new HttpSubscriber<String>(new OnResultCallBack<String>() {
+
+            @Override
+            public void onSuccess(String s) {
+                ToastUtil.show("已开启连麦");
+                liveFlWindow.setVisibility(View.VISIBLE);
+                liveGfvWinow.setVisibility(View.VISIBLE);
+                liveLianmai.setText("关闭连麦");
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+        }));
     }
 }

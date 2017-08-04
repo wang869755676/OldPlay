@@ -111,29 +111,38 @@
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/viewLine"
+        <LinearLayout
+            android:id="@+id/dialog_pay_score"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="10dp"
-
-            android:background="@color/bg_gray"></View>
-
-        <CheckBox
-            android:id="@+id/acore"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/white"
-            android:button="@null"
-            android:drawableLeft="@drawable/selector_order_type"
-            android:drawablePadding="10dp"
-            android:padding="10dp"
-            android:text="使用100积分抵扣1元"
-            android:textColor="@color/coure_tv"
-            android:textSize="14sp" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <View
+                android:id="@+id/viewLine"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
+
+                android:background="@color/bg_gray"></View>
+
+            <CheckBox
+                android:id="@+id/acore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:button="@null"
+                android:drawableLeft="@drawable/selector_order_type"
+                android:drawablePadding="10dp"
+                android:padding="10dp"
+                android:text="使用100积分抵扣1元"
+                android:textColor="@color/coure_tv"
+                android:textSize="14sp" />
+        </LinearLayout>
+
 
         <View
             android:layout_width="match_parent"

@@ -145,4 +145,13 @@ public class NetWorkAPI {
     public final static String POST_FORUMS_PIC_API = "lnrzb/forum/uploadImages";
     public final static String POST_FORUMS_VIDEO_API = "lnrzb/forum/uploadVideos";
     public final static String POST_FORUMS_VOICE_API = "lnrzb/forum/uploadSpeechs";
+
+
+
+
+    public final static String GET_PAY_SCORETYPE = "lnrzb/pay/api/findScoreOffsetRule";
+
+    public final static String SET_JOIN_MONEY = "lnrzb/pay/api/setConnectPrice";
+
+    public final static String GET_JOIN_MONEY = "lnrzb/pay/api/findConnectPrice";
 }

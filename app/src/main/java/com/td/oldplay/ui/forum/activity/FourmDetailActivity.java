@@ -120,6 +120,7 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fourm_detail);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         id = getIntent().getStringExtra("id");
         params.put("userId", userId);
         params.put("topicId", id);
@@ -380,6 +381,7 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         VoiceManager.getInstance(mContext).stopPlay();
         subscriber.unSubscribe();
         commentSubscriber.unSubscribe();

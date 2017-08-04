@@ -18,6 +18,7 @@ import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.CourseBean;
 import com.td.oldplay.bean.CourseTypeBean;
+import com.td.oldplay.bean.ScoreOffset;
 import com.td.oldplay.contants.MContants;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
@@ -48,7 +49,6 @@ public class CourseFragment extends BaseFragment implements
         SwipeRefreshLayout.OnRefreshListener,
         LoadMoreWrapper.OnLoadMoreListener,
         CustomDialog.DialogClick,
-        PayTypePopupWindow.payTypeAction,
         PayTypeDialog.DialogClick {
 
     @BindView(R.id.swipeToLoadLayout)
@@ -76,6 +76,8 @@ public class CourseFragment extends BaseFragment implements
     private PasswordInputView passwordInputView;
     private View dialogView;
     private String password;
+
+    private ScoreOffset scoreOffset;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -244,12 +246,17 @@ public class CourseFragment extends BaseFragment implements
     }
 
     @Override
-    public void onOk(int payType, int scoreId) {
+    public void onOk(int payType, String scoreId) {
         switch (payType) {
             case 0:
-                accountDialog.setContent("账户余额支付XX元");
-                accountDialog.setScore("使用积分");
-                accountDialog.show();
+                if(scoreId!=null && !scoreId.equals("")){
+                    getApplyScoreMoney();
+                }else{
+                    accountDialog.setContent("账户余额支付"+currentCourse.price+"元");
+                    accountDialog.setScoreVisible(View.GONE);
+                    accountDialog.show();
+                }
+
                 break;
             case 1:
                 ToastUtil.show("微信支付");
@@ -292,60 +299,60 @@ public class CourseFragment extends BaseFragment implements
         }
     }
 
+
     @Override
     public void onOk() {
-        if (payTypeDialog == null) {
-            payTypeDialog = new PayTypeDialog(mActivity, true);
-            payTypeDialog.setDialogClick(this);
-            if(currentCourse!=null){
-                payTypeDialog.setTitle("支付"+currentCourse.price+"购买课程");
+        HttpManager.getInstance().getPayScoreRule(new HttpSubscriber<ScoreOffset>(new OnResultCallBack<ScoreOffset>() {
+
+
+            @Override
+            public void onSuccess(ScoreOffset scoreOffset) {
+                if (payTypeDialog == null) {
+                    payTypeDialog = new PayTypeDialog(mActivity, true);
+                    payTypeDialog.setDialogClick(CourseFragment.this);
+                    if (scoreOffset != null) {
+                        payTypeDialog.setScoreOffset(scoreOffset);
+                        payTypeDialog.setScoreVisisble(View.VISIBLE);
+                    } else {
+                        payTypeDialog.setScoreVisisble(View.GONE);
+                    }
+
+                    if (currentCourse != null) {
+                        payTypeDialog.setTitle("支付" + currentCourse.price + "购买课程");
+                    }
+
+                }
+                payTypeDialog.setAccount(userBean.money + "元");
+                payTypeDialog.show();
+
             }
 
-        }
-        payTypeDialog.setAccount(userBean.money+"元");
-        payTypeDialog.show();
+            @Override
+            public void onError(int code, String errorMsg) {
+
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
+        }));
+
 
     }
 
 
-    @Override
-    public void onPayType(int viewId) {
-        switch (viewId) {
-            case R.id.iv_wx_pay:
-                ToastUtil.show("微信支付");
-                EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
-                break;
-            case R.id.iv_zhifubao_pay:
-                ToastUtil.show("支付宝支付");
-                EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
-                break;
-            case R.id.iv_teacher_pay:
-                ToastUtil.show("找老师开通");
-                if (currentCourse != null) {
-                    HttpManager.getInstance().openCourse(userId, currentCourse.coursesId, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+    /**
+     *  使用使用积分抵消之后所得到的价格
+     */
+    private void getApplyScoreMoney() {
 
-                        @Override
-                        public void onSuccess(String s) {
-                            currentCourse.isBuy = 2;
-                            courserAdapter.notifyDataSetChanged();
-                            ToastUtil.show("等待老师开通");
-                        }
-
-                        @Override
-                        public void onError(int code, String errorMsg) {
-
-                        }
-
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            addDisposable(d);
-                        }
-                    }));
-                }
-
-                break;
-        }
+        accountDialog.setContent("账户余额支付"+currentCourse.price+"元");
+        accountDialog.setScoreVisible(View.GONE);
+        accountDialog.show();
     }
+
+
 
 
 }

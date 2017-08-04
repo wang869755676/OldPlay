@@ -14,6 +14,7 @@ import com.td.oldplay.bean.HomeShopInfo;
 import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.bean.OrderDetail;
 import com.td.oldplay.bean.RechargeInfo;
+import com.td.oldplay.bean.ScoreOffset;
 import com.td.oldplay.bean.SearchCourse;
 import com.td.oldplay.bean.ShopBean;
 import com.td.oldplay.bean.ShopCarBean;
@@ -321,8 +322,15 @@ public interface ApiService {
     Observable<ApiResponse<String>> confirmOrder(@Field("orderId") String orderId);
 
 
+    @POST(NetWorkAPI.GET_PAY_SCORETYPE)
+    Observable<ApiResponse<ScoreOffset>> getPayScoreRule();
 
+    @FormUrlEncoded
+    @POST(NetWorkAPI.SET_JOIN_MONEY)
+    Observable<ApiResponse<String>> setJoinMoney(@Field("userId") String userId,@Field("price") String price);
 
-    @POST(NetWorkAPI.CONFIRM_ORDER_API)
-    Observable<ResponseBody> create(@Body String orderInfo);
+    @FormUrlEncoded
+    @POST(NetWorkAPI.GET_JOIN_MONEY)
+    Observable<ApiResponse<Float>> getJoinMoney(@Field("userId") String userId);
+
 }

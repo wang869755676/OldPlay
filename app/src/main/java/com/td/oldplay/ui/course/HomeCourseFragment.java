@@ -51,6 +51,8 @@ import butterknife.Unbinder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 
 /**
@@ -273,35 +275,9 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         Intent intent = null;
         switch (v.getId()) {
             case R.id.home_more_hot:
-                HttpManager.getInstance().create("1", "https://api.mch.weixin.qq.com/pay/unifiedorder").unsubscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new HttpSubscriber<ResponseBody>(new OnResultCallBack<ResponseBody>() {
-
-
-                            @Override
-                            public void onSuccess(ResponseBody responseBody) {
-                                Log.e("==========", "-------------------------------");
-                                try {
-                                    Log.e("===", responseBody.string() + "----------------");
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            @Override
-                            public void onError(int code, String errorMsg) {
-
-                            }
-
-                            @Override
-                            public void onSubscribe(Disposable d) {
-
-                            }
-                        }));
-/*
                 intent = new Intent(mActivity, CourseListActivity.class);
                 intent.putExtra("type", 3);
-                startActivity(intent);*/
+                startActivity(intent);
                 break;
             case R.id.home_more_recoment:
                 intent = new Intent(mActivity, CourseListActivity.class);

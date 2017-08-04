@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -21,6 +22,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.td.oldplay.R;
+import com.td.oldplay.bean.ScoreOffset;
 
 
 /**
@@ -40,15 +42,22 @@ public class PayTypeDialog extends Dialog implements View.OnClickListener {
 
     private int payType;
     private boolean isScore;
-    private int scoreId;
+    private String scoreId;
     private DialogClick dialogClick;
     private boolean isTeacher;
+
+    private LinearLayout LlScore;
+    private ScoreOffset scoreOffset;
 
     public PayTypeDialog(@NonNull Context context, boolean isTeacher) {
         super(context, R.style.AlertDialogStyle); //dialog的样式
         this.context = context;
         this.isTeacher = isTeacher;
         initalize();
+    }
+
+    public void setScoreOffset(ScoreOffset scoreOffset) {
+        this.scoreOffset = scoreOffset;
     }
 
     @Override
@@ -67,14 +76,14 @@ public class PayTypeDialog extends Dialog implements View.OnClickListener {
         View view = inflater.inflate(R.layout.dialog_paytype, null);
         setContentView(view);
         initWindow();
-
+        LlScore = (LinearLayout) view.findViewById(R.id.dialog_pay_score);
         titletTv = (TextView) view.findViewById(R.id.dialog_title);
         cancelTv = (TextView) view.findViewById(R.id.dialog_cancel);
         okTv = (TextView) view.findViewById(R.id.dialog_ok);
 
         rgPay = (RadioGroup) view.findViewById(R.id.dialog_pay_rg);
         rbTeacher = (RadioButton) view.findViewById(R.id.teacher);
-        rbAccount= (RadioButton) view.findViewById(R.id.account);
+        rbAccount = (RadioButton) view.findViewById(R.id.account);
         if (isTeacher) {
             rbTeacher.setVisibility(View.VISIBLE);
         } else {
@@ -85,13 +94,24 @@ public class PayTypeDialog extends Dialog implements View.OnClickListener {
         viewLine = view.findViewById(R.id.viewLine);
         okTv.setOnClickListener(this);
         cancelTv.setOnClickListener(this);
+        cbScore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    scoreId = scoreOffset.id;
+
+                } else {
+                    scoreId = "";
+                }
+            }
+        });
         rgPay.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 cbScore.setEnabled(false);
                 cbScore.setChecked(false);
                 isScore = false;
-                scoreId = 0;
+                scoreId = "";
                 switch (checkedId) {
                     case R.id.account:
                         payType = 0;
@@ -129,8 +149,14 @@ public class PayTypeDialog extends Dialog implements View.OnClickListener {
     public void setTitle(String title) {
         titletTv.setText(title);
     }
+
     public void setAccount(String accocunt) {
-        rbAccount.append(accocunt);
+        rbAccount.setText("账户余额: " + accocunt);
+    }
+
+    public void setScoreVisisble(int visible) {
+        LlScore.setVisibility(visible);
+
     }
 
     @Override
@@ -154,6 +180,6 @@ public class PayTypeDialog extends Dialog implements View.OnClickListener {
     public interface DialogClick {
         void onCancel();
 
-        void onOk(int payType, int scoreId);
+        void onOk(int payType, String scoreId);
     }
 }

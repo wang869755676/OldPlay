@@ -16,6 +16,7 @@ import com.td.oldplay.bean.HomeShopInfo;
 import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.bean.OrderDetail;
 import com.td.oldplay.bean.RechargeInfo;
+import com.td.oldplay.bean.ScoreOffset;
 import com.td.oldplay.bean.ShopBean;
 import com.td.oldplay.bean.ShopCarBean;
 import com.td.oldplay.bean.ShopDetail;
@@ -372,7 +373,17 @@ public class HttpManager {
     public void confirmOrder(String orderId, Observer<String> observer) {
         toSubscribe(mApiService.confirmOrder(orderId), observer);
     }
-    public Observable<ResponseBody> create(String orderInfo,String path) {
-        return mApiService.create(orderInfo);
+
+
+    // 支付相关的
+    public void getPayScoreRule( Observer<ScoreOffset> observer) {
+        toSubscribe(mApiService.getPayScoreRule(), observer);
+    }
+    public void setJoinMoney(String userId,String price, Observer<String> observer) {
+        toSubscribe(mApiService.setJoinMoney(userId,price), observer);
+    }
+
+    public void getJoinMoney(String userId, Observer<Float> observer) {
+        toSubscribe(mApiService.getJoinMoney(userId), observer);
     }
 }

@@ -315,7 +315,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                     return;
                 } else {
                     // 请求打赏 ，然后支付
-
+                    RewordDialog.dismiss();
                     payTypeDialog.setTitle("打赏: " + Rewordmoney + "元");
                     payTypeDialog.show();
                 }
@@ -358,6 +358,12 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             @Override
             public void onOk() {
                 password = passwordInputView.getText().toString();
+
+                if (TextUtils.isEmpty(password)) {
+                    ToastUtil.show("请输入密码");
+                    return;
+                }
+                passwordDialog.dismiss();
                 if (isPayFromRewoard) {
                     ToastUtil.show("账户支付打赏");
 
@@ -930,7 +936,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     @Override
     public void onOk() {
 
-        payTypeDialog.setTitle("支付"+joinMoney+"元与直播连麦");
+        payTypeDialog.setTitle("支付" + joinMoney + "元与直播连麦");
         payTypeDialog.setScoreVisisble(View.GONE);
         payTypeDialog.show();
        /* if (joinCon.isChecked()) {
@@ -992,16 +998,17 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
      * 获得连麦的金额数
      */
     private float joinMoney;
+
     private void getLianmaiMoney() {
         HttpManager.getInstance().getJoinMoney(userId, new HttpSubscriber<Float>(new OnResultCallBack<Float>() {
 
             @Override
             public void onSuccess(Float aFloat) {
-                joinMoney=aFloat;
+                joinMoney = aFloat;
                 if (aFloat == 0) {
                     ToastUtil.show("主播还没有开启连麦");
-                }else{
-                    customDialog.setContent("支付"+aFloat+"元连麦");
+                } else {
+                    customDialog.setContent("支付" + aFloat + "元连麦");
                     customDialog.show();
                 }
 

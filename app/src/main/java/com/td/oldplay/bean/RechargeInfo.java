@@ -24,6 +24,7 @@ public class RechargeInfo {
    public String id;
    public float money;
    public String orderId;
-   public int type;
+   public int type;  // 类型(0:充值1:提现2:消费3:直播)
    public String userId;
+   public int payType; //支付方式 0:支付宝,1:微信
 }

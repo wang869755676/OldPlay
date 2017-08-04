@@ -27,10 +27,11 @@ public class UserAvatorWindow extends PopupWindow {
     private CircleImageView userIv;
     private TextView name;
     private TextView score;
+    private Context mContext;
 
-    public UserAvatorWindow(Context context, UserBean user) {
+    public UserAvatorWindow(Context context) {
         super(context);
-        this.user = user;
+        this.mContext=context;
         View view = LayoutInflater.from(context).inflate(R.layout.pop_user, null);
         setContentView(view);
         setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -42,15 +43,19 @@ public class UserAvatorWindow extends PopupWindow {
         userIv = (CircleImageView) view.findViewById(R.id.pop_user_iv);
         name = (TextView) view.findViewById(R.id.pop_user_name);
         score = (TextView) view.findViewById(R.id.pop_user_score);
-        if(user!=null){
-            GlideUtils.setAvatorImage(context,user.avatar,userIv);
-            name.setText(user.nickName);
-            score.setText(user.score);
-        }
+
 
 
     }
 
+    public void setUser(UserBean user) {
+        this.user = user;
+        if(user!=null){
+            GlideUtils.setAvatorImage(mContext,user.avatar,userIv);
+            name.setText(user.nickName);
+            score.setText(user.score);
+        }
+    }
 
     public void showPopup(View parent) {
         if (!this.isShowing()) {

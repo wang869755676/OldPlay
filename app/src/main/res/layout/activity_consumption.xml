@@ -53,8 +53,34 @@
                 android:textColor="@color/coure_tv"
                 android:textSize="14sp" />
         </LinearLayout>
-
         <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/ll_other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/other_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="支付账号:"
+                android:textColor="@color/coure_tv"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/otener_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="232432432"
+                android:textColor="@color/coure_tv"
+                android:textSize="14sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_acount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

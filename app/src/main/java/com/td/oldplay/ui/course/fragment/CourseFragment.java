@@ -79,6 +79,8 @@ public class CourseFragment extends BaseFragment implements
 
     private ScoreOffset scoreOffset;
 
+    private float coursePrice;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -157,6 +159,11 @@ public class CourseFragment extends BaseFragment implements
             @Override
             public void onOk() {
                 password = passwordInputView.getText().toString();
+                if (TextUtils.isEmpty(password)) {
+                    ToastUtil.show("请输入密码");
+                    return;
+                }
+                customDialog.dismiss();
                 // 账户支付
                 if (paySuccessDialog != null) {
                     paySuccessDialog.show();
@@ -175,6 +182,13 @@ public class CourseFragment extends BaseFragment implements
 
             @Override
             public void onnext() {
+               if(userBean.money<coursePrice){
+                   ToastUtil.show("账户余额不足，清选择其他支付方式");
+                   if (payTypeDialog != null) {
+                       payTypeDialog.show();
+                   }
+                   return;
+               }
                 if (passwordDialog != null) {
                     passwordDialog.show();
                 }

@@ -41,6 +41,7 @@ import com.qiniu.pili.droid.streaming.StreamingStateChangedListener;
 import com.qiniu.pili.droid.streaming.WatermarkSetting;
 import com.qiniu.pili.droid.streaming.widget.AspectFrameLayout;
 import com.td.oldplay.R;
+import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.bean.CommentBean;
 import com.td.oldplay.bean.MessageEvent;
 import com.td.oldplay.bean.UserBean;
@@ -55,6 +56,7 @@ import com.td.oldplay.permission.util.MPermissionUtil;
 import com.td.oldplay.ui.live.adapter.AvatorAdapter;
 import com.td.oldplay.ui.live.adapter.CommentAdapter;
 import com.td.oldplay.ui.window.CustomDialog;
+import com.td.oldplay.ui.window.UserAvatorWindow;
 import com.td.oldplay.utils.LiveUtils;
 import com.td.oldplay.utils.StreamUtils;
 import com.td.oldplay.utils.ToastUtil;
@@ -127,6 +129,8 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     private View dialogView;
     private EditText dialogEd;
     private float money;
+
+    private UserAvatorWindow avatorWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -275,12 +279,12 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         liveLianmai.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
                     mRTCStreamingManager.kickoutUser(R.id.live_gfv_winow);
                     liveLianmai.setText("开始连麦");
                     liveFlWindow.setVisibility(View.GONE);
                     liveGfvWinow.setVisibility(View.GONE);
-                }else{
+                } else {
                     if (customDialog != null) {
                         customDialog.show();
                     }
@@ -299,6 +303,21 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         customDialog.setViewLineVisible(View.GONE);
         customDialog.setTitle("设置连麦的金额");
         customDialog.setDialogClick(this);
+        avatorWindow = new UserAvatorWindow(mContext);
+        avatorAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                   if(avatorWindow!=null){
+                       avatorWindow.setUser(userDatas.get(position));
+                       avatorWindow.showPopup(view);
+                   }
+            }
+
+            @Override
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
+        });
 
     }
 
@@ -855,19 +874,20 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
             return;
         }
         money = Float.parseFloat(dialogEd.getText().toString());
-        if(money<=0){
+        if (money <= 0) {
             ToastUtil.show("金额数必须大于0");
             return;
         }
+        customDialog.dismiss();
         setJoinMoney(dialogEd.getText().toString());
 
     }
 
     /**
-     *  主播设置连麦的金额
+     * 主播设置连麦的金额
      */
     private void setJoinMoney(String money) {
-        HttpManager.getInstance().setJoinMoney(userId,money,new HttpSubscriber<String>(new OnResultCallBack<String>() {
+        HttpManager.getInstance().setJoinMoney(userId, money, new HttpSubscriber<String>(new OnResultCallBack<String>() {
 
             @Override
             public void onSuccess(String s) {

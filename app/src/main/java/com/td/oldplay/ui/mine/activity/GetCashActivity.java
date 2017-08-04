@@ -12,6 +12,7 @@ import android.widget.EditText;
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.ui.window.CustomDialog;
+import com.td.oldplay.ui.window.PayAlertDialog;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 import com.td.oldplay.widget.password.PasswordInputView;
@@ -49,6 +50,10 @@ public class GetCashActivity extends BaseFragmentActivity
     private View dialogView;
     private String password;
 
+    private PayAlertDialog alertDialog;
+
+    private PayAlertDialog paySuccessDilaog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,9 +85,24 @@ public class GetCashActivity extends BaseFragmentActivity
             @Override
             public void onOk() {
                 password = passwordInputView.getText().toString();
+                if (TextUtils.isEmpty(password)) {
+                    ToastUtil.show("输入密码");
+                    return;
+                }
+                customDialog.dismiss();
                 commitServer();
             }
         });
+
+        paySuccessDilaog = new PayAlertDialog(mContext, false, false);
+        paySuccessDilaog.setContent("提现申请已提交\n" +
+                "请等待平台处理");
+
+        alertDialog = new PayAlertDialog(mContext, false, true);
+        alertDialog.setContent("提示");
+        alertDialog.setScore("最低100元起提");
+
+
     }
 
     private void initListener() {
@@ -96,13 +116,13 @@ public class GetCashActivity extends BaseFragmentActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.commit:
-             /*   if (checkInput()) {
-                    // 提交到服务器
-                }*/
-                if (Float.parseFloat(cash) <= 0) {
-                    ToastUtil.show("提现金额必须大于0");
+                if (Float.parseFloat(cash) <= 100) {
+                    alertDialog.show();
+                    return;
                 }
+
                 customDialog.show();
+
 
                 break;
             case R.id.left_text:
@@ -117,6 +137,7 @@ public class GetCashActivity extends BaseFragmentActivity
      * 提交到服务器
      */
     private void commitServer() {
+        paySuccessDilaog.show();
     }
 
     private boolean checkInput() {
@@ -126,13 +147,13 @@ public class GetCashActivity extends BaseFragmentActivity
         OpeningBank = bank.getText().toString().trim();
 
         if (TextUtils.isEmpty(cash)) {
-            // ToastUtil.show("请输入金额！");
+            //  ToastUtil.show("请输入金额！");
             return false;
         } else if (TextUtils.isEmpty(num)) {
-            //ToastUtil.show("请输入卡号！");
+            // ToastUtil.show("请输入卡号！");
             return false;
         } else if (TextUtils.isEmpty(bankName)) {
-            // ToastUtil.show("请输入姓名！");
+            //ToastUtil.show("请输入姓名！");
             return false;
         } /*else if (TextUtils.isEmpty(OpeningBank)) {
             ToastUtil.show("开户银行！");

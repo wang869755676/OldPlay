@@ -24,7 +24,7 @@ public class UserBean  implements Serializable{
 
     public String avatar;
     public int classHour;
-    public int money;
+    public float money;
     public String nickName;
     public String password;
     public String payPassword;

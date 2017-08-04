@@ -109,7 +109,9 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
     public void setCancelTv(String str) {
        cancelTv.setText(str);
     }
-
+    public void setCancelVisible(int visible) {
+        cancelTv.setVisibility(visible);
+    }
     public void setOkTv(String str) {
         okTv.setText(str);
     }
@@ -126,7 +128,7 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
             case R.id.dialog_ok:
                 if (dialogClick != null) {
                     dialogClick.onOk();
-                    dismiss();
+
                 }
                 break;
         }

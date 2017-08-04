@@ -28,7 +28,7 @@
             android:layout_marginTop="15dp"
             android:layout_toRightOf="@id/pop_user_iv"
             android:gravity="center"
-            android:text="微信"
+            android:text=""
             android:textColor="@color/coure_tv"
             android:textSize="14sp" />
 
@@ -41,7 +41,7 @@
             android:layout_marginBottom="8dp"
             android:layout_toRightOf="@id/pop_user_iv"
             android:gravity="center"
-            android:text="微信"
+            android:text=""
             android:textColor="@color/home_gray"
             android:textSize="14sp" />
     </RelativeLayout>

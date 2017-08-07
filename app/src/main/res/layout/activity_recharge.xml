@@ -116,6 +116,7 @@
             android:textSize="17sp" />
 
         <EditText
+            android:inputType="numberDecimal"
             android:id="@+id/recharge_money"
             android:layout_width="match_parent"
             android:layout_height="45dip"
@@ -136,7 +137,6 @@
         android:layout_marginRight="40dip"
         android:layout_marginTop="80dip"
         android:background="@drawable/cor_red"
-        android:enabled="false"
         android:text="充值"
         android:textColor="@color/white"
         android:textSize="18sp" />

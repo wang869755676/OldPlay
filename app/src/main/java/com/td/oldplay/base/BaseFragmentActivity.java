@@ -97,4 +97,5 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
         }
     }
 
+
 }

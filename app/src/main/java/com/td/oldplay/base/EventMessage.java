@@ -11,6 +11,7 @@ public class EventMessage {
     public String colorId;
     public String size;
     public float total;
+    public int WxPayCode;
     public EventMessage(String action) {
         this.action = action;
     }

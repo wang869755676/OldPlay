@@ -15,11 +15,13 @@ import android.widget.TextView;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
+import com.td.oldplay.base.EventMessage;
 import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.RechargeInfo;
+import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.bean.WalletBean;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
@@ -30,6 +32,10 @@ import com.td.oldplay.utils.DeviceUtil;
 import com.td.oldplay.utils.TimeMangerUtil;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -88,9 +94,16 @@ public class MyWalletActivity extends BaseFragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_wallet);
+        EventBus.getDefault().register(this);
         ButterKnife.bind(this);
         params.put("userId", userId);
         initView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private void initView() {
@@ -255,6 +268,16 @@ public class MyWalletActivity extends BaseFragmentActivity
         getData();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMessage(EventMessage message) {
+        if ("changeAcount".equals(message.action)) {
+            if(bean!=null)
+             bean.money+=message.total;
+            userBean.money+=message.total;
+            spUilts.setUser(userBean);
+
+        }
+    }
     private static class Adapter extends CommonAdapter<String> {
 
         public Adapter(Context context, int layoutId, List<String> datas) {

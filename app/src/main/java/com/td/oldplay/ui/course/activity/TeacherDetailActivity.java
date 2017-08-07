@@ -1,10 +1,13 @@
 package com.td.oldplay.ui.course.activity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.opengl.GLSurfaceView;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -43,6 +46,8 @@ import com.td.oldplay.bean.MessageEvent;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
+import com.td.oldplay.pay.zhifubao.PayDemoActivity;
+import com.td.oldplay.pay.zhifubao.PayResult;
 import com.td.oldplay.permission.MPermission;
 import com.td.oldplay.permission.annotation.OnMPermissionDenied;
 import com.td.oldplay.permission.annotation.OnMPermissionGranted;
@@ -72,6 +77,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -183,6 +189,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     private CustomDialog AlerDialog;
 
+    private boolean isTeacherDetialPay;
+
     /***
      * 连麦的操作监听
      */
@@ -281,12 +289,13 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                         }
                         break;
                     case 1:
+                        isTeacherDetialPay = true;
                         ToastUtil.show("微信支付");
-                        EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
+
                         break;
                     case 2:
                         ToastUtil.show("支付宝支付");
-                        EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
+
                         break;
 
                 }
@@ -458,6 +467,40 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             videoplayer.setUp(paths[position], JCVideoPlayer.SCREEN_LAYOUT_NORMAL, "");
             videoplayer.startVideo();
             position++;
+        } else if ("WX".equals(message.action)) {
+            if (isTeacherDetialPay) {
+                switch (message.WxPayCode) {
+                    case 0:
+                        ToastUtil.show("支付成功！");
+                        if (isPayFromRewoard) {
+                            ToastUtil.show("微信支付打赏");
+
+                        } else {
+                            ToastUtil.show("微信宝连麦");
+                            paySuccessDialog.setOkStr("开始连麦");
+                        }
+                        if (paySuccessDialog != null) {
+                            paySuccessDialog.show();
+
+                        }
+                        isTeacherDetialPay = false;
+                        break;
+                    case -1:
+                        payTypeDialog.dismiss();
+                        ToastUtil.show("支付失败！");
+                        break;
+                    case -2:
+                        ToastUtil.show("您取消了支付！");
+                        break;
+
+                    default:
+
+                        ToastUtil.show("支付失败！");
+                        break;
+
+                }
+            }
+
         }
     }
 
@@ -1025,6 +1068,50 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             }
         }));
     }
+
+
+    private static final int SDK_PAY_FLAG = 1;
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler() {
+        @SuppressWarnings("unused")
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case SDK_PAY_FLAG: {
+                    @SuppressWarnings("unchecked")
+                    PayResult payResult = new PayResult((Map<String, String>) msg.obj);
+                    /**
+                     对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+                     */
+                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+                    String resultStatus = payResult.getResultStatus();
+                    // 判断resultStatus 为9000则代表支付成功
+                    if (TextUtils.equals(resultStatus, "9000")) {
+                        // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                        if (isPayFromRewoard) {
+                            ToastUtil.show("支付宝支付打赏");
+
+                        } else {
+                            ToastUtil.show("连麦");
+                            paySuccessDialog.setOkStr("开始连麦");
+                        }
+                        if (paySuccessDialog != null) {
+                            paySuccessDialog.show();
+                        }
+                    } else {
+                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
+                        ToastUtil.show("支付失败");
+                        payTypeDialog.dismiss();
+                    }
+                    break;
+                }
+
+                default:
+                    break;
+            }
+        }
+
+        ;
+    };
 
 
 }

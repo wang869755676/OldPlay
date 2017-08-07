@@ -82,6 +82,7 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
     private PasswordInputView passwordInputView;
     private View dialogView;
     private String password;
+    private float totalScore = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +154,7 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
             account.setText("账户余额:" + userBean.money + "元");
             ortderTotal.setText("￥ " + orderBean.amount_paid);
             orederConfirmTotal.setText("￥ " + orderBean.amount_payable);
-            // orederConfirmScore.setText();
+
             if (orderBean.orderDetails != null && orderBean.orderDetails.size() > 0) {
                 datas.addAll(orderBean.orderDetails);
                 goodAdapter.notifyDataSetChanged();
@@ -187,6 +188,11 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
                     }
                 }
             });
+
+            for (GoodBean bean : orderBean.orderDetails) {
+                totalScore += bean.score;
+            }
+            orederConfirmScore.setText("购买可得" + totalScore + "积分");
         } else {
             return;
         }

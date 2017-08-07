@@ -101,6 +101,7 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
         }
         if (shopBean.sizeList != null && shopBean.sizeList.size() > 0) {
             modeTv.setText(shopBean.sizeList.get(0));
+            size = shopBean.sizeList.get(0);
             modeAdapter = new Adapter(context, R.layout.item_add_car, shopBean.sizeList);
             modeAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
                 @Override

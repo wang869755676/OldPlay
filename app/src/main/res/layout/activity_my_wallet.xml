@@ -155,7 +155,7 @@
                 android:drawableLeft="@drawable/selector_wallet"
                 android:drawablePadding="5dp"
                 android:gravity="center"
-                android:text="直播"
+                android:text="收入"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 

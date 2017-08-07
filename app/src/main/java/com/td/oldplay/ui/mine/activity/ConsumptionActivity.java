@@ -1,6 +1,7 @@
 package com.td.oldplay.ui.mine.activity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -39,6 +40,10 @@ public class ConsumptionActivity extends BaseFragmentActivity {
     LinearLayout llOther;
     @BindView(R.id.ll_acount)
     LinearLayout llAcount;
+    @BindView(R.id.con_acount_title)
+    TextView conAcountTitle;
+    @BindView(R.id.con_pay_title)
+    TextView conPayTitle;
 
     private String id;
     private String typeStr;
@@ -87,6 +92,8 @@ public class ConsumptionActivity extends BaseFragmentActivity {
                 break;
             case 1:
                 typeStr = "提现";
+                conPayTitle.setText("提现方式:");
+                conAcountTitle.setText("提现账号:");
                 break;
             case 2:
                 typeStr = "消费";
@@ -95,7 +102,7 @@ public class ConsumptionActivity extends BaseFragmentActivity {
                 typeStr = "直播";
                 break;
         }
-        conType.setText(typeStr);
+        conType.setText(rechargeInfo.typeDetail);
         conAccount.setText(rechargeInfo.account);
         switch (rechargeInfo.payType) {
             case 0:
@@ -111,6 +118,12 @@ public class ConsumptionActivity extends BaseFragmentActivity {
         }
 
         conZhifuTime.setText(rechargeInfo.formatTime);
+        if(TextUtils.isEmpty(rechargeInfo.detail)){
+            llOther.setVisibility(View.GONE);
+        }else{
+            llOther.setVisibility(View.VISIBLE);
+            otenerContent.setText(rechargeInfo.detail);
+        }
     }
 
 

@@ -229,8 +229,8 @@ public class HttpManager {
         toSubscribe(mApiService.getShopByType(page, type, scortType, scort), observer);
     }
 
-    public void getShopDetail(String shopId, Observer<ShopDetail> observer) {
-        toSubscribe(mApiService.getShopDetail(shopId), observer);
+    public void getShopDetail(String shopId,String userId ,Observer<ShopDetail> observer) {
+        toSubscribe(mApiService.getShopDetail(shopId,userId), observer);
     }
 
     public void getShopComments(String shopId, int page, Observer<List<CommentBean>> observer) {

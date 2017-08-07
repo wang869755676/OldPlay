@@ -169,7 +169,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.SHOP_DETAIL_API)
-    Observable<ApiResponse<ShopDetail>> getShopDetail(@Field("goodsId") String shopId);
+    Observable<ApiResponse<ShopDetail>> getShopDetail(@Field("goodsId") String shopId,@Field("userId") String userId);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.GET_COMMENTS_API)

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ShopDetail {
 
-
+    public int cartCount;
     public ShopBean goods;
     public GroupBuy groupBuy;
     public MarkDownBean markDown;
@@ -16,10 +16,6 @@ public class ShopDetail {
     public List<GoodsImageListBean> goodsImageList;
     public List<String> sizeList;
     public String userId;
-
-
-
-
 
 
     public static class GoodsImageListBean {

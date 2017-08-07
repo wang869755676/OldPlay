@@ -26,8 +26,22 @@ public class WalletAdapter extends CommonAdapter<RechargeInfo> {
     @Override
     protected void convert(ViewHolder holder, RechargeInfo walletBean, int position) {
         holder.setText(R.id.time,walletBean.formatTime);
-        holder.setText(R.id.money_type,walletBean.detail);
+
         holder.setText(R.id.price,walletBean.money+"");
+        switch (walletBean.type){
+            case 0:
+                holder.setText(R.id.money_type,"充值");
+                break;
+            case 1:
+                holder.setText(R.id.money_type,"提现");
+                break;
+            case 2:
+                holder.setText(R.id.money_type,"消费");
+                break;
+            case 3:
+                holder.setText(R.id.money_type,"收入");
+                break;
+        }
 
     }
 }

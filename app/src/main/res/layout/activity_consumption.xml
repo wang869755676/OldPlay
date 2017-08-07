@@ -15,7 +15,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="236dp"
+        android:layout_height="256dp"
         android:layout_marginTop="10dp"
         android:background="@color/white"
         android:orientation="vertical">
@@ -54,7 +54,7 @@
                 android:textSize="14sp" />
         </LinearLayout>
         <LinearLayout
-            android:visibility="gone"
+
             android:id="@+id/ll_other"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,6 +63,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/other_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -88,6 +89,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/con_acount_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="支付账号:"
@@ -120,6 +122,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/con_pay_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="支付方式:"

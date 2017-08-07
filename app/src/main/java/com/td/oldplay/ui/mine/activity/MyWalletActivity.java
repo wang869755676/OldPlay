@@ -94,6 +94,11 @@ public class MyWalletActivity extends BaseFragmentActivity
     }
 
     private void initView() {
+       if(userBean.uType==1){
+           rbLive.setVisibility(View.VISIBLE);
+       }else{
+           rbLive.setVisibility(View.GONE);
+       }
 
         title.setTitle("我的钱包");
         title.setOnLeftListener(this);
@@ -109,7 +114,7 @@ public class MyWalletActivity extends BaseFragmentActivity
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 switch (checkedId) {
                     case R.id.rb_chongzhi:
-                        params.put("type", 0);//类型(0:充值1:提现2:消费3:直播)
+                        params.put("type", 0);//类型(0:充值1:提现2:消费3:收入)
                         break;
                     case R.id.rb_live:
                         params.put("type", 3);

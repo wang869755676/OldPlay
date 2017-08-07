@@ -36,6 +36,7 @@ public class GoodBean implements Serializable{
 
 
     public String comment;
+    public float score;
 
 
 }

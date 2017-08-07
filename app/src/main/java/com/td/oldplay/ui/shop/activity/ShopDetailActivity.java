@@ -176,7 +176,7 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void getData() {
-        HttpManager.getInstance().getShopDetail(id, new HttpSubscriber<ShopDetail>(new OnResultCallBack<ShopDetail>() {
+        HttpManager.getInstance().getShopDetail(id, userId,new HttpSubscriber<ShopDetail>(new OnResultCallBack<ShopDetail>() {
 
             @Override
             public void onSuccess(ShopDetail shopDetail) {
@@ -198,6 +198,13 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
 
     private void setData() {
         if (bean != null) {
+            if(bean.cartCount>0){
+                shopDeCarNum.setVisibility(View.VISIBLE);
+                shopDeCarNum.setText(bean.cartCount + "");
+            }else{
+                shopDeCarNum.setVisibility(View.GONE);
+            }
+
             if (bean.goods != null) {
                 switch (bean.goods.isPreferential) {
                     case 0:
@@ -350,8 +357,12 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
 
             @Override
             public void onSuccess(String s) {
-                shopDeCarNum.setVisibility(View.VISIBLE);
-                shopDeCarNum.setText(carNum + "");
+
+                if(bean!=null){
+                    bean.cartCount+=carNum;
+                    shopDeCarNum.setVisibility(View.VISIBLE);
+                    shopDeCarNum.setText(bean.cartCount + "");
+                }
                 ToastUtil.show("已加入购物车");
             }
 

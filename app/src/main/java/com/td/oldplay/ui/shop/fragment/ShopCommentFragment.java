@@ -70,7 +70,7 @@ public class ShopCommentFragment extends BaseFragment implements LoadMoreWrapper
         datas = new ArrayList<>();
         swipeToLoadLayout.setOnRefreshListener(this);
         swipeTarget.setLayoutManager(new LinearLayoutManager(mActivity));
-        commentAdapter = new CommentAdapter(mActivity, R.layout.item_comment, datas);
+        commentAdapter = new CommentAdapter(mActivity, R.layout.item_comment_shopdetail, datas);
         adapter = new LoadMoreWrapper(commentAdapter);
         swipeTarget.setAdapter(adapter);
         getData();

@@ -12,10 +12,11 @@
     </com.td.oldplay.widget.CustomTitlebarLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:layout_below="@+id/title"
         android:id="@+id/swipeToLoadLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title"
+        android:layout_marginBottom="55dp">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/swipe_target"
@@ -25,9 +26,9 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <LinearLayout
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:background="@color/white"
         android:orientation="horizontal">
@@ -39,13 +40,13 @@
             android:layout_weight="1">
 
             <CheckBox
-                android:button="@null"
-                android:drawablePadding="10dp"
-                android:drawableLeft="@drawable/selector_car_all"
                 android:id="@+id/car_cb_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:button="@null"
+                android:drawableLeft="@drawable/selector_car_all"
+                android:drawablePadding="10dp"
                 android:text="全选"
                 android:textColor="@color/tv_red"
                 android:textSize="18sp" />

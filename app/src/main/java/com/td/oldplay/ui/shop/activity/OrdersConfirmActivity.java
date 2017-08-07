@@ -21,6 +21,7 @@ import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
 import com.td.oldplay.bean.AddressBean;
+import com.td.oldplay.bean.GoodBean;
 import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.bean.ScoreOffset;
 import com.td.oldplay.http.HttpManager;
@@ -203,9 +204,9 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
         for (int i = 0; i < datas.size(); i++) {
             orderIds.add(datas.get(i).orderId);
             totalMoney += datas.get(i).amount_paid;
-            ortderTotal.setText("￥ " + totalMoney);
-        }
 
+        }
+        ortderTotal.setText("￥ " + totalMoney);
         acore.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -281,10 +282,16 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
         @Override
         protected void convert(ViewHolder holder, OrderBean orderBean, int position) {
             holder.setText(R.id.oreder_confirm_total, "小计:" + orderBean.amount_paid);
-            holder.setText(R.id.oreder_confirm_score, "购买可多少几分:" + orderBean.amount_paid);
+
             recyclerView = holder.getView(R.id.swipe_target);
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
             if (orderBean.orderDetails != null) {
+
+                float totalScore = 0;
+                for (GoodBean bean:orderBean.orderDetails) {
+                    totalScore+=bean.score;
+                }
+                holder.setText(R.id.oreder_confirm_score, "购买可得" +totalScore+"积分");
                 recyclerView.setAdapter(new GoodAdapter(mContext, R.layout.item_confirm_orderr, orderBean.orderDetails));
             }
 

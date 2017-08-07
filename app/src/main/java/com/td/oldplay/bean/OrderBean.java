@@ -46,6 +46,7 @@ public class OrderBean implements Serializable {
     public ScoreOffset scoreOffset;
     public String formatTime;
     public int isApplyScore; //是否使用积分抵消  0 否 1 是
+    public  float score;
 
 
 }

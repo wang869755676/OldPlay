@@ -22,7 +22,7 @@ public class RechargeInfo {
    public String detail;
    public String formatTime;
    public String id;
-   public float money;
+   public String money;
    public String orderId;
    public int type;  // 类型(0:充值1:提现2:消费3:直播)
    public  String typeDetail;

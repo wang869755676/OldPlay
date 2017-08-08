@@ -15,7 +15,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="256dp"
+        android:layout_height="236dp"
         android:layout_marginTop="10dp"
         android:background="@color/white"
         android:orientation="vertical">
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:gravity="center"
-            android:text="￥ 500"
+            android:text=""
             android:textColor="@color/tv_red"
             android:textSize="25sp" />
 
@@ -40,21 +40,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="类型:"
+                android:text="类型:   "
                 android:textColor="@color/coure_tv"
                 android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/con_type"
-                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="类型:"
+                android:text=""
                 android:textColor="@color/coure_tv"
                 android:textSize="14sp" />
         </LinearLayout>
         <LinearLayout
-
+            android:visibility="gone"
             android:id="@+id/ll_other"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                 android:id="@+id/other_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="支付账号:"
+                android:text="支付账号:   "
                 android:textColor="@color/coure_tv"
                 android:textSize="14sp" />
 
@@ -75,7 +75,6 @@
                 android:id="@+id/otener_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
                 android:text="232432432"
                 android:textColor="@color/coure_tv"
                 android:textSize="14sp" />
@@ -89,10 +88,11 @@
             android:orientation="horizontal">
 
             <TextView
+                android:gravity="right"
                 android:id="@+id/con_acount_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="支付账号:"
+                android:text="支付账号:   "
                 android:textColor="@color/coure_tv"
                 android:textSize="14sp" />
 
@@ -100,8 +100,7 @@
                 android:id="@+id/con_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="232432432"
+                android:text=""
                 android:textColor="@color/coure_tv"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -122,10 +121,11 @@
             android:orientation="horizontal">
 
             <TextView
+                android:gravity="right"
                 android:id="@+id/con_pay_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="支付方式:"
+                android:text="支付方式:   "
                 android:textColor="@color/coure_tv"
                 android:textSize="14sp" />
 
@@ -133,8 +133,7 @@
                 android:id="@+id/con_zhifu_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="支付宝"
+                android:text=""
                 android:textColor="@color/coure_tv"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -147,18 +146,19 @@
             android:orientation="horizontal">
 
             <TextView
+                android:gravity="right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="时间:"
+                android:text="时间:   "
                 android:textColor="@color/coure_tv"
                 android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/con_zhifu_time"
-                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:text="支付宝"
+                android:text=""
                 android:textColor="@color/coure_tv"
                 android:textSize="14sp" />
         </LinearLayout>

@@ -31,6 +31,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -88,9 +89,9 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
     private HashMap<String, RequestBody> paramPi = new HashMap<>();
     private HashMap<String, RequestBody> paramVi = new HashMap<>();
     private HashMap<String, RequestBody> paramVo = new HashMap<>();
-    private List<String> imageList = new ArrayList<>();
-    private List<String> videList = new ArrayList<>();
-    private List<String> audioList = new ArrayList<>();
+    private ArrayList<String> imageList = new ArrayList<>();
+    private ArrayList<String> videList = new ArrayList<>();
+    private ArrayList<String> audioList = new ArrayList<>();
 
     private String titleS;
     private String content;
@@ -101,6 +102,8 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
     private int successContent;
     private int count;
     private ForumDetial forumDetial;
+
+    private boolean isOther;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -274,15 +277,15 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
 
                 }
             }
-            if(imageList.size()>0){
-                paramC.put("imageUrlList",imageList);
+            if (imageList.size() > 0) {
+                paramC.put("imageUrlList", imageList.toString().replace("[","").replace("]",""));
             }
-            if(videList.size()>0){
-                paramC.put("videoUrlList",videList);
+            if (videList.size() > 0) {
+                paramC.put("videoUrlList", videList.toString().replace("[","").replace("]",""));
 
             }
-            if(audioList.size()>0){
-                paramC.put("speechUrlList",audioList);
+            if (audioList.size() > 0) {
+                paramC.put("speechUrlList", audioList.toString().replace("[","").replace("]",""));
 
             }
 
@@ -295,19 +298,26 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
         paramVi.put("topicId", toRequestBody(contentId));
         paramVo.put("topicId", toRequestBody(contentId));
         if (paramPi.size() >= 2) {
+            isOther = true;
             count++;
             HttpManager.getInstance().postForumPic(paramPi, MediaSubscriber);
         }
         if (paramVi.size() >= 2) {
             count++;
+            isOther = true;
             HttpManager.getInstance().postForumVideo(paramVi, MediaSubscriber);
         }
         if (paramVo.size() >= 2) {
             count++;
+            isOther = true;
             HttpManager.getInstance().postForumVoicec(paramVo, MediaSubscriber);
         }
 
-
+        if (!isOther) {
+            EventBus.getDefault().post(new EventMessage("publish"));
+            ToastUtil.show("发布成功");
+            finish();
+        }
     }
 
     private RequestBody toRequestBody(String para) {
@@ -373,7 +383,7 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
                     GlideUtils.setImage(mContext, ((ImageItem) o).path, (ImageView) holder.getView(R.id.item_media_iv));
                 } else {
                     GlideUtils.setPhotoImage(mContext, ((ImageItem) o).path, (ImageView) holder.getView(R.id.item_media_iv));
-               Log.e("===", ((ImageItem) o).path);
+                    Log.e("===", ((ImageItem) o).path);
                 }
 
 
@@ -405,7 +415,6 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
             successContent++;
             Log.e("===", successContent + "        " + count);
             if (successContent == count) {
-                hideLoading();
                 successContent = 0;
                 EventBus.getDefault().post(new EventMessage("publish"));
                 ToastUtil.show("发布成功");
@@ -424,4 +433,15 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
             addDisposable(d);
         }
     });
+
+    @Override
+    protected void onDestroy() {
+        hideLoading();
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
+    }
 }

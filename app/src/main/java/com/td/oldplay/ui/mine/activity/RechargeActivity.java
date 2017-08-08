@@ -68,6 +68,7 @@ public class RechargeActivity extends BaseFragmentActivity
     }
 
     private void initDialog() {
+        EventBus.getDefault().post(new EventMessage("dfdsgfd"));
         customDialog = new CustomDialog(mContext);
         customDialog.setTitle("输入密码");
         dialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_password, null);
@@ -96,7 +97,7 @@ public class RechargeActivity extends BaseFragmentActivity
 
             @Override
             public void onnext() {
-                EventBus.getDefault().post(new EventMessage("changeAcount").total = reMoney);  // 支付更新账户余额信息
+
                 finish();
 
             }
@@ -119,6 +120,7 @@ public class RechargeActivity extends BaseFragmentActivity
                     ToastUtil.show("请输入充值金额");
                     return;
                 }
+                EventBus.getDefault().post(new EventMessage("changeAcount").total = reMoney);  // 支付更新账户余额信息
                 if (paySuccessDialog != null) {
                     paySuccessDialog.show();
                     reMoney = Float.parseFloat(rechargeMoney.getText().toString().trim());

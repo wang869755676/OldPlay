@@ -57,7 +57,7 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
     }
 
     public void showCustomLoading(View v) {
-        hud = KProgressHUD.create(mContext)
+        hud = KProgressHUD.create(AContext)
                 .setCustomView(v).show();
 
     }
@@ -79,7 +79,7 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
     private ListCompositeDisposable listCompositeDisposable = new ListCompositeDisposable();
 
 
-    protected void addDisposable(Disposable disposable) {
+    protected void  addDisposable(Disposable disposable) {
         if (disposable != null && !disposable.isDisposed()) {
             listCompositeDisposable.add(disposable);
         }

@@ -1,5 +1,6 @@
 package com.td.oldplay.ui.mine.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -85,25 +86,21 @@ public class ConsumptionActivity extends BaseFragmentActivity {
     }
 
     private void setData(RechargeInfo rechargeInfo) {
-        conMoney.setText(rechargeInfo.money + "");
-        switch (rechargeInfo.type) {
-            case 0:
-                typeStr = "充值";
-                break;
-            case 1:
-                typeStr = "提现";
-                conPayTitle.setText("提现方式:");
-                conAcountTitle.setText("提现账号:");
-                break;
-            case 2:
-                typeStr = "消费";
-                break;
-            case 3:
-                typeStr = "直播";
-                break;
+        if (rechargeInfo.money.contains("+")) {
+            conMoney.setTextColor(Color.parseColor("#168F1B"));
+        } else {
+            conMoney.setTextColor(getResources().getColor(R.color.tv_red));
         }
-        conType.setText(rechargeInfo.typeDetail);
-        conAccount.setText(rechargeInfo.account);
+        conMoney.setText(rechargeInfo.money + "");
+
+        conZhifuTime.setText(rechargeInfo.formatTime);
+        if (TextUtils.isEmpty(rechargeInfo.detail)) {
+            llOther.setVisibility(View.GONE);
+        } else {
+            llOther.setVisibility(View.VISIBLE);
+            otenerContent.setText(rechargeInfo.detail);
+        }
+
         switch (rechargeInfo.payType) {
             case 0:
                 conZhifuType.setText("支付宝");
@@ -117,13 +114,32 @@ public class ConsumptionActivity extends BaseFragmentActivity {
                 break;
         }
 
-        conZhifuTime.setText(rechargeInfo.formatTime);
-        if(TextUtils.isEmpty(rechargeInfo.detail)){
-            llOther.setVisibility(View.GONE);
-        }else{
-            llOther.setVisibility(View.VISIBLE);
-            otenerContent.setText(rechargeInfo.detail);
+        switch (rechargeInfo.type) {
+            case 0:
+                llAcount.setVisibility(View.GONE);
+                typeStr = "充值";
+                break;
+            case 1:
+                typeStr = "提现";
+                llAcount.setVisibility(View.VISIBLE);
+                llOther.setVisibility(View.GONE);
+                conPayTitle.setText("提现方式:");
+                conZhifuType.setText("银行卡");
+                conAcountTitle.setText("提现账号:");
+                break;
+            case 2:
+                llAcount.setVisibility(View.GONE);
+                typeStr = "消费";
+                break;
+            case 3:
+                llAcount.setVisibility(View.GONE);
+                typeStr = "直播";
+                break;
         }
+        conType.setText(rechargeInfo.typeDetail);
+        conAccount.setText(rechargeInfo.account);
+
+
     }
 
 

@@ -7,6 +7,7 @@ import android.support.annotation.IdRes;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
@@ -89,6 +90,7 @@ public class MyWalletActivity extends BaseFragmentActivity
     private HashMap<String, Object> params = new HashMap<>();
 
     private Intent intent;
+    private int RECHARGECODE = 1003;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,14 +106,15 @@ public class MyWalletActivity extends BaseFragmentActivity
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+
     }
 
     private void initView() {
-       if(userBean.uType==1){
-           rbLive.setVisibility(View.VISIBLE);
-       }else{
-           rbLive.setVisibility(View.GONE);
-       }
+        if (userBean.uType == 1) {
+            rbLive.setVisibility(View.VISIBLE);
+        } else {
+            rbLive.setVisibility(View.GONE);
+        }
 
         title.setTitle("我的钱包");
         title.setOnLeftListener(this);
@@ -270,14 +273,27 @@ public class MyWalletActivity extends BaseFragmentActivity
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMessage(EventMessage message) {
+        Log.e("====",message.action);
         if ("changeAcount".equals(message.action)) {
-            if(bean!=null)
-             bean.money+=message.total;
-            userBean.money+=message.total;
+            if (bean != null)
+                bean.money += message.total;
+            userBean.money += message.total;
             spUilts.setUser(userBean);
 
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RECHARGECODE && requestCode == RESULT_OK && data != null) {
+            if (bean != null)
+                bean.money += data.getFloatExtra("total", 0);
+            userBean.money += data.getFloatExtra("total", 0);
+            spUilts.setUser(userBean);
+        }
+    }
+
     private static class Adapter extends CommonAdapter<String> {
 
         public Adapter(Context context, int layoutId, List<String> datas) {

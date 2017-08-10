@@ -15,6 +15,7 @@ import com.td.oldplay.bean.HomeCourseInfo;
 import com.td.oldplay.bean.HomeShopInfo;
 import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.bean.OrderDetail;
+import com.td.oldplay.bean.PayAccountBefore;
 import com.td.oldplay.bean.RechargeInfo;
 import com.td.oldplay.bean.ScoreOffset;
 import com.td.oldplay.bean.ShopBean;
@@ -174,8 +175,8 @@ public class HttpManager {
         toSubscribe(mApiService.getTeachersInCourse(page, id), observer);
     }
 
-    public void getcoursesInTeacher(int page,String userId, String teacherId, Observer<List<CourseBean>> observer) {
-        toSubscribe(mApiService.getcoursesInTeacher(page, userId,teacherId), observer);
+    public void getcoursesInTeacher(int page,String userId, String teacherId,String courseId, Observer<List<CourseBean>> observer) {
+        toSubscribe(mApiService.getcoursesInTeacher(page, userId,teacherId,courseId), observer);
     }
 
     public void getCommentsInTeacher(int page, String id, Observer<List<CommentBean>> observer) {
@@ -198,8 +199,8 @@ public class HttpManager {
         toSubscribe(mApiService.getShopInTeacher(id, page, scortType, scort), observer);
     }
 
-      public void getCourseDetail(String id, Observer<TeacherDetail> observer) {
-        toSubscribe(mApiService.getCourseDetail(id), observer);
+      public void getCourseDetail(String id, String courseId,Observer<TeacherDetail> observer) {
+        toSubscribe(mApiService.getCourseDetail(id,courseId), observer);
     }
 
     public void isConcernTeacher(String userId,String teacherId, Observer<Integer> observer) {
@@ -385,5 +386,9 @@ public class HttpManager {
 
     public void getJoinMoney(String userId, Observer<Float> observer) {
         toSubscribe(mApiService.getJoinMoney(userId), observer);
+    }
+
+    public void getPayAccount(String userId,String totalPrice, Observer<PayAccountBefore> observer) {
+        toSubscribe(mApiService.getPayAccount(userId,totalPrice,1), observer);
     }
 }

@@ -22,6 +22,7 @@ import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
 import com.td.oldplay.bean.CourseBean;
 import com.td.oldplay.bean.CourseTypeBean;
+import com.td.oldplay.bean.PayAccountBefore;
 import com.td.oldplay.bean.ScoreOffset;
 import com.td.oldplay.contants.MContants;
 import com.td.oldplay.http.HttpManager;
@@ -92,6 +93,8 @@ public class CourseFragment extends BaseFragment implements
 
     private boolean isCoursePay;
 
+    private String courseId;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -100,6 +103,7 @@ public class CourseFragment extends BaseFragment implements
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, view);
         id = mActivity.getIntent().getStringExtra("id");
+        courseId = mActivity.getIntent().getStringExtra("courseId");
         return view;
     }
 
@@ -223,7 +227,7 @@ public class CourseFragment extends BaseFragment implements
     }
 
     private void getData() {
-        HttpManager.getInstance().getcoursesInTeacher(page, userId, id, new HttpSubscriber<List<CourseBean>>(new OnResultCallBack<List<CourseBean>>() {
+        HttpManager.getInstance().getcoursesInTeacher(page, userId, id, courseId, new HttpSubscriber<List<CourseBean>>(new OnResultCallBack<List<CourseBean>>() {
 
 
             @Override
@@ -385,10 +389,31 @@ public class CourseFragment extends BaseFragment implements
      * 使用使用积分抵消之后所得到的价格
      */
     private void getApplyScoreMoney() {
+        HttpManager.getInstance().getPayAccount(userId, currentCourse.price + "", new HttpSubscriber<PayAccountBefore>(new OnResultCallBack<PayAccountBefore>() {
 
-        accountDialog.setContent("账户余额支付" + currentCourse.price + "元");
-        accountDialog.setScoreVisible(View.GONE);
-        accountDialog.show();
+
+            @Override
+            public void onSuccess(PayAccountBefore payAccountBefore) {
+                if(payAccountBefore!=null){
+                    accountDialog.setContent("账户余额支付" + payAccountBefore.payPrice + "元");
+                    accountDialog.setScoreVisible(View.VISIBLE);
+                    accountDialog.setScore("(积分抵消"+payAccountBefore.offsetMoney+"元)");
+                    accountDialog.show();
+                }
+
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+        }));
+
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -399,7 +424,7 @@ public class CourseFragment extends BaseFragment implements
                     case 0:
                         ToastUtil.show("支付成功！");
                         paySuccessDialog.show();
-                        isCoursePay=false;
+                        isCoursePay = false;
                         break;
                     case -1:
                         payTypeDialog.dismiss();

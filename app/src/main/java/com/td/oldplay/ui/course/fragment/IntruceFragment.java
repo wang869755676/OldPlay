@@ -48,6 +48,7 @@ public class IntruceFragment extends BaseFragment {
     private TeacherDetail bean;
 
     private String id;
+    private String courseId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,17 +56,20 @@ public class IntruceFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_intruce, container, false);
         unbinder = ButterKnife.bind(this, view);
-        EventBus.getDefault().register(this);
+        id = mActivity.getIntent().getStringExtra("id");
+        courseId = mActivity.getIntent().getStringExtra("courseId");
+        // EventBus.getDefault().register(this);
         return view;
     }
 
+
     private void getData() {
-        HttpManager.getInstance().getCourseDetail(id,new HttpSubscriber<TeacherDetail>(new OnResultCallBack<TeacherDetail>() {
+        HttpManager.getInstance().getCourseDetail(id, courseId, new HttpSubscriber<TeacherDetail>(new OnResultCallBack<TeacherDetail>() {
 
             @Override
             public void onSuccess(TeacherDetail teacherDetail) {
-                bean=teacherDetail;
-                if(bean!=null){
+                bean = teacherDetail;
+                if (bean != null) {
                     setDatas();
                 }
             }
@@ -83,12 +87,11 @@ public class IntruceFragment extends BaseFragment {
     }
 
     private void setDatas() {
-        introduceName.setText(bean.name);
-        introduceDes.setText(bean.profile);
-        if(bean.user!=null){
-           // intrTeIv
-            GlideUtils.setAvatorImage(mActivity,bean.user.avatar,intrTeIv);
+        introduceDes.setText(bean.coursesDescribes);
+        if (bean.user != null) {
+            GlideUtils.setAvatorImage(mActivity, bean.user.avatar, intrTeIv);
             intrTeName.setText(bean.user.nickName);
+            itemSchool.setText(bean.user.profile);
         }
 
     }
@@ -97,14 +100,14 @@ public class IntruceFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        EventBus.getDefault().unregister(this);
     }
 
     @Override
     protected void init(View view) {
-
+        getData();
     }
 
+/*
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMessage(EventMessage message) {
         if ("changeCourse".equals(message.action)) {
@@ -113,6 +116,7 @@ public class IntruceFragment extends BaseFragment {
             getData();
         }
     }
+*/
 
 
 }

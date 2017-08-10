@@ -154,4 +154,7 @@ public class NetWorkAPI {
     public final static String SET_JOIN_MONEY = "lnrzb/pay/api/setConnectPrice";
 
     public final static String GET_JOIN_MONEY = "lnrzb/pay/api/findConnectPrice";
+
+    public final static String GET_PAY_ACCOUNT = "lnrzb/pay/api/toSurplusPay";
+
 }

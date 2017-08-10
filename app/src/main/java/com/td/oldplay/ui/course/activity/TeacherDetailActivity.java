@@ -191,6 +191,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     private boolean isTeacherDetialPay;
 
+    private String courseId;
     /***
      * 连麦的操作监听
      */
@@ -247,6 +248,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         teacherId = getIntent().getStringExtra("id");
+        courseId=getIntent().getStringExtra("courseId");
         customDialog = new CustomDialog(mContext);
         customDialog.setTitleVisible(View.GONE);
         customDialog.setDialogClick(this);

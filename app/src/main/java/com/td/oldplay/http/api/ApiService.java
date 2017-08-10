@@ -13,6 +13,7 @@ import com.td.oldplay.bean.HomeCourseInfo;
 import com.td.oldplay.bean.HomeShopInfo;
 import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.bean.OrderDetail;
+import com.td.oldplay.bean.PayAccountBefore;
 import com.td.oldplay.bean.RechargeInfo;
 import com.td.oldplay.bean.ScoreOffset;
 import com.td.oldplay.bean.SearchCourse;
@@ -105,7 +106,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.TEACHER_COURSE_API)
-    Observable<ApiResponse<List<CourseBean>>> getcoursesInTeacher(@Field("page") int page, @Field("userId") String userId, @Field("teacherId") String teacherId);
+    Observable<ApiResponse<List<CourseBean>>> getcoursesInTeacher(@Field("page") int page, @Field("userId") String userId, @Field("teacherId") String teacherId, @Field("coursesTypeId") String coursesTypeId);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.COURSE_COMMENT_API)
@@ -127,7 +128,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.TEACHER_DETAIL_API)
-    Observable<ApiResponse<TeacherDetail>> getCourseDetail(@Field("coursesId") String coursesId);
+    Observable<ApiResponse<TeacherDetail>> getCourseDetail(@Field("teacherId") String teacherId,@Field("coursesTypeId") String coursesTypeId);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.SHOP_TEACHER_API)
@@ -169,7 +170,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.SHOP_DETAIL_API)
-    Observable<ApiResponse<ShopDetail>> getShopDetail(@Field("goodsId") String shopId,@Field("userId") String userId);
+    Observable<ApiResponse<ShopDetail>> getShopDetail(@Field("goodsId") String shopId, @Field("userId") String userId);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.GET_COMMENTS_API)
@@ -327,10 +328,13 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.SET_JOIN_MONEY)
-    Observable<ApiResponse<String>> setJoinMoney(@Field("userId") String userId,@Field("price") String price);
+    Observable<ApiResponse<String>> setJoinMoney(@Field("userId") String userId, @Field("price") String price);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.GET_JOIN_MONEY)
     Observable<ApiResponse<Float>> getJoinMoney(@Field("userId") String userId);
 
+    @FormUrlEncoded
+    @POST(NetWorkAPI.GET_PAY_ACCOUNT)
+    Observable<ApiResponse<PayAccountBefore>> getPayAccount(@Field("userId") String userId,@Field("totalPrice") String totalPrice,@Field("type") int type);
 }

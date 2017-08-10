@@ -76,6 +76,7 @@ public class TeacherListActivity extends BaseFragmentActivity
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent=new Intent(mContext, TeacherDetailActivity.class);
                 intent.putExtra("id",datas.get(position).userId);
+                intent.putExtra("courseId",courseId);
                 startActivity(intent);
             }
 

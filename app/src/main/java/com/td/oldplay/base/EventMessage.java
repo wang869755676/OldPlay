@@ -16,7 +16,11 @@ public class EventMessage {
         this.action = action;
     }
 
-   /* public EventMessage setAction(String action) {
+    public EventMessage setNum(int num) {
+        this.num = num;
+        return this;
+    }
+  /* public EventMessage setAction(String action) {
         this.action = action;
         return this;
     }*/

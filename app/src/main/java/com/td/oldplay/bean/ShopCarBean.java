@@ -34,4 +34,20 @@ public class ShopCarBean {
     public void setGoods(ShopBean goods) {
         this.goods = goods;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ShopCarBean carBean = (ShopCarBean) o;
+
+        return cartId.equals(carBean.cartId);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return cartId.hashCode();
+    }
 }

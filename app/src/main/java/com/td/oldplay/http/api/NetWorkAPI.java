@@ -89,6 +89,7 @@ public class NetWorkAPI {
 
     public final static String DELET_CAR_API = "lnrzb/cart/deleteCart";
 
+    public final static String UPDATE_CARs_API = "lnrzb/cart/updateCart";
 
     public final static String HOME_SHOP_API = " lnrzb/goods/toGoodsHomePage";
 

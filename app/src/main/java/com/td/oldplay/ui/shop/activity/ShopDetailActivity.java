@@ -311,6 +311,14 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
             } else if (type == 1) {
                 createOrders();
             }
+        }else if("deleteCar".equals(message.action)){
+            bean.cartCount=message.num;
+            if(bean.cartCount>0){
+                shopDeCarNum.setVisibility(View.VISIBLE);
+                shopDeCarNum.setText(bean.cartCount + "");
+            }else{
+                shopDeCarNum.setVisibility(View.GONE);
+            }
         }
 
 

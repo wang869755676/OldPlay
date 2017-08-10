@@ -34,6 +34,7 @@ import com.td.oldplay.http.api.NetWorkAPI;
 import com.td.oldplay.http.exception.ApiException;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -256,6 +257,9 @@ public class HttpManager {
 
     public void deleteCars(String carId, Observer<String> observer) {
         toSubscribe(mApiService.deleteCars(carId), observer);
+    }
+    public void updateCars(String datas, Observer<String> observer) {
+        toSubscribe(mApiService.updateCars(datas), observer);
     }
 
     public void getHomeShop(Observer<HomeShopInfo> observer) {

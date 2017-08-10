@@ -204,6 +204,9 @@ public interface ApiService {
     @POST(NetWorkAPI.DELET_CAR_API)
     Observable<ApiResponse<String>> deleteCars(@Field("cartId") String cartId);
 
+    @FormUrlEncoded
+    @POST(NetWorkAPI.UPDATE_CARs_API)
+    Observable<ApiResponse<String>> updateCars(@Field("cartList") String datas);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.GET_ADDRESS_API)

@@ -123,11 +123,13 @@ public class MyAddressActivity extends BaseFragmentActivity
                     adapter.setLoadMoreView(0);
                     if (page > 1) {
                         ToastUtil.show("没有更多数据了");
+                    }else{
+                        datas.clear();
                     }
 
                 }
                // Collections.reverse(datas);
-                addressAdapter.notifyDataSetChanged();
+               adapter.notifyDataSetChanged();
 
             }
 

@@ -7,7 +7,11 @@
     android:layout_marginRight="10dp"
     android:layout_marginTop="10dp"
     android:orientation="vertical"
-    app:cardCornerRadius="5dp">
+    app:cardCornerRadius="5dp"
+    app:cardElevation="3dp"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardUseCompatPadding="false"
+    app:cardPreventCornerOverlap="false">
 
     <RelativeLayout
         android:layout_width="match_parent"

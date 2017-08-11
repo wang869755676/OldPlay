@@ -14,7 +14,7 @@ import java.util.List;
 
 
 public class PrefUtils {
-    private static final String PREF_NAME = "oumen";
+    private static final String PREF_NAME = "oldplay_jpush";
 
     private static SharedPreferences mSharedPreferences;
     private static SharedPreferences.Editor editor;

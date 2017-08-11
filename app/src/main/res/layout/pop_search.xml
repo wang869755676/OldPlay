@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#4d000000"
-    tools:context="com.td.oldplay.ui.SearchActivity">
+    tools:context="com.td.oldplay.ui.RegisterScoreActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

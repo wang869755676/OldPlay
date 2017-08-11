@@ -11,32 +11,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragment;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;
-import com.td.oldplay.bean.CourseBean;
-import com.td.oldplay.bean.CourseTypeBean;
 import com.td.oldplay.bean.ShopBean;
 import com.td.oldplay.contants.MContants;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
-import com.td.oldplay.ui.SearchActivity;
-import com.td.oldplay.ui.course.activity.CourseListActivity;
-import com.td.oldplay.ui.course.adapter.CourserAdapter;
 import com.td.oldplay.ui.course.adapter.ShopAdapter;
 import com.td.oldplay.ui.shop.activity.ShopDetailActivity;
 import com.td.oldplay.ui.window.SeachPopupWindow;
-import com.td.oldplay.ui.window.SharePopupWindow;
 import com.td.oldplay.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -45,7 +35,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 /**

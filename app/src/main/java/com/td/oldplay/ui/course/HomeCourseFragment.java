@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ import com.td.oldplay.bean.HomeCourseInfo;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
-import com.td.oldplay.ui.SearchActivity;
 import com.td.oldplay.ui.course.activity.CourseListActivity;
 import com.td.oldplay.ui.course.activity.TeacherDetailActivity;
 import com.td.oldplay.ui.course.activity.TeacherListActivity;
@@ -41,19 +39,13 @@ import com.td.oldplay.widget.banner.MZBannerView;
 import com.td.oldplay.widget.banner.holder.MZHolderCreator;
 import com.td.oldplay.widget.banner.holder.MZViewHolder;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -297,7 +289,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
                     popupWindow = new SeachPopupWindow(mActivity, 0);
                 }
                 popupWindow.showPopup(v);
-                /*intent = new Intent(mActivity, SearchActivity.class);
+                /*intent = new Intent(mActivity, RegisterScoreActivity.class);
                 intent.putExtra("type", 0);
                 // intent.putExtra()
                 startActivity(intent);*/

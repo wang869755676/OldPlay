@@ -1,44 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.td.oldplay.ui.SearchActivity">
+    android:layout_width="245dp"
+    android:layout_height="160dp"
+    android:background="@drawable/corwhite"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        android:padding="10dp">
-
-        <EditText
-            android:id="@+id/search_edite"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/cor_gray_5"
-            android:drawableLeft="@mipmap/icon_search"
-            android:hint="搜索想要的内容"
-            android:textColor="@color/home_gray"
-            android:textSize="12sp" />
+        android:layout_height="match_parent"
+        android:background="@drawable/corwhite"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/search_cancle"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="10dp"
+            android:id="@+id/dialog_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="取消"
-            android:textSize="14sp" />
-    </LinearLayout>
+            android:maxLines="3"
+            android:padding="10dp"
+            android:text="支付成功"
+            android:textColor="@color/tv_red"
+            android:textSize="18sp" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/seach_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"></android.support.v7.widget.RecyclerView>
+        <TextView
+            android:background="@drawable/cor_gray_5"
+            android:layout_marginTop="15dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/dialog_content"
+            android:id="@+id/dialog_ok"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/coure_tv"
+            android:textSize="14sp" />
+
+
+    </RelativeLayout>
+
 
 </LinearLayout>

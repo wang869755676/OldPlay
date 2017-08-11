@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
+import com.td.oldplay.contants.MContants;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
@@ -24,6 +26,8 @@ import com.td.oldplay.ui.forum.HomeForumFragment;
 import com.td.oldplay.ui.live.LiveActivity;
 import com.td.oldplay.ui.mine.HomeMyFragment;
 import com.td.oldplay.ui.shop.HomeShopFragment;
+import com.td.oldplay.ui.window.CustomDialog;
+import com.td.oldplay.utils.PrefUtils;
 import com.td.oldplay.utils.ToastUtil;
 
 import java.io.IOException;
@@ -69,6 +73,13 @@ public class MainActivity extends BaseFragmentActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         init();
+        String jpush = PrefUtils.getString(mContext, MContants.PRE_SCORE_KEY, "");
+        if (!TextUtils.isEmpty(jpush)) {
+            Intent i = new Intent(mContext, RegisterScoreActivity.class);
+            i.putExtra("title", jpush);
+            startActivity(i);
+            PrefUtils.putString(mContext, MContants.PRE_SCORE_KEY, "");
+        }
     }
 
     private void init() {
@@ -126,6 +137,7 @@ public class MainActivity extends BaseFragmentActivity {
         });
         rbTab1.setChecked(true);
 
+
     }
 
     private void hideAll(FragmentTransaction transaction) {
@@ -154,5 +166,20 @@ public class MainActivity extends BaseFragmentActivity {
             finish();
         }
         super.onBackPressed();
+    }
+
+
+    public static boolean isForeground = false;
+    @Override
+    protected void onResume() {
+        isForeground = true;
+        super.onResume();
+    }
+
+
+    @Override
+    protected void onPause() {
+        isForeground = false;
+        super.onPause();
     }
 }

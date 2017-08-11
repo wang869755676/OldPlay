@@ -12,6 +12,8 @@ import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.utils.GlideUtils;
 import com.td.oldplay.utils.SharePreferenceUtil;
 
+import org.greenrobot.eventbus.EventBus;
+
 import io.reactivex.disposables.Disposable;
 import io.reactivex.internal.disposables.ListCompositeDisposable;
 

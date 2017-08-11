@@ -8,6 +8,7 @@ import com.qiniu.pili.droid.streaming.StreamingEnv;
 import com.td.oldplay.contants.MContants;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.network.HttpUtils;
+import com.td.oldplay.utils.PrefUtils;
 import com.td.oldplay.utils.SharePreferenceUtil;
 import com.td.oldplay.utils.ToastUtil;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -37,6 +38,7 @@ public class MyApplication extends Application {
         instance = this;
         // sp 工具类
         mPreferenceUtil = new SharePreferenceUtil(this, MContants.SHAREPREFERENCE_NAME);
+        PrefUtils.init(this);
         // toast 工具类
         ToastUtil.init(this);
         /**

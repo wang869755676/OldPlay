@@ -26,9 +26,7 @@ import com.td.oldplay.bean.ShopBean;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
-import com.td.oldplay.ui.SearchActivity;
 import com.td.oldplay.ui.course.HomeCourseFragment;
-import com.td.oldplay.ui.course.activity.TeacherDetailActivity;
 import com.td.oldplay.ui.shop.activity.ShopDetailActivity;
 import com.td.oldplay.ui.shop.activity.ShopListActivity;
 import com.td.oldplay.ui.shop.activity.ShopTypeListActivity;
@@ -256,7 +254,7 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
                 startActivity(intent);
                 break;
             case R.id.right_text:
-              /*  intent = new Intent(mActivity, SearchActivity.class);
+              /*  intent = new Intent(mActivity, RegisterScoreActivity.class);
                 intent.putExtra("type", 0);
                 // intent.putExtra()
                 startActivity(intent);*/

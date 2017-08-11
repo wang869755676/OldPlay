@@ -95,6 +95,13 @@ public class MainActivity extends BaseFragmentActivity {
         } else {
             live.setVisibility(View.GONE);
         }
+
+        transaction = getSupportFragmentManager().beginTransaction();
+        tabMe=new HomeMyFragment();
+        transaction.add(R.id.main_contianer, tabMe);
+        transaction.show(tabMe).commit();
+
+
         rgMain.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {

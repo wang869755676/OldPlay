@@ -106,6 +106,7 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
                 }
                 break;
             case R.id.login_weixin:
+                ShareSDKUtils.loginOut(Wechat.NAME);
                 ShareSDKUtils.login(Wechat.NAME, new PlatformActionListener() {
                     @Override
                     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
@@ -114,7 +115,7 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
 
                     @Override
                     public void onError(Platform platform, int i, Throwable throwable) {
-
+                        ToastUtil.show(throwable.getMessage() + "");
                     }
 
                     @Override
@@ -177,7 +178,7 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
 
         params.put("password", pws);
 
-      //  params.put("uType", type);
+        //  params.put("uType", type);
         return true;
     }
 }

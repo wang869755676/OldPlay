@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -36,6 +38,7 @@ import com.td.oldplay.utils.ShareSDKUtils;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CircleImageView;
 import com.td.oldplay.widget.CustomTitlebarLayout;
+import com.td.oldplay.widget.goodView.GoodView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,7 +53,7 @@ import io.reactivex.disposables.Disposable;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeMyFragment extends BaseFragment implements View.OnClickListener {
+public class HomeMyFragment extends BaseFragment implements View.OnClickListener, PopupWindow.OnDismissListener {
 
 
     @BindView(R.id.title)
@@ -164,6 +167,13 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
 
     private SharePopupWindow popupWindow;
 
+    private boolean isScoreAdd;
+    private GoodView goodView;
+
+    public int currentScore;
+    private boolean isFirst = true;
+    private boolean isHidden=true;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -171,6 +181,8 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_home_my, container, false);
         unbinder = ButterKnife.bind(this, view);
         EventBus.getDefault().register(this);
+        goodView = new GoodView(mActivity);
+        goodView.setOnDismissListener(this);
         setUser();
         return view;
     }
@@ -186,16 +198,37 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
         if ("userUpdate".equals(message.action)) {
             // mineUserHeadImage
             setUser();
-
+        } else if ("userAdd".equals(message.action)) {
+            // 刷新ui
+            isScoreAdd = true;
+            refreshUser();
+        } else if ("user".equals(message.action)) {
 
         }
     }
 
+    private void showAddAnimation() {
+        if (isScoreAdd && !isHidden) {
+            goodView.setText("+" + (userBean.score - currentScore));
+            goodView.setTextColor(getResources().getColor(R.color.tv_red));
+            goodView.setTextSize(20);
+            goodView.show(mineScoree);
+        }
+    }
+
+
+    private void refreshUser() {
+               showAddAnimation();
+    }
+
+
     private void setUser() {
         if (userBean != null) {
+            currentScore = userBean.score;
             GlideUtils.setAvatorImage(mActivity, userBean.avatar, mineUserHeadImage);
             mineNickname.setText(userBean.nickName);
             mineScoree.setText("积分: " + userBean.score);
+
         }
 
     }
@@ -312,5 +345,24 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
 
                 break;
         }
+    }
+
+    @Override
+    public void onDismiss() {
+        isScoreAdd = false;
+        setUser();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //showAddAnimation();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        isHidden = hidden;
+        showAddAnimation();
     }
 }

@@ -45,15 +45,15 @@ public class MyReceiver extends BroadcastReceiver {
             } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
                 Log.e("===", "接收到推送下来的自定义消息:" + bundle.getString(JPushInterface.EXTRA_EXTRA));
 
-
+                processCustomMessage(context, bundle);
 
             } else if (JPushInterface.ACTION_NOTIFICATION_RECEIVED.equals(intent.getAction())) {
 
-
+                Log.e("===", "retergvdsgsvsdfv");
             } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
                 //Logger.d(TAG, "[MyReceiver] 用户点击打开了通知");
                 Log.e("===", "打开推送的通知");
-                processCustomMessage(context, bundle);
+
 
             } else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
                 //	Logger.d(TAG, "[MyReceiver] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
@@ -66,7 +66,7 @@ public class MyReceiver extends BroadcastReceiver {
                 //Logger.d(TAG, "[MyReceiver] Unhandled intent - " + intent.getAction());
             }
         } catch (Exception e) {
-            Log.e("===", e.getMessage());
+
         }
 
     }

@@ -71,7 +71,7 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
         tvGetCode.setOnClickListener(this);
         registerSubmint.setOnClickListener(this);
         paras = new HashMap<>();
-        timer = new CountDownTimer(1000, 60000) {
+        timer = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 tvGetCode.setText(millisUntilFinished / 1000 + "s");
@@ -129,15 +129,18 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
 
     private void registerServicer() {
         if (paras != null) {
+            showLoading();
             HttpManager.getInstance().registerUser(paras, new HttpSubscriber<String>(new OnResultCallBack<String>() {
                 @Override
                 public void onSuccess(String o) {
+                    hideLoading();
                     ToastUtil.show("注册成功");
                     finish();
                 }
 
                 @Override
                 public void onError(int code, String errorMsg) {
+                    hideLoading();
                     ToastUtil.show(errorMsg);
                 }
 

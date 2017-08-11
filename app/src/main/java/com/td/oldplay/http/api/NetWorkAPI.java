@@ -158,4 +158,5 @@ public class NetWorkAPI {
 
     public final static String GET_PAY_ACCOUNT = "lnrzb/pay/api/toSurplusPay";
 
+    public final static String GET_LOGISTICS_AIP= "lnrzb/kuaidi/api/expressDelivery";
 }

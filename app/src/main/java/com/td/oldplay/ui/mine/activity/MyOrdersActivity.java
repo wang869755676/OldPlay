@@ -169,7 +169,9 @@ public class MyOrdersActivity extends BaseFragmentActivity
         switch (action) {
             case 1:
                 intent = new Intent(mContext, LogisticsActivity.class);
-                intent.putExtra("id", item.orderId);
+                intent.putExtra("logistic", item.logistic);
+                intent.putExtra("logisticnum", item.logisticnum);
+                intent.putExtra("status", item.status);
                 startActivity(intent);
                 break;
             case 2:

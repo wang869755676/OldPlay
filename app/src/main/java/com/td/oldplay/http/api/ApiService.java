@@ -11,6 +11,7 @@ import com.td.oldplay.bean.ForumDetial;
 import com.td.oldplay.bean.ForumType;
 import com.td.oldplay.bean.HomeCourseInfo;
 import com.td.oldplay.bean.HomeShopInfo;
+import com.td.oldplay.bean.LogisticsBean;
 import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.bean.OrderDetail;
 import com.td.oldplay.bean.PayAccountBefore;
@@ -340,4 +341,10 @@ public interface ApiService {
     @FormUrlEncoded
     @POST(NetWorkAPI.GET_PAY_ACCOUNT)
     Observable<ApiResponse<PayAccountBefore>> getPayAccount(@Field("userId") String userId,@Field("totalPrice") String totalPrice,@Field("type") int type);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.GET_LOGISTICS_AIP)
+    Observable<ApiResponse<LogisticsBean>> getLogistics(@Field("logistic") String logistic, @Field("logisticnum") String logisticnum);
+
+
 }

@@ -158,17 +158,28 @@ public class SeachPopupWindow extends PopupWindow implements View.OnClickListene
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.e("===",s+"-------------------------");
+             /*   Log.e("===",s+"-------------------------");
                 if (s == null || "".equals(s)) {
                     seachRecycler.setVisibility(View.GONE);
                 } else {
                     search(s.toString());
-                }
+                }*/
 
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (s == null || "".equals(s.toString())) {
+                    shopBeens.clear();
+                    if(shopAdapter!=null)
+                    shopAdapter.notifyDataSetChanged();
+
+                    courseTypeBeens.clear();
+                    if(courserAdapter!=null)
+                        courserAdapter.notifyDataSetChanged();
+                } else {
+                    search(s.toString());
+                }
             }
         });
     }

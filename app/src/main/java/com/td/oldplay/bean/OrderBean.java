@@ -33,6 +33,7 @@ public class OrderBean implements Serializable {
     public String addressId;
     public float amount_paid;
     public float amount_payable;
+    public String logistic;
     public String logisticnum;
     public String orderId;
     public String orderNum;

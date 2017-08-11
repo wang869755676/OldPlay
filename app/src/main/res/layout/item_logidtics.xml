@@ -4,6 +4,7 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -20,6 +21,7 @@
             android:src="@mipmap/icon_log_one" />
 
         <View
+            android:minHeight="20dp"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_below="@+id/item_logi_ic"
@@ -34,7 +36,7 @@
             android:layout_alignTop="@id/item_logi_ic"
             android:layout_marginRight="30dp"
             android:layout_marginTop="4dp"
-            android:text="2014 sr"
+            android:text=""
             android:textColor="@color/home_gray"
             android:textSize="12sp" />
 
@@ -46,7 +48,7 @@
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/item_log_time"
             android:layout_toRightOf="@id/item_logi_ic"
-            android:text="商家发货"
+            android:text=""
             android:textColor="@color/home_gray"
             android:textSize="14sp" />
     </RelativeLayout>

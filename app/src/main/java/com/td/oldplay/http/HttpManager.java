@@ -13,6 +13,7 @@ import com.td.oldplay.bean.ForumDetial;
 import com.td.oldplay.bean.ForumType;
 import com.td.oldplay.bean.HomeCourseInfo;
 import com.td.oldplay.bean.HomeShopInfo;
+import com.td.oldplay.bean.LogisticsBean;
 import com.td.oldplay.bean.OrderBean;
 import com.td.oldplay.bean.OrderDetail;
 import com.td.oldplay.bean.PayAccountBefore;
@@ -394,5 +395,10 @@ public class HttpManager {
 
     public void getPayAccount(String userId,String totalPrice, Observer<PayAccountBefore> observer) {
         toSubscribe(mApiService.getPayAccount(userId,totalPrice,1), observer);
+    }
+
+
+    public void getLogistics(String logistic,String logisticnum, Observer<LogisticsBean> observer) {
+        toSubscribe(mApiService.getLogistics(logistic,logisticnum), observer);
     }
 }

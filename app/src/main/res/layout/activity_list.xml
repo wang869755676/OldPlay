@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_gray"
     android:orientation="vertical">
 
     <com.td.oldplay.widget.CustomTitlebarLayout
@@ -12,6 +13,7 @@
     </com.td.oldplay.widget.CustomTitlebarLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_marginTop="10dp"
         android:id="@+id/swipeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

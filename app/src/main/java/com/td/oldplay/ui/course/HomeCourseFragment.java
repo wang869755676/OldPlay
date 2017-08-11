@@ -294,7 +294,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
                 break;
             case R.id.right_text:
                 if (popupWindow == null) {
-                    popupWindow = new SeachPopupWindow(mActivity, 1);
+                    popupWindow = new SeachPopupWindow(mActivity, 0);
                 }
                 popupWindow.showPopup(v);
                 /*intent = new Intent(mActivity, SearchActivity.class);

@@ -65,6 +65,15 @@ public interface ApiService {
     Observable<ApiResponse<String>> registerUser(@FieldMap() HashMap<String, Object> maps);
 
     @FormUrlEncoded
+    @POST(NetWorkAPI.BOUND_USER_API)
+    Observable<ApiResponse<UserBean>> boundUser(@FieldMap() HashMap<String, Object> maps);
+
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.IS_BOUND_API)
+    Observable<ApiResponse<UserBean>>isBound(@Field("openId") String userId);
+
+    @FormUrlEncoded
     @POST(NetWorkAPI.LOGIN_API)
     Observable<ApiResponse<UserBean>> loginUser(@FieldMap() HashMap<String, Object> maps);
 

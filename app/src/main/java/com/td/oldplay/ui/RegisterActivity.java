@@ -1,5 +1,6 @@
 package com.td.oldplay.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
+import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
@@ -20,6 +22,7 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.jpush.android.api.JPushInterface;
 import io.reactivex.disposables.Disposable;
 
 public class RegisterActivity extends BaseFragmentActivity implements View.OnClickListener {
@@ -60,12 +63,29 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
 
     private HashMap<String, Object> paras;
 
+    private boolean isBound;
+    private UserBean wechatUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
-        title.setTitle("注册");
+        isBound = getIntent().getBooleanExtra("isBound", false);
+        wechatUser = (UserBean) getIntent().getSerializableExtra("user");
+        if (isBound) {
+            title.setTitle("绑定用户信息");
+            if (wechatUser != null) {
+                registerName.setText(wechatUser.nickName);
+                registerPassworad.setVisibility(View.GONE);
+                registerRePas.setVisibility(View.GONE);
+                registerInvitePhone.setVisibility(View.GONE);
+            }
+
+        } else {
+            title.setTitle("注册");
+        }
+
         title.setOnLeftListener(this);
         title.setTitleBarBackgroud(R.color.transparent);
         tvGetCode.setOnClickListener(this);
@@ -93,8 +113,14 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
                 break;
             case R.id.register_submint:
                 if (checkInput()) {
-                    registerServicer();
+                    if (isBound) {
+                        bondServer();
+                    } else {
+                        registerServicer();
+                    }
+
                 }
+
                 break;
             case R.id.tv_getCode:
                 tvGetCode.setEnabled(false);
@@ -125,6 +151,31 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
                 break;
         }
 
+    }
+
+    private void bondServer() {
+        HttpManager.getInstance().boundUser(paras, new HttpSubscriber<UserBean>(new OnResultCallBack<UserBean>() {
+
+            @Override
+            public void onSuccess(UserBean userBean) {
+                spUilts.setUser(userBean);
+                spUilts.setUserId(userBean.userId);
+                spUilts.setIsLogin(true);
+                JPushInterface.setAlias(mContext, 1, userBean.userId);
+                startActivity(new Intent(mContext,MainActivity.class));
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                hideLoading();
+                ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
+        }));
     }
 
     private void registerServicer() {
@@ -175,21 +226,24 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
         }
         paras.put("nickName", name);
 
-        pws = registerPassworad.getText().toString();
-        if (TextUtils.isEmpty(pws)) {
-            ToastUtil.show("请输入密码");
-            return false;
+        if (!isBound) {
+            pws = registerPassworad.getText().toString();
+            if (TextUtils.isEmpty(pws)) {
+                ToastUtil.show("请输入密码");
+                return false;
+            }
+            rePws = registerRePas.getText().toString();
+            if (TextUtils.isEmpty(rePws)) {
+                ToastUtil.show("请输入确认密码");
+                return false;
+            }
+            if (!pws.equals(rePws)) {
+                ToastUtil.show("两次的登录密码不一样");
+                return false;
+            }
+            paras.put("passworad", pws);
         }
-        rePws = registerRePas.getText().toString();
-        if (TextUtils.isEmpty(rePws)) {
-            ToastUtil.show("请输入确认密码");
-            return false;
-        }
-        if (!pws.equals(rePws)) {
-            ToastUtil.show("两次的登录密码不一样");
-            return false;
-        }
-        paras.put("passworad", pws);
+
 
         zhipws = registerZhifuPas.getText().toString();
         if (TextUtils.isEmpty(zhipws)) {
@@ -222,5 +276,9 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
 
     }
 
+    @Override
+    public void onBackPressed() {
 
+        super.onBackPressed();
+    }
 }

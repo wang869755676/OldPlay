@@ -30,8 +30,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.jpush.android.api.JPushInterface;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.PlatformDb;
 import cn.sharesdk.wechat.friends.Wechat;
 import cn.tee3.avd.User;
 import io.reactivex.disposables.Disposable;
@@ -64,6 +66,7 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
     private int type = 1;
 
     private HashMap<String, Object> params = new HashMap<>();
+    private UserBean weUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +113,20 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
                 ShareSDKUtils.login(Wechat.NAME, new PlatformActionListener() {
                     @Override
                     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-                        Log.e("===", hashMap.toString());
+                        PlatformDb db = platform.getDb();
+                        if (weUser != null)
+                            weUser = new UserBean();
+
+                        weUser.userId = db.getUserId();
+                        weUser.avatar = db.getUserIcon();
+                        weUser.avatar = db.getUserName();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                isBound(weUser);
+
+                            }
+                        });
                     }
 
                     @Override
@@ -128,6 +144,44 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
 
     }
 
+    /**
+     * 微信登录是否已经绑定信息
+     */
+    private void isBound(UserBean user) {
+        if (user != null) {
+            HttpManager.getInstance().isBound(user.userId, new HttpSubscriber<UserBean>(new OnResultCallBack<UserBean>() {
+
+                @Override
+                public void onSuccess(UserBean userBean) {
+                    if (userBean != null) {
+                        spUilts.setUser(userBean);
+                        spUilts.setUserId(userBean.userId);
+                        spUilts.setIsLogin(true);
+                        JPushInterface.setAlias(mContext, 1, userBean.userId);
+                        startActivity(new Intent(mContext,MainActivity.class));
+                    } else {
+                        Intent intent = new Intent(mContext, RegisterActivity.class);
+                        intent.putExtra("isBound", true);
+                        intent.putExtra("user", weUser);
+                        startActivity(intent);
+
+                    }
+
+                }
+
+                @Override
+                public void onError(int code, String errorMsg) {
+
+                }
+
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+            }));
+        }
+    }
+
     private void loginServier() {
         showLoading();
         HttpManager.getInstance().loginUser(params, new HttpSubscriber<UserBean>(new OnResultCallBack<UserBean>() {
@@ -137,6 +191,7 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
                     spUilts.setUser(userBean);
                     spUilts.setUserId(userBean.userId);
                     spUilts.setIsLogin(true);
+                    JPushInterface.setAlias(mContext, 1, userBean.userId);
                     startActivity(new Intent(mContext, MainActivity.class));
                     finish();
                 }

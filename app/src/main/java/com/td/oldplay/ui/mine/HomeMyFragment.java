@@ -47,6 +47,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import cn.jpush.android.api.JPushInterface;
 import cn.sharesdk.wechat.friends.Wechat;
 import io.reactivex.disposables.Disposable;
 
@@ -326,7 +327,9 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
                     @Override
                     public void onSuccess(String s) {
                         ToastUtil.show("退出成功");
+                        JPushInterface.deleteAlias(mActivity,2);
                         spUilts.clearSharedPreferences();
+                       // JPushInterface.re
                         ShareSDKUtils.loginOut(Wechat.NAME);
                         startActivity(new Intent(mActivity, LoginActivity.class));
                     }

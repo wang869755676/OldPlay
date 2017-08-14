@@ -20,6 +20,10 @@ public class NetWorkAPI {
 
     public final static String REGISTER_API = "lnrzb/user/userRegister";
 
+    public final static String BOUND_USER_API = "lnrzb/user/userRegister";
+
+    public final static String IS_BOUND_API = "lnrzb/user/checkBindPhone";
+
     public final static String LOGIN_API = "lnrzb/user/userLogin";
 
     public final static String GETCODE_API = "lnrzb/user/sendvcode";

@@ -133,6 +133,14 @@ public class HttpManager {
         toSubscribe(mApiService.registerUser(params), observer);
     }
 
+    public void boundUser(HashMap<String, Object> params, Observer<UserBean> observer) {
+        toSubscribe(mApiService.boundUser(params), observer);
+    }
+
+    public void isBound(String userId, Observer<UserBean> observer) {
+        toSubscribe(mApiService.isBound(userId), observer);
+    }
+
     public void loginUser(HashMap<String, Object> params, Observer<UserBean> observer) {
         toSubscribe(mApiService.loginUser(params), observer);
     }

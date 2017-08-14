@@ -75,11 +75,12 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
         wechatUser = (UserBean) getIntent().getSerializableExtra("user");
         if (isBound) {
             title.setTitle("绑定用户信息");
+            registerPassworad.setVisibility(View.GONE);
+            registerRePas.setVisibility(View.GONE);
+            registerInvitePhone.setVisibility(View.GONE);
             if (wechatUser != null) {
                 registerName.setText(wechatUser.nickName);
-                registerPassworad.setVisibility(View.GONE);
-                registerRePas.setVisibility(View.GONE);
-                registerInvitePhone.setVisibility(View.GONE);
+
             }
 
         } else {
@@ -114,6 +115,8 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
             case R.id.register_submint:
                 if (checkInput()) {
                     if (isBound) {
+                        paras.put("avatar",wechatUser.avatar);
+                        paras.put("openId",wechatUser.userId);
                         bondServer();
                     } else {
                         registerServicer();

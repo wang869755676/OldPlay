@@ -109,7 +109,11 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
                 }
                 break;
             case R.id.login_weixin:
-                ShareSDKUtils.loginOut(Wechat.NAME);
+                Intent intent = new Intent(mContext, RegisterActivity.class);
+                intent.putExtra("isBound", true);
+                intent.putExtra("user", weUser);
+                startActivity(intent);
+           /*     ShareSDKUtils.loginOut(Wechat.NAME);
                 ShareSDKUtils.login(Wechat.NAME, new PlatformActionListener() {
                     @Override
                     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
@@ -138,7 +142,7 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
                     public void onCancel(Platform platform, int i) {
 
                     }
-                });
+                });*/
                 break;
         }
 

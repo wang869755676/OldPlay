@@ -3,10 +3,15 @@ package com.td.oldplay.pay.weixin;
 import android.content.ContentValues;
 import android.util.Log;
 import android.util.Xml;
+import android.widget.Toast;
 
 import com.td.oldplay.pay.PayOrderId;
 import com.td.oldplay.utils.MD5;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.StringReader;
@@ -22,92 +27,45 @@ import java.util.Random;
 
 public class WeixPayUtils {
 
-    public static String genNonceStr() {
-        Random random = new Random();
-        return MD5.getMessageDigest(String.valueOf(random.nextInt(10000)).getBytes());
+
+    /**
+     *  使用微信支付  直接传入json字段
+     * @param api
+     * @param json
+     * @throws JSONException
+     */
+    public static void pay(IWXAPI api, JSONObject json) throws JSONException {
+        PayReq req = new PayReq();
+
+        req.appId = json.getString("appid");
+        req.partnerId = json.getString("partnerid");
+        req.prepayId = json.getString("prepayid");
+        req.nonceStr = json.getString("noncestr");
+        req.timeStamp = json.getString("timestamp");
+        req.packageValue = json.getString("package");
+        req.sign = json.getString("sign");
+        req.extData = "app data"; // optional
+        // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
+        api.sendReq(req);
     }
+    /**
+     *  使用微信支付  直接传入json字段
+     * @param api
+     * @param info
+     * @throws JSONException
+     */
+    public static void pay(IWXAPI api, WechatInfo info) throws JSONException {
+        PayReq req = new PayReq();
 
-    public static String genPackageSign(ContentValues params) {
-        StringBuilder sb = new StringBuilder();
-
-        for (Map.Entry<String, Object> entry :
-                params.valueSet()) {
-            sb.append(entry.getKey());
-            sb.append('=');
-            sb.append(entry.getValue());
-            sb.append('&');
-        }
-
-        sb.append("key=");
-        sb.append(WePayConstants.API_KEY);
-
-        String packageSign = MD5.getMessageDigest(sb.toString().getBytes()).toUpperCase();
-        Log.e("orion", packageSign);
-
-        return packageSign;
+        req.appId = info.appid;
+        req.partnerId = info.partnerid;
+        req.prepayId = info.prepayid;
+        req.nonceStr = info.noncestr;
+        req.timeStamp = info.sign;
+        req.packageValue = info.packageName;
+        req.sign = info.sign;
+        // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
+        api.sendReq(req);
     }
-
-    public static String toXml(ContentValues params) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("<xml>");
-        for (Map.Entry<String, Object> entry :
-                params.valueSet()) {
-            sb.append("<" + entry.getKey() + ">");
-
-
-            sb.append(entry.getValue());
-            sb.append("</" + entry.getKey() + ">");
-        }
-        sb.append("</xml>");
-
-        Log.e("orion", sb.toString());
-        return sb.toString();
-    }
-
-    // 生成订单参数
-    private String genProductArgs(PayOrderId mPayOrderInfo) {
-        StringBuffer xml = new StringBuffer();
-        try {
-            String nonceStr = genNonceStr(); // 随机的一个字符串
-            int orderMoney = 0;
-            try {
-                orderMoney = Integer.valueOf(mPayOrderInfo.totalfee.trim()) * 100;
-            } catch (Exception e) {
-                Log.e("===", "钱数转换异常" + e.toString());
-            }
-
-            String money = String.valueOf(orderMoney);
-            Log.e("===", money);
-
-            xml.append("</xml>");
-            ContentValues contentValues = new ContentValues();
-
-
-            contentValues.put("appid", WePayConstants.APP_ID);
-            contentValues.put("body", "会员充值");
-            contentValues.put("mch_id", WePayConstants.MCH_ID);
-            contentValues.put("nonce_str", nonceStr);
-            contentValues.put("notify_url",WePayConstants.wx_notify_url);
-            contentValues.put("out_trade_no", mPayOrderInfo.out_trade_no);
-            contentValues.put("spbill_create_ip", "127.0.0.1");
-            //TODO 设置钱数
-            contentValues.put("total_fee", money);
-//			new BasicNameValuePair("total_fee", "1"));
-            contentValues.put("trade_type", "APP");
-
-            String sign = genPackageSign(contentValues);
-            contentValues.put("sign", sign);
-
-            String xmlstring = toXml(contentValues);
-
-            return new String(xmlstring.toString().getBytes(), "ISO8859-1");
-
-        } catch (Exception e) {
-            // Log.e(TAG, "genProductArgs fail, ex = " + e.getMessage());
-            return null;
-        }
-    }
-
-
 
 }

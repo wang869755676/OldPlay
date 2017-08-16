@@ -191,7 +191,7 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
 
     private void loginLiveSsdk(final UserBean userBean) {
 
-        LiveLoginHelper.iLiveLogin("1897", "eJxlz11PgzAUBuB7fkXDrcaUQi2YeEHQRjY-pmxk86Zha4cdWjro7IzxvztRYxPP7fOevOe8ewAAf3pdnFSrVbtThpk3LXxwBnzoH-*h1pKzyrCw4-9Q7LXsBKvWRnQDBhhjBKGbkVwoI9fyNxEnxNGeN2yo*MbosItIHCVuRNYD3lzOsvw*eyihbajlDUH0iLb8aTwWV5zbdNbHk*coV3BuHvuCUGzzekRhrfi*RGa3WaKpTovtdmQXS30rLuZ34SSVJYEat9lmce5UGvkifv45nJOgJDp19FV0vWzVEEAwwAEK4df43of3CRb-XD4_", new ILiveCallBack() {
+        LiveLoginHelper.iLiveLogin(userBean.userId,userBean.userSig, new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
                 hideLoading();

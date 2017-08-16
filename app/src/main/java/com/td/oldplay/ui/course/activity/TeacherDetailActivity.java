@@ -58,6 +58,7 @@ import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.view.AVRootView;
 import com.tencent.ilivesdk.view.AVVideoView;
+import com.tencent.ilivesdk.view.BaseVideoView;
 import com.tencent.livesdk.ILVLiveManager;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -124,6 +125,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     LinearLayout llComment;
     @BindView(R.id.invite_view1)
     TextView inviteView1;
+    @BindView(R.id.no_live)
+    TextView noLive;
     private CustomDialog customDialog;
 
     private boolean mIsActivityPaused;
@@ -166,6 +169,9 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     private String backGroundId;
     private LiveHelper mLiveHelper;
+    private boolean isCreate;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,7 +198,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         initDialog();
         initViewPager();
         initView();
-
+        requestLivePermission(); // 请求权限
         getData();
     }
 
@@ -200,7 +206,6 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
         //TODO 设置渲染层
         ILVLiveManager.getInstance().setAvVideoView(avRootView);
-
 
         //avRootView.setBackground(R.mipmap.renderback);
         avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
@@ -216,6 +221,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                     final int index = i;
                     AVVideoView avVideoView = avRootView.getViewByIndex(index);
                     avVideoView.setRotate(false);
+                   /* avVideoView.setDiffDirectionRenderMode(BaseVideoView.BaseRenderMode.BLACK_TO_FILL);
+                    avVideoView.setSameDirectionRenderMode(BaseVideoView.BaseRenderMode.SCALE_TO_FIT);*/
                     avVideoView.setGestureListener(new GestureDetector.SimpleOnGestureListener() {
                         @Override
                         public boolean onSingleTapConfirmed(MotionEvent e) {
@@ -227,6 +234,10 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 }
 
                 avRootView.getViewByIndex(0).setRotate(false);
+                avRootView.getViewByIndex(0).setDiffDirectionRenderMode(BaseVideoView.BaseRenderMode.BLACK_TO_FILL);
+                avRootView.getViewByIndex(0).setSameDirectionRenderMode(BaseVideoView.BaseRenderMode.SCALE_TO_FIT);
+
+
                 //avRootView.getViewByIndex(0).setBackground(R.mipmap.renderback);
 
             }
@@ -361,7 +372,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
             @Override
             public void onOk() {
-                finish();
+                mLiveHelper.startExitRoom();
+
             }
         });
     /*    accountDialog = new PayAlertDialog(mContext, true, true);
@@ -516,9 +528,9 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.join_con:
+                reQuestLink();
                 //向主播发送连麦请求
                 if (mIsConferenceStarted) {
-
 
                 } else {
                     getLianmaiMoney();
@@ -539,6 +551,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                         llAction.setVisibility(View.VISIBLE);
                     }
                     params.height = ScreenUtils.dip2px(AContext, 200);
+                    avRootView.getViewByIndex(0).setPosWidth(ScreenUtils.dip2px(mContext, (ScreenUtils.getScreenW(this))));
+                    avRootView.getViewByIndex(0).setPosHeight(ScreenUtils.dip2px(AContext, 200));
                 } else {
                     title.setVisibility(View.GONE);
                     if (viewPager.getCurrentItem() == 3) {
@@ -547,6 +561,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                         llAction.setVisibility(View.GONE);
                     }
                     params.height = LinearLayout.LayoutParams.MATCH_PARENT;
+                    avRootView.getViewByIndex(0).setPosWidth(ScreenUtils.dip2px(mContext, (ScreenUtils.getScreenW(this))));
+                    avRootView.getViewByIndex(0).setPosHeight(ScreenUtils.dip2px(mContext, (ScreenUtils.getScreenH(this))));
                 }
                 liveRoot.setLayoutParams(params);
                 island = !island;
@@ -820,19 +836,40 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     @Override
     public void enterRoomComplete(boolean b) {
+        noLive.setVisibility(View.GONE);
         // 重置美颜
-        ILiveRoomManager.getInstance().enableBeauty(0);
-        ILiveRoomManager.getInstance().enableWhite(0);
+        ILiveRoomManager.getInstance().enableBeauty(5);
+        ILiveRoomManager.getInstance().enableWhite(5);
         avRootView.getViewByIndex(0).setVisibility(GLView.VISIBLE);
 
-        // 通知服务器加入房间
+        // 通知服务器加入房间  然后发送消息 到主播 加入房间 主播端刷新列表
+
+        //发消息通知上线
+        mLiveHelper.sendC2CCmd(MContants.AVIMCMD_ENTERLIVE, "", teacherId, new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+
+            }
+        });
     }
 
     @Override
     public void quiteRoomComplete(boolean b, Object o) {
-        //通知server 我下线了
-        avRootView.clearUserView();
-        finish();
+
+        if (!isCreate) {
+            isCreate = true;
+            noLive.setVisibility(View.VISIBLE);
+        } else {
+            avRootView.clearUserView();
+            finish();
+        }
+
+
     }
 
     @Override
@@ -842,6 +879,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     @Override
     public void cancelInviteView(String identifier) {
+        mLiveHelper.upMemberVideo();
         if ((inviteView1 != null)) {
             inviteView1.setVisibility(View.GONE);
             isLinking = true;
@@ -849,7 +887,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     }
 
     private void reQuestLink() {
-        mLiveHelper.sendC2CCmd(MContants.AVIMCMD_MUlTI_HOST_INVITE, "", teacherId, new ILiveCallBack() {
+        mLiveHelper.sendC2CCmd(MContants.AVIMCMD_MUlTI_HOST_INVITE, "", "1897", new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
                 showLinkView();
@@ -871,4 +909,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         inviteView1.setVisibility(View.GONE);
     }
 
+    public void forceQuitRoom() {
+        ILiveRoomManager.getInstance().onPause();
+        noLive.setVisibility(View.GONE);
+    }
 }

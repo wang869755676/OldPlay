@@ -76,6 +76,7 @@ public class MainActivity extends BaseFragmentActivity {
             startActivity(i);
             PrefUtils.putString(mContext, MContants.PRE_SCORE_KEY, "");
         }
+
     }
 
     private void init() {

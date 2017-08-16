@@ -329,13 +329,7 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
 
                     @Override
                     public void onSuccess(String s) {
-                        ToastUtil.show("退出成功");
-                        JPushInterface.deleteAlias(mActivity, 2);
-                        spUilts.clearSharedPreferences();
-                        // JPushInterface.re
-                        ShareSDKUtils.loginOut(Wechat.NAME);
-                        startActivity(new Intent(mActivity, LoginActivity.class));
-                     /*   LiveLoginHelper.iLiveLogout(new ILiveCallBack() {
+                        LiveLoginHelper.iLiveLogout(new ILiveCallBack() {
                             @Override
                             public void onSuccess(Object data) {
                                 ToastUtil.show("退出成功");
@@ -344,13 +338,15 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
                                 // JPushInterface.re
                                 ShareSDKUtils.loginOut(Wechat.NAME);
                                 startActivity(new Intent(mActivity, LoginActivity.class));
+                                if (mActivity != null)
+                                    mActivity.finish();
                             }
 
                             @Override
                             public void onError(String module, int errCode, String errMsg) {
                                 ToastUtil.show(errMsg);
                             }
-                        });*/
+                        });
 
                     }
 

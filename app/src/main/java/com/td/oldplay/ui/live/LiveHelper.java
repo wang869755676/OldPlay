@@ -63,7 +63,7 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
     /**
      * 创建房间
      */
-    public  void createRoom(String hostId) {
+    public void createRoom(String hostId) {
         ILVLiveRoomOption hostOption = new ILVLiveRoomOption(hostId)
                 .roomDisconnectListener(this)
                 .videoMode(ILiveConstants.VIDEOMODE_BSUPPORT)
@@ -85,7 +85,7 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
             @Override
             public void onError(String module, int errCode, String errMsg) {
                 ILiveLog.d(TAG, "ILVB-SXB|createRoom->create room failed:" + module + "|" + errCode + "|" + errMsg);
-
+                ToastUtil.show("创建房间失败,请冲洗");
                 if (null != mLiveView) {
                     mLiveView.quiteRoomComplete(true, null);
                 }
@@ -94,7 +94,8 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
     }
 
     /**
-     *  进入房间
+     * 进入房间
+     *
      * @param hostId
      */
     public void joinRoom(String hostId) {
@@ -116,8 +117,9 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
 
             @Override
             public void onError(String module, int errCode, String errMsg) {
+                ToastUtil.show(errMsg);
                 if (null != mLiveView) {
-                    mLiveView.quiteRoomComplete(true, null);
+                    mLiveView.quiteRoomComplete(true, errCode);
                 }
             }
         });
@@ -130,6 +132,7 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
         ILiveSDK.getInstance().getAvVideoCtrl().setLocalVideoPreProcessCallback(null);
         quitLiveRoom();
     }
+
     private void quitLiveRoom() {
         ILVLiveManager.getInstance().quitRoom(new ILiveCallBack() {
             @Override
@@ -139,7 +142,7 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
                 //通知结束
                 //NotifyServerLiveTask();
                 if (null != mLiveView) {
-                    mLiveView.quiteRoomComplete( true, null);
+                    mLiveView.quiteRoomComplete(true, null);
                 }
             }
 
@@ -152,6 +155,7 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
             }
         });
     }
+
     public void startPush(ILivePushOption option) {
         ILiveRoomManager.getInstance().startPushStream(option, new ILiveCallBack<ILivePushRes>() {
             @Override
@@ -173,17 +177,18 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
         ILiveRoomManager.getInstance().stopPushStream(streamChannelID, new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
-               Log.e(TAG, "stopPush->success");
+                Log.e(TAG, "stopPush->success");
                 if (null != mLiveView)
                     mLiveView.stopStreamSucc();
             }
 
             @Override
             public void onError(String module, int errCode, String errMsg) {
-               Log.e(TAG, "stopPush->failed:" + module + "|" + errCode + "|" + errMsg);
+                Log.e(TAG, "stopPush->failed:" + module + "|" + errCode + "|" + errMsg);
             }
         });
     }
+
     public void upMemberVideo() {
         if (!ILiveRoomManager.getInstance().isEnterRoom()) {
             Log.e(TAG, "upMemberVideo->with not in room");
@@ -210,7 +215,7 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
         ILVLiveManager.getInstance().downToNorMember(MContants.NORMAL_MEMBER_ROLE, new ILiveCallBack<ILVChangeRoleRes>() {
             @Override
             public void onSuccess(ILVChangeRoleRes data) {
-              mLiveView.isLinking=false;
+                mLiveView.isLinking = false;
             }
 
             @Override
@@ -219,6 +224,18 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
             }
         });
     }
+
+/*    *//**
+     * 发送信令
+     *//*
+
+    public int sendGroupCmd(int cmd, String param) {
+        ILVCustomCmd customCmd = new ILVCustomCmd();
+        customCmd.setCmd(cmd);
+        customCmd.setParam(param);
+        customCmd.setType(ILVText.ILVTextType.eGroupMsg);
+        return sendCmd(customCmd);
+    }*/
     /**
      * 发送消息
      *
@@ -249,7 +266,6 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
     public void update(Observable o, Object arg) {
         MessageEvent.SxbMsgInfo info = (MessageEvent.SxbMsgInfo) arg;
         switch (info.msgType) {
-
             case MessageEvent.MSGTYPE_CMD:
                 processCmdMsg(info);
                 break;
@@ -288,8 +304,18 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
                 mLiveView.showInviteDialog(new LinkeNumberInfo(identifier, nickname));
                 break;
             case MContants.AVIMCMD_MUlTI_JOIN:
-
                 mLiveView.cancelInviteView(identifier);
+            case MContants.AVIMCMD_MUlTI_REFUSE:
+                mLiveView.cancelInviteView(identifier);
+                ToastUtil.show("主播拒绝与您连麦");
+                break;
+            case MContants.AVIMCMD_EXITLIVE:
+                //startExitRoom();
+                mLiveView.forceQuitRoom();
+                break;
+            case  MContants.AVIMCMD_ENTERLIVE:
+                mLiveView.memberJoin(identifier, nickname);
+
 
         }
     }

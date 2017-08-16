@@ -96,4 +96,19 @@ public abstract class LiveBaseActivity extends BaseFragmentActivity {
      * @param data
      */
     public void pushStreamSucc(ILivePushRes data){}
+
+    /**
+     *  主播离开房间 通知观众
+     */
+    public void forceQuitRoom() {
+    }
+
+
+    /**
+     *  观众加入直播房间
+     * @param identifier
+     * @param nickname
+     */
+    public void memberJoin(String identifier, String nickname) {
+    }
 }

@@ -1,6 +1,7 @@
 package com.td.oldplay.ui.live;
 
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +39,7 @@ import com.td.oldplay.ui.live.adapter.CommentAdapter;
 import com.td.oldplay.ui.window.CustomDialog;
 import com.td.oldplay.ui.window.UserAvatorWindow;
 import com.td.oldplay.utils.ToastUtil;
+import com.tencent.TIMMessage;
 import com.tencent.av.opengl.ui.GLView;
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveConstants;
@@ -46,7 +48,9 @@ import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.data.ILivePushRes;
 import com.tencent.ilivesdk.view.AVRootView;
 import com.tencent.ilivesdk.view.AVVideoView;
+import com.tencent.livesdk.ILVCustomCmd;
 import com.tencent.livesdk.ILVLiveManager;
+import com.tencent.livesdk.ILVText;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -99,6 +103,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     private float money;
 
     private UserAvatorWindow avatorWindow;
+    private CustomDialog alerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +117,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         initView();
         mLiveHelper.createRoom("1234567");
 
+        mLiveHelper.sendC2CCmd(124, "", "1897", null);
 
     }
 
@@ -273,7 +279,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.live_close:
-                finish();
+                onBackPressed();
                 break;
             case R.id.live_change:
                 if (isComment) {
@@ -299,6 +305,20 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
                 break;
         }
+
+    }
+
+    /*
+    结束直播
+     */
+    private void finishLive() {
+        showLoading("正在退出中，请稍后.");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                mLiveHelper.startExitRoom();
+            }
+        }).start();
 
     }
 
@@ -392,17 +412,19 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         linkDialog.setDialogClick(new CustomDialog.DialogClick() {
             @Override
             public void onCancel() {
-
+                linkDialog.dismiss();
+                // 对连麦者发送 消息 同意
+                mLiveHelper.sendC2CCmd(MContants.AVIMCMD_MUlTI_REFUSE, "", currentLinked.id, null);
             }
 
             @Override
             public void onOk() {
+                linkDialog.dismiss();
                 // 对连麦者发送 消息 同意
                 mLiveHelper.sendC2CCmd(MContants.AVIMCMD_MUlTI_JOIN, "", currentLinked.id, new ILiveCallBack() {
                     @Override
                     public void onSuccess(Object data) {
 
-                        mLiveHelper.upMemberVideo();
                     }
 
                     @Override
@@ -410,6 +432,47 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
                     }
                 });
+
+            }
+        });
+
+
+        alerDialog = new CustomDialog(mContext);
+        alerDialog.setTitleVisible(View.GONE);
+        alerDialog.setTitleVisible(View.GONE);
+        alerDialog.setContent("是否结束直播？");
+        alerDialog.setDialogClick(new CustomDialog.DialogClick() {
+            @Override
+            public void onCancel() {
+                alerDialog.dismiss();
+            }
+
+            @Override
+            public void onOk() {
+
+                ILVCustomCmd cmd = new ILVCustomCmd();
+                cmd.setCmd(MContants.AVIMCMD_EXITLIVE);
+                cmd.setType(ILVText.ILVTextType.eGroupMsg);
+                ILVLiveManager.getInstance().sendCustomCmd(cmd, new ILiveCallBack<TIMMessage>() {
+                    @Override
+                    public void onSuccess(TIMMessage data) {
+                        //如果是直播，发消息
+                        if (null != mLiveHelper) {
+                            finishLive();
+                            if (mIsPublishStreamStarted) {
+                                mLiveHelper.stopPush();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(String module, int errCode, String errMsg) {
+                        ToastUtil.show(errMsg);
+                    }
+
+                });
+                alerDialog.dismiss();
+
 
             }
         });
@@ -443,8 +506,15 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     @Override
     public void quiteRoomComplete(boolean b, Object o) {
         //通知server 我下线了
-        avRootView.clearUserView();
-        finish();
+        //avRootView.clearUserView();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                hideLoading();
+                finish();
+            }
+        });
+
     }
 
     @Override
@@ -456,6 +526,8 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         } else {
             currentLinked = identifier;
             linkDialog.setContent(identifier.nickName + "请求与您连麦");
+            linkDialog.show();
+
         }
 
     }
@@ -478,8 +550,16 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     }
 
     @Override
+    public void memberJoin(String identifier, String nickname) {
+        super.memberJoin(identifier, nickname);
+        ToastUtil.show("刷新用户的头像");
+    }
+
+    @Override
     public void onBackPressed() {
-        mLiveHelper.startExitRoom();
+        if (alerDialog != null) {
+            alerDialog.show();
+        }
 
     }
 }

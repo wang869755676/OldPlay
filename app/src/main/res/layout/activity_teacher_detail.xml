@@ -28,7 +28,7 @@
                 <com.tencent.ilivesdk.view.AVRootView
                     android:id="@+id/av_root_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="200dp" />
 
 
                 <TextView
@@ -102,8 +102,17 @@
                         android:padding="10dp"
                         android:src="@mipmap/back_normal" />
                 </FrameLayout>
-
+                <TextView
+                    android:id="@+id/no_live"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    android:text="暂无直播"
+                    android:background="@color/black"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
             </FrameLayout>
+
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab_layout"

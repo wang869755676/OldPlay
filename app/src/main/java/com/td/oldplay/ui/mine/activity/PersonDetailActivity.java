@@ -28,7 +28,6 @@ import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.tee3.avd.User;
 import io.reactivex.disposables.Disposable;
 import me.zuichu.picker.ImagePicker;
 import me.zuichu.picker.bean.ImageItem;

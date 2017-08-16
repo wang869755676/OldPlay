@@ -11,7 +11,6 @@ import com.td.oldplay.utils.GlideUtils;
 
 import java.util.List;
 
-import cn.tee3.avd.User;
 
 /**
  * Created by my on 2017/7/25.

@@ -14,9 +14,11 @@ import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
+import com.td.oldplay.ui.live.LiveLoginHelper;
 import com.td.oldplay.utils.AppUtils;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
+import com.tencent.ilivesdk.ILiveCallBack;
 
 import java.util.HashMap;
 
@@ -115,8 +117,8 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
             case R.id.register_submint:
                 if (checkInput()) {
                     if (isBound) {
-                        paras.put("avatar",wechatUser.avatar);
-                        paras.put("openId",wechatUser.userId);
+                        paras.put("avatar", wechatUser.avatar);
+                        paras.put("openId", wechatUser.userId);
                         bondServer();
                     } else {
                         registerServicer();
@@ -161,11 +163,9 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
 
             @Override
             public void onSuccess(UserBean userBean) {
-                spUilts.setUser(userBean);
-                spUilts.setUserId(userBean.userId);
-                spUilts.setIsLogin(true);
-                JPushInterface.setAlias(mContext, 1, userBean.userId);
-                startActivity(new Intent(mContext,MainActivity.class));
+                if (userBean != null) {
+                    loginLiveSsdk(userBean);
+                }
             }
 
             @Override
@@ -179,6 +179,26 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
                 addDisposable(d);
             }
         }));
+    }
+
+    private void loginLiveSsdk(final UserBean userBean) {
+
+        LiveLoginHelper.iLiveLogin(userBean.userId, userBean.userSig, new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                spUilts.setUser(userBean);
+                spUilts.setUserId(userBean.userId);
+                spUilts.setIsLogin(true);
+                JPushInterface.setAlias(mContext, 1, userBean.userId);
+                startActivity(new Intent(mContext, MainActivity.class));
+                finish();
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+
+            }
+        });
     }
 
     private void registerServicer() {

@@ -33,6 +33,7 @@ public class UserBean  implements Serializable{
     public int score;
     public int uType;   // 用户类型,0:表示普通用户,1:表示主播
     public String userId;
+    public String userSig;
 
 
 }

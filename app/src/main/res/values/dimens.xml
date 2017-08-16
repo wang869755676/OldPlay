@@ -7,4 +7,16 @@
 
     <dimen name="refresh_header_height_twitter">80dp</dimen>
     <dimen name="load_more_footer_height_twitter">60dp</dimen>
+
+
+
+    <dimen name="small_area_margin_bottom">110dp</dimen>
+    <dimen name="small_area_margin_top">60dp</dimen>
+    <dimen name="small_area_margin_top_au">20dp</dimen>
+    <dimen name="small_area_height">110dp</dimen>
+    <dimen name="small_area_width">60dp</dimen>
+    <dimen name="small_area_marginright">10dp</dimen>
+    <dimen name="small_area_marginbetween">10dp</dimen>
+
+
 </resources>

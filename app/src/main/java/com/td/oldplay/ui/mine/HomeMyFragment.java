@@ -22,6 +22,8 @@ import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.LoginActivity;
+import com.td.oldplay.ui.live.LiveHelper;
+import com.td.oldplay.ui.live.LiveLoginHelper;
 import com.td.oldplay.ui.mine.activity.AboutActivity;
 import com.td.oldplay.ui.mine.activity.FeedBackActivity;
 import com.td.oldplay.ui.mine.activity.MyAddressActivity;
@@ -39,6 +41,7 @@ import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CircleImageView;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 import com.td.oldplay.widget.goodView.GoodView;
+import com.tencent.ilivesdk.ILiveCallBack;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -173,7 +176,7 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
 
     public int currentScore;
     private boolean isFirst = true;
-    private boolean isHidden=true;
+    private boolean isHidden = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -219,7 +222,7 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
 
 
     private void refreshUser() {
-               showAddAnimation();
+        showAddAnimation();
     }
 
 
@@ -327,11 +330,28 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
                     @Override
                     public void onSuccess(String s) {
                         ToastUtil.show("退出成功");
-                        JPushInterface.deleteAlias(mActivity,2);
+                        JPushInterface.deleteAlias(mActivity, 2);
                         spUilts.clearSharedPreferences();
-                       // JPushInterface.re
+                        // JPushInterface.re
                         ShareSDKUtils.loginOut(Wechat.NAME);
                         startActivity(new Intent(mActivity, LoginActivity.class));
+                     /*   LiveLoginHelper.iLiveLogout(new ILiveCallBack() {
+                            @Override
+                            public void onSuccess(Object data) {
+                                ToastUtil.show("退出成功");
+                                JPushInterface.deleteAlias(mActivity, 2);
+                                spUilts.clearSharedPreferences();
+                                // JPushInterface.re
+                                ShareSDKUtils.loginOut(Wechat.NAME);
+                                startActivity(new Intent(mActivity, LoginActivity.class));
+                            }
+
+                            @Override
+                            public void onError(String module, int errCode, String errMsg) {
+                                ToastUtil.show(errMsg);
+                            }
+                        });*/
+
                     }
 
                     @Override

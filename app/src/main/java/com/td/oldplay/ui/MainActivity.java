@@ -30,15 +30,11 @@ import com.td.oldplay.ui.window.CustomDialog;
 import com.td.oldplay.utils.PrefUtils;
 import com.td.oldplay.utils.ToastUtil;
 
-import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jpush.android.api.JPushInterface;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.ResponseBody;
+
 
 
 public class MainActivity extends BaseFragmentActivity {

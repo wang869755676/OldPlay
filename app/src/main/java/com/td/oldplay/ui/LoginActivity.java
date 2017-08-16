@@ -17,13 +17,20 @@ import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.bean.TeacherBean;
 import com.td.oldplay.bean.UserBean;
+import com.td.oldplay.contants.MContants;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
+import com.td.oldplay.ui.live.LiveLoginHelper;
+import com.td.oldplay.ui.live.MessageEvent;
 import com.td.oldplay.utils.AppUtils;
 import com.td.oldplay.utils.ShareSDKUtils;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
+import com.tencent.ilivesdk.ILiveCallBack;
+import com.tencent.ilivesdk.ILiveSDK;
+import com.tencent.livesdk.ILVLiveConfig;
+import com.tencent.livesdk.ILVLiveManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,11 +38,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jpush.android.api.JPushInterface;
+
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.PlatformDb;
 import cn.sharesdk.wechat.friends.Wechat;
-import cn.tee3.avd.User;
 import io.reactivex.disposables.Disposable;
 
 public class LoginActivity extends BaseFragmentActivity implements View.OnClickListener {
@@ -109,11 +116,11 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
                 }
                 break;
             case R.id.login_weixin:
-                Intent intent = new Intent(mContext, RegisterActivity.class);
+               /* Intent intent = new Intent(mContext, RegisterActivity.class);
                 intent.putExtra("isBound", true);
                 intent.putExtra("user", weUser);
                 startActivity(intent);
-           /*     ShareSDKUtils.loginOut(Wechat.NAME);
+                ShareSDKUtils.loginOut(Wechat.NAME);*/
                 ShareSDKUtils.login(Wechat.NAME, new PlatformActionListener() {
                     @Override
                     public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
@@ -142,7 +149,7 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
                     public void onCancel(Platform platform, int i) {
 
                     }
-                });*/
+                });
                 break;
         }
 
@@ -158,11 +165,7 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
                 @Override
                 public void onSuccess(UserBean userBean) {
                     if (userBean != null) {
-                        spUilts.setUser(userBean);
-                        spUilts.setUserId(userBean.userId);
-                        spUilts.setIsLogin(true);
-                        JPushInterface.setAlias(mContext, 1, userBean.userId);
-                        startActivity(new Intent(mContext,MainActivity.class));
+                        loginLiveSsdk(userBean);
                     } else {
                         Intent intent = new Intent(mContext, RegisterActivity.class);
                         intent.putExtra("isBound", true);
@@ -186,18 +189,38 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
         }
     }
 
+    private void loginLiveSsdk(final UserBean userBean) {
+
+        LiveLoginHelper.iLiveLogin("1897", "eJxlz11PgzAUBuB7fkXDrcaUQi2YeEHQRjY-pmxk86Zha4cdWjro7IzxvztRYxPP7fOevOe8ewAAf3pdnFSrVbtThpk3LXxwBnzoH-*h1pKzyrCw4-9Q7LXsBKvWRnQDBhhjBKGbkVwoI9fyNxEnxNGeN2yo*MbosItIHCVuRNYD3lzOsvw*eyihbajlDUH0iLb8aTwWV5zbdNbHk*coV3BuHvuCUGzzekRhrfi*RGa3WaKpTovtdmQXS30rLuZ34SSVJYEat9lmce5UGvkifv45nJOgJDp19FV0vWzVEEAwwAEK4df43of3CRb-XD4_", new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                hideLoading();
+                spUilts.setUser(userBean);
+                spUilts.setUserId(userBean.userId);
+                spUilts.setIsLogin(true);
+                JPushInterface.setAlias(mContext, 1, userBean.userId);
+                startActivity(new Intent(mContext, MainActivity.class));
+                finish();
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                hideLoading();
+                Log.e("===",errMsg);
+                ToastUtil.show(errCode + " " + errMsg);
+            }
+        });
+    }
+
     private void loginServier() {
         showLoading();
         HttpManager.getInstance().loginUser(params, new HttpSubscriber<UserBean>(new OnResultCallBack<UserBean>() {
             @Override
-            public void onSuccess(UserBean userBean) {
+            public void onSuccess(final UserBean userBean) {
                 if (userBean != null) {
-                    spUilts.setUser(userBean);
-                    spUilts.setUserId(userBean.userId);
-                    spUilts.setIsLogin(true);
-                    JPushInterface.setAlias(mContext, 1, userBean.userId);
-                    startActivity(new Intent(mContext, MainActivity.class));
-                    finish();
+
+                   loginLiveSsdk(userBean);
+
                 }
 
             }

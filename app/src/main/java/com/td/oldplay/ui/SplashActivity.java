@@ -8,6 +8,9 @@ import android.os.Handler;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
+import com.td.oldplay.ui.live.LiveLoginHelper;
+import com.td.oldplay.utils.ToastUtil;
+import com.tencent.ilivesdk.ILiveCallBack;
 ;
 
 
@@ -28,10 +31,21 @@ public class SplashActivity extends BaseFragmentActivity {
         runnable = new Runnable() {
             @Override
             public void run() {
-                if(spUilts.getIsLogin()){
-                    startActivity(new Intent(mContext, MainActivity.class));
-                    finish();
-                }else{
+                if (spUilts.getIsLogin()) {
+                    LiveLoginHelper.iLiveLogin("1897", "eJxlz11PgzAUBuB7fkXDrcaUQi2YeEHQRjY-pmxk86Zha4cdWjro7IzxvztRYxPP7fOevOe8ewAAf3pdnFSrVbtThpk3LXxwBnzoH-*h1pKzyrCw4-9Q7LXsBKvWRnQDBhhjBKGbkVwoI9fyNxEnxNGeN2yo*MbosItIHCVuRNYD3lzOsvw*eyihbajlDUH0iLb8aTwWV5zbdNbHk*coV3BuHvuCUGzzekRhrfi*RGa3WaKpTovtdmQXS30rLuZ34SSVJYEat9lmce5UGvkifv45nJOgJDp19FV0vWzVEEAwwAEK4df43of3CRb-XD4_", new ILiveCallBack() {
+                        @Override
+                        public void onSuccess(Object data) {
+                            startActivity(new Intent(mContext, MainActivity.class));
+                            finish();
+                        }
+
+                        @Override
+                        public void onError(String module, int errCode, String errMsg) {
+                            ToastUtil.show(errMsg + "errcode: " + errCode);
+                        }
+                    });
+
+                } else {
                     startActivity(new Intent(mContext, LoginActivity.class));
                     finish();
                 }

@@ -1,20 +1,17 @@
 package com.td.oldplay.ui.course.activity;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
-import android.opengl.GLSurfaceView;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -23,30 +20,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.pili.pldroid.player.AVOptions;
-import com.pili.pldroid.player.PLMediaPlayer;
-import com.pili.pldroid.player.widget.PLVideoView;
-import com.qiniu.pili.droid.rtcstreaming.RTCConferenceState;
-import com.qiniu.pili.droid.rtcstreaming.RTCConferenceStateChangedListener;
-import com.qiniu.pili.droid.rtcstreaming.RTCMediaStreamingManager;
-import com.qiniu.pili.droid.rtcstreaming.RTCRemoteWindowEventListener;
-import com.qiniu.pili.droid.rtcstreaming.RTCStartConferenceCallback;
-import com.qiniu.pili.droid.rtcstreaming.RTCVideoWindow;
-import com.qiniu.pili.droid.streaming.AVCodecType;
-import com.qiniu.pili.droid.streaming.CameraStreamingSetting;
-import com.qiniu.pili.droid.streaming.StreamingProfile;
-import com.qiniu.pili.droid.streaming.widget.AspectFrameLayout;
 import com.td.oldplay.R;
 import com.td.oldplay.base.EventMessage;
 import com.td.oldplay.base.adapter.BasePagerAdapter;
 import com.td.oldplay.bean.CourseBean;
-import com.td.oldplay.bean.MessageEvent;
+import com.td.oldplay.contants.MContants;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
-import com.td.oldplay.pay.zhifubao.PayDemoActivity;
 import com.td.oldplay.pay.zhifubao.PayResult;
 import com.td.oldplay.permission.MPermission;
 import com.td.oldplay.permission.annotation.OnMPermissionDenied;
@@ -57,21 +39,27 @@ import com.td.oldplay.ui.course.fragment.CommentFragment;
 import com.td.oldplay.ui.course.fragment.CourseFragment;
 import com.td.oldplay.ui.course.fragment.IntruceFragment;
 import com.td.oldplay.ui.course.fragment.ShopFragment;
+import com.td.oldplay.ui.live.LinkeNumberInfo;
 import com.td.oldplay.ui.live.LiveBaseActivity;
+import com.td.oldplay.ui.live.LiveHelper;
 import com.td.oldplay.ui.window.CustomDialog;
 import com.td.oldplay.ui.window.PayAlertDialog;
 import com.td.oldplay.ui.window.PayTypeDialog;
 import com.td.oldplay.ui.window.PayTypePopupWindow;
 import com.td.oldplay.ui.window.SharePopupWindow;
-import com.td.oldplay.utils.LiveUtils;
 import com.td.oldplay.utils.ScreenUtils;
 import com.td.oldplay.utils.SoftInputUtils;
-import com.td.oldplay.utils.StreamUtils;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 import com.td.oldplay.widget.password.PasswordInputView;
+import com.tencent.av.opengl.ui.GLView;
+import com.tencent.ilivesdk.ILiveCallBack;
+import com.tencent.ilivesdk.ILiveConstants;
+import com.tencent.ilivesdk.core.ILiveRoomManager;
+import com.tencent.ilivesdk.view.AVRootView;
+import com.tencent.ilivesdk.view.AVVideoView;
+import com.tencent.livesdk.ILVLiveManager;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -86,9 +74,6 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import io.reactivex.disposables.Disposable;
 
 public class TeacherDetailActivity extends LiveBaseActivity implements
-        PLMediaPlayer.OnCompletionListener,
-        PLMediaPlayer.OnVideoSizeChangedListener,
-        PLMediaPlayer.OnErrorListener,
         View.OnClickListener,
         CustomDialog.DialogClick,
         PayTypePopupWindow.payTypeAction {
@@ -97,8 +82,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     public CourseBean currentBean;
     @BindView(R.id.title)
     CustomTitlebarLayout title;
-    @BindView(R.id.au_videoview)
-    PLVideoView auVideoview;
+    @BindView(R.id.av_root_view)
+    AVRootView avRootView;
     @BindView(R.id.reword)
     ImageView reword;
     @BindView(R.id.join_con)
@@ -107,16 +92,12 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     ImageView landan;
     @BindView(R.id.pause)
     ImageView pause;
-    @BindView(R.id.live_sfv)
-    GLSurfaceView liveSfv;
-    @BindView(R.id.live_afl)
-    AspectFrameLayout liveAfl;
-    @BindView(R.id.live_gfv_winow)
-    GLSurfaceView liveGfvWinow;
-    @BindView(R.id.live_fl_window)
-    FrameLayout liveFlWindow;
-    @BindView(R.id.live)
-    FrameLayout live;
+    @BindView(R.id.videoplayer)
+    JCVideoPlayerStandard videoplayer;
+    @BindView(R.id.dianbo_back)
+    ImageView dianboBack;
+    @BindView(R.id.dianbo)
+    FrameLayout dianbo;
     @BindView(R.id.live_root)
     FrameLayout liveRoot;
     @BindView(R.id.tab_layout)
@@ -141,24 +122,13 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     TextView commentSend;
     @BindView(R.id.ll_comment)
     LinearLayout llComment;
-    @BindView(R.id.videoplayer)
-    JCVideoPlayerStandard videoplayer;
-    @BindView(R.id.dianbo)
-    FrameLayout dianbo;
-    @BindView(R.id.dianbo_back)
-    ImageView dianboBack;
+    @BindView(R.id.invite_view1)
+    TextView inviteView1;
     private CustomDialog customDialog;
-    private RTCMediaStreamingManager mRTCStreamingManager;
-    // private RTCConferenceOptions options;
-    private RTCVideoWindow windowA;
-    //  private WatermarkSetting watermarksetting;
-    private CameraStreamingSetting cameraStreamingSetting;
-    private StreamingProfile mStreamingProfile;
-    private int mCurrentCamFacingIndex; // 记录当前摄像头的方向
-    private boolean isSwCodec; // 编码的方式 true 软 false 硬
+
     private boolean mIsActivityPaused;
     private boolean mIsConferenceStarted = false; // 是否连麦
-    private String mRoomName = "9cd5821094c84894ae20d81f9068108a";
+
     private boolean isPermissionGrant;
     private List<Fragment> fragments;
     private CommentFragment commentFragment;
@@ -192,63 +162,17 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     private boolean isTeacherDetialPay;
 
     private String courseId;
-    /***
-     * 连麦的操作监听
-     */
-    private RTCConferenceStateChangedListener mRTCStreamingStateChangedListener = new RTCConferenceStateChangedListener() {
-        @Override
-        public void onConferenceStateChanged(RTCConferenceState state, int extra) {
-            switch (state) {
-                case READY:
-                    break;
-                case CONNECT_FAIL:
-                    // 连麦失败
-                    break;
-                case VIDEO_PUBLISH_FAILED:
-                case AUDIO_PUBLISH_FAILED:
-                    break;
-                case VIDEO_PUBLISH_SUCCESS:
-                    // 连接成功掉
-                    showOnMis();
-                    break;
-                case AUDIO_PUBLISH_SUCCESS:
-                    break;
-                case USER_JOINED_AGAIN:
-                    break;
-                case USER_KICKOUT_BY_HOST:
-                    break;
-                case OPEN_CAMERA_FAIL:
-                    break;
-                case AUDIO_RECORDING_FAIL:
-                    break;
-                default:
-                    return;
-            }
-        }
-    };
-    private RTCRemoteWindowEventListener mRTCRemoteWindowEventListener = new RTCRemoteWindowEventListener() {
-        @Override
-        public void onRemoteWindowAttached(RTCVideoWindow window, String remoteUserId) {
-            Log.d(TAG, "onRemoteWindowAttached: " + remoteUserId);
-        }
 
-        @Override
-        public void onRemoteWindowDetached(RTCVideoWindow window, String remoteUserId) {
-            Log.d(TAG, "onRemoteWindowDetached: " + remoteUserId);
-        }
 
-        @Override
-        public void onFirstRemoteFrameArrived(String remoteUserId) {
-            Log.d(TAG, "onFirstRemoteFrameArrived: " + remoteUserId);
-        }
-    };
+    private String backGroundId;
+    private LiveHelper mLiveHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         teacherId = getIntent().getStringExtra("id");
-        courseId=getIntent().getStringExtra("courseId");
+        courseId = getIntent().getStringExtra("courseId");
         customDialog = new CustomDialog(mContext);
         customDialog.setTitleVisible(View.GONE);
         customDialog.setDialogClick(this);
@@ -264,14 +188,49 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         title.setTitle("讲师直播");
         title.setOnLeftListener(this);
         params = (LinearLayout.LayoutParams) liveRoot.getLayoutParams();
+        mLiveHelper = new LiveHelper(this, this);
         initDialog();
         initViewPager();
-        initCamer();
-        initLister();
-        initWindow();
-        initStream();
-        // initPlay();
+        initView();
+
         getData();
+    }
+
+    private void initView() {
+
+        //TODO 设置渲染层
+        ILVLiveManager.getInstance().setAvVideoView(avRootView);
+
+
+        //avRootView.setBackground(R.mipmap.renderback);
+        avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
+        avRootView.setSubMarginY(getResources().getDimensionPixelSize(R.dimen.small_area_margin_top));
+        avRootView.setSubMarginX(getResources().getDimensionPixelSize(R.dimen.small_area_marginright));
+        avRootView.setSubPadding(getResources().getDimensionPixelSize(R.dimen.small_area_marginbetween));
+        avRootView.setSubWidth(getResources().getDimensionPixelSize(R.dimen.small_area_width));
+        avRootView.setSubHeight(getResources().getDimensionPixelSize(R.dimen.small_area_height));
+        avRootView.setSubCreatedListener(new AVRootView.onSubViewCreatedListener() {
+            @Override
+            public void onSubViewCreated() {
+                for (int i = 1; i < ILiveConstants.MAX_AV_VIDEO_NUM; i++) {
+                    final int index = i;
+                    AVVideoView avVideoView = avRootView.getViewByIndex(index);
+                    avVideoView.setRotate(false);
+                    avVideoView.setGestureListener(new GestureDetector.SimpleOnGestureListener() {
+                        @Override
+                        public boolean onSingleTapConfirmed(MotionEvent e) {
+                            avRootView.swapVideoView(0, index);
+                            backGroundId = avRootView.getViewByIndex(0).getIdentifier();
+                            return super.onSingleTapConfirmed(e);
+                        }
+                    });
+                }
+
+                avRootView.getViewByIndex(0).setRotate(false);
+                //avRootView.getViewByIndex(0).setBackground(R.mipmap.renderback);
+
+            }
+        });
     }
 
     private void initDialog() {
@@ -346,8 +305,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             @Override
             public void onnext() {
                 if (!isPayFromRewoard) {
-                    showOnMis();
-                    startConference();
+                    reQuestLink();
                 }
             }
         });
@@ -462,9 +420,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMessage(EventMessage message) {
         if ("changeCourseVideo".equals(message.action)) {
-            Log.e("===", "---------------");
-            // 切换直播视频
-            mRTCStreamingManager.mute(false);
+
             dianbo.setVisibility(View.VISIBLE);
             videoplayer.setUp(paths[position], JCVideoPlayer.SCREEN_LAYOUT_NORMAL, "");
             videoplayer.startVideo();
@@ -550,85 +506,6 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     }
 
-    private void initPlay() {
-        // auVideoview.setBufferingIndicator(auLoadingView);
-        // 画面的尺寸
-        AVOptions options = new AVOptions();
-       /* options.setInteger(AVOptions.KEY_PREPARE_TIMEOUT, 10 * 1000);
-        options.setInteger(AVOptions.KEY_GET_AV_FRAME_TIMEOUT, 10 * 1000);
-        options.setInteger(AVOptions.KEY_LIVE_STREAMING, 1);
-        options.setInteger(AVOptions.KEY_DELAY_OPTIMIZATION, 1);
-        options.setInteger(AVOptions.KEY_MEDIACODEC, 0);*/
-
-        // whether start play automatically after prepared, default value is 1
-        options.setInteger(AVOptions.KEY_START_ON_PREPARED, 0);
-
-        auVideoview.setAVOptions(options);
-        auVideoview.setDisplayAspectRatio(PLVideoView.ASPECT_RATIO_FIT_PARENT);
-        auVideoview.setOnCompletionListener(this);
-        auVideoview.setOnVideoSizeChangedListener(this);
-        auVideoview.setOnErrorListener(this);
-
-        // 设置播放的地址
-        auVideoview.setVideoPath("rtmp://v1.live.126.net/live/f05d2012107143c4908c6069057f1dc5");
-        live.setVisibility(View.GONE);
-        mRTCStreamingManager.startCapture();
-
-    }
-
-    @Override
-    protected void onMicConnectedMsg(MessageEvent event) {
-        // showOnMis();
-        auVideoview.setVisibility(View.GONE);
-        auVideoview.pause();
-    }
-
-    @Override
-    protected void onMicDisConnectedMsg(MessageEvent event) {
-        live.setVisibility(View.GONE);
-        // 确保还处在频道中时，才要切换成拉流模式
-        if (auVideoview != null) {
-            return;
-        }
-        mRTCStreamingManager.destroy();
-        RTCMediaStreamingManager.deinit();
-        initPlay();
-
-    }
-
-    @Override
-    protected void onMicLinking(MessageEvent event) {
-        // 收到主播的确认连麦
-        requestLivePermission();
-    }
-
-    @Override
-    protected void rejectConnecting(MessageEvent event) {
-
-    }
-
-    @Override
-    protected void onMicCanceling(MessageEvent event) {
-        // 隐藏布局（无论是否处于频道中，都要清理界面上的布局，如连麦者姓名）
-        live.setVisibility(View.GONE);
-        // 确保还处在频道中时，才要切换成拉流模式
-        if (auVideoview != null) {
-            return;
-        }
-        mRTCStreamingManager.destroy();
-        RTCMediaStreamingManager.deinit();
-        initPlay();
-    }
-
-    @Override
-    protected void exitQueue(MessageEvent event) {
-
-    }
-
-    @Override
-    protected void joinQueue(MessageEvent event) {
-
-    }
 
     @Override
     protected int getLayout() {
@@ -641,8 +518,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             case R.id.join_con:
                 //向主播发送连麦请求
                 if (mIsConferenceStarted) {
-                    stopConference();
-                    hideOnMis();
+
+
                 } else {
                     getLianmaiMoney();
                     isPayFromRewoard = false;
@@ -653,7 +530,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 break;
             case R.id.landan:
                 setRequestedOrientation(island ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                mRTCStreamingManager.notifyActivityOrientationChanged();
+                //mRTCStreamingManager.notifyActivityOrientationChanged();
                 if (island) {
                     title.setVisibility(View.VISIBLE);
                     if (viewPager.getCurrentItem() == 3) {
@@ -707,104 +584,29 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             case R.id.dianbo_back:
                 JCVideoPlayer.releaseAllVideos();
                 dianbo.setVisibility(View.GONE);
-                mRTCStreamingManager.mute(false);
+
                 break;
         }
-    }
-
-    //====连麦操作===
-    private boolean startConference() {
-        if (mIsConferenceStarted) {
-            return true;
-        }
-        showLoading("正在加入连麦");
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                startConferenceInternal();
-            }
-        });
-
-        return true;
-    }
-
-    private boolean startConferenceInternal() {
-      /*  String roomToken = StreamUtils.requestRoomToken(StreamUtils.getTestUserId(this), mRoomName);
-        if (roomToken == null) {
-            hideLoading();
-            ToastUtil.show("无法获取房间信息 !");
-            return false;
-        }
-*/
-        String roomToken = "69a10dee6a56429a985d6956a500d07e";
-        mRTCStreamingManager.startConference("", mRoomName, roomToken, new RTCStartConferenceCallback() {
-            @Override
-            public void onStartConferenceSuccess() {
-                hideLoading();
-                showToast(getString(R.string.start_conference));
-                // updateControlButtonText();
-                mIsConferenceStarted = true;
-                if (mIsActivityPaused) {
-                    stopConference();
-                }
-                // 释放拉流
-                auVideoview.stopPlayback();
-                // 连麦者显示连麦画面
-                showOnMis();
-                joinCon.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onStartConferenceFailed(int errorCode) {
-                hideLoading();
-                //hideOnMis();
-                showToast(getString(R.string.failed_to_start_conference) + errorCode);
-
-            }
-        });
-        return true;
-    }
-
-    /**
-     * 结束连麦
-     *
-     * @return
-     */
-    private boolean stopConference() {
-        if (!mIsConferenceStarted) {
-            return true;
-        }
-        mRTCStreamingManager.stopConference();
-        mIsConferenceStarted = false;
-
-        return true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mIsActivityPaused = false;
-
-        auVideoview.start();
-
+        ILiveRoomManager.getInstance().onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         JCVideoPlayer.releaseAllVideos();
-        auVideoview.pause();
-        mIsActivityPaused = true;
-        mRTCStreamingManager.stopCapture();
-        stopConference();
+        ILiveRoomManager.getInstance().onPause();
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        auVideoview.stopPlayback();
-        mRTCStreamingManager.destroy();
-        RTCMediaStreamingManager.deinit();
+
     }
 
     @Override
@@ -814,7 +616,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         }
         if (island) {
             setRequestedOrientation(island ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            mRTCStreamingManager.notifyActivityOrientationChanged();
+
             island = false;
             title.setVisibility(View.VISIBLE);
             if (viewPager.getCurrentItem() == 3) {
@@ -833,105 +635,6 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     }
 
-    /**
-     * 初始化相机相关的
-     */
-    private void initCamer() {
-        // 显示模式
-        liveAfl.setShowMode(AspectFrameLayout.SHOW_MODE.FULL);
-        // 摄像头的方向
-        CameraStreamingSetting.CAMERA_FACING_ID facingId = LiveUtils.chooseCameraFacingId();
-        mCurrentCamFacingIndex = facingId.ordinal();
-        // 美颜处理
-        cameraStreamingSetting = new CameraStreamingSetting();
-        cameraStreamingSetting.setCameraFacingId(facingId);
-        cameraStreamingSetting.setBuiltInFaceBeautyEnabled(true); // Using sdk built in face beauty algorithm
-        //FaceBeautySetting 中的参数依次为：beautyLevel，whiten，redden，即磨皮程度、美白程度以及红润程度，取值范围为[0.0f, 1.0f]
-        cameraStreamingSetting.setFaceBeautySetting(new CameraStreamingSetting.FaceBeautySetting(0.8f, 0.8f, 0.6f)); // sdk built in face beauty settings
-        cameraStreamingSetting.setVideoFilter(CameraStreamingSetting.VIDEO_FILTER_TYPE.VIDEO_FILTER_BEAUTY); // set the beauty on/off
-
-    }
-
-    /**
-     * 事件监听
-     */
-    private void initLister() {
-        AVCodecType codecType = isSwCodec ? AVCodecType.SW_VIDEO_WITH_SW_AUDIO_CODEC : AVCodecType.HW_VIDEO_YUV_AS_INPUT_WITH_HW_AUDIO_CODEC;
-        mRTCStreamingManager = new RTCMediaStreamingManager(getApplicationContext(), liveAfl, liveSfv, codecType);
-        mRTCStreamingManager.setConferenceStateListener(mRTCStreamingStateChangedListener);
-        mRTCStreamingManager.setRemoteWindowEventListener(mRTCRemoteWindowEventListener);
-    }
-
-    /**
-     * 连麦小窗口
-     */
-    private void initWindow() {
-        windowA = new RTCVideoWindow(liveFlWindow, liveGfvWinow);
-        // windowA.setAbsolutetMixOverlayRect(options.getVideoEncodingWidth() - 320, 100, 320, 240);
-        mRTCStreamingManager.addRemoteWindow(windowA);
-
-
-    }
-
-    /**
-     * 推流设置
-     */
-    private void initStream() {
-        mStreamingProfile = new StreamingProfile();
-        mStreamingProfile.setEncodingOrientation(StreamingProfile.ENCODING_ORIENTATION.PORT);
-        // 动态切换横竖跑屏时 要调用 mMediaStreamingManager.notifyActivityOrientationChanged(); mMediaStreamingManager.notifyActivityOrientationChanged();
-        mRTCStreamingManager.prepare(cameraStreamingSetting, null);
-
-    }
-
-    @Override
-    public void onCompletion(PLMediaPlayer plMediaPlayer) {
-        // 显示直播完毕的画面
-    }
-
-    @Override
-    public boolean onError(PLMediaPlayer plMediaPlayer, int i) {
-        return false;
-    }
-
-    @Override
-    public void onVideoSizeChanged(PLMediaPlayer plMediaPlayer, int i, int i1, int i2, int i3) {
-
-    }
-
-    /**
-     * 显示自己的画面
-     */
-    protected void showLiveView() {
-
-        live.setVisibility(View.VISIBLE);
-        liveFlWindow.setVisibility(View.GONE);
-        liveAfl.setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * 连麦成功显示 连麦的小窗口
-     */
-    protected void showOnMis() {
-        live.setVisibility(View.VISIBLE);
-        liveFlWindow.setVisibility(View.VISIBLE);
-        liveAfl.setVisibility(View.VISIBLE);
-
-        auVideoview.setVisibility(View.GONE);
-        auVideoview.pause();
-
-    }
-
-    protected void hideOnMis() {
-        live.setVisibility(View.GONE);
-        liveFlWindow.setVisibility(View.INVISIBLE);
-        liveAfl.setVisibility(View.INVISIBLE);
-        auVideoview.setVisibility(View.VISIBLE);
-        auVideoview.start();
-
-
-    }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -946,8 +649,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     @OnMPermissionGranted(LIVE_PERMISSION_REQUEST_CODE)
     public void onLivePermissionGranted() {
         isPermissionGrant = true;
-        mRTCStreamingManager.startCapture();
-        startConference();
+        mLiveHelper.joinRoom("1234567");
     }
 
     @OnMPermissionDenied(LIVE_PERMISSION_REQUEST_CODE)
@@ -1115,5 +817,58 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         ;
     };
 
+
+    @Override
+    public void enterRoomComplete(boolean b) {
+        // 重置美颜
+        ILiveRoomManager.getInstance().enableBeauty(0);
+        ILiveRoomManager.getInstance().enableWhite(0);
+        avRootView.getViewByIndex(0).setVisibility(GLView.VISIBLE);
+
+        // 通知服务器加入房间
+    }
+
+    @Override
+    public void quiteRoomComplete(boolean b, Object o) {
+        //通知server 我下线了
+        avRootView.clearUserView();
+        finish();
+    }
+
+    @Override
+    public void showInviteDialog(LinkeNumberInfo identifier) {
+
+    }
+
+    @Override
+    public void cancelInviteView(String identifier) {
+        if ((inviteView1 != null)) {
+            inviteView1.setVisibility(View.GONE);
+            isLinking = true;
+        }
+    }
+
+    private void reQuestLink() {
+        mLiveHelper.sendC2CCmd(MContants.AVIMCMD_MUlTI_HOST_INVITE, "", teacherId, new ILiveCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                showLinkView();
+            }
+
+            @Override
+            public void onError(String module, int errCode, String errMsg) {
+                ToastUtil.show(errMsg);
+            }
+        });
+    }
+
+    private void showLinkView() {
+        inviteView1.setVisibility(View.VISIBLE);
+        inviteView1.setText("等待中");
+    }
+
+    private void hideLinkView() {
+        inviteView1.setVisibility(View.GONE);
+    }
 
 }

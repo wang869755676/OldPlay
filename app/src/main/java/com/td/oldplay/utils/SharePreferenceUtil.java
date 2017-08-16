@@ -45,7 +45,7 @@ public class SharePreferenceUtil {
     }
 
     public String getUserId() {
-        return sp.getString("userId", "-");
+        return sp.getString("userId", "0");
     }
 
     public void setUser(UserBean user) {

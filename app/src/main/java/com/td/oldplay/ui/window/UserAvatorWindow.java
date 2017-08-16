@@ -14,7 +14,6 @@ import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.utils.GlideUtils;
 import com.td.oldplay.widget.CircleImageView;
 
-import cn.tee3.avd.User;
 
 /**
  * Created by my on 2017/7/14.

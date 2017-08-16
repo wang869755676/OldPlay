@@ -44,4 +44,26 @@ public class MContants {
     public static final int LAUNCH_CAMERA_CODE = 0x102;
     public static final int LAUNCH_DCIM_CODE = 0x103;
 
+
+    /**
+     *  直播相关的配置
+     */
+    public static final int SDK_APPID = 1400027849;
+    public static final int ACCOUNT_TYPE = 11656;
+
+
+    public static final String HD_ROLE = "HD";
+    public static final String SD_ROLE = "SD";
+    public static final String LD_ROLE = "LD";
+
+    public static final int AVIMCMD_MULTI = 0x800;             // 多人互动消息类型
+
+    public static final int AVIMCMD_MUlTI_HOST_INVITE = AVIMCMD_MULTI + 1;         // 邀请直播互动,
+    public static final int AVIMCMD_MULTI_CANCEL_INTERACT = AVIMCMD_MUlTI_HOST_INVITE + 1;       // 断开互动，
+    public static final int AVIMCMD_MUlTI_JOIN = AVIMCMD_MULTI_CANCEL_INTERACT + 1;       // 同意互动，
+    public static final int AVIMCMD_MUlTI_REFUSE = AVIMCMD_MUlTI_JOIN + 1;      // 拒绝互动，
+
+    public static final String HOST_ROLE = "LiveMaster";
+    public static final String VIDEO_MEMBER_ROLE = "LiveGuest";
+    public static final String NORMAL_MEMBER_ROLE = "Guest";
 }

@@ -22,7 +22,7 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
 
     public Context mContext;   //吐司的上下文
     protected Context AContext;
-    protected String userId;
+    public String userId;
     protected UserBean userBean;
     private KProgressHUD hud;
     protected SharePreferenceUtil spUilts;

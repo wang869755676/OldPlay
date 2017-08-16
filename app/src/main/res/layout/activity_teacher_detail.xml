@@ -25,58 +25,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp">
                 <!--观看直播-->
-                <com.pili.pldroid.player.widget.PLVideoView
-                    android:id="@+id/au_videoview"
+                <com.tencent.ilivesdk.view.AVRootView
+                    android:id="@+id/av_root_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center" />
+                    android:layout_height="match_parent" />
 
 
-                <FrameLayout
-                    android:id="@+id/live"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <!--主播的画面-->
-                    <com.qiniu.pili.droid.streaming.widget.AspectFrameLayout
-                        android:id="@+id/live_afl"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <android.opengl.GLSurfaceView
-                            android:id="@+id/live_sfv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center" />
-
-                    </com.qiniu.pili.droid.streaming.widget.AspectFrameLayout>
-
-                    <!--连麦的窗口 如果需要多个窗口添加-->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right|center_vertical"
-                        android:layout_marginRight="5dp"
-                        android:orientation="vertical">
-
-                        <FrameLayout
-                            android:id="@+id/live_fl_window"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:onClick="onClickRemoteWindowA"
-                            android:visibility="invisible">
-
-                            <android.opengl.GLSurfaceView
-                                android:id="@+id/live_gfv_winow"
-                                android:layout_width="100dp"
-                                android:layout_height="120dp"
-                                android:visibility="invisible" />
-
-                        </FrameLayout>
-
-                    </LinearLayout>
-                </FrameLayout>
-
+                <TextView
+                    android:layout_gravity="right"
+                    android:id="@+id/invite_view1"
+                    android:layout_width="60dp"
+                    android:layout_height="110dp"
+                    android:visibility="invisible"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/bg_gray"
+                    android:gravity="center"
+                    android:text="呼叫中"
+                    android:textColor="@color/white" />
                 <ImageView
                     android:id="@+id/reword"
                     android:layout_width="wrap_content"

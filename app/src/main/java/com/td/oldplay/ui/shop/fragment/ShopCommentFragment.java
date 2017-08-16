@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragment;
 import com.td.oldplay.base.adapter.recyclerview.wrapper.LoadMoreWrapper;

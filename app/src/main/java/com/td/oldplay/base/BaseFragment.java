@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -38,7 +39,7 @@ public abstract class BaseFragment extends Fragment {
         spUilts = MyApplication.getInstance().mPreferenceUtil;
         userId = spUilts.getUserId();
         userBean = spUilts.getUser();
-
+        Log.e("===","onAcct");
     }
 
     @Override

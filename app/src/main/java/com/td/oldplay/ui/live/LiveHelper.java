@@ -265,6 +265,9 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
     @Override
     public void update(Observable o, Object arg) {
         MessageEvent.SxbMsgInfo info = (MessageEvent.SxbMsgInfo) arg;
+        if(info.msgType==MessageEvent.MSGTYPE_CMD){
+            ToastUtil.show("有Cmd消息了"+info.senderId);
+        }
         switch (info.msgType) {
             case MessageEvent.MSGTYPE_CMD:
                 processCmdMsg(info);
@@ -273,6 +276,18 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
 
         }
     }
+    /**
+     * 发送信令
+     */
+
+    public int sendGroupCmd(int cmd, String param) {
+        ILVCustomCmd customCmd = new ILVCustomCmd();
+        customCmd.setCmd(cmd);
+        customCmd.setParam(param);
+        customCmd.setType(ILVText.ILVTextType.eGroupMsg);
+        return sendCmd(customCmd,null);
+    }
+
 
     // 解析自定义信令
     private void processCmdMsg(MessageEvent.SxbMsgInfo info) {
@@ -281,8 +296,9 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
             return;
         }
         ILVCustomCmd cmd = (ILVCustomCmd) info.data;
+        Log.e("===",cmd.getDestId()+"       "+ mLiveView.userId);
         if (cmd.getType() == ILVText.ILVTextType.eGroupMsg
-                && !mLiveView.userId.equals(cmd.getDestId())) {
+                && mLiveView.userId.equals(cmd.getDestId())) {
             // SxbLog.d(TAG, "processCmdMsg->ingore message from: "+cmd.getDestId()+"/"+CurLiveInfo.getChatRoomId());
             return;
         }
@@ -315,6 +331,11 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
                 break;
             case  MContants.AVIMCMD_ENTERLIVE:
                 mLiveView.memberJoin(identifier, nickname);
+                break;
+
+            case  MContants.AVIMCMD_LIVING: // 3`
+                mLiveView.hostCreateRoom();
+                break;
 
 
         }

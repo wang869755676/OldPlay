@@ -3,6 +3,7 @@ package com.td.oldplay.ui.live;
 import android.Manifest;
 
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.permission.MPermission;
@@ -20,6 +21,7 @@ public abstract class LiveBaseActivity extends BaseFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   // 不锁屏
         setContentView(getLayout());
 
 
@@ -110,5 +112,12 @@ public abstract class LiveBaseActivity extends BaseFragmentActivity {
      * @param nickname
      */
     public void memberJoin(String identifier, String nickname) {
+    }
+
+
+    /**
+     *  主播开始直播    观众端实现
+     */
+    public void hostCreateRoom() {
     }
 }

@@ -74,7 +74,7 @@ public class MContants {
     public static final int AVIMCMD_PRAISE = AVIMCMD_EXITLIVE + 1;           // 点赞消息,
     public static final int AVIMCMD_HOST_LEAVE = AVIMCMD_PRAISE + 1;         // 主播离开,
     public static final int AVIMCMD_HOST_BACK = AVIMCMD_HOST_LEAVE + 1;      // 主播回来,
-
+    public static final int AVIMCMD_LIVING = AVIMCMD_HOST_BACK  + 1;      // 主播创建房间
     public static final String HOST_ROLE = "LiveMaster";
     public static final String VIDEO_MEMBER_ROLE = "LiveGuest";
     public static final String NORMAL_MEMBER_ROLE = "Guest";

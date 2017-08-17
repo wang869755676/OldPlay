@@ -28,7 +28,7 @@
                 <com.tencent.ilivesdk.view.AVRootView
                     android:id="@+id/av_root_view"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp" />
+                    android:layout_height="match_parent" />
 
 
                 <TextView

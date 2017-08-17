@@ -9,6 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -172,7 +173,6 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     private boolean isCreate;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -209,6 +209,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
         //avRootView.setBackground(R.mipmap.renderback);
         avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
+        avRootView.setAutoOrientation(false);
         avRootView.setSubMarginY(getResources().getDimensionPixelSize(R.dimen.small_area_margin_top));
         avRootView.setSubMarginX(getResources().getDimensionPixelSize(R.dimen.small_area_marginright));
         avRootView.setSubPadding(getResources().getDimensionPixelSize(R.dimen.small_area_marginbetween));
@@ -220,7 +221,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 for (int i = 1; i < ILiveConstants.MAX_AV_VIDEO_NUM; i++) {
                     final int index = i;
                     AVVideoView avVideoView = avRootView.getViewByIndex(index);
-                    avVideoView.setRotate(false);
+                    avVideoView.setRotate(true);
                    /* avVideoView.setDiffDirectionRenderMode(BaseVideoView.BaseRenderMode.BLACK_TO_FILL);
                     avVideoView.setSameDirectionRenderMode(BaseVideoView.BaseRenderMode.SCALE_TO_FIT);*/
                     avVideoView.setGestureListener(new GestureDetector.SimpleOnGestureListener() {
@@ -233,9 +234,9 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                     });
                 }
 
-                avRootView.getViewByIndex(0).setRotate(false);
-                avRootView.getViewByIndex(0).setDiffDirectionRenderMode(BaseVideoView.BaseRenderMode.BLACK_TO_FILL);
-                avRootView.getViewByIndex(0).setSameDirectionRenderMode(BaseVideoView.BaseRenderMode.SCALE_TO_FIT);
+                avRootView.getViewByIndex(0).setRotate(true);
+                // avRootView.getViewByIndex(0).setDiffDirectionRenderMode(BaseVideoView.BaseRenderMode.BLACK_TO_FILL);
+                // avRootView.getViewByIndex(0).setSameDirectionRenderMode(BaseVideoView.BaseRenderMode.SCALE_TO_FIT);
 
 
                 //avRootView.getViewByIndex(0).setBackground(R.mipmap.renderback);
@@ -543,6 +544,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             case R.id.landan:
                 setRequestedOrientation(island ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 //mRTCStreamingManager.notifyActivityOrientationChanged();
+                Log.e("===", ScreenUtils.getScreenW(this) + "   " + ScreenUtils.getScreenH(this));
                 if (island) {
                     title.setVisibility(View.VISIBLE);
                     if (viewPager.getCurrentItem() == 3) {
@@ -551,7 +553,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                         llAction.setVisibility(View.VISIBLE);
                     }
                     params.height = ScreenUtils.dip2px(AContext, 200);
-                    avRootView.getViewByIndex(0).setPosWidth(ScreenUtils.dip2px(mContext, (ScreenUtils.getScreenW(this))));
+                    avRootView.getViewByIndex(0).setPosWidth(ScreenUtils.getScreenW(this));
                     avRootView.getViewByIndex(0).setPosHeight(ScreenUtils.dip2px(AContext, 200));
                 } else {
                     title.setVisibility(View.GONE);
@@ -561,8 +563,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                         llAction.setVisibility(View.GONE);
                     }
                     params.height = LinearLayout.LayoutParams.MATCH_PARENT;
-                    avRootView.getViewByIndex(0).setPosWidth(ScreenUtils.dip2px(mContext, (ScreenUtils.getScreenW(this))));
-                    avRootView.getViewByIndex(0).setPosHeight(ScreenUtils.dip2px(mContext, (ScreenUtils.getScreenH(this))));
+                    avRootView.getViewByIndex(0).setPosWidth(ScreenUtils.getScreenW(this));
+                    avRootView.getViewByIndex(0).setPosHeight(ScreenUtils.getScreenH(this));
                 }
                 liveRoot.setLayoutParams(params);
                 island = !island;
@@ -665,7 +667,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     @OnMPermissionGranted(LIVE_PERMISSION_REQUEST_CODE)
     public void onLivePermissionGranted() {
         isPermissionGrant = true;
-        mLiveHelper.joinRoom("1234567");
+        mLiveHelper.joinRoom("1899");
     }
 
     @OnMPermissionDenied(LIVE_PERMISSION_REQUEST_CODE)
@@ -887,7 +889,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     }
 
     private void reQuestLink() {
-        mLiveHelper.sendC2CCmd(MContants.AVIMCMD_MUlTI_HOST_INVITE, "", "1897", new ILiveCallBack() {
+        mLiveHelper.sendC2CCmd(MContants.AVIMCMD_MUlTI_HOST_INVITE, "", teacherId, new ILiveCallBack() {
             @Override
             public void onSuccess(Object data) {
                 showLinkView();
@@ -911,6 +913,12 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     public void forceQuitRoom() {
         ILiveRoomManager.getInstance().onPause();
-        noLive.setVisibility(View.GONE);
+        noLive.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hostCreateRoom() {
+        ToastUtil.show("主播创建房间了");
+        mLiveHelper.joinRoom("1899");
     }
 }

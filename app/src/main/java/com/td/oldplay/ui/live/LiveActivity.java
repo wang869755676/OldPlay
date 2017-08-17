@@ -115,9 +115,8 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         requestLivePermission(); // 请求权限
         initDailog();
         initView();
-        mLiveHelper.createRoom("1234567");
+        mLiveHelper.createRoom("1899");
 
-        mLiveHelper.sendC2CCmd(124, "", "1897", null);
 
     }
 
@@ -179,6 +178,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
         //avRootView.setBackground(R.mipmap.renderback);
         avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
+        avRootView.setAutoOrientation(false);
         avRootView.setSubMarginY(getResources().getDimensionPixelSize(R.dimen.small_area_margin_top));
         avRootView.setSubMarginX(getResources().getDimensionPixelSize(R.dimen.small_area_marginright));
         avRootView.setSubPadding(getResources().getDimensionPixelSize(R.dimen.small_area_marginbetween));
@@ -500,6 +500,10 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         ILiveRoomManager.getInstance().enableBeauty(0);
         ILiveRoomManager.getInstance().enableWhite(0);
         avRootView.getViewByIndex(0).setVisibility(GLView.VISIBLE);
+        // 通知服务器
+
+        // 通知其他用户
+        mLiveHelper.sendGroupCmd(MContants.AVIMCMD_LIVING,"");
 
     }
 

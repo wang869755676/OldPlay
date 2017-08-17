@@ -42,6 +42,8 @@ public class SplashActivity extends BaseFragmentActivity {
                         @Override
                         public void onError(String module, int errCode, String errMsg) {
                             ToastUtil.show(errMsg + "errcode: " + errCode);
+                            startActivity(new Intent(mContext, LoginActivity.class));
+                            finish();
                         }
                     });
 

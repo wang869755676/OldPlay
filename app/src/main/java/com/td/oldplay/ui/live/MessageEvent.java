@@ -21,7 +21,7 @@ public class MessageEvent extends Observable implements ILVLiveConfig.ILVLiveMsg
     public class SxbMsgInfo{
         int msgType;
         Object data;
-        String senderId;
+        String senderId; // 接守着
         TIMUserProfile profile;
 
         public SxbMsgInfo(int type, String id, TIMUserProfile user, Object obj){

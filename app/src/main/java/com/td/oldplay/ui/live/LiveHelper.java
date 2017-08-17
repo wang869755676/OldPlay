@@ -321,6 +321,7 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
                 break;
             case MContants.AVIMCMD_MUlTI_JOIN:
                 mLiveView.cancelInviteView(identifier);
+                break;
             case MContants.AVIMCMD_MUlTI_REFUSE:
                 mLiveView.cancelInviteView(identifier);
                 ToastUtil.show("主播拒绝与您连麦");

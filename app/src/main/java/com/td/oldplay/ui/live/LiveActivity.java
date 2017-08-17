@@ -178,7 +178,6 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
         //avRootView.setBackground(R.mipmap.renderback);
         avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
-        avRootView.setAutoOrientation(false);
         avRootView.setSubMarginY(getResources().getDimensionPixelSize(R.dimen.small_area_margin_top));
         avRootView.setSubMarginX(getResources().getDimensionPixelSize(R.dimen.small_area_marginright));
         avRootView.setSubPadding(getResources().getDimensionPixelSize(R.dimen.small_area_marginbetween));

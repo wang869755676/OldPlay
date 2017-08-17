@@ -21,7 +21,7 @@ public class GlideUtils {
     private static RequestOptions options = new RequestOptions().dontAnimate();
 
     public static void setImage(Context context, String url, ImageView imageView) {
-        defaultOptions.placeholder(R.color.gray);
+        defaultOptions.placeholder(R.color.gray).error(R.color.gray);
         Glide
                 .with(context)
                 .load(url)
@@ -32,7 +32,7 @@ public class GlideUtils {
     }
 
     public static void setAvatorImage(Context context, String url, ImageView imageView) {
-        defaultOptions.placeholder(R.mipmap.icon_avator_default);
+        defaultOptions.placeholder(R.mipmap.icon_avator_default).error(R.mipmap.icon_avator_default);
         Glide
                 .with(context)
                 .load(url)
@@ -43,7 +43,7 @@ public class GlideUtils {
     }
 
     public static void setAvatorLoadImage(Context context, String path, ImageView imageView) {
-        defaultOptions.placeholder(R.mipmap.icon_avator_default);
+        defaultOptions.placeholder(R.mipmap.icon_avator_default).error(R.mipmap.icon_avator_default);
         Glide
                 .with(context)
                 .load(path)

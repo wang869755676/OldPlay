@@ -209,7 +209,6 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
         //avRootView.setBackground(R.mipmap.renderback);
         avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
-        avRootView.setAutoOrientation(false);
         avRootView.setSubMarginY(getResources().getDimensionPixelSize(R.dimen.small_area_margin_top));
         avRootView.setSubMarginX(getResources().getDimensionPixelSize(R.dimen.small_area_marginright));
         avRootView.setSubPadding(getResources().getDimensionPixelSize(R.dimen.small_area_marginbetween));
@@ -221,7 +220,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 for (int i = 1; i < ILiveConstants.MAX_AV_VIDEO_NUM; i++) {
                     final int index = i;
                     AVVideoView avVideoView = avRootView.getViewByIndex(index);
-                    avVideoView.setRotate(true);
+                    avVideoView.setRotate(false);
                    /* avVideoView.setDiffDirectionRenderMode(BaseVideoView.BaseRenderMode.BLACK_TO_FILL);
                     avVideoView.setSameDirectionRenderMode(BaseVideoView.BaseRenderMode.SCALE_TO_FIT);*/
                     avVideoView.setGestureListener(new GestureDetector.SimpleOnGestureListener() {
@@ -234,7 +233,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                     });
                 }
 
-                avRootView.getViewByIndex(0).setRotate(true);
+                avRootView.getViewByIndex(0).setRotate(false);
                 // avRootView.getViewByIndex(0).setDiffDirectionRenderMode(BaseVideoView.BaseRenderMode.BLACK_TO_FILL);
                 // avRootView.getViewByIndex(0).setSameDirectionRenderMode(BaseVideoView.BaseRenderMode.SCALE_TO_FIT);
 
@@ -373,7 +372,14 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
             @Override
             public void onOk() {
-                mLiveHelper.startExitRoom();
+                AlerDialog.dismiss();
+                showLoading("正在退出中，请稍后.");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mLiveHelper.startExitRoom();
+                    }
+                }).start();
 
             }
         });
@@ -867,6 +873,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             isCreate = true;
             noLive.setVisibility(View.VISIBLE);
         } else {
+            hideLoading();
             avRootView.clearUserView();
             finish();
         }

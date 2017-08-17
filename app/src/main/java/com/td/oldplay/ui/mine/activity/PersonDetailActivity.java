@@ -139,11 +139,13 @@ public class PersonDetailActivity extends BaseFragmentActivity implements View.O
     }
 
     private void saveSerer() {
+        showLoading();
         HttpManager.getInstance().modifyUser(params, new HttpSubscriber<UserBean>(new OnResultCallBack<UserBean>() {
 
             @Override
             public void onSuccess(UserBean userBean) {
                 ToastUtil.show("修改成功");
+                hideLoading();
                 spUilts.setUser(userBean);
                 EventBus.getDefault().post(new EventMessage("userUpdate"));
                 finish();

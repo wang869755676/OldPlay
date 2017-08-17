@@ -384,4 +384,12 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
         isHidden = hidden;
         showAddAnimation();
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEventMessage(EventMessage message){
+        if("userUpdate".equals(message.action)){
+            userBean=spUilts.getUser();
+            setUser();
+        }
+    }
 }

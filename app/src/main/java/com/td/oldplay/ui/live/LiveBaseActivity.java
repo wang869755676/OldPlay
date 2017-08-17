@@ -120,4 +120,10 @@ public abstract class LiveBaseActivity extends BaseFragmentActivity {
      */
     public void hostCreateRoom() {
     }
+
+    /**
+     * 其中一个 连麦 关闭之后，去连麦另外的一个            主播端实现
+     */
+    public void linkOther() {
+    }
 }

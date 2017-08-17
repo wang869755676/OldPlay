@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -62,6 +63,7 @@ import com.tencent.ilivesdk.view.AVVideoView;
 import com.tencent.ilivesdk.view.BaseVideoView;
 import com.tencent.livesdk.ILVLiveManager;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -177,6 +179,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         teacherId = getIntent().getStringExtra("id");
         courseId = getIntent().getStringExtra("courseId");
         customDialog = new CustomDialog(mContext);
@@ -209,10 +212,11 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
         //avRootView.setBackground(R.mipmap.renderback);
         avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
+        avRootView.setAutoOrientation(false);
         avRootView.setSubMarginY(getResources().getDimensionPixelSize(R.dimen.small_area_margin_top));
         avRootView.setSubMarginX(getResources().getDimensionPixelSize(R.dimen.small_area_marginright));
         avRootView.setSubPadding(getResources().getDimensionPixelSize(R.dimen.small_area_marginbetween));
-        avRootView.setSubWidth(getResources().getDimensionPixelSize(R.dimen.small_area_width));
+        avRootView.setSubWidth(getResources().getDimensionPixelSize(R.dimen.small_area_height));
         avRootView.setSubHeight(getResources().getDimensionPixelSize(R.dimen.small_area_height));
         avRootView.setSubCreatedListener(new AVRootView.onSubViewCreatedListener() {
             @Override
@@ -234,6 +238,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 }
 
                 avRootView.getViewByIndex(0).setRotate(false);
+
                 // avRootView.getViewByIndex(0).setDiffDirectionRenderMode(BaseVideoView.BaseRenderMode.BLACK_TO_FILL);
                 // avRootView.getViewByIndex(0).setSameDirectionRenderMode(BaseVideoView.BaseRenderMode.SCALE_TO_FIT);
 
@@ -316,7 +321,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             @Override
             public void onnext() {
                 if (!isPayFromRewoard) {
-                    reQuestLink();
+                    //reQuestLink();
+                    mLiveHelper.upMemberVideo();
                 }
             }
         });
@@ -363,26 +369,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         AlerDialog = new CustomDialog(mContext);
         AlerDialog.setTitleVisible(View.GONE);
         AlerDialog.setTitleVisible(View.GONE);
-        AlerDialog.setContent("是否退出房间？");
-        AlerDialog.setDialogClick(new CustomDialog.DialogClick() {
-            @Override
-            public void onCancel() {
 
-            }
-
-            @Override
-            public void onOk() {
-                AlerDialog.dismiss();
-                showLoading("正在退出中，请稍后.");
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mLiveHelper.startExitRoom();
-                    }
-                }).start();
-
-            }
-        });
     /*    accountDialog = new PayAlertDialog(mContext, true, true);
         accountDialog.setDialogClick(new PayAlertDialog.DialogClick() {
             @Override
@@ -478,6 +465,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 }
             }
 
+        }else if("live".equals(message.action)){
+            hostCreateRoom();
         }
     }
 
@@ -535,14 +524,25 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.join_con:
-                reQuestLink();
-                //向主播发送连麦请求
-                if (mIsConferenceStarted) {
 
+                if (isLinking) {
+                    AlerDialog.setContent("确定与主播断开连麦?");
+                    AlerDialog.setDialogClick(new CustomDialog.DialogClick() {
+                        @Override
+                        public void onCancel() {
+                            AlerDialog.dismiss();
+                        }
+
+                        @Override
+                        public void onOk() {
+                            mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, teacherId);
+                        }
+                    });
+                    AlerDialog.show();
                 } else {
-                    getLianmaiMoney();
-                    isPayFromRewoard = false;
 
+                    reQuestLink();
+                    //向主播发送连麦请求
                 }
 
 
@@ -550,7 +550,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             case R.id.landan:
                 setRequestedOrientation(island ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 //mRTCStreamingManager.notifyActivityOrientationChanged();
-                Log.e("===", ScreenUtils.getScreenW(this) + "   " + ScreenUtils.getScreenH(this));
+                Log.e("===",  avRootView.getViewByIndex(1).getPosHeight() + "   " +  avRootView.getViewByIndex(1).getPosWidth()+ avRootView.getViewByIndex(0).getPosWidth());
                 if (island) {
                     title.setVisibility(View.VISIBLE);
                     if (viewPager.getCurrentItem() == 3) {
@@ -559,8 +559,19 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                         llAction.setVisibility(View.VISIBLE);
                     }
                     params.height = ScreenUtils.dip2px(AContext, 200);
-                    avRootView.getViewByIndex(0).setPosWidth(ScreenUtils.getScreenW(this));
+                    avRootView.getViewByIndex(0).setPosWidth(ScreenUtils.getScreenH(this));
                     avRootView.getViewByIndex(0).setPosHeight(ScreenUtils.dip2px(AContext, 200));
+                    avRootView.getViewByIndex(0).autoLayout();
+
+
+
+                    avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_BOTTOM);
+                   // avRootView.getViewByIndex(1).setPosWidth(getResources().getDimensionPixelSize(R.dimen.small_area_width));
+                   // avRootView.getViewByIndex(1).setPosHeight(getResources().getDimensionPixelSize(R.dimen.small_area_height));
+                    avRootView.getViewByIndex(1).setPosLeft(ScreenUtils.getScreenH(this)-getResources().getDimensionPixelSize(R.dimen.small_area_height)-20);
+                    avRootView.getViewByIndex(1).autoLayout();
+
+
                 } else {
                     title.setVisibility(View.GONE);
                     if (viewPager.getCurrentItem() == 3) {
@@ -571,6 +582,14 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                     params.height = LinearLayout.LayoutParams.MATCH_PARENT;
                     avRootView.getViewByIndex(0).setPosWidth(ScreenUtils.getScreenW(this));
                     avRootView.getViewByIndex(0).setPosHeight(ScreenUtils.getScreenH(this));
+                    avRootView.getViewByIndex(0).autoLayout();
+
+
+                    avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_BOTTOM);
+                    //avRootView.getViewByIndex(1).setPosWidth(getResources().getDimensionPixelSize(R.dimen.small_area_height));
+                  //  avRootView.getViewByIndex(1).setPosHeight(getResources().getDimensionPixelSize(R.dimen.small_area_width));
+                    avRootView.getViewByIndex(1).setPosLeft(ScreenUtils.getScreenW(this)-getResources().getDimensionPixelSize(R.dimen.small_area_height)-20);
+                    avRootView.getViewByIndex(1).autoLayout();
                 }
                 liveRoot.setLayoutParams(params);
                 island = !island;
@@ -630,6 +649,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
+        mLiveHelper.onDestory();
 
     }
 
@@ -651,6 +672,26 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             params.height = ScreenUtils.dip2px(AContext, 200);
             liveRoot.setLayoutParams(params);
         } else {
+            AlerDialog.setContent("是否退出房间？");
+            AlerDialog.setDialogClick(new CustomDialog.DialogClick() {
+                @Override
+                public void onCancel() {
+
+                }
+
+                @Override
+                public void onOk() {
+                    AlerDialog.dismiss();
+                    showLoading("正在退出中，请稍后.");
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mLiveHelper.startExitRoom();
+                        }
+                    }).start();
+
+                }
+            });
             AlerDialog.show();
 
             // super.onBackPressed();
@@ -844,6 +885,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     @Override
     public void enterRoomComplete(boolean b) {
+        isCreate=true;
         noLive.setVisibility(View.GONE);
         // 重置美颜
         ILiveRoomManager.getInstance().enableBeauty(5);
@@ -868,15 +910,19 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     @Override
     public void quiteRoomComplete(boolean b, Object o) {
-
-        if (!isCreate) {
-            isCreate = true;
-            noLive.setVisibility(View.VISIBLE);
-        } else {
-            hideLoading();
-            avRootView.clearUserView();
-            finish();
-        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (!isCreate) {
+                    isCreate = true;
+                    noLive.setVisibility(View.VISIBLE);
+                } else {
+                    hideLoading();
+                    avRootView.clearUserView();
+                    finish();
+                }
+            }
+        });
 
 
     }
@@ -888,7 +934,9 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     @Override
     public void cancelInviteView(String identifier) {
-        mLiveHelper.upMemberVideo();
+
+        getLianmaiMoney();  // 支付连麦
+        isPayFromRewoard = false;
         if ((inviteView1 != null)) {
             inviteView1.setVisibility(View.GONE);
             isLinking = true;
@@ -926,6 +974,13 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     @Override
     public void hostCreateRoom() {
         ToastUtil.show("主播创建房间了");
-        mLiveHelper.joinRoom("1899");
+        if(isCreate){
+            noLive.setVisibility(View.GONE);
+        }else{
+            mLiveHelper.joinRoom("1899");
+        }
+
     }
+
+
 }

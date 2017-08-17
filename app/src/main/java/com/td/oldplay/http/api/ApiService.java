@@ -355,5 +355,12 @@ public interface ApiService {
     @POST(NetWorkAPI.GET_LOGISTICS_AIP)
     Observable<ApiResponse<LogisticsBean>> getLogistics(@Field("logistic") String logistic, @Field("logisticnum") String logisticnum);
 
+    @FormUrlEncoded
+    @POST(NetWorkAPI.CREAT_LIV_ROOM_AIP)
+    Observable<ApiResponse<String>> creatLiveRoom(@Field("userId") String userId, @Field("roomId") String roomId);
 
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.QUIT_LIV_ROOM_AIP)
+    Observable<ApiResponse<String>> quitLiveRoom(@Field("userId") String userId);
 }

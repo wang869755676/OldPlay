@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
+import com.td.oldplay.base.EventMessage;
 import com.td.oldplay.contants.MContants;
 import com.td.oldplay.ui.MainActivity;
 import com.td.oldplay.ui.RegisterScoreActivity;
@@ -15,6 +16,7 @@ import com.td.oldplay.utils.BackgroundUtil;
 import com.td.oldplay.utils.PrefUtils;
 import com.tencent.mm.opensdk.utils.Log;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -93,6 +95,8 @@ public class MyReceiver extends BroadcastReceiver {
                 context.startActivity(i);
             }
 
+        }else if("live".equals(info.action)){
+            EventBus.getDefault().post(new EventMessage("live"));
         }
 
     }

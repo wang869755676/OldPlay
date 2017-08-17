@@ -409,4 +409,13 @@ public class HttpManager {
     public void getLogistics(String logistic,String logisticnum, Observer<LogisticsBean> observer) {
         toSubscribe(mApiService.getLogistics(logistic,logisticnum), observer);
     }
+
+
+    public void creatLiveRoom(String userId,String roomId, Observer<String> observer) {
+        toSubscribe(mApiService.creatLiveRoom(userId,roomId), observer);
+    }
+    public void quitLiveRoom(String userId, Observer<String> observer) {
+        toSubscribe(mApiService.quitLiveRoom(userId), observer);
+    }
+
 }

@@ -6,6 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -22,7 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.td.oldplay.R;
+import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
 import com.td.oldplay.base.adapter.recyclerview.MultiItemTypeAdapter;
+import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
 import com.td.oldplay.bean.CommentBean;
 import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.contants.MContants;
@@ -37,10 +40,12 @@ import com.td.oldplay.permission.util.MPermissionUtil;
 import com.td.oldplay.ui.live.adapter.AvatorAdapter;
 import com.td.oldplay.ui.live.adapter.CommentAdapter;
 import com.td.oldplay.ui.window.CustomDialog;
+import com.td.oldplay.ui.window.ListPopupWindow;
 import com.td.oldplay.ui.window.UserAvatorWindow;
 import com.td.oldplay.utils.ToastUtil;
 import com.tencent.TIMMessage;
 import com.tencent.av.opengl.ui.GLView;
+import com.tencent.av.sdk.AVView;
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.core.ILivePushOption;
@@ -104,6 +109,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
     private UserAvatorWindow avatorWindow;
     private CustomDialog alerDialog;
+    private boolean isCanLinked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +143,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    isCanLinked = false;
                     liveLianmai.setText("开始连麦");
                     inviteView1.setVisibility(View.GONE);
                 } else {
@@ -178,10 +185,11 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
         //avRootView.setBackground(R.mipmap.renderback);
         avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
+        //avRootView.setAutoOrientation(false);
         avRootView.setSubMarginY(getResources().getDimensionPixelSize(R.dimen.small_area_margin_top));
         avRootView.setSubMarginX(getResources().getDimensionPixelSize(R.dimen.small_area_marginright));
         avRootView.setSubPadding(getResources().getDimensionPixelSize(R.dimen.small_area_marginbetween));
-        avRootView.setSubWidth(getResources().getDimensionPixelSize(R.dimen.small_area_width));
+        avRootView.setSubWidth(getResources().getDimensionPixelSize(R.dimen.small_area_height));
         avRootView.setSubHeight(getResources().getDimensionPixelSize(R.dimen.small_area_height));
         avRootView.setSubCreatedListener(new AVRootView.onSubViewCreatedListener() {
             @Override
@@ -293,14 +301,18 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
                 isComment = !isComment;
                 break;
             case R.id.live_lianmai:
-               /* Log.e("===",liveLianmai.isChecked()+"  ");
-                if(liveLianmai.isChecked()){
-                    mRTCStreamingManager.kickoutUser(R.id.live_gfv_winow);
-                }else{
+                Log.e("===", liveLianmai.isChecked() + "  ");
+                if (liveLianmai.isChecked()) {
+                    if (currentLinked != null) {
+                        mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, currentLinked.id);
+                        avRootView.closeUserView(currentLinked.id, AVView.VIDEO_SRC_TYPE_CAMERA, true);
+                    }
+                    liveLianmai.setText("开始连麦");
+                } else {
                     if (customDialog != null) {
                         customDialog.show();
                     }
-                }*/
+                }
 
                 break;
         }
@@ -312,12 +324,28 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
      */
     private void finishLive() {
         showLoading("正在退出中，请稍后.");
-        new Thread(new Runnable() {
+        HttpManager.getInstance().quitLiveRoom(userId, new HttpSubscriber<String>(new OnResultCallBack<String>() {
             @Override
-            public void run() {
-                mLiveHelper.startExitRoom();
+            public void onSuccess(String s) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mLiveHelper.startExitRoom();
+                    }
+                }).start();
             }
-        }).start();
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                hideLoading();
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
+        }));
+
 
     }
 
@@ -378,6 +406,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
             @Override
             public void onSuccess(String s) {
+                isCanLinked = false;
                 ToastUtil.show("已开启连麦");
                 inviteView1.setVisibility(View.VISIBLE);
                 inviteView1.setText("等待观众连麦中");
@@ -401,6 +430,9 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     private LinkeNumberInfo currentLinked;  // 当前正在连麦的人
     private CustomDialog linkDialog;
     private LiveHelper mLiveHelper;
+
+    private ListPopupWindow<LinkeNumberInfo> listPopupWindow;  // 用来显示其他连麦的人数
+    private CommonAdapter<LinkeNumberInfo> adapter;
 
     private void initDailog() {
         linkDialog = new CustomDialog(mContext);
@@ -439,42 +471,29 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         alerDialog = new CustomDialog(mContext);
         alerDialog.setTitleVisible(View.GONE);
         alerDialog.setTitleVisible(View.GONE);
-        alerDialog.setContent("是否结束直播？");
-        alerDialog.setDialogClick(new CustomDialog.DialogClick() {
+
+        adapter = new CommonAdapter<LinkeNumberInfo>(mContext, R.layout.item_month, interactionDataSource) {
+
             @Override
-            public void onCancel() {
-                alerDialog.dismiss();
+            protected void convert(ViewHolder holder, LinkeNumberInfo linkeNumberInfo, int position) {
+                holder.setText(R.id.item_tv, linkeNumberInfo.nickName);
+            }
+        };
+        adapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                currentLinked = interactionDataSource.get(position);
+                linkDialog.setContent(currentLinked.nickName + "请求与您连麦");
+                linkDialog.show();
             }
 
             @Override
-            public void onOk() {
-
-                ILVCustomCmd cmd = new ILVCustomCmd();
-                cmd.setCmd(MContants.AVIMCMD_EXITLIVE);
-                cmd.setType(ILVText.ILVTextType.eGroupMsg);
-                ILVLiveManager.getInstance().sendCustomCmd(cmd, new ILiveCallBack<TIMMessage>() {
-                    @Override
-                    public void onSuccess(TIMMessage data) {
-                        //如果是直播，发消息
-                        if (null != mLiveHelper) {
-                            finishLive();
-                            if (mIsPublishStreamStarted) {
-                                mLiveHelper.stopPush();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(String module, int errCode, String errMsg) {
-                        ToastUtil.show(errMsg);
-                    }
-
-                });
-                alerDialog.dismiss();
-
-
+            public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
             }
         });
+        listPopupWindow = new ListPopupWindow<>(mContext, adapter, getResources().getDimensionPixelOffset(R.dimen.link_pop_width), getResources().getDimensionPixelOffset(R.dimen.link_pop_height));
+
     }
 
     private void startPush() {
@@ -500,9 +519,23 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         ILiveRoomManager.getInstance().enableWhite(0);
         avRootView.getViewByIndex(0).setVisibility(GLView.VISIBLE);
         // 通知服务器
+        HttpManager.getInstance().creatLiveRoom(userId, userId, new HttpSubscriber<String>(new OnResultCallBack<String>() {
 
-        // 通知其他用户
-        mLiveHelper.sendGroupCmd(MContants.AVIMCMD_LIVING,"");
+            @Override
+            public void onSuccess(String s) {
+
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
+        }));
 
     }
 
@@ -523,9 +556,13 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     @Override
     public void showInviteDialog(LinkeNumberInfo identifier) {
         if (isLinking) {
-            if (interactionDataSource == null)
+
+            // 可以允许多个连麦
+         /*   if (interactionDataSource == null)
                 interactionDataSource = new LinkedList<>();
-            interactionDataSource.add(identifier);
+            interactionDataSource.add(identifier);*/
+
+            mLiveHelper.sendC2CCmd(MContants.AVIMCMD_MUlTI_LINKING, "", currentLinked.id, null);
         } else {
             currentLinked = identifier;
             linkDialog.setContent(identifier.nickName + "请求与您连麦");
@@ -561,8 +598,49 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     @Override
     public void onBackPressed() {
         if (alerDialog != null) {
+            alerDialog.setContent("是否结束直播？");
+            alerDialog.setDialogClick(new CustomDialog.DialogClick() {
+                @Override
+                public void onCancel() {
+                    alerDialog.dismiss();
+                }
+
+                @Override
+                public void onOk() {
+
+                    ILVCustomCmd cmd = new ILVCustomCmd();
+                    cmd.setCmd(MContants.AVIMCMD_EXITLIVE);
+                    cmd.setType(ILVText.ILVTextType.eGroupMsg);
+                    ILVLiveManager.getInstance().sendCustomCmd(cmd, new ILiveCallBack<TIMMessage>() {
+                        @Override
+                        public void onSuccess(TIMMessage data) {
+                            //如果是直播，发消息
+                            if (null != mLiveHelper) {
+                                finishLive();
+                                if (mIsPublishStreamStarted) {
+                                    mLiveHelper.stopPush();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onError(String module, int errCode, String errMsg) {
+                            ToastUtil.show(errMsg);
+                        }
+
+                    });
+                    alerDialog.dismiss();
+
+
+                }
+            });
             alerDialog.show();
         }
+
+    }
+
+    @Override
+    public void linkOther() {
 
     }
 }

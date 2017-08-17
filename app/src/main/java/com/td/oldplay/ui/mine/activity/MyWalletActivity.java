@@ -294,7 +294,7 @@ public class MyWalletActivity extends BaseFragmentActivity
         }
     }
 
-    private static class Adapter extends CommonAdapter<String> {
+    public static class Adapter extends CommonAdapter<String> {
 
         public Adapter(Context context, int layoutId, List<String> datas) {
             super(context, layoutId, datas);

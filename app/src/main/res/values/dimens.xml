@@ -18,5 +18,7 @@
     <dimen name="small_area_marginright">10dp</dimen>
     <dimen name="small_area_marginbetween">10dp</dimen>
 
+    <dimen name="link_pop_width">178dp</dimen>
 
+    <dimen name="link_pop_height">378dp</dimen>
 </resources>

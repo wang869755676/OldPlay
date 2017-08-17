@@ -62,7 +62,7 @@ public class MContants {
     public static final int AVIMCMD_MULTI_CANCEL_INTERACT = AVIMCMD_MUlTI_HOST_INVITE + 1;       // 断开互动，
     public static final int AVIMCMD_MUlTI_JOIN = AVIMCMD_MULTI_CANCEL_INTERACT + 1;       // 同意互动，
     public static final int AVIMCMD_MUlTI_REFUSE = AVIMCMD_MUlTI_JOIN + 1;      // 拒绝互动，
-
+    public static final int AVIMCMD_MUlTI_LINKING = AVIMCMD_MUlTI_REFUSE+ 1;      // 主播正在连麦，
 
     public static final int AVIMCMD_TEXT = -1;         // 普通的聊天消息
 
@@ -71,10 +71,14 @@ public class MContants {
     // 以下事件为TCAdapter内部处理的通用事件
     public static final int AVIMCMD_ENTERLIVE = AVIMCMD_NONE + 1;          // 用户加入直播,
     public static final int AVIMCMD_EXITLIVE = AVIMCMD_ENTERLIVE + 1;         // 用户退出直播,
+
     public static final int AVIMCMD_PRAISE = AVIMCMD_EXITLIVE + 1;           // 点赞消息,
     public static final int AVIMCMD_HOST_LEAVE = AVIMCMD_PRAISE + 1;         // 主播离开,
     public static final int AVIMCMD_HOST_BACK = AVIMCMD_HOST_LEAVE + 1;      // 主播回来,
+
     public static final int AVIMCMD_LIVING = AVIMCMD_HOST_BACK  + 1;      // 主播创建房间
+
+
     public static final String HOST_ROLE = "LiveMaster";
     public static final String VIDEO_MEMBER_ROLE = "LiveGuest";
     public static final String NORMAL_MEMBER_ROLE = "Guest";

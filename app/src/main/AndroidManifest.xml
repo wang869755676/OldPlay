@@ -212,7 +212,7 @@
         <activity
             android:name=".ui.mine.activity.AddAddressActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AlertDialogStyle"
+            android:theme="@style/MyDialogStyle"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.ForgetPwsActivity"

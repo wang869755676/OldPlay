@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.td.oldplay.R;
+import com.td.oldplay.base.BaseActivity;
 import com.td.oldplay.base.BaseFragmentActivity;
 import com.td.oldplay.base.EventMessage;
 import com.td.oldplay.bean.AddressBean;
@@ -24,7 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.Disposable;
 
-public class AddAddressActivity extends BaseFragmentActivity implements View.OnClickListener {
+public class AddAddressActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.adr_name)
     EditText adrName;

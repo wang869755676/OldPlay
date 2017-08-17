@@ -236,6 +236,7 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
         customCmd.setType(ILVText.ILVTextType.eGroupMsg);
         return sendCmd(customCmd);
     }*/
+
     /**
      * 发送消息
      *
@@ -265,8 +266,8 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
     @Override
     public void update(Observable o, Object arg) {
         MessageEvent.SxbMsgInfo info = (MessageEvent.SxbMsgInfo) arg;
-        if(info.msgType==MessageEvent.MSGTYPE_CMD){
-            ToastUtil.show("有Cmd消息了"+info.senderId);
+        if (info.msgType == MessageEvent.MSGTYPE_CMD) {
+            ToastUtil.show("有Cmd消息了" + info.senderId);
         }
         switch (info.msgType) {
             case MessageEvent.MSGTYPE_CMD:
@@ -276,6 +277,7 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
 
         }
     }
+
     /**
      * 发送信令
      */
@@ -285,7 +287,7 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
         customCmd.setCmd(cmd);
         customCmd.setParam(param);
         customCmd.setType(ILVText.ILVTextType.eGroupMsg);
-        return sendCmd(customCmd,null);
+        return sendCmd(customCmd, null);
     }
 
 
@@ -296,7 +298,7 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
             return;
         }
         ILVCustomCmd cmd = (ILVCustomCmd) info.data;
-        Log.e("===",cmd.getDestId()+"       "+ mLiveView.userId);
+        Log.e("===", cmd.getDestId() + "       " + mLiveView.userId);
         if (cmd.getType() == ILVText.ILVTextType.eGroupMsg
                 && mLiveView.userId.equals(cmd.getDestId())) {
             // SxbLog.d(TAG, "processCmdMsg->ingore message from: "+cmd.getDestId()+"/"+CurLiveInfo.getChatRoomId());
@@ -319,7 +321,7 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
             case MContants.AVIMCMD_MUlTI_HOST_INVITE:
                 mLiveView.showInviteDialog(new LinkeNumberInfo(identifier, nickname));
                 break;
-            case MContants.AVIMCMD_MUlTI_JOIN:
+            case MContants.AVIMCMD_MUlTI_JOIN:  // 同意互动主播
                 mLiveView.cancelInviteView(identifier);
                 break;
             case MContants.AVIMCMD_MUlTI_REFUSE:
@@ -330,12 +332,26 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
                 //startExitRoom();
                 mLiveView.forceQuitRoom();
                 break;
-            case  MContants.AVIMCMD_ENTERLIVE:
+            case MContants.AVIMCMD_ENTERLIVE:
                 mLiveView.memberJoin(identifier, nickname);
                 break;
 
-            case  MContants.AVIMCMD_LIVING: // 3`
+            case MContants.AVIMCMD_LIVING: // 3`
                 mLiveView.hostCreateRoom();
+                break;
+
+            case MContants.AVIMCMD_MULTI_CANCEL_INTERACT:// 下麦操作   观众端发起来的
+                //如果是自己关闭Camera和Mic
+                if (param.equals(mLiveView.userId)) {//是自己
+                    //TODO 被动下麦 下麦 下麦
+                    downMemberVideo();
+                }
+                //其他人关闭小窗口
+                ILiveRoomManager.getInstance().getRoomView().closeUserView(param, AVView.VIDEO_SRC_TYPE_CAMERA, true);
+                mLiveView.linkOther();
+                break;
+            case MContants.AVIMCMD_MUlTI_LINKING:// 主播正在连麦中
+                ToastUtil.show("主播正在连麦中，请稍后");
                 break;
 
 

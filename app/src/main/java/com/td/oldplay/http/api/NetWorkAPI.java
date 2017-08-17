@@ -168,4 +168,8 @@ public class NetWorkAPI {
     public final static String CREAT_LIV_ROOM_AIP= "lnrzb/live/anchorEstablishRoom";
 
     public final static String QUIT_LIV_ROOM_AIP= "lnrzb/live/anchorQuit";
+
+    public final static String GET_SEE_LIVES_AIP= "lnrzb/live/findAudience";
+
+    public final static String QUIT_ROOM_AIP= "lnrzb/live/audienceQuit";
 }

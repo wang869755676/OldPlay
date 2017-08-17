@@ -465,7 +465,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 }
             }
 
-        }else if("live".equals(message.action)){
+        } else if ("live".equals(message.action)) {
             hostCreateRoom();
         }
     }
@@ -550,7 +550,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             case R.id.landan:
                 setRequestedOrientation(island ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 //mRTCStreamingManager.notifyActivityOrientationChanged();
-                Log.e("===",  avRootView.getViewByIndex(1).getPosHeight() + "   " +  avRootView.getViewByIndex(1).getPosWidth()+ avRootView.getViewByIndex(0).getPosWidth());
+                Log.e("===", avRootView.getViewByIndex(1).getPosHeight() + "   " + avRootView.getViewByIndex(1).getPosWidth() + avRootView.getViewByIndex(0).getPosWidth());
                 if (island) {
                     title.setVisibility(View.VISIBLE);
                     if (viewPager.getCurrentItem() == 3) {
@@ -564,11 +564,10 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                     avRootView.getViewByIndex(0).autoLayout();
 
 
-
                     avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_BOTTOM);
-                   // avRootView.getViewByIndex(1).setPosWidth(getResources().getDimensionPixelSize(R.dimen.small_area_width));
-                   // avRootView.getViewByIndex(1).setPosHeight(getResources().getDimensionPixelSize(R.dimen.small_area_height));
-                    avRootView.getViewByIndex(1).setPosLeft(ScreenUtils.getScreenH(this)-getResources().getDimensionPixelSize(R.dimen.small_area_height)-20);
+                    // avRootView.getViewByIndex(1).setPosWidth(getResources().getDimensionPixelSize(R.dimen.small_area_width));
+                    // avRootView.getViewByIndex(1).setPosHeight(getResources().getDimensionPixelSize(R.dimen.small_area_height));
+                    avRootView.getViewByIndex(1).setPosLeft(ScreenUtils.getScreenH(this) - getResources().getDimensionPixelSize(R.dimen.small_area_height) - 20);
                     avRootView.getViewByIndex(1).autoLayout();
 
 
@@ -587,8 +586,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
                     avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_BOTTOM);
                     //avRootView.getViewByIndex(1).setPosWidth(getResources().getDimensionPixelSize(R.dimen.small_area_height));
-                  //  avRootView.getViewByIndex(1).setPosHeight(getResources().getDimensionPixelSize(R.dimen.small_area_width));
-                    avRootView.getViewByIndex(1).setPosLeft(ScreenUtils.getScreenW(this)-getResources().getDimensionPixelSize(R.dimen.small_area_height)-20);
+                    //  avRootView.getViewByIndex(1).setPosHeight(getResources().getDimensionPixelSize(R.dimen.small_area_width));
+                    avRootView.getViewByIndex(1).setPosLeft(ScreenUtils.getScreenW(this) - getResources().getDimensionPixelSize(R.dimen.small_area_height) - 20);
                     avRootView.getViewByIndex(1).autoLayout();
                 }
                 liveRoot.setLayoutParams(params);
@@ -683,12 +682,31 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 public void onOk() {
                     AlerDialog.dismiss();
                     showLoading("正在退出中，请稍后.");
-                    new Thread(new Runnable() {
+                    HttpManager.getInstance().quitRoom(userId, teacherId, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+
+
                         @Override
-                        public void run() {
-                            mLiveHelper.startExitRoom();
+                        public void onSuccess(String s) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mLiveHelper.startExitRoom();
+                                }
+                            }).start();
                         }
-                    }).start();
+
+                        @Override
+                        public void onError(int code, String errorMsg) {
+                            ToastUtil.show(errorMsg);
+                            hideLoading();
+                        }
+
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            addDisposable(d);
+                        }
+                    }));
+
 
                 }
             });
@@ -885,7 +903,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     @Override
     public void enterRoomComplete(boolean b) {
-        isCreate=true;
+        isCreate = true;
         noLive.setVisibility(View.GONE);
         // 重置美颜
         ILiveRoomManager.getInstance().enableBeauty(5);
@@ -974,9 +992,9 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     @Override
     public void hostCreateRoom() {
         ToastUtil.show("主播创建房间了");
-        if(isCreate){
+        if (isCreate) {
             noLive.setVisibility(View.GONE);
-        }else{
+        } else {
             mLiveHelper.joinRoom("1899");
         }
 

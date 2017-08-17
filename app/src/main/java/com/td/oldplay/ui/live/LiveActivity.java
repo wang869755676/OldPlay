@@ -111,6 +111,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     private CustomDialog alerDialog;
     private boolean isCanLinked;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -296,7 +297,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
                 } else {
                     liveRvChat.setLayoutManager(new GridLayoutManager(mContext, 3));
                     liveRvChat.setAdapter(avatorAdapter);
-                    getUsers();
+
                 }
                 isComment = !isComment;
                 break;
@@ -372,10 +373,6 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         }));
     }
 
-    private void getUsers() {
-        userDatas.add(new UserBean());
-        userDatas.add(new UserBean());
-    }
 
     @Override
     public void onCancel() {
@@ -518,7 +515,8 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         ILiveRoomManager.getInstance().enableBeauty(0);
         ILiveRoomManager.getInstance().enableWhite(0);
         avRootView.getViewByIndex(0).setVisibility(GLView.VISIBLE);
-        // 通知服务器
+        getUserDatas();
+        // 通知服务器  进入房间
         HttpManager.getInstance().creatLiveRoom(userId, userId, new HttpSubscriber<String>(new OnResultCallBack<String>() {
 
             @Override
@@ -591,8 +589,9 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
     @Override
     public void memberJoin(String identifier, String nickname) {
-        super.memberJoin(identifier, nickname);
-        ToastUtil.show("刷新用户的头像");
+        // super.memberJoin(identifier, nickname);
+        //  ToastUtil.show("刷新用户的头像");
+        getUserDatas();
     }
 
     @Override
@@ -642,5 +641,26 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     @Override
     public void linkOther() {
 
+    }
+
+    private void getUserDatas() {
+        HttpManager.getInstance().getAudiences(userId, new HttpSubscriber<List<UserBean>>(new OnResultCallBack<List<UserBean>>() {
+
+            @Override
+            public void onSuccess(List<UserBean> userBeen) {
+                userDatas.addAll(userBeen);
+                avatorAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+        }));
     }
 }

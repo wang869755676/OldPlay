@@ -417,5 +417,11 @@ public class HttpManager {
     public void quitLiveRoom(String userId, Observer<String> observer) {
         toSubscribe(mApiService.quitLiveRoom(userId), observer);
     }
+    public void getAudiences(String userId, Observer<List<UserBean>> observer) {
+        toSubscribe(mApiService.getAudiences(userId), observer);
+    }
 
+    public void quitRoom(String userId,String roomId, Observer<String> observer) {
+        toSubscribe(mApiService.quitRoom(userId,roomId), observer);
+    }
 }

@@ -52,7 +52,7 @@ public class UserAvatorWindow extends PopupWindow {
         if(user!=null){
             GlideUtils.setAvatorImage(mContext,user.avatar,userIv);
             name.setText(user.nickName);
-            score.setText(user.score);
+            score.setText("积分:"+user.score);
         }
     }
 

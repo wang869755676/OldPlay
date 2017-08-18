@@ -143,7 +143,12 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         liveLianmai.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
+                if (currentLinked != null) {
+                        mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, currentLinked.id);
+                        avRootView.closeUserView(currentLinked.id, AVView.VIDEO_SRC_TYPE_CAMERA, true);
+                          //mLiveHelper.downMemberVideo();
+                }
+              /*  if (isChecked) {
                     isCanLinked = false;
                     liveLianmai.setText("开始连麦");
                     inviteView1.setVisibility(View.GONE);
@@ -151,7 +156,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
                     if (customDialog != null) {
                         customDialog.show();
                     }
-                }
+                }*/
 
             }
         });
@@ -302,11 +307,16 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
                 isComment = !isComment;
                 break;
             case R.id.live_lianmai:
-                Log.e("===", liveLianmai.isChecked() + "  ");
-                if (liveLianmai.isChecked()) {
+                if (currentLinked != null) {
+                       /* mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, currentLinked.id);
+                        avRootView.closeUserView(currentLinked.id, AVView.VIDEO_SRC_TYPE_CAMERA, true);*/
+                    mLiveHelper.downMemberVideo();
+                }
+               /* if (liveLianmai.isChecked()) {
                     if (currentLinked != null) {
-                        mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, currentLinked.id);
-                        avRootView.closeUserView(currentLinked.id, AVView.VIDEO_SRC_TYPE_CAMERA, true);
+                       *//* mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, currentLinked.id);
+                        avRootView.closeUserView(currentLinked.id, AVView.VIDEO_SRC_TYPE_CAMERA, true);*//*
+                        mLiveHelper.downMemberVideo();
                     }
                     liveLianmai.setText("开始连麦");
                 } else {
@@ -314,7 +324,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
                         customDialog.show();
                     }
                 }
-
+*/
                 break;
         }
 
@@ -648,8 +658,13 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
             @Override
             public void onSuccess(List<UserBean> userBeen) {
-                userDatas.addAll(userBeen);
-                avatorAdapter.notifyDataSetChanged();
+                if (userBeen != null) {
+                    userDatas.clear();
+                    userDatas.addAll(userBeen);
+                    livePersonNum.setText("" + userBeen.size());
+                    avatorAdapter.notifyDataSetChanged();
+                }
+
             }
 
             @Override
@@ -659,7 +674,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
             @Override
             public void onSubscribe(Disposable d) {
-
+                addDisposable(d);
             }
         }));
     }

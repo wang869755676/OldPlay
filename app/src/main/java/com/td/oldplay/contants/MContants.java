@@ -69,8 +69,11 @@ public class MContants {
     public static final int AVIMCMD_NONE = AVIMCMD_TEXT + 1;               // 无事件
 
     // 以下事件为TCAdapter内部处理的通用事件
-    public static final int AVIMCMD_ENTERLIVE = AVIMCMD_NONE + 1;          // 用户加入直播,
-    public static final int AVIMCMD_EXITLIVE = AVIMCMD_ENTERLIVE + 1;         // 用户退出直播,
+    public static final int AVIMCMD_ENTERLIVE = AVIMCMD_NONE + 1;          // 观众加入直播,
+    public static final int AVIMCMD_EXITLIVE = AVIMCMD_ENTERLIVE + 1;         // 主播退出直播,
+
+
+
 
     public static final int AVIMCMD_PRAISE = AVIMCMD_EXITLIVE + 1;           // 点赞消息,
     public static final int AVIMCMD_HOST_LEAVE = AVIMCMD_PRAISE + 1;         // 主播离开,
@@ -78,6 +81,7 @@ public class MContants {
 
     public static final int AVIMCMD_LIVING = AVIMCMD_HOST_BACK  + 1;      // 主播创建房间
 
+    public static final int AUDICE_EXITLIVE = AVIMCMD_LIVING + 1;         // 观众退出直播,
 
     public static final String HOST_ROLE = "LiveMaster";
     public static final String VIDEO_MEMBER_ROLE = "LiveGuest";

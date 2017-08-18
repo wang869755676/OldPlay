@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alipay.sdk.app.PayTask;
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragment;
 import com.td.oldplay.base.EventMessage;
@@ -24,10 +25,13 @@ import com.td.oldplay.bean.CourseBean;
 import com.td.oldplay.bean.CourseTypeBean;
 import com.td.oldplay.bean.PayAccountBefore;
 import com.td.oldplay.bean.ScoreOffset;
+import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.contants.MContants;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
+import com.td.oldplay.pay.weixin.WechatInfo;
+import com.td.oldplay.pay.weixin.WeixPayUtils;
 import com.td.oldplay.pay.zhifubao.PayResult;
 import com.td.oldplay.ui.course.activity.TeacherDetailActivity;
 import com.td.oldplay.ui.course.adapter.CourserAdapter;
@@ -37,12 +41,15 @@ import com.td.oldplay.ui.window.PayTypeDialog;
 import com.td.oldplay.ui.window.PayTypePopupWindow;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.password.PasswordInputView;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -94,12 +101,16 @@ public class CourseFragment extends BaseFragment implements
     private boolean isCoursePay;
 
     private String courseId;
+    private HashMap<String, Object> param;
+    private IWXAPI api;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_course, container, false);
+        api = WXAPIFactory.createWXAPI(mActivity, MContants.WX_APP_ID);
+        param = new HashMap<>();
         EventBus.getDefault().register(this);
         unbinder = ButterKnife.bind(this, view);
         id = mActivity.getIntent().getStringExtra("id");
@@ -135,6 +146,8 @@ public class CourseFragment extends BaseFragment implements
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 ((TeacherDetailActivity) mActivity).currentBean = datas.get(position);
                 currentCourse = datas.get(position);
+                param.put("coursesId", currentCourse.coursesId);
+                param.put("price",currentCourse.price);
                 if (datas.get(position).isBuy == 0) {
                     customDialog.setContent("支付" + datas.get(position).price + "元购买课程");
                     customDialog.show();
@@ -166,6 +179,7 @@ public class CourseFragment extends BaseFragment implements
 
             @Override
             public void onnext() {
+                currentCourse.isBuy=1;
                 EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
             }
         });
@@ -191,11 +205,12 @@ public class CourseFragment extends BaseFragment implements
                     ToastUtil.show("请输入密码");
                     return;
                 }
-                customDialog.dismiss();
+                passwordDialog.dismiss();
                 // 账户支付
-                if (paySuccessDialog != null) {
+                payAccout();
+             /*   if (paySuccessDialog != null) {
                     paySuccessDialog.show();
-                }
+                }*/
 
             }
         });
@@ -285,11 +300,15 @@ public class CourseFragment extends BaseFragment implements
 
     @Override
     public void onOk(int payType, String scoreId) {
+        param.put("userId", userId);
+        param.put("teacherId",id);
+        param.put("type",0);
         switch (payType) {
             case 0:
                 if (scoreId != null && !scoreId.equals("")) {
                     getApplyScoreMoney();
                 } else {
+
                     accountDialog.setContent("账户余额支付" + currentCourse.price + "元");
                     accountDialog.setScoreVisible(View.GONE);
                     accountDialog.show();
@@ -300,14 +319,14 @@ public class CourseFragment extends BaseFragment implements
                 isCoursePay = true;
                 ToastUtil.show("微信支付");
 
-
-                EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
+                payWechat();
+               // EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
 
                 break;
             case 2:
                 ToastUtil.show("支付宝支付");
-
-                EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
+                payZhifubao();
+              //  EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
                 break;
             case 3:
                 ToastUtil.show("找老师开通");
@@ -394,10 +413,11 @@ public class CourseFragment extends BaseFragment implements
 
             @Override
             public void onSuccess(PayAccountBefore payAccountBefore) {
-                if(payAccountBefore!=null){
+                if (payAccountBefore != null) {
+                    param.put("price",payAccountBefore.payPrice);
                     accountDialog.setContent("账户余额支付" + payAccountBefore.payPrice + "元");
                     accountDialog.setScoreVisible(View.VISIBLE);
-                    accountDialog.setScore("(积分抵消"+payAccountBefore.offsetMoney+"元)");
+                    accountDialog.setScore("(积分抵消" + payAccountBefore.offsetMoney + "元)");
                     accountDialog.show();
                 }
 
@@ -476,5 +496,84 @@ public class CourseFragment extends BaseFragment implements
         ;
     };
 
+    private void payZhifubao() {
+
+        HttpManager.getInstance().payZhifubao(param, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+
+            @Override
+            public void onSuccess(final String s) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        PayTask alipay = new PayTask(getActivity());
+                        Map<String, String> result = alipay.payV2(s, true);
+                        Log.i("msp", result.toString());
+                        Message msg = new Message();
+                        msg.what = SDK_PAY_FLAG;
+                        msg.obj = result;
+                        mHandler.sendMessage(msg);
+                    }
+                }).start();
+
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+        }));
+    }
+
+    private void payWechat() {
+
+        HttpManager.getInstance().payWechat(param, new HttpSubscriber<WechatInfo>(new OnResultCallBack<WechatInfo>() {
+
+            @Override
+            public void onSuccess(WechatInfo wechatInfo) {
+                WeixPayUtils.pay(api, wechatInfo);
+
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
+        }));
+    }
+
+    private void payAccout() {
+        param.put("payPassword",password);
+        HttpManager.getInstance().payAccount(param, new HttpSubscriber<UserBean>(new OnResultCallBack<UserBean>() {
+            @Override
+            public void onSuccess(UserBean userBean) {
+                currentCourse.isBuy=1;
+                spUilts.setUser(userBean);
+                if (paySuccessDialog != null) {
+                    paySuccessDialog.show();
+                }
+
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
+        }));
+    }
 
 }

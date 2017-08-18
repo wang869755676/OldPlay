@@ -27,6 +27,7 @@ import com.td.oldplay.bean.TeacherDetail;
 import com.td.oldplay.bean.TestBean;
 import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.bean.WalletBean;
+import com.td.oldplay.pay.weixin.WechatInfo;
 
 import java.util.HashMap;
 import java.util.List;
@@ -369,5 +370,18 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.QUIT_ROOM_AIP)
-    Observable<ApiResponse<String>> quitRoom(@Field("userId") String userId, @Field("roomId") String roomId);
+    Observable<ApiResponse<String>> quitRoom(@Field("userId") String userId, @Field("teacherId") String roomId);
+
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.PAY_WECHAT_AIP)
+    Observable<ApiResponse<WechatInfo>> payWechat(@FieldMap() HashMap<String, Object> maps);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.PAY_APLIAY_AIP)
+    Observable<ApiResponse<String>> payZhifubao(@FieldMap() HashMap<String, Object> maps);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.PAY_ACOUNT_AIP)
+    Observable<ApiResponse<UserBean>> payAccount(@FieldMap() HashMap<String, Object> maps);
 }

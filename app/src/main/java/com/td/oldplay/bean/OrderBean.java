@@ -39,6 +39,7 @@ public class OrderBean implements Serializable {
     public String orderNum;
     public TimeInfo overTime;
     public TimeInfo payTime;
+    public String payNum;
     public int payment_way;
     public TimeInfo sendTime;
     public int status; // 订单状态 0:提交订单,1已支付, 2:仓库配货 3:商品出库 4:等待收货 5:完成 6待退货 7已退货

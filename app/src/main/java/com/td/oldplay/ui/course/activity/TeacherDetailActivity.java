@@ -23,14 +23,18 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alipay.sdk.app.PayTask;
 import com.td.oldplay.R;
 import com.td.oldplay.base.EventMessage;
 import com.td.oldplay.base.adapter.BasePagerAdapter;
 import com.td.oldplay.bean.CourseBean;
+import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.contants.MContants;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
+import com.td.oldplay.pay.weixin.WechatInfo;
+import com.td.oldplay.pay.weixin.WeixPayUtils;
 import com.td.oldplay.pay.zhifubao.PayResult;
 import com.td.oldplay.permission.MPermission;
 import com.td.oldplay.permission.annotation.OnMPermissionDenied;
@@ -44,6 +48,7 @@ import com.td.oldplay.ui.course.fragment.ShopFragment;
 import com.td.oldplay.ui.live.LinkeNumberInfo;
 import com.td.oldplay.ui.live.LiveBaseActivity;
 import com.td.oldplay.ui.live.LiveHelper;
+import com.td.oldplay.ui.shop.activity.OrdersConfirmActivity;
 import com.td.oldplay.ui.window.CustomDialog;
 import com.td.oldplay.ui.window.PayAlertDialog;
 import com.td.oldplay.ui.window.PayTypeDialog;
@@ -55,6 +60,7 @@ import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 import com.td.oldplay.widget.password.PasswordInputView;
 import com.tencent.av.opengl.ui.GLView;
+import com.tencent.av.sdk.AVView;
 import com.tencent.ilivesdk.ILiveCallBack;
 import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
@@ -62,12 +68,15 @@ import com.tencent.ilivesdk.view.AVRootView;
 import com.tencent.ilivesdk.view.AVVideoView;
 import com.tencent.ilivesdk.view.BaseVideoView;
 import com.tencent.livesdk.ILVLiveManager;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -148,7 +157,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     private CustomDialog RewordDialog;
     private View RewordDialogView;
     private EditText RewordDialogEd;
-    private String Rewordmoney;
+    private String Rewordmoney="";
 
     private PayTypePopupWindow payTypePopupWindow;
     private boolean isPayFromRewoard;
@@ -161,7 +170,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     private PasswordInputView passwordInputView;
     private View dialogView;
-    private String password;
+    private String password="";
 
     private CustomDialog AlerDialog;
 
@@ -173,13 +182,18 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     private String backGroundId;
     private LiveHelper mLiveHelper;
     private boolean isCreate;
+    private boolean isJoin;
 
+    private HashMap<String, Object> param;
+    private IWXAPI api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        api = WXAPIFactory.createWXAPI(this, MContants.WX_APP_ID);
+        param = new HashMap<>();
         teacherId = getIntent().getStringExtra("id");
         courseId = getIntent().getStringExtra("courseId");
         customDialog = new CustomDialog(mContext);
@@ -212,7 +226,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
         //avRootView.setBackground(R.mipmap.renderback);
         avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
-        avRootView.setAutoOrientation(false);
+        // avRootView.setAutoOrientation(false);
         avRootView.setSubMarginY(getResources().getDimensionPixelSize(R.dimen.small_area_margin_top));
         avRootView.setSubMarginX(getResources().getDimensionPixelSize(R.dimen.small_area_marginright));
         avRootView.setSubPadding(getResources().getDimensionPixelSize(R.dimen.small_area_marginbetween));
@@ -225,8 +239,6 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                     final int index = i;
                     AVVideoView avVideoView = avRootView.getViewByIndex(index);
                     avVideoView.setRotate(false);
-                   /* avVideoView.setDiffDirectionRenderMode(BaseVideoView.BaseRenderMode.BLACK_TO_FILL);
-                    avVideoView.setSameDirectionRenderMode(BaseVideoView.BaseRenderMode.SCALE_TO_FIT);*/
                     avVideoView.setGestureListener(new GestureDetector.SimpleOnGestureListener() {
                         @Override
                         public boolean onSingleTapConfirmed(MotionEvent e) {
@@ -239,11 +251,6 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
                 avRootView.getViewByIndex(0).setRotate(false);
 
-                // avRootView.getViewByIndex(0).setDiffDirectionRenderMode(BaseVideoView.BaseRenderMode.BLACK_TO_FILL);
-                // avRootView.getViewByIndex(0).setSameDirectionRenderMode(BaseVideoView.BaseRenderMode.SCALE_TO_FIT);
-
-
-                //avRootView.getViewByIndex(0).setBackground(R.mipmap.renderback);
 
             }
         });
@@ -251,6 +258,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     private void initDialog() {
         payTypeDialog = new PayTypeDialog(mContext, false);
+        payTypeDialog.setScoreVisisble(View.GONE);
         payTypeDialog.setDialogClick(new PayTypeDialog.DialogClick() {
             @Override
             public void onCancel() {
@@ -259,6 +267,13 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
             @Override
             public void onOk(int payType, String scoreId) {
+                param.put("userId", userId);
+                param.put("teacherId", teacherId);
+                if(isPayFromRewoard){
+                    param.put("price",Rewordmoney);
+                }else{
+                    param.put("price",joinMoney);
+                }
                 switch (payType) {
                     case 0:
                         if (passwordDialog != null) {
@@ -268,11 +283,11 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                     case 1:
                         isTeacherDetialPay = true;
                         ToastUtil.show("微信支付");
-
+                        payWechat();
                         break;
                     case 2:
                         ToastUtil.show("支付宝支付");
-
+                        payZhifubao();
                         break;
 
                 }
@@ -350,17 +365,17 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                     return;
                 }
                 passwordDialog.dismiss();
-                if (isPayFromRewoard) {
+           /*     if (isPayFromRewoard) {
                     ToastUtil.show("账户支付打赏");
+                    param.put("type",1);
 
                 } else {
                     ToastUtil.show("账户连麦");
+                    param.put("type",1);
                     paySuccessDialog.setOkStr("开始连麦");
-                }
-                // 账户支付
-                if (paySuccessDialog != null) {
-                    paySuccessDialog.show();
-                }
+                }*/
+                payAccout();
+
 
             }
         });
@@ -535,7 +550,9 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
                         @Override
                         public void onOk() {
-                            mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, teacherId);
+                            AlerDialog.dismiss();
+                            mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, userId);
+                            avRootView.closeUserView(userId, AVView.VIDEO_SRC_TYPE_CAMERA, true);
                         }
                     });
                     AlerDialog.show();
@@ -687,6 +704,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
                         @Override
                         public void onSuccess(String s) {
+                            mLiveHelper.sendC2CCmd(MContants.ACCOUNT_TYPE, "", teacherId, null);
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -904,6 +922,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     @Override
     public void enterRoomComplete(boolean b) {
         isCreate = true;
+        isJoin = true;
         noLive.setVisibility(View.GONE);
         // 重置美颜
         ILiveRoomManager.getInstance().enableBeauty(5);
@@ -952,8 +971,9 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     @Override
     public void cancelInviteView(String identifier) {
+        // getLianmaiMoney();  // 支付连麦
 
-        getLianmaiMoney();  // 支付连麦
+        mLiveHelper.upMemberVideo();
         isPayFromRewoard = false;
         if ((inviteView1 != null)) {
             inviteView1.setVisibility(View.GONE);
@@ -992,13 +1012,114 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     @Override
     public void hostCreateRoom() {
         ToastUtil.show("主播创建房间了");
-        if (isCreate) {
-            noLive.setVisibility(View.GONE);
-        } else {
+        noLive.setVisibility(View.GONE);
+        if (!isJoin) {
             mLiveHelper.joinRoom("1899");
         }
 
     }
+
+
+    private void payZhifubao() {
+        if (isPayFromRewoard) {
+            param.put("type", 1);
+            paySuccessDialog.setOkStr("确定");
+        } else {
+            param.put("type", 2);
+            paySuccessDialog.setOkStr("开始连麦");
+        }
+        HttpManager.getInstance().payZhifubao(param, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+
+            @Override
+            public void onSuccess(final String s) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        PayTask alipay = new PayTask(TeacherDetailActivity.this);
+                        Map<String, String> result = alipay.payV2(s, true);
+                        Log.i("msp", result.toString());
+                        Message msg = new Message();
+                        msg.what = SDK_PAY_FLAG;
+                        msg.obj = result;
+                        mHandler.sendMessage(msg);
+                    }
+                }).start();
+
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+        }));
+    }
+
+    private void payWechat() {
+        if (isPayFromRewoard) {
+            param.put("type", 1);
+            paySuccessDialog.setOkStr("确定");
+        } else {
+            param.put("type", 2);
+            paySuccessDialog.setOkStr("开始连麦");
+        }
+        HttpManager.getInstance().payWechat(param, new HttpSubscriber<WechatInfo>(new OnResultCallBack<WechatInfo>() {
+
+            @Override
+            public void onSuccess(WechatInfo wechatInfo) {
+                WeixPayUtils.pay(api, wechatInfo);
+
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
+        }));
+    }
+
+    private void payAccout() {
+        if (isPayFromRewoard) {
+            param.put("type", 1);
+            paySuccessDialog.setOkStr("确定");
+        } else {
+            param.put("type", 2);
+            paySuccessDialog.setOkStr("开始连麦");
+        }
+        param.put("payPassword",password);
+        HttpManager.getInstance().payAccount(param, new HttpSubscriber<UserBean>(new OnResultCallBack<UserBean>() {
+            @Override
+            public void onSuccess(UserBean userBean) {
+                spUilts.setUser(userBean);
+                // 账户支付
+                if (paySuccessDialog != null) {
+                    paySuccessDialog.show();
+                }
+
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
+        }));
+    }
+
+    private boolean isGoodCars;
 
 
 }

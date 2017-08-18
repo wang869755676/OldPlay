@@ -34,6 +34,7 @@ import com.td.oldplay.http.api.ApiService;
 import com.td.oldplay.http.api.NetWorkAPI;
 import com.td.oldplay.http.exception.ApiException;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
+import com.td.oldplay.pay.weixin.WechatInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -423,5 +424,19 @@ public class HttpManager {
 
     public void quitRoom(String userId,String roomId, Observer<String> observer) {
         toSubscribe(mApiService.quitRoom(userId,roomId), observer);
+    }
+
+
+
+    public void payAccount(HashMap<String,Object> params, Observer<UserBean> observer) {
+        toSubscribe(mApiService.payAccount(params), observer);
+    }
+
+    public void payZhifubao(HashMap<String,Object> params, Observer<String> observer) {
+        toSubscribe(mApiService.payZhifubao(params), observer);
+    }
+
+    public void payWechat(HashMap<String,Object> params, Observer<WechatInfo> observer) {
+        toSubscribe(mApiService.payWechat(params), observer);
     }
 }

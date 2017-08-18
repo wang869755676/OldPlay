@@ -353,6 +353,9 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
             case MContants.AVIMCMD_MUlTI_LINKING:// 主播正在连麦中
                 ToastUtil.show("主播正在连麦中，请稍后");
                 break;
+            case MContants.AUDICE_EXITLIVE://  观众退出房间
+                mLiveView.memberJoin(identifier, nickname);
+                break;
 
 
         }

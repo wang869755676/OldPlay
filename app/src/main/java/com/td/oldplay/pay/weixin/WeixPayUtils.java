@@ -54,7 +54,7 @@ public class WeixPayUtils {
      * @param info
      * @throws JSONException
      */
-    public static void pay(IWXAPI api, WechatInfo info) throws JSONException {
+    public static void pay(IWXAPI api, WechatInfo info){
         PayReq req = new PayReq();
 
         req.appId = info.appid;
@@ -62,7 +62,7 @@ public class WeixPayUtils {
         req.prepayId = info.prepayid;
         req.nonceStr = info.noncestr;
         req.timeStamp = info.sign;
-        req.packageValue = info.packageName;
+        req.packageValue = info.packageX;
         req.sign = info.sign;
         // 在支付之前，如果应用没有注册到微信，应该先调用IWXMsg.registerApp将应用注册到微信
         api.sendReq(req);

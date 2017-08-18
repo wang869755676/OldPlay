@@ -172,4 +172,11 @@ public class NetWorkAPI {
     public final static String GET_SEE_LIVES_AIP= "lnrzb/live/findAudience";
 
     public final static String QUIT_ROOM_AIP= "lnrzb/live/audienceQuit";
+
+
+    public final static String PAY_WECHAT_AIP= "lnrzb/pay/api/weixinPay";
+
+    public final static String PAY_APLIAY_AIP= "lnrzb/pay/api/zhifubaoPay";
+
+    public final static String PAY_ACOUNT_AIP= "lnrzb/pay/api/surplusPay";
 }

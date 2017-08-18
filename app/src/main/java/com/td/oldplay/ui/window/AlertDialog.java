@@ -22,7 +22,6 @@ public class AlertDialog extends Dialog implements View.OnClickListener {
 
     private TextView contentTv;
 
-
     public AlertDialog(@NonNull Context context) {
         super(context, R.style.AlertDialogStyle); //dialog的样式
         this.context = context;
@@ -68,10 +67,21 @@ public class AlertDialog extends Dialog implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.dialog_ok:
-                dismiss();
+                if (alertOk != null) {
+                    alertOk.onClickOk();
+                }
                 break;
         }
     }
 
+    private onAlertOk alertOk;
+
+    public void setAlertOk(onAlertOk alertOk) {
+        this.alertOk = alertOk;
+    }
+
+    public interface onAlertOk {
+        void onClickOk();
+    }
 
 }

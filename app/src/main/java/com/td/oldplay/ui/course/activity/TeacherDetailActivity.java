@@ -157,7 +157,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     private CustomDialog RewordDialog;
     private View RewordDialogView;
     private EditText RewordDialogEd;
-    private String Rewordmoney="";
+    private String Rewordmoney = "";
 
     private PayTypePopupWindow payTypePopupWindow;
     private boolean isPayFromRewoard;
@@ -170,7 +170,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     private PasswordInputView passwordInputView;
     private View dialogView;
-    private String password="";
+    private String password = "";
 
     private CustomDialog AlerDialog;
 
@@ -186,6 +186,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     private HashMap<String, Object> param;
     private IWXAPI api;
+    private boolean isLiveing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -269,10 +270,10 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             public void onOk(int payType, String scoreId) {
                 param.put("userId", userId);
                 param.put("teacherId", teacherId);
-                if(isPayFromRewoard){
-                    param.put("price",Rewordmoney);
-                }else{
-                    param.put("price",joinMoney);
+                if (isPayFromRewoard) {
+                    param.put("price", Rewordmoney);
+                } else {
+                    param.put("price", joinMoney);
                 }
                 switch (payType) {
                     case 0:
@@ -441,8 +442,9 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMessage(EventMessage message) {
         if ("changeCourseVideo".equals(message.action)) {
-
+            ILiveRoomManager.getInstance().onPause();
             dianbo.setVisibility(View.VISIBLE);
+            noLive.setVisibility(View.GONE);
             videoplayer.setUp(paths[position], JCVideoPlayer.SCREEN_LAYOUT_NORMAL, "");
             videoplayer.startVideo();
             position++;
@@ -643,7 +645,10 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             case R.id.dianbo_back:
                 JCVideoPlayer.releaseAllVideos();
                 dianbo.setVisibility(View.GONE);
-
+                ILiveRoomManager.getInstance().onResume();
+                if (!isLiveing) {
+                    noLive.setVisibility(View.VISIBLE);
+                }
                 break;
         }
     }
@@ -923,6 +928,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     public void enterRoomComplete(boolean b) {
         isCreate = true;
         isJoin = true;
+        isJoin=true;
         noLive.setVisibility(View.GONE);
         // 重置美颜
         ILiveRoomManager.getInstance().enableBeauty(5);
@@ -1005,6 +1011,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     }
 
     public void forceQuitRoom() {
+        isLiveing=false;
         ILiveRoomManager.getInstance().onPause();
         noLive.setVisibility(View.VISIBLE);
     }
@@ -1095,7 +1102,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             param.put("type", 2);
             paySuccessDialog.setOkStr("开始连麦");
         }
-        param.put("payPassword",password);
+        param.put("payPassword", password);
         HttpManager.getInstance().payAccount(param, new HttpSubscriber<UserBean>(new OnResultCallBack<UserBean>() {
             @Override
             public void onSuccess(UserBean userBean) {

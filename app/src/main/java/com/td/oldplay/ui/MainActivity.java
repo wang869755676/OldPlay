@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
+import com.td.oldplay.bean.UserBean;
 import com.td.oldplay.contants.MContants;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
@@ -34,7 +35,7 @@ import com.td.oldplay.utils.ToastUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jpush.android.api.JPushInterface;
-
+import io.reactivex.disposables.Disposable;
 
 
 public class MainActivity extends BaseFragmentActivity {
@@ -76,7 +77,28 @@ public class MainActivity extends BaseFragmentActivity {
             startActivity(i);
             PrefUtils.putString(mContext, MContants.PRE_SCORE_KEY, "");
         }
+        refreshUser();
 
+    }
+
+    private void refreshUser() {
+        HttpManager.getInstance().refreshUser(userId, new HttpSubscriber<String>(new OnResultCallBack<UserBean>() {
+
+            @Override
+            public void onSuccess(UserBean userBean) {
+                spUilts.setUser(userBean);
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
+        }));
     }
 
     private void init() {
@@ -94,7 +116,7 @@ public class MainActivity extends BaseFragmentActivity {
         }
 
         transaction = getSupportFragmentManager().beginTransaction();
-        tabMe=new HomeMyFragment();
+        tabMe = new HomeMyFragment();
         transaction.add(R.id.main_contianer, tabMe);
         transaction.show(tabMe).commit();
 
@@ -174,6 +196,7 @@ public class MainActivity extends BaseFragmentActivity {
 
 
     public static boolean isForeground = false;
+
     @Override
     protected void onResume() {
         isForeground = true;

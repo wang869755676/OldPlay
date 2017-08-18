@@ -60,6 +60,9 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
         ILVLiveManager.getInstance().quitRoom(null);
     }
 
+    public void toggleMic(boolean isMis) {
+        ILiveRoomManager.getInstance().enableMic(isMis);
+    }
     /**
      * 创建房间
      */

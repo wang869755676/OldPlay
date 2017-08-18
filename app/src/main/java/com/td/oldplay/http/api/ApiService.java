@@ -384,4 +384,8 @@ public interface ApiService {
     @FormUrlEncoded
     @POST(NetWorkAPI.PAY_ACOUNT_AIP)
     Observable<ApiResponse<UserBean>> payAccount(@FieldMap() HashMap<String, Object> maps);
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.REFRESH_USER_AIP)
+    Observable<ApiResponse<String>> refreshUser(@Field("userId") String userId);
 }

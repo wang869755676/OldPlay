@@ -439,4 +439,8 @@ public class HttpManager {
     public void payWechat(HashMap<String,Object> params, Observer<WechatInfo> observer) {
         toSubscribe(mApiService.payWechat(params), observer);
     }
+
+    public void refreshUser(String userId, Observer<String> observer) {
+        toSubscribe(mApiService.refreshUser(userId), observer);
+    }
 }

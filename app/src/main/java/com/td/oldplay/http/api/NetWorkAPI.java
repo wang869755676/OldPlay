@@ -179,4 +179,7 @@ public class NetWorkAPI {
     public final static String PAY_APLIAY_AIP= "lnrzb/pay/api/zhifubaoPay";
 
     public final static String PAY_ACOUNT_AIP= "lnrzb/pay/api/surplusPay";
+
+
+    public final static String REFRESH_USER_AIP= "lnrzb/user/refreshUse";
 }

@@ -232,6 +232,7 @@ public class CourseFragment extends BaseFragment implements
                     }
                     return;
                 }
+                accountDialog.dismiss();
                 if (passwordDialog != null) {
                     passwordDialog.show();
                 }

@@ -8,6 +8,7 @@ import android.os.Handler;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
+import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.ui.live.LiveLoginHelper;
 import com.td.oldplay.utils.ToastUtil;
 import com.tencent.ilivesdk.ILiveCallBack;

@@ -100,16 +100,16 @@ public class ConsumptionActivity extends BaseFragmentActivity {
             llOther.setVisibility(View.VISIBLE);
             otenerContent.setText(rechargeInfo.detail);
         }
-
+//0:余额,1:微信,2:支付宝
         switch (rechargeInfo.payType) {
             case 0:
-                conZhifuType.setText("支付宝");
+                conZhifuType.setText("账户余额");
                 break;
             case 1:
                 conZhifuType.setText("微信");
                 break;
             case 2:
-                conZhifuType.setText("账户余额");
+                conZhifuType.setText("支付宝");
                 llAcount.setVisibility(View.GONE);
                 break;
         }

@@ -82,8 +82,9 @@ public abstract class LiveBaseActivity extends BaseFragmentActivity {
     /**
      *  观众端实现连麦---主播同意连麦
      * @param identifier
+     * @param b
      */
-    public abstract void cancelInviteView(String identifier);
+    public abstract void cancelInviteView(String identifier, boolean b);
 
 
     /**
@@ -125,5 +126,12 @@ public abstract class LiveBaseActivity extends BaseFragmentActivity {
      * 其中一个 连麦 关闭之后，去连麦另外的一个            主播端实现
      */
     public void linkOther() {
+    }
+
+    /**
+     *  主播还没有开启连麦                观众端实现
+     */
+    public  void linkedNoStart(){
+
     }
 }

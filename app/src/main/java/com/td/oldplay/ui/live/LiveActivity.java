@@ -1,15 +1,12 @@
 package com.td.oldplay.ui.live;
 
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -20,7 +17,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
@@ -134,7 +130,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
             @Override
             public void onSuccess(Float aFloat) {
-                money=aFloat;
+                money = aFloat;
             }
 
             @Override
@@ -165,20 +161,25 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         liveLianmai.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (currentLinked != null) {
+           /*     if (currentLinked != null) {
                     mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, currentLinked.id);
                     avRootView.closeUserView(currentLinked.id, AVView.VIDEO_SRC_TYPE_CAMERA, true);
                     //mLiveHelper.downMemberVideo();
-                }
-              /*  if (isChecked) {
+                }*/
+                if (isChecked) {
                     isCanLinked = false;
                     liveLianmai.setText("开始连麦");
                     inviteView1.setVisibility(View.GONE);
+                    if (currentLinked != null) {
+                        mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, currentLinked.id);
+                        avRootView.closeUserView(currentLinked.id, AVView.VIDEO_SRC_TYPE_CAMERA, true);
+                        //mLiveHelper.downMemberVideo();
+                    }
                 } else {
                     if (customDialog != null) {
                         customDialog.show();
                     }
-                }*/
+                }
 
             }
         });
@@ -334,10 +335,10 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
                         avRootView.closeUserView(currentLinked.id, AVView.VIDEO_SRC_TYPE_CAMERA, true);*/
                     mLiveHelper.downMemberVideo();
                 }
-               /* if (liveLianmai.isChecked()) {
+                if (liveLianmai.isChecked()) {
                     if (currentLinked != null) {
-                       *//* mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, currentLinked.id);
-                        avRootView.closeUserView(currentLinked.id, AVView.VIDEO_SRC_TYPE_CAMERA, true);*//*
+                        mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, currentLinked.id);
+                        avRootView.closeUserView(currentLinked.id, AVView.VIDEO_SRC_TYPE_CAMERA, true);
                         mLiveHelper.downMemberVideo();
                     }
                     liveLianmai.setText("开始连麦");
@@ -346,7 +347,6 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
                         customDialog.show();
                     }
                 }
-*/
                 break;
         }
 
@@ -435,7 +435,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
             @Override
             public void onSuccess(String s) {
-                isCanLinked = false;
+                isCanLinked = true;
                 ToastUtil.show("已开启连麦");
                 inviteView1.setVisibility(View.VISIBLE);
                 inviteView1.setText("等待观众连麦中");
@@ -480,6 +480,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
             @Override
             public void onOk() {
                 linkDialog.dismiss();
+                hideLinkView();
                 // 对连麦者发送 消息 同意
                 mLiveHelper.sendC2CCmd(MContants.AVIMCMD_MUlTI_JOIN, "", currentLinked.id, new ILiveCallBack() {
                     @Override
@@ -585,25 +586,30 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
     @Override
     public void showInviteDialog(LinkeNumberInfo identifier) {
-        if (isLinking) {
+        if (isCanLinked) {   // 开启连麦
+            if (isLinking) {
 
-            // 可以允许多个连麦
+                // 可以允许多个连麦
          /*   if (interactionDataSource == null)
                 interactionDataSource = new LinkedList<>();
             interactionDataSource.add(identifier);*/
 
-            mLiveHelper.sendC2CCmd(MContants.AVIMCMD_MUlTI_LINKING, "", currentLinked.id, null);
-        } else {
-            currentLinked = identifier;
-            linkDialog.setContent(identifier.nickName + "请求与您连麦");
-            linkDialog.show();
+                mLiveHelper.sendC2CCmd(MContants.AVIMCMD_MUlTI_LINKING, "", currentLinked.id, null);
+            } else {
+                currentLinked = identifier;
+                linkDialog.setContent(identifier.nickName + "请求与您连麦");
+                linkDialog.show();
 
+            }
+
+        } else {    // 开启连麦
+            mLiveHelper.sendC2CCmd(MContants.AVIMCMD_MUlTI_NOSTARTLINK, "", identifier.id, null);
         }
 
     }
 
     @Override
-    public void cancelInviteView(String identifier) {
+    public void cancelInviteView(String identifier, boolean b) {
 
     }
 
@@ -699,5 +705,9 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
                 addDisposable(d);
             }
         }));
+    }
+
+    private void hideLinkView() {
+        inviteView1.setVisibility(View.GONE);
     }
 }

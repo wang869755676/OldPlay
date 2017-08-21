@@ -63,6 +63,8 @@ public class MContants {
     public static final int AVIMCMD_MUlTI_JOIN = AVIMCMD_MULTI_CANCEL_INTERACT + 1;       // 同意互动，
     public static final int AVIMCMD_MUlTI_REFUSE = AVIMCMD_MUlTI_JOIN + 1;      // 拒绝互动，
     public static final int AVIMCMD_MUlTI_LINKING = AVIMCMD_MUlTI_REFUSE+ 1;      // 主播正在连麦，
+    public static final int AVIMCMD_MUlTI_NOSTARTLINK = AVIMCMD_MUlTI_LINKING+ 1;      // 主播为开启连麦，
+
 
     public static final int AVIMCMD_TEXT = -1;         // 普通的聊天消息
 

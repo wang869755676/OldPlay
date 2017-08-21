@@ -8,7 +8,6 @@ import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -48,7 +47,6 @@ import com.td.oldplay.ui.course.fragment.ShopFragment;
 import com.td.oldplay.ui.live.LinkeNumberInfo;
 import com.td.oldplay.ui.live.LiveBaseActivity;
 import com.td.oldplay.ui.live.LiveHelper;
-import com.td.oldplay.ui.shop.activity.OrdersConfirmActivity;
 import com.td.oldplay.ui.window.CustomDialog;
 import com.td.oldplay.ui.window.PayAlertDialog;
 import com.td.oldplay.ui.window.PayTypeDialog;
@@ -66,7 +64,6 @@ import com.tencent.ilivesdk.ILiveConstants;
 import com.tencent.ilivesdk.core.ILiveRoomManager;
 import com.tencent.ilivesdk.view.AVRootView;
 import com.tencent.ilivesdk.view.AVVideoView;
-import com.tencent.ilivesdk.view.BaseVideoView;
 import com.tencent.livesdk.ILVLiveManager;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -337,7 +334,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             @Override
             public void onnext() {
                 if (!isPayFromRewoard) {
-                    //reQuestLink();
+                    hideLinkView();
+                    isLinking = true;
                     mLiveHelper.upMemberVideo();
                 }
             }
@@ -366,15 +364,6 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                     return;
                 }
                 passwordDialog.dismiss();
-           /*     if (isPayFromRewoard) {
-                    ToastUtil.show("账户支付打赏");
-                    param.put("type",1);
-
-                } else {
-                    ToastUtil.show("账户连麦");
-                    param.put("type",1);
-                    paySuccessDialog.setOkStr("开始连麦");
-                }*/
                 payAccout();
 
 
@@ -386,23 +375,6 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         AlerDialog.setTitleVisible(View.GONE);
         AlerDialog.setTitleVisible(View.GONE);
 
-    /*    accountDialog = new PayAlertDialog(mContext, true, true);
-        accountDialog.setDialogClick(new PayAlertDialog.DialogClick() {
-            @Override
-            public void onBack() {
-                if (payTypeDialog != null) {
-                    payTypeDialog.show();
-                }
-            }
-
-            @Override
-            public void onnext() {
-                if (passwordDialog != null) {
-                    passwordDialog.show();
-                }
-            }
-        });
-*/
     }
 
     private void getData() {
@@ -552,6 +524,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
                         @Override
                         public void onOk() {
+                            isLinking=false;
                             AlerDialog.dismiss();
                             mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, userId);
                             avRootView.closeUserView(userId, AVView.VIDEO_SRC_TYPE_CAMERA, true);
@@ -709,6 +682,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
                         @Override
                         public void onSuccess(String s) {
+                            //finish();
                             mLiveHelper.sendC2CCmd(MContants.ACCOUNT_TYPE, "", teacherId, null);
                             new Thread(new Runnable() {
                                 @Override
@@ -783,12 +757,12 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
     @Override
     public void onCancel() {
-
+        customDialog.dismiss();
     }
 
     @Override
     public void onOk() {
-
+        customDialog.dismiss();
         payTypeDialog.setTitle("支付" + joinMoney + "元与直播连麦");
         payTypeDialog.setScoreVisisble(View.GONE);
         payTypeDialog.show();
@@ -928,7 +902,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     public void enterRoomComplete(boolean b) {
         isCreate = true;
         isJoin = true;
-        isJoin=true;
+        isJoin = true;
         noLive.setVisibility(View.GONE);
         // 重置美颜
         ILiveRoomManager.getInstance().enableBeauty(5);
@@ -962,6 +936,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 } else {
                     hideLoading();
                     avRootView.clearUserView();
+                    // 暂时隐藏
                     finish();
                 }
             }
@@ -976,14 +951,27 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     }
 
     @Override
-    public void cancelInviteView(String identifier) {
-        // getLianmaiMoney();  // 支付连麦
+    public void cancelInviteView(String identifier, boolean b) {
+        if (b) {
+            getLianmaiMoney();  // 支付连麦
+            // mLiveHelper.upMemberVideo();
+        } else {
+            /// 主播拒绝连麦
+            isPayFromRewoard = false;
+            if ((inviteView1 != null)) {
+                inviteView1.setVisibility(View.GONE);
+                isLinking = false;
+            }
+        }
 
-        mLiveHelper.upMemberVideo();
-        isPayFromRewoard = false;
+
+    }
+
+    @Override
+    public void linkedNoStart() {
         if ((inviteView1 != null)) {
             inviteView1.setVisibility(View.GONE);
-            isLinking = true;
+            isLinking = false;
         }
     }
 
@@ -1011,7 +999,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     }
 
     public void forceQuitRoom() {
-        isLiveing=false;
+        isLiveing = false;
         ILiveRoomManager.getInstance().onPause();
         noLive.setVisibility(View.VISIBLE);
     }

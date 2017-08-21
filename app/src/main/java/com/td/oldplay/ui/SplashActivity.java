@@ -33,6 +33,8 @@ public class SplashActivity extends BaseFragmentActivity {
             @Override
             public void run() {
                 if (spUilts.getIsLogin()) {
+                    /*startActivity(new Intent(mContext, MainActivity.class));
+                    finish();*/
                     LiveLoginHelper.iLiveLogin(userBean.userId, userBean.userSig, new ILiveCallBack() {
                         @Override
                         public void onSuccess(Object data) {

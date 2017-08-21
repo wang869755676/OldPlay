@@ -218,7 +218,13 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
             @Override
             public void onSuccess(final UserBean userBean) {
                 if (userBean != null) {
-
+                    /*hideLoading();
+                    spUilts.setUser(userBean);
+                    spUilts.setUserId(userBean.userId);
+                    spUilts.setIsLogin(true);
+                    JPushInterface.setAlias(mContext, 1, userBean.userId);
+                    startActivity(new Intent(mContext, MainActivity.class));
+                    finish();*/
                    loginLiveSsdk(userBean);
 
                 }

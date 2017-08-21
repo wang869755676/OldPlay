@@ -325,10 +325,10 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
                 mLiveView.showInviteDialog(new LinkeNumberInfo(identifier, nickname));
                 break;
             case MContants.AVIMCMD_MUlTI_JOIN:  // 同意互动主播
-                mLiveView.cancelInviteView(identifier);
+                mLiveView.cancelInviteView(identifier,true);
                 break;
             case MContants.AVIMCMD_MUlTI_REFUSE:
-                mLiveView.cancelInviteView(identifier);
+                mLiveView.cancelInviteView(identifier,false);
                 ToastUtil.show("主播拒绝与您连麦");
                 break;
             case MContants.AVIMCMD_EXITLIVE:
@@ -358,6 +358,10 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
                 break;
             case MContants.AUDICE_EXITLIVE://  观众退出房间
                 mLiveView.memberJoin(identifier, nickname);
+                break;
+            case MContants.AVIMCMD_MUlTI_NOSTARTLINK://  主播为开启来连麦
+                mLiveView.linkedNoStart();
+                ToastUtil.show("主播还未开启连麦权限");
                 break;
 
 

@@ -123,8 +123,30 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         initDailog();
         initView();
         mLiveHelper.createRoom("1899");
+        getData();
 
 
+    }
+
+    //// TODO: 2017/8/21  获得连麦的金额 
+    private void getData() {
+        HttpManager.getInstance().getLinkMoney(userId, new HttpSubscriber<Float>(new OnResultCallBack<Float>() {
+
+            @Override
+            public void onSuccess(Float aFloat) {
+                money=aFloat;
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
+        }));
     }
 
 
@@ -144,9 +166,9 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (currentLinked != null) {
-                        mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, currentLinked.id);
-                        avRootView.closeUserView(currentLinked.id, AVView.VIDEO_SRC_TYPE_CAMERA, true);
-                          //mLiveHelper.downMemberVideo();
+                    mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, currentLinked.id);
+                    avRootView.closeUserView(currentLinked.id, AVView.VIDEO_SRC_TYPE_CAMERA, true);
+                    //mLiveHelper.downMemberVideo();
                 }
               /*  if (isChecked) {
                     isCanLinked = false;

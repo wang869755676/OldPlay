@@ -443,4 +443,8 @@ public class HttpManager {
     public void refreshUser(String userId, Observer<String> observer) {
         toSubscribe(mApiService.refreshUser(userId), observer);
     }
+
+    public void getLinkMoney(String userId, Observer<Float> observer) {
+        toSubscribe(mApiService.getLinkMoney(userId), observer);
+    }
 }

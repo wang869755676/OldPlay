@@ -184,4 +184,6 @@ public class NetWorkAPI {
     public final static String REFRESH_USER_AIP= "lnrzb/user/refreshUser";
 
     public final static String GET_LINK_MONEY_AIP= "lnrzb/pay/api/findConnectPrice";
+
+    public final static String WITHDRAW_MONEY_AIP= "lnrzb/mine/withdrawDeposit";
 }

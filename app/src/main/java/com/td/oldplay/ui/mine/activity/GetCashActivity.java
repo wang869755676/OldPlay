@@ -11,14 +11,20 @@ import android.widget.EditText;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
+import com.td.oldplay.http.HttpManager;
+import com.td.oldplay.http.callback.OnResultCallBack;
+import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.window.CustomDialog;
 import com.td.oldplay.ui.window.PayAlertDialog;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 import com.td.oldplay.widget.password.PasswordInputView;
 
+import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 public class GetCashActivity extends BaseFragmentActivity
         implements View.OnClickListener, TextWatcher {
@@ -53,6 +59,7 @@ public class GetCashActivity extends BaseFragmentActivity
     private PayAlertDialog alertDialog;
 
     private PayAlertDialog paySuccessDilaog;
+    private HashMap<String, Object> params = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +73,7 @@ public class GetCashActivity extends BaseFragmentActivity
         commit.setOnClickListener(this);
         cashMoney.setHint("可提现" + totalMoney);
         initListener();
+        params.put("userId", userId);
 
 
     }
@@ -89,6 +97,7 @@ public class GetCashActivity extends BaseFragmentActivity
                     ToastUtil.show("输入密码");
                     return;
                 }
+                params.put("payPassword", password);
                 customDialog.dismiss();
                 commitServer();
             }
@@ -137,7 +146,27 @@ public class GetCashActivity extends BaseFragmentActivity
      * 提交到服务器
      */
     private void commitServer() {
-        paySuccessDilaog.show();
+
+        HttpManager.getInstance().withDrawMoney(params, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+
+
+            @Override
+            public void onSuccess(String s) {
+                paySuccessDilaog.show();
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+
+            }
+        }));
+
     }
 
     private boolean checkInput() {
@@ -159,7 +188,9 @@ public class GetCashActivity extends BaseFragmentActivity
             ToastUtil.show("开户银行！");
             return false;
         }*/
-
+        params.put("money", cash);
+        params.put("cardNo", num);
+        params.put("name", bankName);
         return true;
     }
 

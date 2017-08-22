@@ -129,7 +129,7 @@ public class HttpManager {
                 .subscribe(s);
     }
 
-  //============用户登录
+    //============用户登录
     public void registerUser(HashMap<String, Object> params, Observer<String> observer) {
         toSubscribe(mApiService.registerUser(params), observer);
     }
@@ -186,15 +186,16 @@ public class HttpManager {
         toSubscribe(mApiService.getTeachersInCourse(page, id), observer);
     }
 
-    public void getcoursesInTeacher(int page,String userId, String teacherId,String courseId, Observer<List<CourseBean>> observer) {
-        toSubscribe(mApiService.getcoursesInTeacher(page, userId,teacherId,courseId), observer);
+    public void getcoursesInTeacher(int page, String userId, String teacherId, String courseId, Observer<List<CourseBean>> observer) {
+        toSubscribe(mApiService.getcoursesInTeacher(page, userId, teacherId, courseId), observer);
     }
 
     public void getCommentsInTeacher(int page, String id, Observer<List<CommentBean>> observer) {
         toSubscribe(mApiService.getCommentsInTeacher(page, id), observer);
     }
+
     public void getCommentsInTeacher(String id, Observer<List<CommentBean>> observer) {
-        toSubscribe(mApiService.getCommentsInTeacher( id), observer);
+        toSubscribe(mApiService.getCommentsInTeacher(id), observer);
     }
 
     public void getHomeCourse(Observer<HomeCourseInfo> observer) {
@@ -202,30 +203,32 @@ public class HttpManager {
     }
 
 
-    public void searchCommentsTeachers(String name,int type, Observer<List<CourseTypeBean>> observer) {
-        toSubscribe(mApiService.searchCommentsTeachers(name,type), observer);
+    public void searchCommentsTeachers(String name, int type, Observer<List<CourseTypeBean>> observer) {
+        toSubscribe(mApiService.searchCommentsTeachers(name, type), observer);
     }
 
     public void getShopInTeacher(String id, int page, int scortType, int scort, Observer<List<ShopBean>> observer) {
         toSubscribe(mApiService.getShopInTeacher(id, page, scortType, scort), observer);
     }
 
-      public void getCourseDetail(String id, String courseId,Observer<TeacherDetail> observer) {
-        toSubscribe(mApiService.getCourseDetail(id,courseId), observer);
+    public void getCourseDetail(String id, String courseId, Observer<TeacherDetail> observer) {
+        toSubscribe(mApiService.getCourseDetail(id, courseId), observer);
     }
 
-    public void isConcernTeacher(String userId,String teacherId, Observer<Integer> observer) {
-        toSubscribe(mApiService.isConcernTeacher(userId,teacherId), observer);
+    public void isConcernTeacher(String userId, String teacherId, Observer<Integer> observer) {
+        toSubscribe(mApiService.isConcernTeacher(userId, teacherId), observer);
     }
 
-    public void openCourse(String userId,String courseId, Observer<String> observer) {
-        toSubscribe(mApiService.openCourse(userId,courseId), observer);
+    public void openCourse(String userId, String courseId, Observer<String> observer) {
+        toSubscribe(mApiService.openCourse(userId, courseId), observer);
     }
-    public void concernTeacher(String userId,String teacherId, Observer<String> observer) {
-        toSubscribe(mApiService.concernTeacher(userId,teacherId), observer);
+
+    public void concernTeacher(String userId, String teacherId, Observer<String> observer) {
+        toSubscribe(mApiService.concernTeacher(userId, teacherId), observer);
     }
-    public void commentTeacher(String userId,String teacherId,String content, Observer<String> observer) {
-        toSubscribe(mApiService.commentTeacher(userId,teacherId,content), observer);
+
+    public void commentTeacher(String userId, String teacherId, String content, Observer<String> observer) {
+        toSubscribe(mApiService.commentTeacher(userId, teacherId, content), observer);
     }
 
     //========================
@@ -241,16 +244,16 @@ public class HttpManager {
         toSubscribe(mApiService.getShopByType(page, type, scortType, scort), observer);
     }
 
-    public void getShopDetail(String shopId,String userId ,Observer<ShopDetail> observer) {
-        toSubscribe(mApiService.getShopDetail(shopId,userId), observer);
+    public void getShopDetail(String shopId, String userId, Observer<ShopDetail> observer) {
+        toSubscribe(mApiService.getShopDetail(shopId, userId), observer);
     }
 
     public void getShopComments(String shopId, int page, Observer<List<CommentBean>> observer) {
         toSubscribe(mApiService.getShopComments(shopId, page), observer);
     }
 
-    public void createOrderCars(List<String> carIds,String userId, Observer<List<OrderBean>> observer) {
-        toSubscribe(mApiService.createOrderCars(carIds,userId), observer);
+    public void createOrderCars(List<String> carIds, String userId, Observer<List<OrderBean>> observer) {
+        toSubscribe(mApiService.createOrderCars(carIds, userId), observer);
     }
 
     public void createOrder(HashMap<String, Object> params, Observer<OrderBean> observer) {
@@ -268,6 +271,7 @@ public class HttpManager {
     public void deleteCars(String carId, Observer<String> observer) {
         toSubscribe(mApiService.deleteCars(carId), observer);
     }
+
     public void updateCars(String datas, Observer<String> observer) {
         toSubscribe(mApiService.updateCars(datas), observer);
     }
@@ -276,15 +280,15 @@ public class HttpManager {
         toSubscribe(mApiService.getHomeShop(), observer);
     }
 
-    public void applyScore(String userId,List<String> orderIds,Observer<Float> observer) {
-        toSubscribe(mApiService.applyScore(userId,orderIds), observer);
+    public void applyScore(String userId, List<String> orderIds, Observer<Float> observer) {
+        toSubscribe(mApiService.applyScore(userId, orderIds), observer);
     }
 
-    public void searchShop(HashMap<String,Object> params,Observer<List<ShopBean>> observer) {
+    public void searchShop(HashMap<String, Object> params, Observer<List<ShopBean>> observer) {
         toSubscribe(mApiService.searchShop(params), observer);
     }
 
-    public void getShopTypesById(int parentType,Observer<List<ShopType>> observer) {
+    public void getShopTypesById(int parentType, Observer<List<ShopType>> observer) {
         toSubscribe(mApiService.getShopTypesById(parentType), observer);
     }
     //=============================
@@ -316,8 +320,9 @@ public class HttpManager {
     public void getMyConCerns(String userId, Observer<List<TeacherBean>> observer) {
         toSubscribe(mApiService.getMyConCerns(userId), observer);
     }
-    public void getMyOrders(String userId, int page,Observer<List<OrderBean>> observer) {
-        toSubscribe(mApiService.getMyOrders(userId,page), observer);
+
+    public void getMyOrders(String userId, int page, Observer<List<OrderBean>> observer) {
+        toSubscribe(mApiService.getMyOrders(userId, page), observer);
     }
 
     //=========================论坛=========================
@@ -329,8 +334,8 @@ public class HttpManager {
         toSubscribe(mApiService.getForumsNyId(borad, page), observer);
     }
 
-    public void getForumDetials(String id,String userId, Observer<ForumDetial> observer) {
-        toSubscribe(mApiService.getForumDetials(id,userId), observer);
+    public void getForumDetials(String id, String userId, Observer<ForumDetial> observer) {
+        toSubscribe(mApiService.getForumDetials(id, userId), observer);
     }
 
     public void getForumComment(String id, int page, Observer<List<CommentBean>> observer) {
@@ -357,10 +362,9 @@ public class HttpManager {
         toSubscribe(mApiService.postForumVoicec(params), observer);
     }
 
-    public void forumLikeAction(String topicId,String userId,boolean action, Observer<String> observer) {
-        toSubscribe(mApiService.forumLikeAction(topicId,userId,action), observer);
+    public void forumLikeAction(String topicId, String userId, boolean action, Observer<String> observer) {
+        toSubscribe(mApiService.forumLikeAction(topicId, userId, action), observer);
     }
-
 
 
     public void getMyWallets(HashMap<String, Object> params, Observer<WalletBean> observer) {
@@ -371,72 +375,76 @@ public class HttpManager {
         toSubscribe(mApiService.walletDetail(id), observer);
     }
 
-    public void getMyForums(String userid,int page, Observer<List<ForumBean>> observer) {
-        toSubscribe(mApiService.getMyForums(userid,page), observer);
-    }
-    public void feedBack(String userid,String content, Observer<String> observer) {
-        toSubscribe(mApiService.feedBack(userid,content), observer);
+    public void getMyForums(String userid, int page, Observer<List<ForumBean>> observer) {
+        toSubscribe(mApiService.getMyForums(userid, page), observer);
     }
 
-    public void commentShop(String userid,List<String> goodId,List<String>  content, Observer<String> observer) {
-        toSubscribe(mApiService.commentShop(userid,goodId,content), observer);
+    public void feedBack(String userid, String content, Observer<String> observer) {
+        toSubscribe(mApiService.feedBack(userid, content), observer);
+    }
+
+    public void commentShop(String userid, List<String> goodId, List<String> content, Observer<String> observer) {
+        toSubscribe(mApiService.commentShop(userid, goodId, content), observer);
     }
 
     public void orderDetails(String orderId, Observer<OrderDetail> observer) {
         toSubscribe(mApiService.orderDetails(orderId), observer);
     }
+
     public void confirmOrder(String orderId, Observer<String> observer) {
         toSubscribe(mApiService.confirmOrder(orderId), observer);
     }
 
 
     // 支付相关的
-    public void getPayScoreRule( Observer<ScoreOffset> observer) {
+    public void getPayScoreRule(Observer<ScoreOffset> observer) {
         toSubscribe(mApiService.getPayScoreRule(), observer);
     }
-    public void setJoinMoney(String userId,String price, Observer<String> observer) {
-        toSubscribe(mApiService.setJoinMoney(userId,price), observer);
+
+    public void setJoinMoney(String userId, String price, Observer<String> observer) {
+        toSubscribe(mApiService.setJoinMoney(userId, price), observer);
     }
 
     public void getJoinMoney(String userId, Observer<Float> observer) {
         toSubscribe(mApiService.getJoinMoney(userId), observer);
     }
 
-    public void getPayAccount(String userId,String totalPrice, Observer<PayAccountBefore> observer) {
-        toSubscribe(mApiService.getPayAccount(userId,totalPrice,1), observer);
+    public void getPayAccount(String userId, String totalPrice, Observer<PayAccountBefore> observer) {
+        toSubscribe(mApiService.getPayAccount(userId, totalPrice, 1), observer);
     }
 
 
-    public void getLogistics(String logistic,String logisticnum, Observer<LogisticsBean> observer) {
-        toSubscribe(mApiService.getLogistics(logistic,logisticnum), observer);
+    public void getLogistics(String logistic, String logisticnum, Observer<LogisticsBean> observer) {
+        toSubscribe(mApiService.getLogistics(logistic, logisticnum), observer);
     }
 
 
-    public void creatLiveRoom(String userId,String roomId, Observer<String> observer) {
-        toSubscribe(mApiService.creatLiveRoom(userId,roomId), observer);
+    public void creatLiveRoom(String userId, String roomId, Observer<String> observer) {
+        toSubscribe(mApiService.creatLiveRoom(userId, roomId), observer);
     }
+
     public void quitLiveRoom(String userId, Observer<String> observer) {
         toSubscribe(mApiService.quitLiveRoom(userId), observer);
     }
+
     public void getAudiences(String userId, Observer<List<UserBean>> observer) {
         toSubscribe(mApiService.getAudiences(userId), observer);
     }
 
-    public void quitRoom(String userId,String roomId, Observer<String> observer) {
-        toSubscribe(mApiService.quitRoom(userId,roomId), observer);
+    public void quitRoom(String userId, String roomId, Observer<String> observer) {
+        toSubscribe(mApiService.quitRoom(userId, roomId), observer);
     }
 
 
-
-    public void payAccount(HashMap<String,Object> params, Observer<UserBean> observer) {
+    public void payAccount(HashMap<String, Object> params, Observer<UserBean> observer) {
         toSubscribe(mApiService.payAccount(params), observer);
     }
 
-    public void payZhifubao(HashMap<String,Object> params, Observer<String> observer) {
+    public void payZhifubao(HashMap<String, Object> params, Observer<String> observer) {
         toSubscribe(mApiService.payZhifubao(params), observer);
     }
 
-    public void payWechat(HashMap<String,Object> params, Observer<WechatInfo> observer) {
+    public void payWechat(HashMap<String, Object> params, Observer<WechatInfo> observer) {
         toSubscribe(mApiService.payWechat(params), observer);
     }
 
@@ -446,5 +454,9 @@ public class HttpManager {
 
     public void getLinkMoney(String userId, Observer<Float> observer) {
         toSubscribe(mApiService.getLinkMoney(userId), observer);
+    }
+
+    public void withDrawMoney(HashMap<String, Object> params, Observer<String> observer) {
+        toSubscribe(mApiService.withDrawMoney(params), observer);
     }
 }

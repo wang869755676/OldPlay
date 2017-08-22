@@ -392,4 +392,9 @@ public interface ApiService {
     @FormUrlEncoded
     @POST(NetWorkAPI.GET_LINK_MONEY_AIP)
     Observable<ApiResponse<Float>> getLinkMoney(@Field("userId") String userId);
+
+
+    @FormUrlEncoded
+    @POST(NetWorkAPI.WITHDRAW_MONEY_AIP)
+    Observable<ApiResponse<String>> withDrawMoney(@FieldMap() HashMap<String, Object> maps);
 }

@@ -681,7 +681,8 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
     }
 
-    private void getUserDatas() {
+    private void
+    getUserDatas() {
         HttpManager.getInstance().getAudiences(userId, new HttpSubscriber<List<UserBean>>(new OnResultCallBack<List<UserBean>>() {
 
             @Override

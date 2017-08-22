@@ -683,7 +683,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                         @Override
                         public void onSuccess(String s) {
                             //finish();
-                            mLiveHelper.sendC2CCmd(MContants.ACCOUNT_TYPE, "", teacherId, null);
+                            mLiveHelper.sendC2CCmd(MContants.AUDICE_EXITLIVE, "", teacherId, null);
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {

@@ -212,6 +212,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
                                 return new BannerViewHolder();
                             }
                         });
+                        homrCoureseBanner.start();
                     }
 
                     if (homeCourseInfo.coursesTypeList != null) {
@@ -245,16 +246,20 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         }));
     }
 
+
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         homrCoureseBanner.start();
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
+        homrCoureseBanner.pause();
     }
+
+
 
     @Override
     public void onDestroyView() {

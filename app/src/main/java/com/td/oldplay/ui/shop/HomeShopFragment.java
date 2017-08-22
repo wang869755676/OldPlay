@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,9 +100,16 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
+        Log.e("===", "onResaume------------");
         homrCoureseBanner.start();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        homrCoureseBanner.pause();
     }
 
     @Override
@@ -198,6 +206,7 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
                                 return new HomeCourseFragment.BannerViewHolder();
                             }
                         });
+                        homrCoureseBanner.start();
                     }
 
                     if (homeShopInfo.commendGoodsList != null) {

@@ -293,8 +293,10 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
                     } else if (orderIds != null) {
                         HttpManager.getInstance().applyScore(userId, orderIds, scoreSubcriber);
                     }
+                    params.put("score",0);
                 } else {
                     ortderTotal.setText("￥ " + totalMoney);
+                    params.put("score",1);
                 }
             }
         });

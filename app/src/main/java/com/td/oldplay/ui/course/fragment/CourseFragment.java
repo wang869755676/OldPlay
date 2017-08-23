@@ -296,11 +296,12 @@ public class CourseFragment extends BaseFragment implements
 
     @Override
     public void onCancel() {
-
+        customDialog.dismiss();
     }
 
     @Override
     public void onOk(int payType, String scoreId) {
+        customDialog.dismiss();
         param.put("userId", userId);
         param.put("teacherId",id);
         param.put("type",0);

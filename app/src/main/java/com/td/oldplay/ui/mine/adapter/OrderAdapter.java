@@ -1,6 +1,7 @@
 package com.td.oldplay.ui.mine.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,7 +15,9 @@ import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
 import com.td.oldplay.bean.AddressBean;
 import com.td.oldplay.bean.GoodBean;
 import com.td.oldplay.bean.OrderBean;
+import com.td.oldplay.ui.shop.activity.OrderDetailActivity;
 import com.td.oldplay.ui.shop.adapter.GoodAdapter;
+import com.td.oldplay.utils.ToastUtil;
 
 import java.util.List;
 
@@ -56,28 +59,41 @@ public class OrderAdapter extends CommonAdapter<OrderBean> {
         holder.setText(R.id.item_order_smoney, "合计 " + orderBean.amount_paid);
         recyclerView = holder.getView(R.id.item_goods);
         if (orderBean.orderDetails != null && orderBean.orderDetails.size() > 0) {
-             if(orderBean.orderDetails.get(0).groupBuy!=null){
-                 if(orderBean.orderDetails.get(0).groupBuy.status==1){
-                     holder.setText(R.id.item_order_groupstate,"团购中");
-                     holder.setVisible(R.id.item_order_groupstate,true);
-                     holder.setVisible(R.id.item_order_done_action,false);
-                 }else if(orderBean.orderDetails.get(0).groupBuy.status==2){
-                     holder.setText(R.id.item_order_groupstate,"团购成功");
-                     holder.setVisible(R.id.item_order_groupstate,true);
-                     holder.setVisible(R.id.item_order_done_action,true);
-                 }else if(orderBean.orderDetails.get(0).groupBuy.status==2){
-                     holder.setText(R.id.item_order_groupstate,"团购取消");
-                     holder.setVisible(R.id.item_order_groupstate,true);
-                     holder.setVisible(R.id.item_order_done_action,false);
-                 }
+            if (orderBean.orderDetails.get(0).groupBuy != null) {
+                if (orderBean.orderDetails.get(0).groupBuy.status == 1) {
+                    holder.setText(R.id.item_order_groupstate, "团购中");
+                    holder.setVisible(R.id.item_order_groupstate, true);
+                    holder.setVisible(R.id.item_order_done_action, false);
+                } else if (orderBean.orderDetails.get(0).groupBuy.status == 2) {
+                    holder.setText(R.id.item_order_groupstate, "团购成功");
+                    holder.setVisible(R.id.item_order_groupstate, true);
+                    holder.setVisible(R.id.item_order_done_action, true);
+                } else if (orderBean.orderDetails.get(0).groupBuy.status == 2) {
+                    holder.setText(R.id.item_order_groupstate, "团购取消");
+                    holder.setVisible(R.id.item_order_groupstate, true);
+                    holder.setVisible(R.id.item_order_done_action, false);
+                }
 
-             }else {
-                 holder.setVisible(R.id.item_order_groupstate,false);
-                 holder.setVisible(R.id.item_order_done_action,true);
-             }
+            } else {
+                holder.setVisible(R.id.item_order_groupstate, false);
+                holder.setVisible(R.id.item_order_done_action, true);
+            }
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
             goodAdapter = new GoodAdapter(mContext, R.layout.item_mine_order_inner, orderBean.orderDetails);
             recyclerView.setAdapter(goodAdapter);
+            goodAdapter.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
+                    Intent intent = new Intent(mContext, OrderDetailActivity.class);
+                    intent.putExtra("id", orderBean.orderId);
+                    mContext.startActivity(intent);
+                }
+
+                @Override
+                public boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                    return false;
+                }
+            });
           /*  recyclerView.setAdapter(new CommonAdapter<GoodBean>(mContext, R.layout.item_mine_order_inner, orderBean.goodBeanList) {
                 @Override
                 protected void convert(ViewHolder holder, GoodBean o, int position) {
@@ -113,9 +129,14 @@ public class OrderAdapter extends CommonAdapter<OrderBean> {
             @Override
             public void onClick(View v) {
                 // 确认收货
-                if (actionListener != null) {
-                    actionListener.onAction(3, position, orderBean);
+                if (orderBean.status == 4) {
+                    if (actionListener != null) {
+                        actionListener.onAction(3, position, orderBean);
+                    }
+                } else {
+                    ToastUtil.show("商家还未发货");
                 }
+
             }
         });
 

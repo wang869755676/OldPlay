@@ -387,7 +387,7 @@ public interface ApiService {
 
     @FormUrlEncoded
     @POST(NetWorkAPI.REFRESH_USER_AIP)
-    Observable<ApiResponse<String>> refreshUser(@Field("userId") String userId);
+    Observable<ApiResponse<UserBean>> refreshUser(@Field("userId") String userId);
 
     @FormUrlEncoded
     @POST(NetWorkAPI.GET_LINK_MONEY_AIP)

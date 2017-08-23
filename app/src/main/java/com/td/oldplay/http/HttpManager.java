@@ -448,7 +448,7 @@ public class HttpManager {
         toSubscribe(mApiService.payWechat(params), observer);
     }
 
-    public void refreshUser(String userId, Observer<String> observer) {
+    public void refreshUser(String userId, Observer<UserBean> observer) {
         toSubscribe(mApiService.refreshUser(userId), observer);
     }
 

@@ -42,6 +42,7 @@ import com.td.oldplay.ui.mine.activity.MyAddressActivity;
 import com.td.oldplay.ui.shop.adapter.GoodAdapter;
 import com.td.oldplay.ui.window.AlertDialog;
 import com.td.oldplay.ui.window.CustomDialog;
+import com.td.oldplay.utils.SoftInputUtils;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 import com.td.oldplay.widget.password.PasswordInputView;
@@ -187,6 +188,8 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
                     return;
                 }
                 customDialog.dismiss();
+                params.put("payPassword",password);
+                SoftInputUtils.hideSoftInput(mContext,getWindow());
                 payAccout();
             }
         });
@@ -263,11 +266,11 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
     }
 
     private void setData() {
-        account.setText("账户余额:" + userBean.money + "元");
+        account.setText(String.format("账户余额: % .1f 元",userBean.money));
         if (addressBean != null) {
             buyAddressName.setText("收货人: " + addressBean.consignee);
-            buyAddressTelphone.setText("收货人: " + addressBean.mobile);
-            buyAddressInfo.setText("收货人: " + addressBean.address);
+            buyAddressTelphone.setText("联系电话: " + addressBean.mobile);
+            buyAddressInfo.setText("收货地址: " + addressBean.address);
         }
 
         if (scoreOffset != null) {
@@ -320,6 +323,10 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
                     }
                     params.put("payPassword", password);
                     params.put("payNum", datas.get(0).payNum);
+                    if(addressBean==null ){
+                        ToastUtil.show("请选择收货地址");
+                        return;
+                    }
                     switch (payType) {
                         case 0:
                             if (userBean.money < totalMoney - scoreMoney) {

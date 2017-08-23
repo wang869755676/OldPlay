@@ -176,7 +176,7 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
     }
 
     private void getData() {
-        HttpManager.getInstance().getShopDetail(id, userId,new HttpSubscriber<ShopDetail>(new OnResultCallBack<ShopDetail>() {
+        HttpManager.getInstance().getShopDetail(id, userId, new HttpSubscriber<ShopDetail>(new OnResultCallBack<ShopDetail>() {
 
             @Override
             public void onSuccess(ShopDetail shopDetail) {
@@ -186,7 +186,7 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
 
             @Override
             public void onError(int code, String errorMsg) {
-
+                ToastUtil.show(errorMsg);
             }
 
             @Override
@@ -198,10 +198,10 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
 
     private void setData() {
         if (bean != null) {
-            if(bean.cartCount>0){
+            if (bean.cartCount > 0) {
                 shopDeCarNum.setVisibility(View.VISIBLE);
                 shopDeCarNum.setText(bean.cartCount + "");
-            }else{
+            } else {
                 shopDeCarNum.setVisibility(View.GONE);
             }
 
@@ -259,21 +259,26 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.shop_detail_add_cart:
-                type = 0;
-                if (shopCarDialog == null) {
-                    shopCarDialog = new ShopCarDialog(mContext, this, bean, type);
+                if(bean!=null){
+                    type = 0;
+                    if (shopCarDialog == null) {
+                        shopCarDialog = new ShopCarDialog(mContext, this, bean, type);
+                    }
+                    shopCarDialog.show();
                 }
-                shopCarDialog.show();
+
                 break;
             case R.id.shop_detail_buy:
-                type = 1;
-                if (shopCarDialog == null) {
-                    shopCarDialog = new ShopCarDialog(mContext, this, bean, type);
+                if(bean!=null){
+                    type = 1;
+                    if (shopCarDialog == null) {
+                        shopCarDialog = new ShopCarDialog(mContext, this, bean, type);
+                    }
+                    shopCarDialog.show();
                 }
-                shopCarDialog.show();
                 break;
             case R.id.shop_detail_teacher:
-                if(bean!=null){
+                if (bean != null) {
                     Intent intent = new Intent(mContext, TeacherDetailActivity.class);
                     intent.putExtra("id", bean.userId);
                     startActivity(intent);
@@ -311,12 +316,12 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
             } else if (type == 1) {
                 createOrders();
             }
-        }else if("deleteCar".equals(message.action)){
-            bean.cartCount=message.num;
-            if(bean.cartCount>0){
+        } else if ("deleteCar".equals(message.action)) {
+            bean.cartCount = message.num;
+            if (bean.cartCount > 0) {
                 shopDeCarNum.setVisibility(View.VISIBLE);
                 shopDeCarNum.setText(bean.cartCount + "");
-            }else{
+            } else {
                 shopDeCarNum.setVisibility(View.GONE);
             }
         }
@@ -366,8 +371,8 @@ public class ShopDetailActivity extends BaseFragmentActivity implements View.OnC
             @Override
             public void onSuccess(String s) {
 
-                if(bean!=null){
-                    bean.cartCount+=carNum;
+                if (bean != null) {
+                    bean.cartCount ++;
                     shopDeCarNum.setVisibility(View.VISIBLE);
                     shopDeCarNum.setText(bean.cartCount + "");
                 }

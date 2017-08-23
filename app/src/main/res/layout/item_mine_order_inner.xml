@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:background="#f8f8f8"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -13,8 +15,7 @@
             android:id="@+id/item_order_good_iv"
             android:layout_width="104dp"
             android:layout_height="89dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_launcher" />
+            android:scaleType="fitXY" />
 
         <TextView
             android:id="@+id/item_order_goods_name"

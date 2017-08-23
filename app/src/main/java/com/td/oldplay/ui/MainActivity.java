@@ -82,10 +82,11 @@ public class MainActivity extends BaseFragmentActivity {
     }
 
     private void refreshUser() {
-        HttpManager.getInstance().refreshUser(userId, new HttpSubscriber<String>(new OnResultCallBack<UserBean>() {
+        HttpManager.getInstance().refreshUser(userId, new HttpSubscriber<UserBean>(new OnResultCallBack<UserBean>() {
 
             @Override
             public void onSuccess(UserBean userBean) {
+
                 spUilts.setUser(userBean);
             }
 

@@ -1,6 +1,8 @@
 package com.td.oldplay.bean;
 
-public class MarkDownBean {
+import java.io.Serializable;
+
+public class MarkDownBean implements Serializable{
 
     public int conditions; //  0,//优惠条件类型0:按件数,1:按总价
     public String content;

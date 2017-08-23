@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragmentActivity;
+import com.td.oldplay.bean.GoodBean;
 import com.td.oldplay.bean.OrderDetail;
 import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
@@ -56,6 +57,7 @@ public class OrderDetailActivity extends BaseFragmentActivity implements View.On
 
     private String id;
     private GoodAdapter adapter;
+    private float score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +102,14 @@ public class OrderDetailActivity extends BaseFragmentActivity implements View.On
             orderDetailTime.setText(orderDetail.formatTime);
             orderDetailTotal.setText("合计: " + orderDetail.amount_paid);
             orederConfirmTotal.setText("小计" + orderDetail.amount_payable);
-          //  oreder_confirm_score
+            if(orderDetail.orderDetails!=null){
+                for (GoodBean goodBean:
+                        orderDetail.orderDetails) {
+                    score+=goodBean.score;
+                }
+            }
 
+            orederConfirmScore.setText(String.format("获得%.1f积分",score));
             swipeTarget.setLayoutManager(new LinearLayoutManager(mContext));
             if (orderDetail.orderDetails != null) {
                 swipeTarget.setAdapter(new GoodAdapter(mContext, R.layout.item_confirm_orderr, orderDetail.orderDetails));
@@ -114,10 +122,10 @@ public class OrderDetailActivity extends BaseFragmentActivity implements View.On
             } else {
                 orderDetailAcore.setVisibility(View.GONE);
             }
-
             switch (orderDetail.payment_way) {
                 case 0:
                     orderDetailPay.setText("账户余额:" + orderDetail.amount_paid + "元");
+
                     break;
                 case 1:
                     orderDetailPay.setText("支付宝支付" + orderDetail.amount_paid + "元");
@@ -128,8 +136,8 @@ public class OrderDetailActivity extends BaseFragmentActivity implements View.On
             }
             if (orderDetail.address != null) {
                 buyAddressName.setText("收货人: " + orderDetail.address.consignee);
-                buyAddressTelphone.setText("收货人: " + orderDetail.address.mobile);
-                buyAddressInfo.setText("收货人: " + orderDetail.address.address);
+                buyAddressTelphone.setText("联系电话: " + orderDetail.address.mobile);
+                buyAddressInfo.setText("收货地址: " + orderDetail.address.address);
             }
         }
     }

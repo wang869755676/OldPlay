@@ -201,16 +201,22 @@ public class ShopCarDialog extends Dialog implements View.OnClickListener {
                 CalTotal();
                 break;
             case R.id.dialog_type:
-                if (modelWindow == null) {
-                    modelWindow = new ListPopupWindow(context, modeAdapter, ViewGroup.LayoutParams.MATCH_PARENT, DeviceUtil.dip2px(context, 100));
+                if(shopBean.sizeList!=null && shopBean.sizeList.size()>0)
+                {
+                    if (modelWindow == null) {
+                        modelWindow = new ListPopupWindow(context, modeAdapter, ViewGroup.LayoutParams.MATCH_PARENT, DeviceUtil.dip2px(context, 100));
+                    }
+                    modelWindow.showPopupWindow(v);
                 }
-                modelWindow.showPopupWindow(v);
+
                 break;
             case R.id.dialog_color:
-                if (colorWindow== null) {
-                    colorWindow = new ListPopupWindow(context, colorAdpater, ViewGroup.LayoutParams.MATCH_PARENT, DeviceUtil.dip2px(context, 100));
+                if (shopBean.colorList!=null && shopBean.colorList.size()>0){
+                    if (colorWindow== null) {
+                        colorWindow = new ListPopupWindow(context, colorAdpater, ViewGroup.LayoutParams.MATCH_PARENT, DeviceUtil.dip2px(context, 100));
+                    }
+                    colorWindow.showPopupWindow(v);
                 }
-                colorWindow.showPopupWindow(v);
                 break;
             case R.id.dialog_ok:
                 dismiss();

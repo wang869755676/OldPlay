@@ -39,6 +39,7 @@ import com.td.oldplay.ui.mine.activity.MyAddressActivity;
 import com.td.oldplay.ui.shop.adapter.GoodAdapter;
 import com.td.oldplay.ui.window.AlertDialog;
 import com.td.oldplay.ui.window.CustomDialog;
+import com.td.oldplay.utils.SoftInputUtils;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 import com.td.oldplay.widget.password.PasswordInputView;
@@ -183,7 +184,10 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
                     ToastUtil.show("请输入密码");
                     return;
                 }
+
                 customDialog.dismiss();
+                params.put("payPassword",password);
+                SoftInputUtils.hideSoftInput(mContext,getWindow());
                 payAccout();
             }
         });
@@ -230,7 +234,7 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
 
     private void setData() {
         if (orderBean != null) {
-            account.setText("账户余额:" + userBean.money + "元");
+            account.setText(String.format("账户余额: % .1f 元",userBean.money));
             ortderTotal.setText("￥ " + orderBean.amount_paid);
             orederConfirmTotal.setText("￥ " + orderBean.amount_payable);
 
@@ -240,8 +244,8 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
             }
             if (orderBean.address != null) {
                 buyAddressName.setText("收货人: " + orderBean.address.consignee);
-                buyAddressTelphone.setText("收货人: " + orderBean.address.mobile);
-                buyAddressInfo.setText("收货人: " + orderBean.address.address);
+                buyAddressTelphone.setText("联系电话: " + orderBean.address.mobile);
+                buyAddressInfo.setText("收货地址: " + orderBean.address.address);
             }
 
             if (orderBean.scoreOffset != null) {
@@ -298,8 +302,11 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
                     }else{
                         params.put("price",orderBean.amount_payable);
                     }
-                    params.put("payPassword",password);
                     params.put("payNum",orderBean.payNum);
+                    if(orderBean!=null && orderBean.address==null){
+                        ToastUtil.show("请选择收货地址");
+                        return;
+                    }
                     switch (payType) {
                         case 0:
                             if (userBean.money < orderBean.amount_paid) {

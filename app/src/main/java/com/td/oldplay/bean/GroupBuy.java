@@ -1,6 +1,8 @@
 package com.td.oldplay.bean;
 
-public class GroupBuy {
+import java.io.Serializable;
+
+public class GroupBuy implements Serializable{
 
     public int buyNum;  // 购买时不能超过的数量
     public int conditions;

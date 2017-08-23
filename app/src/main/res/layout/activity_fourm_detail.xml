@@ -105,8 +105,16 @@
                         android:textColor="@color/black"
                         android:textSize="12sp" />
                 </RelativeLayout>
-                <!-- 视频图片的内容-->
 
+                <TextView
+                    android:id="@+id/forum_detail_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+                <!-- 视频图片的内容-->
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/ry_pic"

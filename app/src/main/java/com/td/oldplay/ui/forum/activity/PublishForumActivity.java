@@ -416,8 +416,14 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
             Log.e("===", successContent + "        " + count);
             if (successContent == count) {
                 successContent = 0;
-                EventBus.getDefault().post(new EventMessage("publish"));
+                hideLoading();
                 ToastUtil.show("发布成功");
+                EventBus.getDefault().post(new EventMessage("publish"));
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 finish();
             }
 
@@ -436,12 +442,6 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
 
     @Override
     protected void onDestroy() {
-        hideLoading();
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         super.onDestroy();
     }
 }

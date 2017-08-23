@@ -10,7 +10,7 @@ public class NetWorkAPI {
      * 请求的基本路径
      */
     public static final String BASE_URL = "http://172.16.0.205:8080/";
-  // public static final String BASE_URL = "http://222.187.223.4:8081/";
+   // public static final String BASE_URL = "http://222.187.223.4:8081/";
 
     /**
      * 老师数据

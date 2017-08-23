@@ -86,7 +86,8 @@ public class AddAddressActivity extends BaseActivity implements View.OnClickList
 
                             @Override
                             public void onError(int code, String errorMsg) {
-
+                                v.setEnabled(true);
+                                ToastUtil.show(errorMsg);
                             }
 
                             @Override
@@ -107,7 +108,8 @@ public class AddAddressActivity extends BaseActivity implements View.OnClickList
 
                             @Override
                             public void onError(int code, String errorMsg) {
-
+                                v.setEnabled(true);
+                                ToastUtil.show(errorMsg);
                             }
 
                             @Override
@@ -146,7 +148,7 @@ public class AddAddressActivity extends BaseActivity implements View.OnClickList
         params.put("mobile", phone);
 
         address = adrAdr.getText().toString();
-        if (TextUtils.isEmpty(name)) {
+        if (TextUtils.isEmpty(address)) {
             ToastUtil.show("请输入地址");
             return false;
         }

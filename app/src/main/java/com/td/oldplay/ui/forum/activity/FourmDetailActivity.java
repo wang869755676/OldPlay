@@ -29,10 +29,10 @@ import com.td.oldplay.ui.displayphoto.DisplayPhotoActivity;
 import com.td.oldplay.ui.forum.adapter.PicAdapter;
 import com.td.oldplay.ui.forum.adapter.VideAdapter;
 import com.td.oldplay.ui.forum.adapter.VoiceAdapter;
+import com.td.oldplay.ui.window.SharePopupWindow;
 import com.td.oldplay.utils.SoftInputUtils;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.voicemanager.VoiceManager;
-import com.tencent.mm.opensdk.utils.Log;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -94,6 +94,8 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
     RecyclerView ryVideo;
     @BindView(R.id.scrollView)
     NestedScrollView scrollView;
+    @BindView(R.id.forum_detail_content)
+    TextView forumDetailContent;
     private List<CommentBean> datas = new ArrayList<>();
     private CommentAdapter commentAdapter;
     private LoadMoreWrapper adapter;
@@ -114,7 +116,7 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
     private HashMap<String, Object> params = new HashMap<>();
 
     private boolean likeAction;
-
+    private SharePopupWindow popupWindow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -251,6 +253,7 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
             forumDetailTitle.setText(forumDetial.topic.title);
             forumDetailComment.setText(forumDetial.topic.replyCount + "评论");
             forumDetailName.setText(forumDetial.topic.userName);
+            forumDetailContent.setText(forumDetial.topic.content);
             if (forumDetial.topic.userId.equals(userId)) {
                 forumDetailEdit.setVisibility(View.VISIBLE);
             } else {
@@ -301,6 +304,10 @@ public class FourmDetailActivity extends BaseFragmentActivity implements
                 finish();
                 break;
             case R.id.right_image: // 分享
+                if (popupWindow == null) {
+                    popupWindow = new SharePopupWindow(mContext, "", "", "", "");
+                }
+                popupWindow.showPopup(v);
                 break;
             case R.id.right_image2: // 喜欢
                 HttpManager.getInstance().forumLikeAction(id, userId, likeAction, new HttpSubscriber<String>(new OnResultCallBack<String>() {

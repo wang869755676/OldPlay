@@ -286,7 +286,7 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
                 finish();
                 break;
             case R.id.buy_address_btn:
-                startActivityForResult(new Intent(mContext, MyAddressActivity.class), 1002);
+                startActivityForResult(new Intent(mContext, MyAddressActivity.class).putExtra("fromType",1), 1002);
                 break;
             case R.id.ortder_confirm:
                 if(orderBean!=null){

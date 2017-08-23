@@ -341,7 +341,7 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
 
                 break;
             case R.id.buy_address_btn:
-                startActivityForResult(new Intent(mContext, MyAddressActivity.class), 1002);
+                startActivityForResult(new Intent(mContext, MyAddressActivity.class).putExtra("fromType",1), 1002);
                 break;
         }
 

@@ -56,8 +56,6 @@ public class MyForumActivity extends BaseFragmentActivity implements View.OnClic
         title.setTitle("我的帖子");
         title.setOnLeftListener(this);
         swipeLayout.setOnRefreshListener(this);
-        datas.add(new ForumBean());
-        datas.add(new ForumBean());
         swipeTarget.setLayoutManager(new LinearLayoutManager(mContext));
         listAdapter = new ForumListAdapter(mContext, R.layout.item_forum, datas);
         adapter = new LoadMoreWrapper(listAdapter);

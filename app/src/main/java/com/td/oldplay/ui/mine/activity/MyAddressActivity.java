@@ -27,6 +27,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,6 +53,8 @@ public class MyAddressActivity extends BaseFragmentActivity
     private LoadMoreWrapper adapter;
     private int page = 1;
 
+    private int fromType;
+    private HashMap<String, Object> params;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,8 @@ public class MyAddressActivity extends BaseFragmentActivity
         setContentView(R.layout.activity_my_address);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        params = new HashMap<>();
+        fromType = getIntent().getIntExtra("fromType", 0);
         initView();
     }
 
@@ -91,8 +96,11 @@ public class MyAddressActivity extends BaseFragmentActivity
         addressAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                setResult(RESULT_OK, new Intent().putExtra("model", datas.get(position)));
-                finish();
+                if (fromType != 0) {
+                    setResult(RESULT_OK, new Intent().putExtra("model", datas.get(position)));
+                    finish();
+                }
+
             }
 
             @Override
@@ -123,13 +131,13 @@ public class MyAddressActivity extends BaseFragmentActivity
                     adapter.setLoadMoreView(0);
                     if (page > 1) {
                         ToastUtil.show("没有更多数据了");
-                    }else{
+                    } else {
                         datas.clear();
                     }
 
                 }
-               // Collections.reverse(datas);
-               adapter.notifyDataSetChanged();
+                // Collections.reverse(datas);
+                adapter.notifyDataSetChanged();
 
             }
 
@@ -173,7 +181,7 @@ public class MyAddressActivity extends BaseFragmentActivity
     }
 
     @Override
-    public void onAction(String action, final int postion, AddressBean item) {
+    public void onAction(String action, final int postion, final AddressBean item) {
         if (action.equals("default")) {
             HttpManager.getInstance().setDefaultAddress(item.addressId, userId, new HttpSubscriber<String>(new OnResultCallBack<String>() {
                 @Override
@@ -198,10 +206,36 @@ public class MyAddressActivity extends BaseFragmentActivity
                 }
             }));
         } else if (action.equals("update")) {
-            Intent intent = new Intent(mContext, AddAddressActivity.class);
-            intent.putExtra("mode", item);
-            startActivity(intent);
-        } else if (action.equals("delete")) {
+            params.put("consignee", item.consignee);
+            params.put("mobile", item.mobile);
+            params.put("address", item.address);
+            params.put("addressId", item.addressId);
+            params.put("userId", userId);
+            HttpManager.getInstance().updateAddress(params, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+
+                @Override
+                public void onSuccess(String s) {
+                    datas.set(postion, item);
+                    ToastUtil.show("修改成功");
+                    //EventBus.getDefault().post(new EventMessage("loadAddress"));
+
+                }
+
+                @Override
+                public void onError(int code, String errorMsg) {
+                    ToastUtil.show(errorMsg);
+                }
+
+                @Override
+                public void onSubscribe(Disposable d) {
+                    addDisposable(d);
+                }
+            }));
+
+
+        } else if (action.equals("delete"))
+
+        {
             HttpManager.getInstance().deleteAddress(item.addressId, new HttpSubscriber<String>(new OnResultCallBack<String>() {
 
                 @Override

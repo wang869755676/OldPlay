@@ -696,6 +696,14 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                         public void onError(int code, String errorMsg) {
                             ToastUtil.show(errorMsg);
                             hideLoading();
+                            mLiveHelper.sendC2CCmd(MContants.AUDICE_EXITLIVE, "", teacherId, null);
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mLiveHelper.startExitRoom();
+                                }
+                            }).start();
+
                         }
 
                         @Override

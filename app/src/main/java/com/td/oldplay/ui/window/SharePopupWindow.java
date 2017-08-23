@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.td.oldplay.R;
+import com.td.oldplay.contants.MContants;
 import com.td.oldplay.utils.ShareSDKUtils;
 import com.td.oldplay.utils.ToastUtil;
 
@@ -42,9 +43,9 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
 
     public SharePopupWindow(Context context, String title, String cocntent, String url, String imageUrl) {
         super(context);
-        this.title = title;
-        this.cocntent = cocntent;
-        this.url = url;
+        this.title = MContants.SHARE_TITLE;
+        this.cocntent = MContants.SHARE_CONTENT;
+        this.url = MContants.SHARE_URL;
         this.imageUrl = imageUrl;
         View view = LayoutInflater.from(context).inflate(R.layout.pop_share, null);
         setContentView(view);

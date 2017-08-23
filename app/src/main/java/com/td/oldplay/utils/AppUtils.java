@@ -46,7 +46,7 @@ public class AppUtils {
 	 * @return
 	 */
 	public static boolean checkPhone(String phone) {
-		Pattern pattern = Pattern.compile("^13\\d{9}||15\\d{9}||18\\d{9}$");
+		Pattern pattern = Pattern.compile("^1[3|4|5|7|8][0-9]\\d{8}$");
 		Matcher matcher = pattern.matcher(phone);
 
 		if (matcher.matches()) {

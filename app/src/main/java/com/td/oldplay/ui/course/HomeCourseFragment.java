@@ -112,7 +112,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
         swipeLayout.setOnRefreshListener(this);
         homrCoureseBanner.setIndicatorVisible(false);
         homrCoureseBanner.getViewPager().setPageTransformer(true, new CustPagerTransformer(mActivity));
-        homrCoureseBanner.getViewPager().setPageMargin(50);
+        homrCoureseBanner.getViewPager().setPageMargin(30);
         homrCoureseBanner.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
             @Override
             public void onPageClick(View view, int position) {

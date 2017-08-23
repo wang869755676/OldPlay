@@ -14,6 +14,7 @@
         android:id="@+id/swipeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -32,13 +33,13 @@
                     android:layout_height="10dp"
                     android:background="@color/gray"></View>
 
+
                 <com.td.oldplay.widget.banner.MZBannerView
-                    android:focusableInTouchMode="true"
-                    android:focusable="true"
                     android:id="@+id/homr_courese_banner"
                     android:layout_width="match_parent"
                     android:layout_height="164dp"
-                    android:background="@color/white"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     app:canLoop="true"
                     app:indicatorAlign="center"
                     app:indicatorPaddingLeft="10dp"
@@ -91,20 +92,17 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp">
 
-                        <View
+                        <ImageView
                             android:id="@+id/view1"
-                            android:layout_width="3dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_alignParentLeft="true"
-                            android:layout_marginBottom="6dp"
-                            android:layout_marginTop="6dp"
-                            android:background="@color/tv_red" />
+                            android:src="@mipmap/icon_home_line" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="17dp"
                             android:layout_toRightOf="@+id/view1"
                             android:text="推荐商品"
                             android:textColor="@color/coure_tv"
@@ -145,20 +143,17 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp">
 
-                        <View
+                        <ImageView
                             android:id="@+id/view2"
-                            android:layout_width="3dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_alignParentLeft="true"
-                            android:layout_marginBottom="6dp"
-                            android:layout_marginTop="6dp"
-                            android:background="@color/tv_red" />
+                            android:src="@mipmap/icon_home_line" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="17dp"
                             android:layout_toRightOf="@+id/view2"
                             android:text="最新优惠"
                             android:textColor="@color/coure_tv"

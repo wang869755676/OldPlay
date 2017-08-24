@@ -155,6 +155,7 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
         setContentView(R.layout.activity_orders_confirm);
         api = WXAPIFactory.createWXAPI(this, MContants.WX_APP_ID);
         params=new HashMap<>();
+        params.put("score",1);
         carIds = getIntent().getStringArrayListExtra("carIds");
         ButterKnife.bind(this);
         initView();
@@ -327,6 +328,7 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
                         ToastUtil.show("请选择收货地址");
                         return;
                     }
+                    params.put("addressId",addressBean.addressId);
                     switch (payType) {
                         case 0:
                             if (userBean.money < totalMoney - scoreMoney) {
@@ -468,7 +470,7 @@ public class OrdersConfirmActivity extends BaseFragmentActivity implements View.
                     totalScore += bean.score;
                 }
                 holder.setText(R.id.oreder_confirm_score, "购买可得" + totalScore + "积分");
-                recyclerView.setAdapter(new GoodAdapter(mContext, R.layout.item_confirm_orderr, orderBean.orderDetails));
+                recyclerView.setAdapter(new GoodAdapter(mContext, R.layout.item_confirm_orderr, orderBean.orderDetails,0));
             }
 
         }

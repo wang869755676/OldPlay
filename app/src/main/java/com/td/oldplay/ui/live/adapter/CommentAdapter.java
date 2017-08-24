@@ -26,5 +26,10 @@ public class CommentAdapter extends CommonAdapter<CommentBean> {
         holder.setText(R.id.item_live_cm_name, commentBean.user.nickName);
         holder.setTextColor(R.id.item_live_cm_name, colors[position % 4]);
         holder.setText(R.id.item_live_cm_content, commentBean.content);
+        if(commentBean.type==1){
+            holder.setTextColor(R.id.item_live_cm_content, mContext.getResources().getColor(R.color.tv_red));
+        }else{
+            holder.setTextColor(R.id.item_live_cm_content, mContext.getResources().getColor(R.color.home_gray));
+        }
     }
 }

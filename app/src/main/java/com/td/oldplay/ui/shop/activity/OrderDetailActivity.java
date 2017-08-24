@@ -112,7 +112,7 @@ public class OrderDetailActivity extends BaseFragmentActivity implements View.On
             orederConfirmScore.setText(String.format("获得%.1f积分",score));
             swipeTarget.setLayoutManager(new LinearLayoutManager(mContext));
             if (orderDetail.orderDetails != null) {
-                swipeTarget.setAdapter(new GoodAdapter(mContext, R.layout.item_confirm_orderr, orderDetail.orderDetails));
+                swipeTarget.setAdapter(new GoodAdapter(mContext, R.layout.item_confirm_orderr, orderDetail.orderDetails,0));
             }
             if (orderDetail.isApplyScore == 1) {
                 orderDetailAcore.setVisibility(View.VISIBLE);

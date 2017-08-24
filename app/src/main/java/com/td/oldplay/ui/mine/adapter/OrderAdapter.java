@@ -79,7 +79,7 @@ public class OrderAdapter extends CommonAdapter<OrderBean> {
                 holder.setVisible(R.id.item_order_done_action, true);
             }
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-            goodAdapter = new GoodAdapter(mContext, R.layout.item_mine_order_inner, orderBean.orderDetails);
+            goodAdapter = new GoodAdapter(mContext, R.layout.item_mine_order_inner, orderBean.orderDetails,1);
             recyclerView.setAdapter(goodAdapter);
             goodAdapter.setOnItemClickListener(new OnItemClickListener() {
                 @Override

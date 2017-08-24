@@ -108,5 +108,34 @@
                 android:textSize="14sp" />
         </LinearLayout>
     </RelativeLayout>
+    <!--团购-->
+    <LinearLayout
+        android:id="@+id/item_shop_tuangou"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_order_good_iv"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:text="团购人数"
+            android:textColor="@color/coure_tv"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/item_shop_tuangou_des"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:text="70"
+            android:textColor="@color/tv_red"
+            android:textSize="14sp" />
+    </LinearLayout>
 </LinearLayout>

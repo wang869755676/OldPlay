@@ -154,6 +154,7 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
         ButterKnife.bind(this);
         orderBean = (OrderBean) getIntent().getSerializableExtra("model");
         params = new HashMap<>();
+        params.put("score",1);
         initView();
         initDialog();
     }
@@ -226,7 +227,7 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
             }
         });
         datas = new ArrayList<>();
-        goodAdapter = new GoodAdapter(mContext, R.layout.item_confirm_orderr, datas);
+        goodAdapter = new GoodAdapter(mContext, R.layout.item_confirm_orderr, datas,0);
         swipeTarget.setAdapter(goodAdapter);
 
         setData();
@@ -307,6 +308,7 @@ public class OrderConfirmActivity extends BaseFragmentActivity implements View.O
                         ToastUtil.show("请选择收货地址");
                         return;
                     }
+                    params.put("addressId",orderBean.address.addressId);
                     switch (payType) {
                         case 0:
                             if (userBean.money < orderBean.amount_paid) {

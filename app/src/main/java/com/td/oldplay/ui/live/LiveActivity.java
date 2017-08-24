@@ -106,7 +106,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     private UserAvatorWindow avatorWindow;
     private CustomDialog alerDialog;
     private boolean isCanLinked;
-
+    private boolean isWait;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,14 +167,20 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
                     //mLiveHelper.downMemberVideo();
                 }*/
                 if (isChecked) {
-                    isCanLinked = false;
-                    liveLianmai.setText("开始连麦");
-                    inviteView1.setVisibility(View.GONE);
-                    if (currentLinked != null) {
-                        mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, currentLinked.id);
-                        avRootView.closeUserView(currentLinked.id, AVView.VIDEO_SRC_TYPE_CAMERA, true);
-                        //mLiveHelper.downMemberVideo();
+                    if (isWait) {
+                        ToastUtil.show("正在等待连麦中，无法关闭连麦");
+                    } else {
+                        isCanLinked = false;
+                        isWait = false;
+                        liveLianmai.setText("开始连麦");
+                        inviteView1.setVisibility(View.GONE);
+                        if (currentLinked != null) {
+                            mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, currentLinked.id);
+                            avRootView.closeUserView(currentLinked.id, AVView.VIDEO_SRC_TYPE_CAMERA, true);
+                            //mLiveHelper.downMemberVideo();
+                        }
                     }
+
                 } else {
                     if (customDialog != null) {
                         customDialog.show();
@@ -318,7 +324,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
                 onBackPressed();
                 break;
             case R.id.live_change:
-                if (isComment) {
+                if (!isComment) {
                     liveRvChat.setLayoutManager(new LinearLayoutManager(mContext));
                     liveRvChat.setAdapter(commentAdapter);
                     getComments();
@@ -475,12 +481,15 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
                 linkDialog.dismiss();
                 // 对连麦者发送 消息 同意
                 mLiveHelper.sendC2CCmd(MContants.AVIMCMD_MUlTI_REFUSE, "", currentLinked.id, null);
+                isWait = false;
             }
 
             @Override
             public void onOk() {
                 linkDialog.dismiss();
-                hideLinkView();
+                inviteView1.setText("等待" + currentLinked.nickName + "连麦中");
+                isWait = true;
+                // hideLinkView();
                 // 对连麦者发送 消息 同意
                 mLiveHelper.sendC2CCmd(MContants.AVIMCMD_MUlTI_JOIN, "", currentLinked.id, new ILiveCallBack() {
                     @Override
@@ -610,7 +619,11 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
     @Override
     public void cancelInviteView(String identifier, boolean b) {
-
+        if (b) {   //连麦成功
+            hideLinkView();
+        } else {  // 在未连接成功之前 取消
+            hideLinkView();
+        }
     }
 
     @Override
@@ -678,6 +691,9 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
     @Override
     public void linkOther() {
+        showLinkView();
+        isWait = false;
+
 
     }
 
@@ -710,5 +726,11 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
 
     private void hideLinkView() {
         inviteView1.setVisibility(View.GONE);
+        inviteView1.setText("等待粉丝连麦中");
+    }
+
+    private void showLinkView() {
+        inviteView1.setVisibility(View.VISIBLE);
+
     }
 }

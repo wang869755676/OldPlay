@@ -63,6 +63,7 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
     public void toggleMic(boolean isMis) {
         ILiveRoomManager.getInstance().enableMic(isMis);
     }
+
     /**
      * 创建房间
      */
@@ -192,21 +193,23 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
         });
     }
 
-    public void upMemberVideo() {
+    public void upMemberVideo(final String toUserId) {
         if (!ILiveRoomManager.getInstance().isEnterRoom()) {
             Log.e(TAG, "upMemberVideo->with not in room");
+            sendC2CCmd(MContants.AVIMCMD_MUlTI_AUDICE_CANCEL, "", toUserId, null);
         }
         ILVLiveManager.getInstance().upToVideoMember(MContants.VIDEO_MEMBER_ROLE, true, true, new ILiveCallBack<ILVChangeRoleRes>() {
             @Override
             public void onSuccess(ILVChangeRoleRes data) {
                 Log.d(TAG, "upToVideoMember->success");
                 mLiveView.isLinking = true;
-
+                sendC2CCmd(MContants.AVIMCMD_MUlTI_AYDIENCE_LINKED_SESS, "", toUserId, null);
             }
 
             @Override
             public void onError(String module, int errCode, String errMsg) {
                 Log.e(TAG, "upToVideoMember->failed:" + module + "|" + errCode + "|" + errMsg);
+                sendC2CCmd(MContants.AVIMCMD_MUlTI_AUDICE_CANCEL, "", toUserId, null);
             }
         });
     }
@@ -325,10 +328,10 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
                 mLiveView.showInviteDialog(new LinkeNumberInfo(identifier, nickname));
                 break;
             case MContants.AVIMCMD_MUlTI_JOIN:  // 同意互动主播
-                mLiveView.cancelInviteView(identifier,true);
+                mLiveView.cancelInviteView(identifier, true);
                 break;
             case MContants.AVIMCMD_MUlTI_REFUSE:
-                mLiveView.cancelInviteView(identifier,false);
+                mLiveView.cancelInviteView(identifier, false);
                 ToastUtil.show("主播拒绝与您连麦");
                 break;
             case MContants.AVIMCMD_EXITLIVE:
@@ -362,6 +365,12 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
             case MContants.AVIMCMD_MUlTI_NOSTARTLINK://  主播为开启来连麦
                 mLiveView.linkedNoStart();
                 ToastUtil.show("主播还未开启连麦权限");
+                break;
+            case MContants.AVIMCMD_MUlTI_AUDICE_CANCEL://   观众在支付的过程中 点击对话框的取消
+                mLiveView.cancelInviteView(identifier,false);
+                break;
+            case MContants.AVIMCMD_MUlTI_AYDIENCE_LINKED_SESS://   在观众端连麦成功
+               mLiveView.cancelInviteView(identifier,true);
                 break;
 
 

@@ -90,7 +90,7 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
         }
 
         title.setOnLeftListener(this);
-        title.setTitleBarBackgroud(R.color.transparent);
+        //title.setTitleBarBackgroud(R.color.transparent);
         tvGetCode.setOnClickListener(this);
         registerSubmint.setOnClickListener(this);
         paras = new HashMap<>();
@@ -140,6 +140,7 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
 
                         @Override
                         public void onError(int code, String errorMsg) {
+                            tvGetCode.setEnabled(true);
                             ToastUtil.show(errorMsg);
                         }
 
@@ -264,7 +265,7 @@ public class RegisterActivity extends BaseFragmentActivity implements View.OnCli
                 ToastUtil.show("两次的登录密码不一样");
                 return false;
             }
-            paras.put("passworad", pws);
+            paras.put("password", pws);
         }
 
 

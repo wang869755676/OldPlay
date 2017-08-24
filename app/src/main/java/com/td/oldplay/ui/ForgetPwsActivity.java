@@ -110,6 +110,7 @@ public class ForgetPwsActivity extends BaseFragmentActivity implements View.OnCl
                         @Override
                         public void onError(int code, String errorMsg) {
                             ToastUtil.show(errorMsg);
+                            tvGetCode.setEnabled(true);
                         }
 
                         @Override

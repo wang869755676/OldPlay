@@ -260,6 +260,10 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         payTypeDialog.setDialogClick(new PayTypeDialog.DialogClick() {
             @Override
             public void onCancel() {
+                if (!isPayFromRewoard){
+                    hideLinkView();
+                    mLiveHelper.sendC2CCmd(MContants.AVIMCMD_MUlTI_AUDICE_CANCEL, "", teacherId, null);
+                }
 
             }
 
@@ -336,7 +340,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                 if (!isPayFromRewoard) {
                     hideLinkView();
                     isLinking = true;
-                    mLiveHelper.upMemberVideo();
+                    mLiveHelper.upMemberVideo(teacherId);
                 }
             }
         });
@@ -524,7 +528,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
                         @Override
                         public void onOk() {
-                            isLinking=false;
+                            isLinking = false;
                             AlerDialog.dismiss();
                             mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, userId);
                             avRootView.closeUserView(userId, AVView.VIDEO_SRC_TYPE_CAMERA, true);
@@ -763,9 +767,12 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     }
 
 
+    // TODO: 2017/8/24    取消连麦
     @Override
     public void onCancel() {
         customDialog.dismiss();
+        hideLinkView();
+        mLiveHelper.sendC2CCmd(MContants.AVIMCMD_MUlTI_AUDICE_CANCEL, "", teacherId, null);
     }
 
     @Override
@@ -835,7 +842,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     private float joinMoney;
 
     private void getLianmaiMoney() {
-        HttpManager.getInstance().getJoinMoney(userId, new HttpSubscriber<Float>(new OnResultCallBack<Float>() {
+        HttpManager.getInstance().getJoinMoney(teacherId, new HttpSubscriber<Float>(new OnResultCallBack<Float>() {
 
             @Override
             public void onSuccess(Float aFloat) {
@@ -851,7 +858,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
             @Override
             public void onError(int code, String errorMsg) {
-
+                ToastUtil.show(errorMsg);
             }
 
             @Override

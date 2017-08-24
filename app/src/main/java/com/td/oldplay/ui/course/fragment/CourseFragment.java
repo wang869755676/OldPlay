@@ -152,7 +152,7 @@ public class CourseFragment extends BaseFragment implements
                     customDialog.setContent("支付" + datas.get(position).price + "元购买课程");
                     customDialog.show();
                 } else if (datas.get(position).isBuy == 1) {
-                    EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
+                    EventBus.getDefault().post(new EventMessage("changeCourseVideo").setUrl(datas.get(position).contentUrl));  // 支付成功触发改事件
                 } else if (datas.get(position).isBuy == 2) {
                     ToastUtil.show("等待老师开通中");
                 }
@@ -180,7 +180,7 @@ public class CourseFragment extends BaseFragment implements
             @Override
             public void onnext() {
                 currentCourse.isBuy=1;
-                EventBus.getDefault().post(new EventMessage("changeCourseVideo"));  // 支付成功触发改事件
+                EventBus.getDefault().post(new EventMessage("changeCourseVideo").setUrl(currentCourse.contentUrl));  // 支付成功触发改事件
             }
         });
 

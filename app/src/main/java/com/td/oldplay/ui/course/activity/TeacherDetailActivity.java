@@ -408,12 +408,12 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     }
 
     private int position;
-    private String[] paths =
+   /* private String[] paths =
 
             {
                     "http://video.jiecao.fm/8/17/bGQS3BQQWUYrlzP1K4Tg4Q__.mp4",
                     "http://video.jiecao.fm/8/17/%E6%8A%AB%E8%90%A8.mp4",
-                    "http://video.jiecao.fm/8/18/%E5%A4%A7%E5%AD%A6.mp4",};
+                    "http://video.jiecao.fm/8/18/%E5%A4%A7%E5%AD%A6.mp4",};*/
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMessage(EventMessage message) {
@@ -421,9 +421,9 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
             ILiveRoomManager.getInstance().onPause();
             dianbo.setVisibility(View.VISIBLE);
             noLive.setVisibility(View.GONE);
-            videoplayer.setUp(paths[position], JCVideoPlayer.SCREEN_LAYOUT_NORMAL, "");
+            videoplayer.setUp(message.contentUrl, JCVideoPlayer.SCREEN_LAYOUT_NORMAL, "");
             videoplayer.startVideo();
-            position++;
+
         } else if ("WX".equals(message.action)) {
             if (isTeacherDetialPay) {
                 switch (message.WxPayCode) {

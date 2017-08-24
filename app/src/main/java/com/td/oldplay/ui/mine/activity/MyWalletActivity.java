@@ -220,7 +220,8 @@ public class MyWalletActivity extends BaseFragmentActivity
 
     private void setData() {
         if (bean != null) {
-            walletTixian.setText(bean.money + "");
+
+            walletTixian.setText( String.format("%.1f", currentYear, bean.money));
             if (bean.rechargeSetsList != null) {
                 datas.clear();
                 datas.addAll(bean.rechargeSetsList);

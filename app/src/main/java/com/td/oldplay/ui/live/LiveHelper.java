@@ -88,8 +88,11 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
 
             @Override
             public void onError(String module, int errCode, String errMsg) {
-                ILiveLog.d(TAG, "ILVB-SXB|createRoom->create room failed:" + module + "|" + errCode + "|" + errMsg);
-                ToastUtil.show("创建房间失败,请冲洗");
+                if (errCode == 6014) {
+                    ToastUtil.show("该账号已经在其他设备上登录了，清重新登录");
+                }else{
+                    ToastUtil.show("创建房间失败,请重新进入");
+                }
                 if (null != mLiveView) {
                     mLiveView.quiteRoomComplete(true, null);
                 }
@@ -121,6 +124,9 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
 
             @Override
             public void onError(String module, int errCode, String errMsg) {
+                if (errCode == 6014) {
+                    ToastUtil.show("该账号已经在其他设备上登录了，清重新登录");
+                }
                 ToastUtil.show(errMsg);
                 if (null != mLiveView) {
                     mLiveView.quiteRoomComplete(true, errCode);
@@ -367,10 +373,10 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
                 ToastUtil.show("主播还未开启连麦权限");
                 break;
             case MContants.AVIMCMD_MUlTI_AUDICE_CANCEL://   观众在支付的过程中 点击对话框的取消
-                mLiveView.cancelInviteView(identifier,false);
+                mLiveView.cancelInviteView(identifier, false);
                 break;
             case MContants.AVIMCMD_MUlTI_AYDIENCE_LINKED_SESS://   在观众端连麦成功
-               mLiveView.cancelInviteView(identifier,true);
+                mLiveView.cancelInviteView(identifier, true);
                 break;
 
 

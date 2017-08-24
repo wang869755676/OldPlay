@@ -345,6 +345,14 @@ public class HomeMyFragment extends BaseFragment implements View.OnClickListener
                             @Override
                             public void onError(String module, int errCode, String errMsg) {
                                 ToastUtil.show(errMsg);
+                                ToastUtil.show("退出成功");
+                                JPushInterface.deleteAlias(mActivity, 2);
+                                spUilts.clearSharedPreferences();
+                                // JPushInterface.re
+                                ShareSDKUtils.loginOut(Wechat.NAME);
+                                startActivity(new Intent(mActivity, LoginActivity.class));
+                                if (mActivity != null)
+                                    mActivity.finish();
                             }
                         });
 

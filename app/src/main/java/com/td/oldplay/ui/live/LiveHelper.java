@@ -73,6 +73,7 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
                 .videoMode(ILiveConstants.VIDEOMODE_BSUPPORT)
                 .controlRole(MContants.SD_ROLE)
                 .autoFocus(true)
+                .cameraId(ILiveConstants.FRONT_CAMERA)
                 .authBits(AVRoomMulti.AUTH_BITS_DEFAULT)
                 .videoRecvMode(AVRoomMulti.VIDEO_RECV_MODE_SEMI_AUTO_RECV_CAMERA_VIDEO);
         int ret = ILVLiveManager.getInstance().createRoom(Integer.parseInt(hostId), hostOption, new ILiveCallBack() {
@@ -98,6 +99,7 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
                 }
             }
         });
+        checkEnterReturn(ret);
     }
 
     /**
@@ -133,10 +135,27 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
                 }
             }
         });
-        // checkEnterReturn(ret);
+         checkEnterReturn(ret);
 
     }
+    private void checkEnterReturn(int iRet){
+        if (ILiveConstants.NO_ERR != iRet){
+            ILiveLog.d(TAG, "ILVB-Suixinbo|checkEnterReturn->enter room failed:" + iRet);
+            if (ILiveConstants.ERR_ALREADY_IN_ROOM == iRet){     // 上次房间未退出处理做退出处理
+                ILiveRoomManager.getInstance().quitRoom(new ILiveCallBack() {
+                    @Override
+                    public void onSuccess(Object data) {
 
+                    }
+
+                    @Override
+                    public void onError(String module, int errCode, String errMsg) {
+
+                    }
+                });
+            }
+        }
+    }
 
     public void startExitRoom() {
         ILiveSDK.getInstance().getAvVideoCtrl().setLocalVideoPreProcessCallback(null);
@@ -312,8 +331,8 @@ public class LiveHelper implements ILiveRoomOption.onRoomDisconnectListener, Obs
         ILVCustomCmd cmd = (ILVCustomCmd) info.data;
         Log.e("===", cmd.getDestId() + "       " + mLiveView.userId);
         if (cmd.getType() == ILVText.ILVTextType.eGroupMsg
-                && mLiveView.userId.equals(cmd.getDestId())) {
-            // SxbLog.d(TAG, "processCmdMsg->ingore message from: "+cmd.getDestId()+"/"+CurLiveInfo.getChatRoomId());
+                && !CurLiveInfo.roomNum.equals(cmd.getDestId())) {
+            // 过滤非当前群组中的信息
             return;
         }
 

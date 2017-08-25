@@ -38,6 +38,7 @@ import com.td.oldplay.ui.live.adapter.CommentAdapter;
 import com.td.oldplay.ui.window.CustomDialog;
 import com.td.oldplay.ui.window.ListPopupWindow;
 import com.td.oldplay.ui.window.UserAvatorWindow;
+import com.td.oldplay.utils.ScreenUtils;
 import com.td.oldplay.utils.ToastUtil;
 import com.tencent.TIMMessage;
 import com.tencent.av.opengl.ui.GLView;
@@ -85,6 +86,8 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     FrameLayout content;
     @BindView(R.id.invite_view1)
     TextView inviteView1;
+    @BindView(R.id.host_switch_cam)
+    TextView hostSwitchCam;
 
 
     private boolean mIsActivityPaused;
@@ -118,8 +121,9 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         requestLivePermission(); // 请求权限
         initDailog();
         initView();
-        mLiveHelper.createRoom("1899");
+        mLiveHelper.createRoom(userId);
         getData();
+        CurLiveInfo.roomNum=userId;  // 直播的房间id；
 
 
     }
@@ -158,6 +162,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     private void initView() {
         liveChange.setOnClickListener(this);
         liveClose.setOnClickListener(this);
+        hostSwitchCam.setOnClickListener(this);
         liveLianmai.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -219,7 +224,8 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         ILVLiveManager.getInstance().setAvVideoView(avRootView);
 
         //avRootView.setBackground(R.mipmap.renderback);
-        avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
+       // avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
+        avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_BOTTOM);
         //avRootView.setAutoOrientation(false);
         avRootView.setSubMarginY(getResources().getDimensionPixelSize(R.dimen.small_area_margin_top));
         avRootView.setSubMarginX(getResources().getDimensionPixelSize(R.dimen.small_area_marginright));
@@ -335,10 +341,10 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
                 }
                 isComment = !isComment;
                 break;
-            case R.id.live_lianmai:
+         /*   case R.id.live_lianmai:
                 if (currentLinked != null) {
-                       /* mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, currentLinked.id);
-                        avRootView.closeUserView(currentLinked.id, AVView.VIDEO_SRC_TYPE_CAMERA, true);*/
+                       *//* mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, currentLinked.id);
+                        avRootView.closeUserView(currentLinked.id, AVView.VIDEO_SRC_TYPE_CAMERA, true);*//*
                     mLiveHelper.downMemberVideo();
                 }
                 if (liveLianmai.isChecked()) {
@@ -353,6 +359,15 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
                         customDialog.show();
                     }
                 }
+                break;*/
+            case R.id.host_switch_cam:
+                Log.e("===",ScreenUtils.getScreenW(this)+"    "+ScreenUtils.getScreenH(this));
+               /* avRootView.getViewByIndex(0).setPosWidth(ScreenUtils.getScreenW(this));
+                avRootView.getViewByIndex(0).setPosHeight(ScreenUtils.getScreenH(this));
+                avRootView.getViewByIndex(0).autoLayout();*/
+                ILiveRoomManager.getInstance().switchCamera(1-ILiveRoomManager.getInstance().getCurCameraId());
+               // avRootView.getViewByIndex(0).setMirror(true);
+
                 break;
         }
 
@@ -554,8 +569,8 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     @Override
     public void enterRoomComplete(boolean b) {
         // 重置美颜
-        ILiveRoomManager.getInstance().enableBeauty(0);
-        ILiveRoomManager.getInstance().enableWhite(0);
+        ILiveRoomManager.getInstance().enableBeauty(5);
+        ILiveRoomManager.getInstance().enableWhite(5);
         avRootView.getViewByIndex(0).setVisibility(GLView.VISIBLE);
         getUserDatas();
         // 通知服务器  进入房间
@@ -620,8 +635,10 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     @Override
     public void cancelInviteView(String identifier, boolean b) {
         if (b) {   //连麦成功
+            isWait=false;
             hideLinkView();
         } else {  // 在未连接成功之前 取消
+            isWait=false;
             hideLinkView();
         }
     }

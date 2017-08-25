@@ -103,7 +103,6 @@
         <activity
             android:name=".ui.live.LiveActivity"
             android:configChanges="orientation|screenSize"
-            android:screenOrientation="landscape"
             android:theme="@style/AppThemeFullscreen" />
 
         <activity

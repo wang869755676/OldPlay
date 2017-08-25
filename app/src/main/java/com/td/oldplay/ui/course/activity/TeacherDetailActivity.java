@@ -47,6 +47,7 @@ import com.td.oldplay.ui.course.fragment.ShopFragment;
 import com.td.oldplay.ui.live.LinkeNumberInfo;
 import com.td.oldplay.ui.live.LiveBaseActivity;
 import com.td.oldplay.ui.live.LiveHelper;
+import com.td.oldplay.ui.live.CurLiveInfo;
 import com.td.oldplay.ui.window.CustomDialog;
 import com.td.oldplay.ui.window.PayAlertDialog;
 import com.td.oldplay.ui.window.PayTypeDialog;
@@ -215,6 +216,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         initView();
         requestLivePermission(); // 请求权限
         getData();
+        CurLiveInfo.roomNum=teacherId; // 当前直播的房间id
     }
 
     private void initView() {
@@ -407,13 +409,6 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         }));
     }
 
-    private int position;
-   /* private String[] paths =
-
-            {
-                    "http://video.jiecao.fm/8/17/bGQS3BQQWUYrlzP1K4Tg4Q__.mp4",
-                    "http://video.jiecao.fm/8/17/%E6%8A%AB%E8%90%A8.mp4",
-                    "http://video.jiecao.fm/8/18/%E5%A4%A7%E5%AD%A6.mp4",};*/
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventMessage(EventMessage message) {
@@ -544,7 +539,8 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
                 break;
             case R.id.landan:
-                setRequestedOrientation(island ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                // TODO: 2017/8/24   待确定
+             //   setRequestedOrientation(island ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 //mRTCStreamingManager.notifyActivityOrientationChanged();
                 Log.e("===", avRootView.getViewByIndex(1).getPosHeight() + "   " + avRootView.getViewByIndex(1).getPosWidth() + avRootView.getViewByIndex(0).getPosWidth());
                 if (island) {
@@ -555,16 +551,15 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                         llAction.setVisibility(View.VISIBLE);
                     }
                     params.height = ScreenUtils.dip2px(AContext, 200);
-                    avRootView.getViewByIndex(0).setPosWidth(ScreenUtils.getScreenH(this));
+                    //avRootView.getViewByIndex(0).setPosWidth(ScreenUtils.getScreenH(this));
                     avRootView.getViewByIndex(0).setPosHeight(ScreenUtils.dip2px(AContext, 200));
                     avRootView.getViewByIndex(0).autoLayout();
+                    // TODO: 2017/8/24   待确定
+                  //  avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_BOTTOM);
+                   // avRootView.getViewByIndex(1).setPosLeft(ScreenUtils.getScreenH(this) - getResources().getDimensionPixelSize(R.dimen.small_area_height) - 20);
+                   // avRootView.getViewByIndex(1).autoLayout();
 
 
-                    avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_BOTTOM);
-                    // avRootView.getViewByIndex(1).setPosWidth(getResources().getDimensionPixelSize(R.dimen.small_area_width));
-                    // avRootView.getViewByIndex(1).setPosHeight(getResources().getDimensionPixelSize(R.dimen.small_area_height));
-                    avRootView.getViewByIndex(1).setPosLeft(ScreenUtils.getScreenH(this) - getResources().getDimensionPixelSize(R.dimen.small_area_height) - 20);
-                    avRootView.getViewByIndex(1).autoLayout();
 
 
                 } else {
@@ -575,16 +570,16 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                         llAction.setVisibility(View.GONE);
                     }
                     params.height = LinearLayout.LayoutParams.MATCH_PARENT;
-                    avRootView.getViewByIndex(0).setPosWidth(ScreenUtils.getScreenW(this));
+                    //avRootView.getViewByIndex(0).setPosWidth(ScreenUtils.getScreenW(this));
                     avRootView.getViewByIndex(0).setPosHeight(ScreenUtils.getScreenH(this));
                     avRootView.getViewByIndex(0).autoLayout();
 
+                    // TODO: 2017/8/24   待确定
+                    //avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_BOTTOM);
+                    //avRootView.getViewByIndex(1).setPosLeft(ScreenUtils.getScreenW(this) - getResources().getDimensionPixelSize(R.dimen.small_area_height) - 20);
+                    //avRootView.getViewByIndex(1).autoLayout();
 
-                    avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_BOTTOM);
-                    //avRootView.getViewByIndex(1).setPosWidth(getResources().getDimensionPixelSize(R.dimen.small_area_height));
-                    //  avRootView.getViewByIndex(1).setPosHeight(getResources().getDimensionPixelSize(R.dimen.small_area_width));
-                    avRootView.getViewByIndex(1).setPosLeft(ScreenUtils.getScreenW(this) - getResources().getDimensionPixelSize(R.dimen.small_area_height) - 20);
-                    avRootView.getViewByIndex(1).autoLayout();
+
                 }
                 liveRoot.setLayoutParams(params);
                 island = !island;
@@ -686,7 +681,13 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
 
                         @Override
                         public void onSuccess(String s) {
-                            //finish();
+
+                            //  如果有连麦先断开练麦
+                            if(isLinking){
+                                isLinking=false;
+                                mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, userId);
+                                avRootView.closeUserView(userId, AVView.VIDEO_SRC_TYPE_CAMERA, true);
+                            }
                             mLiveHelper.sendC2CCmd(MContants.AUDICE_EXITLIVE, "", teacherId, null);
                             new Thread(new Runnable() {
                                 @Override
@@ -700,6 +701,13 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
                         public void onError(int code, String errorMsg) {
                             ToastUtil.show(errorMsg);
                             hideLoading();
+                            //  如果有连麦先断开练麦
+                            if(isLinking){
+                                isLinking=false;
+                                mLiveHelper.sendGroupCmd(MContants.AVIMCMD_MULTI_CANCEL_INTERACT, userId);
+                                avRootView.closeUserView(userId, AVView.VIDEO_SRC_TYPE_CAMERA, true);
+                            }
+
                             mLiveHelper.sendC2CCmd(MContants.AUDICE_EXITLIVE, "", teacherId, null);
                             new Thread(new Runnable() {
                                 @Override
@@ -741,7 +749,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
     @OnMPermissionGranted(LIVE_PERMISSION_REQUEST_CODE)
     public void onLivePermissionGranted() {
         isPermissionGrant = true;
-        mLiveHelper.joinRoom("1899");
+        mLiveHelper.joinRoom(teacherId);
     }
 
     @OnMPermissionDenied(LIVE_PERMISSION_REQUEST_CODE)
@@ -1024,7 +1032,7 @@ public class TeacherDetailActivity extends LiveBaseActivity implements
         ToastUtil.show("主播创建房间了");
         noLive.setVisibility(View.GONE);
         if (!isJoin) {
-            mLiveHelper.joinRoom("1899");
+            mLiveHelper.joinRoom(teacherId);
         }
 
     }

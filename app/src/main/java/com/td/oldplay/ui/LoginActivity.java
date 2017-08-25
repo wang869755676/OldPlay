@@ -203,11 +203,18 @@ public class LoginActivity extends BaseFragmentActivity implements View.OnClickL
                 finish();
             }
 
+
             @Override
             public void onError(String module, int errCode, String errMsg) {
                 hideLoading();
-                Log.e("===",errMsg);
-                ToastUtil.show(errCode + " " + errMsg);
+                //ToastUtil.show(errCode + " " + errMsg);
+                // TODO: 2017/8/24   待删除
+                spUilts.setUser(userBean);
+                spUilts.setUserId(userBean.userId);
+                spUilts.setIsLogin(true);
+                JPushInterface.setAlias(mContext, 1, userBean.userId);
+                startActivity(new Intent(mContext, MainActivity.class));
+                finish();
             }
         });
     }

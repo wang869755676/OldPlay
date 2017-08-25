@@ -1,5 +1,6 @@
 package com.td.oldplay.ui.live;
 
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -88,6 +90,8 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     TextView inviteView1;
     @BindView(R.id.host_switch_cam)
     TextView hostSwitchCam;
+    @BindView(R.id.rotate_view)
+    FrameLayout rotateView;
 
 
     private boolean mIsActivityPaused;
@@ -111,6 +115,12 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     private boolean isCanLinked;
     private boolean isWait;
 
+    OrientationEventListener mOrientationListener;
+    int mLastOrientation = -25;
+    private int mRotationAngle = 0;
+    // 敏感度
+    private int iRoleDt = 20;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -123,9 +133,50 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         initView();
         mLiveHelper.createRoom(userId);
         getData();
-        CurLiveInfo.roomNum=userId;  // 直播的房间id；
+        CurLiveInfo.roomNum = userId;  // 直播的房间id；
 
+        /*mOrientationListener = new OrientationEventListener(this,
+                SensorManager.SENSOR_DELAY_NORMAL) {
 
+            @Override
+            public void onOrientationChanged(int orientation) {
+
+                if (mLastOrientation < 0) {
+                    mLastOrientation = 0;
+                }
+
+                if (((orientation - mLastOrientation) < iRoleDt)
+                        && ((orientation - mLastOrientation) > -iRoleDt)) {
+                    return;
+                }
+                mLastOrientation = orientation;
+                if (orientation > 314 || orientation < 45) {
+                    mRotationAngle = 0;
+                } else if (orientation > 44 && orientation < 135) {
+                    mRotationAngle = 90;
+                } else if (orientation > 134 && orientation < 225) {
+                    mRotationAngle = 180;
+                } else {
+                    mRotationAngle = 270;
+                }
+                if (mRotationAngle == 180 && mRotationAngle == 270) {
+
+                }
+                rotateView.setRotation(-mRotationAngle );
+
+               // rotateView.invalidate();
+                // rotateView.setRotationX(rotateView.getWidth()/2);
+                // rotateView.setRotationY(rotateView.getHeight()/2);
+            }
+        };
+
+        if (mOrientationListener.canDetectOrientation()) {
+            Log.v("===", "Can detect orientation");
+            mOrientationListener.enable();
+        } else {
+            Log.v("===", "Cannot detect orientation");
+            mOrientationListener.disable();
+        }*/
     }
 
     //// TODO: 2017/8/21  获得连麦的金额 
@@ -135,7 +186,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
             @Override
             public void onSuccess(Float aFloat) {
                 money = aFloat;
-                dialogEd.setText(money+"");
+                dialogEd.setText(money + "");
 
             }
 
@@ -226,7 +277,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         ILVLiveManager.getInstance().setAvVideoView(avRootView);
 
         //avRootView.setBackground(R.mipmap.renderback);
-       // avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
+        // avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_RIGHT);
         avRootView.setGravity(AVRootView.LAYOUT_GRAVITY_BOTTOM);
         //avRootView.setAutoOrientation(false);
         avRootView.setSubMarginY(getResources().getDimensionPixelSize(R.dimen.small_area_margin_top));
@@ -279,6 +330,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     protected void onDestroy() {
 
         super.onDestroy();
+       // mOrientationListener.disable();
         mLiveHelper.onDestory();
 
     }
@@ -363,12 +415,12 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
                 }
                 break;*/
             case R.id.host_switch_cam:
-                Log.e("===",ScreenUtils.getScreenW(this)+"    "+ScreenUtils.getScreenH(this));
+                Log.e("===", ScreenUtils.getScreenW(this) + "    " + ScreenUtils.getScreenH(this));
                /* avRootView.getViewByIndex(0).setPosWidth(ScreenUtils.getScreenW(this));
                 avRootView.getViewByIndex(0).setPosHeight(ScreenUtils.getScreenH(this));
                 avRootView.getViewByIndex(0).autoLayout();*/
-                ILiveRoomManager.getInstance().switchCamera(1-ILiveRoomManager.getInstance().getCurCameraId());
-               // avRootView.getViewByIndex(0).setMirror(true);
+                ILiveRoomManager.getInstance().switchCamera(1 - ILiveRoomManager.getInstance().getCurCameraId());
+                // avRootView.getViewByIndex(0).setMirror(true);
 
                 break;
         }
@@ -571,8 +623,8 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     @Override
     public void enterRoomComplete(boolean b) {
         // 重置美颜
-        ILiveRoomManager.getInstance().enableBeauty(5);
-        ILiveRoomManager.getInstance().enableWhite(5);
+        ILiveRoomManager.getInstance().enableBeauty(8);
+        ILiveRoomManager.getInstance().enableWhite(8);
         avRootView.getViewByIndex(0).setVisibility(GLView.VISIBLE);
         getUserDatas();
         // 通知服务器  进入房间
@@ -637,10 +689,10 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
     @Override
     public void cancelInviteView(String identifier, boolean b) {
         if (b) {   //连麦成功
-            isWait=false;
+            isWait = false;
             hideLinkView();
         } else {  // 在未连接成功之前 取消
-            isWait=false;
+            isWait = false;
             hideLinkView();
         }
     }

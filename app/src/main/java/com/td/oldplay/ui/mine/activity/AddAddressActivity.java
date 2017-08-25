@@ -119,6 +119,8 @@ public class AddAddressActivity extends BaseActivity implements View.OnClickList
                         }));
                     }
 
+                }else{
+                    v.setEnabled(true);
                 }
                 break;
             case R.id.cancel:

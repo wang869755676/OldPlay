@@ -18,6 +18,7 @@ import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.mine.adapter.AddressAdapter;
+import com.td.oldplay.ui.window.CustomDialog;
 import com.td.oldplay.utils.ToastUtil;
 import com.td.oldplay.widget.CustomTitlebarLayout;
 
@@ -55,6 +56,10 @@ public class MyAddressActivity extends BaseFragmentActivity
 
     private int fromType;
     private HashMap<String, Object> params;
+
+    private boolean isUpdate;
+    private CustomDialog dialog;
+    private AddressBean currentBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,8 +113,24 @@ public class MyAddressActivity extends BaseFragmentActivity
                 return false;
             }
         });
+        dialog = new CustomDialog(mContext);
+        dialog.setContent("是否删除？");
+        dialog.setDialogClick(new CustomDialog.DialogClick() {
+            @Override
+            public void onCancel() {
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onOk() {
+                dialog.dismiss();
+                deleteAddress();
+
+            }
+        });
         getData();
     }
+
 
     private void getData() {
         showLoading();
@@ -205,6 +226,9 @@ public class MyAddressActivity extends BaseFragmentActivity
                     addDisposable(d);
                 }
             }));
+        } else if (action.equals("updateing")) {
+            isUpdate = true;
+
         } else if (action.equals("update")) {
             params.put("consignee", item.consignee);
             params.put("mobile", item.mobile);
@@ -215,6 +239,7 @@ public class MyAddressActivity extends BaseFragmentActivity
 
                 @Override
                 public void onSuccess(String s) {
+                    isUpdate = false;
                     datas.set(postion, item);
                     ToastUtil.show("修改成功");
                     //EventBus.getDefault().post(new EventMessage("loadAddress"));
@@ -236,28 +261,37 @@ public class MyAddressActivity extends BaseFragmentActivity
         } else if (action.equals("delete"))
 
         {
-            HttpManager.getInstance().deleteAddress(item.addressId, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+            if (isUpdate) {
+                ToastUtil.show("正在更新中，无法删除");
+                return;
+            }
+            currentBean = item;
+            dialog.show();
 
-                @Override
-                public void onSuccess(String s) {
-                    datas.remove(postion);
-                    adapter.notifyDataSetChanged();
-                    ToastUtil.show("删除成功");
-                }
-
-                @Override
-                public void onError(int code, String errorMsg) {
-                    ToastUtil.show(errorMsg);
-                }
-
-                @Override
-                public void onSubscribe(Disposable d) {
-                    addDisposable(d);
-                }
-            }));
 
         }
     }
 
+    private void deleteAddress() {
+        HttpManager.getInstance().deleteAddress(currentBean.addressId, new HttpSubscriber<String>(new OnResultCallBack<String>() {
+
+            @Override
+            public void onSuccess(String s) {
+                datas.remove(currentBean);
+                adapter.notifyDataSetChanged();
+                ToastUtil.show("删除成功");
+            }
+
+            @Override
+            public void onError(int code, String errorMsg) {
+                ToastUtil.show(errorMsg);
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                addDisposable(d);
+            }
+        }));
+    }
 
 }

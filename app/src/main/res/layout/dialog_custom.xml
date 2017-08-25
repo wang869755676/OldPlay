@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:gravity="center"
-                android:text="标题"
+                android:text="提示"
                 android:textColor="@color/coure_tv"
                 android:textSize="16sp" />
 

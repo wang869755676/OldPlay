@@ -12,6 +12,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:layout_marginRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -26,15 +27,19 @@
                 android:textSize="14sp" />
 
             <EditText
+                android:ellipsize="end"
+                android:lines="1"
+                android:paddingRight="2dp"
+                android:paddingLeft="2dp"
                 android:id="@+id/item_addrs_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-
                 android:layout_weight="1"
-                android:background="@null"
+                android:background="@drawable/select_car_ed"
                 android:enabled="false"
                 android:textColor="@color/coure_tv"
                 android:textSize="14sp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -42,34 +47,54 @@
                 android:text="联系人:"
                 android:textColor="@color/coure_tv"
                 android:textSize="14sp" />
+
             <EditText
+                android:paddingRight="2dp"
+                android:paddingLeft="2dp"
                 android:id="@+id/item_addrs_phone"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_weight="1"
-                android:background="@null"
+                android:background="@drawable/select_car_ed"
                 android:enabled="false"
                 android:textColor="@color/coure_tv"
                 android:textSize="14sp" />
 
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/item_addrs_addr"
+        <LinearLayout
+            android:layout_marginRight="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
             android:layout_marginTop="10dp"
-            android:background="@null"
-            android:ellipsize="end"
-            android:enabled="false"
-            android:maxLines="3"
-            android:paddingBottom="10dp"
-            android:paddingRight="15dp"
-            android:text="cxxxxxdsfsdfsdfsdfsdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsfxxx"
-            android:textColor="#999999"
-            android:textSize="14sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="收货地址: "
+                android:textColor="@color/home_gray"
+                android:textSize="14sp" />
+
+            <EditText
+                android:layout_marginBottom="2dp"
+                android:paddingRight="2dp"
+                android:paddingLeft="2dp"
+                android:id="@+id/item_addrs_addr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/select_car_ed"
+                android:ellipsize="end"
+                android:enabled="false"
+                android:maxLines="3"
+                android:paddingBottom="10dp"
+                android:text=""
+                android:textColor="@color/home_gray"
+                android:textSize="14sp" />
+
+        </LinearLayout>
 
 
         <RelativeLayout

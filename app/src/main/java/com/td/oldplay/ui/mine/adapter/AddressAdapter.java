@@ -67,9 +67,7 @@ public class AddressAdapter extends CommonAdapter<AddressBean> {
                 holder.getView(R.id.item_addrs_phone).setEnabled(false);
                 holder.getView(R.id.item_addrs_addr).setEnabled(false);
                 holder.getView(R.id.item_addrs_name).setEnabled(false);
-
-
-                address = ((EditText) holder.getView(R.id.item_addrs_addr)).getText().toString().replace("收货地址:", "");
+                address = ((EditText) holder.getView(R.id.item_addrs_addr)).getText().toString();
                 name = ((EditText) holder.getView(R.id.item_addrs_name)).getText().toString();
                 phone = ((EditText) holder.getView(R.id.item_addrs_phone)).getText().toString();
                 if (TextUtils.isEmpty(name)) {
@@ -106,58 +104,28 @@ public class AddressAdapter extends CommonAdapter<AddressBean> {
                 holder.getView(R.id.item_addrs_name).setEnabled(true);
                 holder.setVisible(R.id.addr_edit, false);
                 holder.setVisible(R.id.addr_edit_done, true);
-                (holder.getView(R.id.item_addrs_addr)).setOnKeyListener(new View.OnKeyListener() {
-                    @Override
-                    public boolean onKey(View v, int keyCode, KeyEvent event) {
-                        if (keyCode == KeyEvent.KEYCODE_DEL
-                                && event.getAction() == KeyEvent.ACTION_DOWN
-                                && ((EditText) holder.getView(R.id.item_addrs_addr)).getText().length() == 5) {
+                if (actionListener != null) {
+                    actionListener.onAction("updateing", position, addressBean);
+                }
 
-                            return true;
-                        }
-                        return false;
-
-                    }
-                });
-       /*         ((EditText) holder.getView(R.id.item_addrs_addr)).addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        Log.e("===",s.length()+" ----------------");
-                        if(TextUtils.isEmpty(s)){
-                            if (s.length() <= 6) {
-                                ((EditText) holder.getView(R.id.item_addrs_addr)).setText("收货地址:");
-                            }
-                        }
-                    }
-                });*/
             }
         });
-                holder.setOnClickListener(R.id.addr_delete, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (actionListener != null) {
+        holder.setOnClickListener(R.id.addr_delete, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (actionListener != null) {
 
 
-                            actionListener.onAction("delete", position, addressBean);
-                        }
-                    }
-                });
-
+                    actionListener.onAction("delete", position, addressBean);
+                }
             }
+        });
+
+    }
 
 
-            public interface OnItemActionListener {
-                void onAction(String action, int postion, AddressBean item);
+    public interface OnItemActionListener {
+        void onAction(String action, int postion, AddressBean item);
 
-            }
-        }
+    }
+}

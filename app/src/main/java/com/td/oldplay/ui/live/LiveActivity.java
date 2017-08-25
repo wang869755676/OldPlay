@@ -135,6 +135,8 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
             @Override
             public void onSuccess(Float aFloat) {
                 money = aFloat;
+                dialogEd.setText(money+"");
+
             }
 
             @Override
@@ -750,4 +752,5 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         inviteView1.setVisibility(View.VISIBLE);
 
     }
+
 }

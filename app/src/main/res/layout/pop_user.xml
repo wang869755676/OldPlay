@@ -5,8 +5,8 @@
     android:layout_height="120dp">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="200dp"
+        android:layout_height="120dp"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
         android:orientation="vertical">

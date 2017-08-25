@@ -15,34 +15,31 @@
         android:id="@+id/invite_view1"
         android:layout_width="110dp"
         android:layout_height="110dp"
-        android:layout_gravity="bottom|center_horizontal"
+        android:layout_gravity="right"
         android:layout_marginRight="10dp"
         android:layout_marginTop="60dp"
         android:background="@color/black"
         android:gravity="center"
-        android:rotation="90"
         android:text="等待粉丝连麦中"
         android:textColor="@color/white"
         android:visibility="invisible" />
     <!--聊天的回话界面-->
     <LinearLayout
-        android:layout_width="196dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="-10dp"
-        android:orientation="vertical"
-        android:rotation="90">
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="16dp"
+
+        android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/live_rv_chat"
-            android:layout_width="196dp"
+            android:layout_width="120dp"
             android:layout_height="206dp"
-            android:background="@drawable/corwhite"
+            android:background="@drawable/cor_trgray_5"
             android:fadeScrollbars="false"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbarThumbVertical="@mipmap/icon_live_bars"
-            android:scrollbarTrackVertical="@color/bg_gray"
-            android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
+            android:scrollbars="none"></android.support.v7.widget.RecyclerView>
 
         <LinearLayout
             android:id="@+id/live_change"
@@ -51,14 +48,14 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:background="@drawable/cor_trgray_5"
-            android:padding="10dp">
+            android:padding="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:drawableLeft="@mipmap/icon_live_person"
-                android:drawablePadding="6dp"
+                android:drawablePadding="3dp"
                 android:gravity="center"
                 android:text="观看人数"
                 android:textColor="@color/white"
@@ -73,7 +70,7 @@
                 android:gravity="center"
                 android:text="99"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
     </LinearLayout>
@@ -83,8 +80,8 @@
         android:id="@+id/live_lianmai"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="left|bottom"
-        android:layout_marginBottom="30dp"
+        android:layout_gravity="right|bottom"
+        android:layout_marginBottom="50dp"
         android:layout_marginRight="30dp"
         android:background="@drawable/cor_trgray_5"
         android:button="@null"
@@ -92,8 +89,7 @@
         android:drawableLeft="@mipmap/icon_live_lianmai"
         android:drawablePadding="6dp"
         android:gravity="center"
-        android:padding="10dp"
-        android:rotation="90"
+        android:padding="5dp"
         android:text="开启连麦"
         android:textColor="@color/white"
         android:textSize="12sp" />
@@ -102,7 +98,6 @@
         android:id="@+id/live_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
         android:layout_margin="10dp"
         android:src="@mipmap/icon_live_close" />
 
@@ -110,11 +105,11 @@
         android:id="@+id/ControlButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="-40dp"
-        android:paddingLeft="50dp"
-        android:paddingRight="50dp"
-        android:rotation="90"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
         android:text="开始直播"
         android:textColor="@android:color/white" />
 
@@ -122,9 +117,8 @@
         android:id="@+id/host_switch_cam"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_gravity="center_vertical|right"
-        android:layout_marginRight="10dp"
-        android:background="@mipmap/icon_switch_camera"
-        android:rotation="90" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:background="@mipmap/icon_switch_camera" />
 
 </FrameLayout>

@@ -196,7 +196,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
         });
         avatorAdapter = new AvatorAdapter(mContext, R.layout.item_avator, userDatas);
         commentAdapter = new CommentAdapter(mContext, R.layout.item_live_comment, commentDatas);
-        liveRvChat.setLayoutManager(new GridLayoutManager(mContext, 4));
+        liveRvChat.setLayoutManager(new GridLayoutManager(mContext, 2));
         liveRvChat.setAdapter(avatorAdapter);
         customDialog = new CustomDialog(mContext);
         dialogView = LayoutInflater.from(mContext).inflate(R.layout.dialog_money, null);
@@ -211,7 +211,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 if (avatorWindow != null) {
                     avatorWindow.setUser(userDatas.get(position));
-                    avatorWindow.showPopup(view);
+                    avatorWindow.showPopup(avRootView);
                 }
             }
 
@@ -335,7 +335,7 @@ public class LiveActivity extends LiveBaseActivity implements View.OnClickListen
                     liveRvChat.setAdapter(commentAdapter);
                     getComments();
                 } else {
-                    liveRvChat.setLayoutManager(new GridLayoutManager(mContext, 3));
+                    liveRvChat.setLayoutManager(new GridLayoutManager(mContext, 2));
                     liveRvChat.setAdapter(avatorAdapter);
 
                 }

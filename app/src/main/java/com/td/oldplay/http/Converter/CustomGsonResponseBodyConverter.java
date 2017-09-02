@@ -34,9 +34,10 @@ final class CustomGsonResponseBodyConverter<T> implements Converter<ResponseBody
         String response = value.string();
         Log.e("===", response);
         ApiResponse httpStatus = gson.fromJson(response, ApiResponse.class);
+       // httpStatus.setData(null);
         if (httpStatus.getData() == null) {  // 处理返回的数据为你ull
             value.close();
-            throw new ApiException(Integer.parseInt(httpStatus.getErrcode()), httpStatus.getErrdesc());
+            throw new ApiException(ApiException.Code_NULL_DATA, httpStatus.getErrdesc());
         }
         if (httpStatus.getData() instanceof String && !httpStatus.getErrcode().equals("0")) {
             value.close();

@@ -14,13 +14,13 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="@dimen/titlebar_height"
-            app:layout_scrollFlags="scroll|enterAlways"></com.td.oldplay.widget.CustomTitlebarLayout>
+            app:layout_scrollFlags="scroll"></com.td.oldplay.widget.CustomTitlebarLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_scrollFlags="scroll|enterAlways">
+            app:layout_scrollFlags="scroll">
 
             <ImageView
                 android:id="@+id/shop_detail_banner"
@@ -103,12 +103,12 @@
             </RelativeLayout>
             <!-- 团购的详情-->
             <RelativeLayout
-                android:visibility="gone"
                 android:id="@+id/rl_tuangou"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/shop_tuanghou_name"
@@ -182,12 +182,12 @@
                     android:textSize="12sp" />
                 <!-- 倒计时组件-->
                 <com.td.oldplay.widget.countDown.CountdownView
-                    android:layout_marginTop="10dp"
                     android:id="@+id/cv_countdownView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
                     android:layout_below="@id/shop_tuangou_price"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"
                     android:layout_toRightOf="@id/shop_de_tuangoudes"
                     app:isShowDay="true"
                     app:isShowHour="true"
@@ -316,6 +316,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
+        android:layout_marginBottom="60dp"
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -337,10 +338,12 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
             android:drawableTop="@mipmap/icon_te_home"
+            android:ellipsize="end"
             android:gravity="center"
+            android:lines="1"
             android:text="讲师的主页"
             android:textColor="@color/home_gray"
-            android:textSize="11sp" />
+            android:textSize="10sp" />
 
         <FrameLayout
             android:id="@+id/fl_car"
@@ -356,7 +359,7 @@
                 android:gravity="center"
                 android:text="购物车"
                 android:textColor="@color/home_gray"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/shop_de_car_num"

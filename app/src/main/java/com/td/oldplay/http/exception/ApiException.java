@@ -8,6 +8,7 @@ public class ApiException extends RuntimeException {
     public static final String CONNECT_EXCEPTION = "网络连接异常，请检查您的网络状态";
     public static final String SOCKET_TIMEOUT_EXCEPTION = "网络连接超时，请检查您的网络状态，稍后重试";
     public static final String MALFORMED_JSON_EXCEPTION = "数据解析错误";
+    public static int Code_NULL_DATA=1101;
 
     public ApiException(int resultCode, String msg) {
         this(getApiExceptionMessage(resultCode, msg));

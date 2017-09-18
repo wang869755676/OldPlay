@@ -1,12 +1,12 @@
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeToLoadLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.td.oldplay.ui.shop.fragment.ShopCommentFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <com.td.oldplay.widget.CustomListView
         android:id="@+id/swipe_target"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
-</android.support.v4.widget.SwipeRefreshLayout>
+        android:layout_height="match_parent"></com.td.oldplay.widget.CustomListView>
+</LinearLayout>

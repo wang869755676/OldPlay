@@ -4,8 +4,8 @@
     android:layout_height="match_parent"
     tools:context="com.td.oldplay.ui.shop.fragment.ShopDetailFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <com.td.oldplay.widget.CustomListView
         android:id="@+id/swipe_target"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"></com.td.oldplay.widget.CustomListView>
 </FrameLayout>

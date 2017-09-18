@@ -427,6 +427,9 @@
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true" >
         </activity>
+        <activity android:name=".ui.shop.ShopDetailActivityq">
+
+        </activity>
     </application>
 
 </manifest>

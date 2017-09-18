@@ -25,6 +25,7 @@ import com.td.oldplay.http.HttpManager;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.subscriber.HttpSubscriber;
 import com.td.oldplay.ui.course.adapter.ShopAdapter;
+import com.td.oldplay.ui.shop.ShopDetailActivityq;
 import com.td.oldplay.ui.shop.activity.ShopDetailActivity;
 import com.td.oldplay.ui.window.SeachPopupWindow;
 import com.td.oldplay.utils.ToastUtil;
@@ -150,7 +151,7 @@ public class ShopFragment extends BaseFragment implements
         shopAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent = new Intent(mActivity, ShopDetailActivity.class);
+                Intent intent = new Intent(mActivity, ShopDetailActivityq.class);
                 intent.putExtra("id", datas.get(position).goodsId);
                 startActivity(intent);
 

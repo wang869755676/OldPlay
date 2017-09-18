@@ -3,10 +3,7 @@ package com.td.oldplay.ui.shop.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +11,12 @@ import android.widget.ImageView;
 
 import com.td.oldplay.R;
 import com.td.oldplay.base.BaseFragment;
-import com.td.oldplay.base.adapter.recyclerview.CommonAdapter;
-import com.td.oldplay.base.adapter.recyclerview.base.ViewHolder;
+
+import com.td.oldplay.base.adapter.listview.CommonAdapter;
+import com.td.oldplay.base.adapter.listview.ViewHolder;
 import com.td.oldplay.bean.ShopDetail;
 import com.td.oldplay.utils.GlideUtils;
+import com.td.oldplay.widget.CustomListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,7 @@ public class ShopDetailFragment extends BaseFragment {
 
 
     @BindView(R.id.swipe_target)
-    RecyclerView swipeTarget;
+    CustomListView swipeTarget;
     Unbinder unbinder;
     private List<ShopDetail.GoodsImageListBean> datas;
 
@@ -49,7 +48,7 @@ public class ShopDetailFragment extends BaseFragment {
     @Override
     protected void init(View view) {
         datas = new ArrayList<>();
-        swipeTarget.setLayoutManager(new LinearLayoutManager(mActivity));
+        //swipeTarget.setLayoutManager(new LinearLayoutManager(mActivity));
 
     }
 

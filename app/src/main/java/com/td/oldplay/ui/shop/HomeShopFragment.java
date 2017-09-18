@@ -136,7 +136,7 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
         homrCoureseBanner.setBannerPageClickListener(new MZBannerView.BannerPageClickListener() {
             @Override
             public void onPageClick(View view, int position) {
-                Intent intent = new Intent(mActivity, ShopDetailActivity.class);
+                Intent intent = new Intent(mActivity, ShopDetailActivityq.class);
                 intent.putExtra("id", banners.get(position).goodsId);
                 startActivity(intent);
             }
@@ -153,7 +153,7 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
         recommendShopAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent = new Intent(mActivity, ShopDetailActivity.class);
+                Intent intent = new Intent(mActivity, ShopDetailActivityq.class);
                 intent.putExtra("id", recommenddatas.get(position).goodsId);
                 startActivity(intent);
             }
@@ -175,7 +175,7 @@ public class HomeShopFragment extends BaseFragment implements View.OnClickListen
         LastShopAdapter.setOnItemClickListener(new MultiItemTypeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
-                Intent intent = new Intent(mActivity, ShopDetailActivity.class);
+                Intent intent = new Intent(mActivity, ShopDetailActivityq.class);
                 intent.putExtra("id", Lastdatas.get(position).goodsId);
                 startActivity(intent);
             }

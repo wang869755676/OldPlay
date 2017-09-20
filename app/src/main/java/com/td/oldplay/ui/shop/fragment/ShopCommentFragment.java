@@ -42,7 +42,7 @@ public class ShopCommentFragment extends BaseFragment implements LoadMoreWrapper
 
 
     @BindView(R.id.swipe_target)
-    ListView swipeTarget;
+    RecyclerView swipeTarget;
     Unbinder unbinder;
 
     private CommentAdapter commentAdapter;
@@ -71,17 +71,17 @@ public class ShopCommentFragment extends BaseFragment implements LoadMoreWrapper
     @Override
     protected void init(View view) {
         datas = new ArrayList<>();
-       // swipeToLoadLayout.setOnRefreshListener(this);
-       // swipeTarget.setLayoutManager(new LinearLayoutManager(mActivity));
-        //commentAdapter = new CommentAdapter(mActivity, R.layout.item_comment_shopdetail, datas);
-       // adapter = new LoadMoreWrapper(commentAdapter);
-        lisCommonAdapter=new CommonAdapter<CommentBean>(mActivity, R.layout.item_comment_shopdetail, datas) {
+        // swipeToLoadLayout.setOnRefreshListener(this);
+        swipeTarget.setLayoutManager(new LinearLayoutManager(mActivity));
+        commentAdapter = new CommentAdapter(mActivity, R.layout.item_comment_shopdetail, datas);
+        adapter = new LoadMoreWrapper(commentAdapter);
+       /* lisCommonAdapter=new CommonAdapter<CommentBean>(mActivity, R.layout.item_comment_shopdetail, datas) {
             @Override
             protected void convert(ViewHolder viewHolder, CommentBean item, int position) {
 
             }
-        };
-        swipeTarget.setAdapter(lisCommonAdapter);
+        };*/
+        swipeTarget.setAdapter(adapter);
         getData();
 
     }
@@ -91,7 +91,7 @@ public class ShopCommentFragment extends BaseFragment implements LoadMoreWrapper
 
             @Override
             public void onSuccess(List<CommentBean> commentBean) {
-               // swipeToLoadLayout.setRefreshing(false);
+                // swipeToLoadLayout.setRefreshing(false);
                 if (commentBean != null && commentBean.size() > 0) {
                     if (page == 1) {
                         datas.clear();
@@ -106,12 +106,12 @@ public class ShopCommentFragment extends BaseFragment implements LoadMoreWrapper
                         ToastUtil.show("没有更多数据了");
                     }
                 }
-                lisCommonAdapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onError(int code, String errorMsg) {
-              //  swipeToLoadLayout.setRefreshing(false);
+                //  swipeToLoadLayout.setRefreshing(false);
                 ToastUtil.show(errorMsg);
             }
 

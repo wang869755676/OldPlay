@@ -40,7 +40,6 @@ dependencies {
     compile 'com.android.support:design:24.0.0'
     compile 'com.jakewharton:butterknife:8.4.0'
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.github.bumptech.glide:glide:4.0.0-RC1'
     compile 'com.android.support:support-v4:24.0.0'
     compile 'com.squareup.okio:okio:1.7.0'
     compile 'com.squareup.retrofit2:retrofit:latest.release'
@@ -58,12 +57,13 @@ dependencies {
     compile 'com.android.support:cardview-v7:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'fm.jiecao:jiecaovideoplayer:5.7'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'com.minimize.library:seekbar-compat:0.2.5'
     compile 'com.tencent.ilivesdk:ilivesdk:1.6.0'
     compile 'com.tencent.livesdk:livesdk:1.1.4'
     compile 'com.tencent.rtmpsdk:rtmpsdk:1.0.1'
-
     compile 'com.android.support:multidex:1.0.1'
+    compile 'com.github.bumptech.glide:glide:4.1.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.1.1'
+
 }

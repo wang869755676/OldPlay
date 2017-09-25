@@ -56,7 +56,8 @@ import retrofit2.http.Field;
 
 public class HttpManager {
     public static final String TAG = HttpManager.class.getSimpleName();
-    private static final int DEFAULT_TIMEOUT = 5;
+    private static final int DEFAULT_TIMEOUT = 30;
+    private static final int READ_TIMEOUT = 30;
     private Retrofit mRetrofit;
     private ApiService mApiService;
 
@@ -64,19 +65,15 @@ public class HttpManager {
     private volatile static HttpManager instance;
 
     private HttpManager() {
-        HttpLoggingInterceptor.Level level = HttpLoggingInterceptor.Level.BODY;
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-            @Override
-            public void log(String message) {
-                Log.i("HttpManager", message);
-            }
-        });
-        loggingInterceptor.setLevel(level);
+
+
         //拦截请求和响应日志并输出，其实有很多封装好的日志拦截插件，大家也可以根据个人喜好选择。
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                .writeTimeout(100, TimeUnit.SECONDS)
+                .readTimeout(DEFAULT_TIMEOUT,TimeUnit.SECONDS)
                 .retryOnConnectionFailure(false)
-                .addInterceptor(loggingInterceptor)
+
         ;
 
 

@@ -32,8 +32,8 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mContext = this;
         AContext = getApplicationContext();
-        spUilts= MyApplication.getInstance().mPreferenceUtil;
-        userId= spUilts.getUserId();
+        spUilts = MyApplication.getInstance().mPreferenceUtil;
+        userId = spUilts.getUserId();
         userBean = spUilts.getUser();
       /*  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = getWindow();
@@ -81,7 +81,7 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
     private ListCompositeDisposable listCompositeDisposable = new ListCompositeDisposable();
 
 
-    protected void  addDisposable(Disposable disposable) {
+    protected void addDisposable(Disposable disposable) {
         if (disposable != null && !disposable.isDisposed()) {
             listCompositeDisposable.add(disposable);
         }
@@ -99,5 +99,32 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
         }
     }
 
+/*    public void showProgress(String title) {
+        hud = KProgressHUD.create(mContext)
+                .setStyle(KProgressHUD.Style.ANNULAR_DETERMINATE)
+                .setLabel(title)
+                .setMaxProgress(100)
+                .setAutoDismiss(false)
+                .show();
+    }*/
 
+    public void updateProgressTitle(String title) {
+        if (hud != null) {
+            hud.setProgress(0);
+            hud.setLabel(title);
+        } else {
+            hud = KProgressHUD.create(mContext)
+                    .setStyle(KProgressHUD.Style.ANNULAR_DETERMINATE)
+                    .setLabel(title)
+                    .setMaxProgress(100)
+                    .setAutoDismiss(false)
+                    .show();
+        }
+
+    }
+
+    public void updateProgress(int progress) {
+        if (hud != null)
+            hud.setProgress(progress);
+    }
 }

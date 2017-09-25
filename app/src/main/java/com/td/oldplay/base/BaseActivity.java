@@ -65,6 +65,18 @@ public class BaseActivity extends FragmentActivity {
             hud.dismiss();
         }
     }
+    public void showProgress(String title){
+        hud = KProgressHUD.create(mContext)
+                .setStyle(KProgressHUD.Style.ANNULAR_DETERMINATE)
+                .setLabel(title)
+                .setMaxProgress(100)
+                .show();
+    }
+
+    public void updateProgress(int progress){
+        if(hud!=null)
+            hud.setProgress(progress);
+    }
 
     @Override
     protected void onDestroy() {

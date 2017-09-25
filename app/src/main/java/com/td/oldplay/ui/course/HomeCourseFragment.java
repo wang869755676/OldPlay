@@ -179,7 +179,7 @@ public class HomeCourseFragment extends BaseFragment implements View.OnClickList
             @Override
             public void onItemClick(View view, RecyclerView.ViewHolder holder, int position) {
                 Intent intent = new Intent(mActivity, TeacherListActivity.class);
-                intent.putExtra("courseId", hotBeens.get(position).id);
+                intent.putExtra("courseId", recomendBeens.get(position).id);
                 startActivity(intent);
             }
 

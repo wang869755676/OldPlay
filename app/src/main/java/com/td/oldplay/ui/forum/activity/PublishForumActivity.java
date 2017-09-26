@@ -579,6 +579,7 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
             obj = ite.next();
             switch (type) {
                 case 1:
+
                     paramPi.clear();
                     if (obj instanceof ImageItem) {
                         ite.remove();

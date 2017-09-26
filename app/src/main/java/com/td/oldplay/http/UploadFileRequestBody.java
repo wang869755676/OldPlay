@@ -76,7 +76,7 @@ public class UploadFileRequestBody extends RequestBody {
                 bytesWritten += byteCount;
                 //回调上传接口
                 mProgressListener.onProgress((int) ((double) bytesWritten / (double) contentLength) * 100, tag);
-                mProgressListener.onDetailProgress(bytesWritten, contentLength, tag);
+                mProgressListener.onDetailProgress(byteCount, contentLength, tag);
             }
         };
     }

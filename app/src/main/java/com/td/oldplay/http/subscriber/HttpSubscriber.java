@@ -1,6 +1,8 @@
 package com.td.oldplay.http.subscriber;
 
 
+import android.util.Log;
+
 import com.google.gson.stream.MalformedJsonException;
 import com.td.oldplay.http.callback.OnResultCallBack;
 import com.td.oldplay.http.exception.ApiException;
@@ -52,15 +54,18 @@ public class HttpSubscriber<T> implements Observer<T> {
                     mOnResultListener.onError(ApiException.Code_MalformedJson, ApiException.MALFORMED_JSON_EXCEPTION);
                 }
             }
+        } else if (e instanceof SocketTimeoutException) {
+            Log.e("===",e.getMessage());
+            mOnResultListener.onError(ApiException.Code_TimeOut, ApiException.SOCKET_TIMEOUT_EXCEPTION);
         } else if (e instanceof ApiException) {
 
             String msg = e.getMessage();
             int code;
             if (msg.contains("#")) {
                 code = Integer.parseInt(msg.split("#")[0]);
-                if(code==ApiException.Code_NULL_DATA){
+                if (code == ApiException.Code_NULL_DATA) {
                     onNext(null);
-                }else{
+                } else {
                     mOnResultListener.onError(code, msg.split("#")[1]);
                 }
 
@@ -69,7 +74,7 @@ public class HttpSubscriber<T> implements Observer<T> {
                 mOnResultListener.onError(code, msg);
             }
         } else {
-            mOnResultListener.onError(1001,"网络请求失败");
+            mOnResultListener.onError(1001, "网络请求失败");
         }
     }
 

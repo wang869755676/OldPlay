@@ -99,16 +99,8 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
         }
     }
 
-/*    public void showProgress(String title) {
-        hud = KProgressHUD.create(mContext)
-                .setStyle(KProgressHUD.Style.ANNULAR_DETERMINATE)
-                .setLabel(title)
-                .setMaxProgress(100)
-                .setAutoDismiss(false)
-                .show();
-    }*/
 
-    public void updateProgressTitle(String title) {
+    public void updateProgressTitle(String title,long total) {
         if (hud != null) {
             hud.setProgress(0);
             hud.setLabel(title);
@@ -116,8 +108,9 @@ public abstract class BaseFragmentActivity extends AppCompatActivity {
             hud = KProgressHUD.create(mContext)
                     .setStyle(KProgressHUD.Style.ANNULAR_DETERMINATE)
                     .setLabel(title)
-                    .setMaxProgress(100)
+                    .setMaxProgress((int) total)
                     .setAutoDismiss(false)
+                    .setCancellable(false)
                     .show();
         }
 

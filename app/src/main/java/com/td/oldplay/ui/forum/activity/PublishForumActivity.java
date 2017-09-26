@@ -35,6 +35,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -108,6 +109,12 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
     private ForumDetial forumDetial;
 
     private boolean isOther;
+    private long totalPic;
+    private long totalVideo;
+    private long totalAudio;
+    private int currentPic;
+    private int currentVideo;
+    private int currentAudio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,15 +170,26 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
             }
 
             @Override
-            public void onDetailProgress(final long written, final long total, String tag) {
+            public void onDetailProgress(final long written, final long total, final String tag) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        updateProgress((int) (100 * written / total));
+                        // updateProgress((int) (100 * written / totalPic));
+                        if ("pic".equals(tag)) {
+                            currentPic += written;
+                            updateProgress(currentPic);
+                        } else if ("video".equals(tag)) {
+                            currentVideo += written;
+                            updateProgress(currentVideo);
+                        } else if ("audio".equals(tag)) {
+                            currentAudio += written;
+                            updateProgress(currentAudio);
+                        }
+
                     }
                 });
 
-                android.util.Log.e("===","        "+(100 * written / total));
+                android.util.Log.e("===", written + "      " + totalAudio + "   " + currentAudio + "  " + total);
             }
         };
 
@@ -266,6 +284,12 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
     }
 
     private void setMedia() {
+        totalAudio = 0;
+        totalPic = 0;
+        totalVideo = 0;
+        currentAudio = 0;
+        currentPic = 0;
+        currentVideo = 0;
         if (datas != null && datas.size() > 0) {
             for (Object obj : datas) {
                 if (obj instanceof ImageItem) {
@@ -273,6 +297,7 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
                         imageList.add((((ImageItem) obj).path));
                     } else {
                         file = new File(((ImageItem) obj).path);
+                        totalPic += file.length();
                         requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
                         paramPi.put("picFile\"; filename=\"" + file.getName(), new UploadFileRequestBody(requestFile, progressListener, "pic"));
                     }
@@ -283,6 +308,7 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
                         videList.add(((VideoItem) obj).path);
                     } else {
                         file = new File(((VideoItem) obj).path);
+                        totalVideo += file.length();
                         requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
                         paramVi.put("picFile\"; filename=\"" + file.getName(), new UploadFileRequestBody(requestFile, progressListener, "video"));
                     }
@@ -292,7 +318,9 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
                     if (((AudioItem) obj).type == 1) {
                         audioList.add(((AudioItem) obj).path);
                     } else {
+
                         file = new File(((AudioItem) obj).path);
+                        totalAudio += file.length();
                         requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
                         paramVo.put("picFile\"; filename=\"" + file.getName(), new UploadFileRequestBody(requestFile, progressListener, "audio"));
                     }
@@ -332,7 +360,7 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
         if (paramPi.size() >= 2) {
             isOther = true;
             count++;
-            updateProgressTitle("上传图片中");
+            updateProgressTitle("上传图片中", totalPic);
             HttpManager.getInstance().postForumPic(paramPi, new HttpSubscriber<String>(new OnResultCallBack<String>() {
                 @Override
                 public void onSuccess(String s) {
@@ -343,9 +371,10 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
 
                 @Override
                 public void onError(int code, String errorMsg) {
-                    if(code== Code_TimeOut){
+                    if (code == Code_TimeOut) {
                         uploadAudio();
-                    }else{
+                    } else {
+                        hideLoading();
                         ToastUtil.show(errorMsg);
                     }
 
@@ -356,7 +385,7 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
                     addDisposable(d);
                 }
             }));
-        }else{
+        } else {
             uploadAudio();
         }
 
@@ -460,20 +489,21 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
 
         @Override
         public void onSuccess(String s) {
-            hideLoading();
-            ToastUtil.show("发布成功");
-            EventBus.getDefault().post(new EventMessage("publish"));
-            finish();
+            finishPublish();
 
 
         }
 
         @Override
         public void onError(int code, String errorMsg) {
-            hideLoading();
-            ToastUtil.show("发布成功");
-            EventBus.getDefault().post(new EventMessage("publish"));
-            finish();
+
+            if (code == Code_TimeOut)
+                finishPublish();
+            else {
+                hideLoading();
+                clearData(2);
+                ToastUtil.show("上传视频出错");
+            }
         }
 
         @Override
@@ -482,15 +512,17 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
         }
     });
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
 
     private ProgressListener progressListener;
-    private void uploadAudio(){
-        if(paramVo.size()>=2){
-            updateProgressTitle("上传音频中");
+
+    private void uploadAudio() {
+        if (paramVo.size() >= 2) {
+            updateProgressTitle("上传音频中", totalAudio);
             HttpManager.getInstance().postForumVoicec(paramVo, new HttpSubscriber<String>(new OnResultCallBack<String>() {
                 @Override
                 public void onSuccess(String s) {
@@ -500,9 +532,11 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
 
                 @Override
                 public void onError(int code, String errorMsg) {
-                    if(code== Code_TimeOut)
-                       uploadAudio();
-                    else{
+                    if (code == Code_TimeOut)
+                        uploadVideo();
+                    else {
+                        hideLoading();
+                        clearData(1);
                         ToastUtil.show(errorMsg);
                     }
                 }
@@ -512,15 +546,58 @@ public class PublishForumActivity extends BaseFragmentActivity implements View.O
                     addDisposable(d);
                 }
             }));
-        }else{
-         uploadVideo();
+        } else {
+            uploadVideo();
         }
 
     }
-    private  void uploadVideo(){
-        if(paramVi.size()>0){
-            updateProgressTitle("上传视频中");
+
+    private void uploadVideo() {
+        if (paramVi.size() >= 2) {
+            updateProgressTitle("上传视频中", totalVideo);
             HttpManager.getInstance().postForumVideo(paramVi, MediaSubscriber);
+        } else {
+            finishPublish();
+
         }
+    }
+
+    private void finishPublish() {
+        hideLoading();
+        ToastUtil.show("发布成功");
+        EventBus.getDefault().post(new EventMessage("publish"));
+        finish();
+    }
+
+    /**
+     * @param type 1 图片 2 音频 3 视频
+     */
+    private void clearData(int type) {
+        Iterator<Object> ite = datas.iterator();
+        Object obj = null;
+        while (ite.hasNext()) {
+            obj = ite.next();
+            switch (type) {
+                case 1:
+                    paramPi.clear();
+                    if (obj instanceof ImageItem) {
+                        ite.remove();
+                    }
+                    break;
+                case 2:
+                    paramVo.clear();
+                    if (obj instanceof AudioItem) {
+                        ite.remove();
+                    }
+                    break;
+                case 3:
+                    paramVi.clear();
+                    if (obj instanceof VideoItem) {
+                        ite.remove();
+                    }
+                    break;
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 }
